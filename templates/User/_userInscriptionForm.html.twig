@@ -1,0 +1,47 @@
+{{ form_start(form, {'action' : path('user_new')}) }}   
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(form.organisation) }}
+            {{ form_widget(form.organisation) }}
+        </div>        
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(form.firstName) }}
+            {{ form_widget(form.firstName) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(form.lastName) }}  
+            {{ form_widget(form.lastName) }}  
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(form.password.first) }}
+            {{ form_widget(form.password.first) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(form.password.second) }}  
+            {{ form_widget(form.password.second) }}  
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(form.phoneNumber) }}
+            {{ form_widget(form.phoneNumber) }}        
+        </div>                
+    </div>
+    <div class="row ">
+        <div class="col-2 text-center">
+            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+        </div>
+    </div>
+{{ form_end(form) }}

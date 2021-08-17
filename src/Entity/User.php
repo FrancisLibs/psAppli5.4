@@ -56,6 +56,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $organisation;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -184,6 +189,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

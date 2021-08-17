@@ -17,25 +17,24 @@
                         </li>
                     {% endif %}
                     {% if app.user %}
-                        {# <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
-                        </li> #}
+                        </li>
                     {% else %}
-                        {# <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
-                        </li> #}
+                        </li>
                     {% endif %}
-                    {# <li class="nav-item">
+                    <li class="nav-item">
                         <a href="{{ path('user_new') }}" class="nav-link">Inscription</a>
-                    </li> #}
+                    </li>
                     {% if app.user %}
                         <li class="nav-item dropdown">
                             {# <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{{ asset("images/profilh.png") }}" alt="Profil">
                             </a> #}
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                {# <li><a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a></li>
-                                <li><a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a></li> #}
+                                {#  #}
                             </ul>
                         </li>
                     {% endif %}
@@ -43,4 +42,10 @@
             </div>
         </div>
     </div>
+    {# <li>
+        <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
+    </li>
+    <li>
+        <a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a>
+    </li> #}
 </nav>
