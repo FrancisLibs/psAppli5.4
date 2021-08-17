@@ -50,6 +50,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $phoneNumber;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -166,6 +172,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }
