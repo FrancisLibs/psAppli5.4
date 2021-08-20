@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Token;
 use App\Data\SearchUser;
 use App\Form\UserEditType;
 use App\Form\SearchUserForm;
@@ -15,10 +16,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as extraSecurity;
 
 class UserController extends AbstractController
@@ -76,7 +79,7 @@ class UserController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return RedirectResponse|Response
      */
-    public function userCreate(Request $request)
+    public function userCreate(Request $request, \Swift_Mailer $mailer,TokenGeneratorInterface $tokenGenerator)
     {       
         $user = new User();
         $form = $this->createForm(UserInscriptionType::class, $user);
@@ -84,8 +87,29 @@ class UserController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) 
         {          
             $user->setPassword($this->hasher->hashPassword($user, 'password'));
+            $user->setActive(false);
             $this->manager->persist($user);
             $this->manager->flush();
+
+            $token = (new Token());
+            $token->setToken($tokenGenerator->generateToken())
+                ->setCreatedAt(new \DateTime()); 
+            $this->manager->persist($token);
+            $this->manager->flush();
+
+            $url = "";
+
+            $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('fr.libs@gmail.com')
+            ->setTo('fr.libs@gmail.com')
+            ->setBody(
+                $this->renderView(
+                    'emails/registration.html.twig',
+                    ['name' => $user->getFirstName()]
+                ),
+                'text/html'
+            );
+            $mailer->send($message);
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 

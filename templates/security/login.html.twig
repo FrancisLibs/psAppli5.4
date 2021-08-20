@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row mt-4">
-        <div class="col-5 mx-auto">
+        <div class="col-4 mx-auto">
             <form method="post">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -12,11 +12,11 @@
 
                 {% if app.user %}
                     <div class="mb-3">
-                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        Tu es connecté en tant que  {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                     </div>
                 {% endif %}
 
-                <h1 class="h3 mt-5 mb-5 font-weight-normal">Please sign in</h1>
+                <h1 class="h3 mt-5 mb-5 font-weight-normal">Merci de vous identifier</h1>
                 <div>
                     <label for="inputUsername">Username</label>
                     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
