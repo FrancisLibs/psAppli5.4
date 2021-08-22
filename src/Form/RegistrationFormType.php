@@ -7,35 +7,38 @@ use App\Entity\Organisation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-class UserInscriptionType extends AbstractType
+class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Identifiant',
-                'required' => true,
-                'attr' => [
-                    'placeholder' => 'Identifiant...'
-                ],
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => [
-                    'label' => 'Mot de passe',
-                    'attr' => ['placeholder' => 'Mot de passe...'],
-                ],
-                'second_options' => [
-                    'label' => 'Vérification',
-                    'attr' => ['placeholder' => 'Vérification...'],
+            ->add('plainPassword', PasswordType::class, [
+                'label' => 'Mot de passe',
+                // instead of being set onto the object directly,
+                // this is read and encoded in the controller
+                'mapped' => false,
+                'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un mot de passe',
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Votre mot de passe doit avoir au moins {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 4096,
+                    ]),
                 ],
             ])
             ->add('firstName', TextType::class, [
@@ -63,6 +66,7 @@ class UserInscriptionType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
             ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

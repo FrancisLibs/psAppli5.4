@@ -1,0 +1,43 @@
+{{ form_start(registrationForm) }}   
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(registrationForm.username) }}
+            {{ form_widget(registrationForm.username) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(registrationForm.organisation) }}
+            {{ form_widget(registrationForm.organisation) }}
+        </div>        
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(registrationForm.firstName) }}
+            {{ form_widget(registrationForm.firstName) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(registrationForm.lastName) }}  
+            {{ form_widget(registrationForm.lastName) }}  
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(registrationForm.plainPassword) }}
+            {{ form_widget(registrationForm.plainPassword) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(registrationForm.phoneNumber) }}
+            {{ form_widget(registrationForm.phoneNumber) }}        
+        </div>                
+    </div>
+    <div class="row ">
+        <div class="col-2 text-center">
+            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+        </div>
+    </div>
+{{ form_end(registrationForm) }}
