@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Renouvellement du mdp.{% endblock %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-4 mx-auto">
+            <h5>
+                Si un compte correspondant à ton email existe, alors un email de renouvellement de mot de passe t'a été envoyé
+                Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </h5>
+            <h5>Si tu ne recois pas l'email, verifie dans tes Spams ou <br>
+                <a href="{{ path('app_forgot_password_request') }}">essaye encore</a>.
+            </h5>
+        </div>
+    </div>
+{% endblock %}

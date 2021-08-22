@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
             //USERS
             for ($i = 0; $i < 5; $i++) {
                 $user  = (new User());
-                $user->setUsername($faker->name)
+                $user->setUsername($faker->lastName)
                     ->setPhoneNumber($faker->phoneNumber)
                     ->setFirstName($faker->firstName)
                     ->setLastName($faker->lastName)
