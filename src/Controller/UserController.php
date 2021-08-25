@@ -30,12 +30,13 @@ class UserController extends AbstractController
     private $security;
     private $userRepository;
     private $manager;
-   
-    public function __construct(EntityManagerInterface $manager, 
-        Security $security, 
+
+    public function __construct(
+        EntityManagerInterface $manager,
+        Security $security,
         UserRepository $userRepository,
-        UserPasswordHasherInterface $passwordHasher)
-    {
+        UserPasswordHasherInterface $passwordHasher
+    ) {
         $this->hasher = $passwordHasher;
         $this->security = $security;
         $this->userRepository = $userRepository;
@@ -52,14 +53,14 @@ class UserController extends AbstractController
      * @return RedirectResponse|Response
      */
     public function userList(Request $request)
-    {    
+    {
         $users = $this->userRepository->findAll();
 
         return $this->render('user/list.html.twig', [
             'users' => $users,
         ]);
     }
-    
+
     /**
      * Edit user
      * 
@@ -74,9 +75,8 @@ class UserController extends AbstractController
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {         
-             
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $this->manager->persist($user);
             $this->manager->flush();
 
@@ -88,20 +88,20 @@ class UserController extends AbstractController
             'user'  => $user,
         ]);
     }
-    
+
     /**
      * Delete user
      *
-     * @Route("/user/{id}/delete", name="user_delete", methods="DELETE")
+     * @Route("/user/{id}/remove", name="user_remove", methods={"DELETE"})
      * @extraSecurity("is_granted('ROLE_ADMIN')")
      * @param                      User $user
      * @return                     RedirectResponse
      */
     public function userDelete(User $user, Request $request)
     {
-        $token = $request->request->get('token');
+        $token = $request->request->get('_token');
         $currentUser = $this->getUser();
-        
+
         if ($this->isCsrfTokenValid('delete', $token)) {
             if ($user <> $currentUser) {
                 $this->manager->remove($user);

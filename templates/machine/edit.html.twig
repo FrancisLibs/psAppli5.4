@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Machine{% endblock %}
+
+{% block body %}
+    <h1>Edit Machine</h1>
+
+    {{ include('machine/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('machine_index') }}">back to list</a>
+
+    {{ include('machine/_delete_form.html.twig') }}
+{% endblock %}

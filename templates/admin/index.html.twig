@@ -8,8 +8,7 @@
         <div class="col-2">
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('user_list') }}" class=" w-100 btn btn-primary btn-sm">Utilisateurs</a>
-                <a href="{{ path('account_list') }}" class=" w-100 btn btn-primary btn-sm mt-2">Comptes</a>
-                <a href="{{ path('provider_list') }}" class=" w-100 btn btn-primary btn-sm mt-2">Fournisseurs</a>
+                {# <a href="{{ path('provider_list') }}" class=" w-100 btn btn-primary btn-sm mt-2">Fournisseurs</a> #}
             {% endif %}
         </div>
     </div>
