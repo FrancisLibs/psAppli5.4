@@ -1,19 +1,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
-    <div>
-        <a class="navbar-brand px-5" href="{{ path('home') }}">
-            <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-    <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+    <a class="navbar-brand px-5" href="{{ path('home') }}">
+        <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto topnav">
              <li class="nav-item active">
-                <a class="nav-link" href="{{ path('part') }}">Pièces détachées</a>
+                {# <a class="nav-link" href="{{ path('part') }}">Pièces détachées</a> #}
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('machine') }}">Machines</a>
+                <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
             </li>
             <li>
                 <a href="{{ path('admin') }}" class="nav-link">Bons de travail</a>
@@ -21,10 +20,6 @@
             <li>
                 <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
             </li>
-        </ul>
-    </div>
-    <div>
-        <ul class="navbar-nav mr-auto align-items-center">
             {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                     <a href="{{ path('admin') }}" class="nav-link">Administration</a>
