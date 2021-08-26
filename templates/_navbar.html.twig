@@ -1,50 +1,62 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
-    <div class="container">
-        <div class="col-2 d-flex justify-content-start">
-            <a class="navbar-brand d-flex align-items-center" href="{{ path('home') }}">
-                <img class="logo" src="{{ asset('images/logo.png') }}" alt="Charcuterie Pierre Schmidt">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto align-items-center">
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item">
-                            <a href="{{ path('admin') }}" class="nav-link">Administration</a>
+    <div>
+        <a class="navbar-brand px-5" href="{{ path('home') }}">
+            <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse px-5" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+             <li class="nav-item active">
+                <a class="nav-link" href="{{ path('part') }}">Pièces détachées</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('machine') }}">Machines</a>
+            </li>
+            <li>
+                <a href="{{ path('admin') }}" class="nav-link">Bons de travail</a>
+            </li>
+            <li>
+                <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <ul class="navbar-nav mr-auto align-items-center">
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a href="{{ path('admin') }}" class="nav-link">Administration</a>
+                </li>
+            {% endif %}
+            {% if app.user %}
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
+            </li>
+            {% if app.user %}
+                <li class="nav-item dropdown px-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="logo_profil" src="{{ asset("images/profil3.png") }}" alt="Profil">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
                         </li>
-                    {% endif %}
-                    {% if app.user %}
-                        <li class="nav-item">
-                            <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
-                    </li>
-                    {% if app.user %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ asset("images/profilh.png") }}" alt="Profil">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
-                                </li>
-                                {# <li>
-                                    <a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a>
-                                </li> #}
-                            </ul>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
+                        {# <li>
+                            <a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a>
+                        </li> #}
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 </nav>

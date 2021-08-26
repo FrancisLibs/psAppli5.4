@@ -3,14 +3,25 @@
 {% block title %}Hello PartController!{% endblock %}
 
 {% block body %}
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/Gmao/src/Controller/PartController.php'|file_link(0) }}">src/Controller/PartController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/Gmao/templates/part/index.html.twig'|file_link(0) }}">templates/part/index.html.twig</a></code></li>
-    </ul>
-</div>
+     <div class="row mt-5">
+        <nav class="col-2">
+        </nav>
+        <section class="col-8">
+            <div class="row mb-3">
+                <div class="col-4">
+                    <h3>Pièces détachées</h3>
+                </div>
+                <div class="col-3">
+                    <a href="#" class="btn btn-primary btn-sm">Ajouter pièce</a>
+                </div>
+            </div>
+            {% include('part/_partsList.html.twig') %}
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(parts) }}
+            </div>
+        </section>
+        <aside class="col-2">
+        </aside>
+    </div>
 {% endblock %}
