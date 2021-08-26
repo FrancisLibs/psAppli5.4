@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Machine{% endblock %}
+
+{% block body %}
+    <h1>Create new Machine</h1>
+
+    {{ include('machine/_form.html.twig') }}
+
+    <a href="{{ path('machine_index') }}">back to list</a>
+{% endblock %}

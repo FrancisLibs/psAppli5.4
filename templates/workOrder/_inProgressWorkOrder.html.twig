@@ -1,0 +1,19 @@
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(workOrders, 'Date', 'a.createdAt') }}</th>
+            <th> {{ knp_pagination_sortable(workOrders, 'Machine', 'a.machine') }}</th>
+            <th> {{ knp_pagination_sortable(workOrders, 'Travaux', 'a.subject') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for workOrder in workOrders %}
+            <tr>
+                <td>{{ workorder.createdAt}}</td>
+                <td>{{ workorder.machine.name}}</td>
+                <td>{{ workorder.subject}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
