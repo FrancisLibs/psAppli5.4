@@ -2,9 +2,9 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(workOrders, 'Date', 'a.createdAt') }}</th>
-            <th> {{ knp_pagination_sortable(workOrders, 'Machine', 'a.machine') }}</th>
-            <th> {{ knp_pagination_sortable(workOrders, 'Travaux', 'a.subject') }}</th>
+            <th>{{ knp_pagination_sortable(workOrders, 'Date', 'w.createdAt') }}</th>
+            <th>{{ knp_pagination_sortable(workOrders, 'Machine', 'w.machine') }}</th>
+            <th>{{ knp_pagination_sortable(workOrders, 'Travaux', 'w.subject') }}</th>
         </tr>
     </thead>
     <tbody>
