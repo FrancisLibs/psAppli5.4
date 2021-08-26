@@ -1,0 +1,27 @@
+ <table class="table">
+        <thead>
+            <tr>
+                <th>Designation</th>
+                <th>Reference</th>
+                <th>Code</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for part in parts %}
+                <tr>
+                    <td>{{ part.designation }}</td>
+                    <td>{{ part.reference }}</td>
+                    <td>{{ part.code }}</td>
+                    <td>
+                        <a href="{{ path('part_show', {'id': part.id}) }}">show</a>
+                        <a href="{{ path('part_edit', {'id': part.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Il n'y a pas de pièce enregistrée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
