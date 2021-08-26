@@ -1,0 +1,24 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(machines, 'Constructeur', 'm.id') }}</th>
+            <th>{{ knp_pagination_sortable(machines, 'Modèle', 'm.model') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for machine in machines %}
+        <tr>
+            <td>{{ machine.Constructor }}</td>
+            <td>{{ machine.model }}</td>
+            <td>
+                <a href="{{ path('machine_show', {'id': machine.id}) }}">show</a>
+                <a href="{{ path('machine_edit', {'id': machine.id}) }}">edit</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">Il n'y a aucune machine</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
