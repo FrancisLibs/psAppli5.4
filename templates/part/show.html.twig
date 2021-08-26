@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Part{% endblock %}
+
+{% block body %}
+    <h1>Part</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ part.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ part.designation }}</td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ part.reference }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ part.status }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ part.code }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('part_index') }}">back to list</a>
+
+    <a href="{{ path('part_edit', {'id': part.id}) }}">edit</a>
+
+    {{ include('part/_delete_form.html.twig') }}
+{% endblock %}
