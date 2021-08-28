@@ -1,27 +1,73 @@
- <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-left">{{ knp_pagination_sortable(parts, 'Code', 'p.code') }}</th>
+            <th>{{ knp_pagination_sortable(parts, 'Désignation', 'p.designation') }}</th>
+            <th>{{ knp_pagination_sortable(parts, 'Référence', 'p.reference') }}</th>
+            <th>{{ knp_pagination_sortable(parts, 'Qte Stock', 'p.qteStock') }}</th>
+            <th>{{ knp_pagination_sortable(parts, 'Emplacement', 'p.place') }}</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for part in parts %}
             <tr>
-                <th>Designation</th>
-                <th>Reference</th>
-                <th>Code</th>
-                <th>Actions</th>
+                <td>{{ part.code }}</td>
+                <td>{{ part.designation }}</td>
+                <td>{{ part.reference }}</td>
+                <td>{{ part.stock.qteStock }}</td>
+                <td>{{ part.stock.place }}</td>
+                <td>
+                    <a href="{{ path('part_show', {'id': part.id}) }}">show</a>
+                    <a href="{{ path('part_edit', {'id': part.id}) }}">edit</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for part in parts %}
-                <tr>
-                    <td>{{ part.designation }}</td>
-                    <td>{{ part.reference }}</td>
-                    <td>{{ part.code }}</td>
-                    <td>
-                        <a href="{{ path('part_show', {'id': part.id}) }}">show</a>
-                        <a href="{{ path('part_edit', {'id': part.id}) }}">edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">Il n'y a pas de pièce enregistrée</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% else %}
+            <tr>
+                <td colspan="6">Il n'y a pas de pièce enregistrée</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# <table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>CreatedAt</th>
+            <th>Status</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Subject</th>
+            <th>Duration</th>
+            <th>MachineStop</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for work_order in work_orders %}
+        <tr>
+            <td>{{ work_order.id }}</td>
+            <td>{{ work_order.createdAt ? work_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ work_order.status }}</td>
+            <td>{{ work_order.startDate ? work_order.startDate|date('Y-m-d') : '' }}</td>
+            <td>{{ work_order.endDate ? work_order.endDate|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ work_order.subject }}</td>
+            <td>{{ work_order.duration ? work_order.duration|date('Y-m-d') : '' }}</td>
+            <td>{{ work_order.machineStop ? work_order.machineStop.format('%y year(s), %m month(s), %d day(s)') : '' }}</td>
+            <td>{{ work_order.startTime ? work_order.startTime|date('H:i:s') : '' }}</td>
+            <td>{{ work_order.endTime ? work_order.endTime|date('H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('work_order_show', {'id': work_order.id}) }}">show</a>
+                <a href="{{ path('work_order_edit', {'id': work_order.id}) }}">edit</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="11">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table> #}

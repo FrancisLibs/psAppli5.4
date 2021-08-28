@@ -2,28 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Part;
-use App\Form\StockType;
+use App\Entity\Stock;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class PartType extends AbstractType
+class StockType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('designation')
-            ->add('reference')
-            ->add('code')
-            ->add('stock', StockType::class);
+            ->add('place', TextType::class, [
+                'label' => 'Emplacement',
+            ])
+            ->add('qteMin')
+            ->add('qteMax')
+            ->add('qteStock')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Part::class,
+            'data_class' => Stock::class,
         ]);
     }
 }

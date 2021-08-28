@@ -28,7 +28,7 @@ class PartController extends AbstractController
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
-        return $this->render('part/list.html.twig', [
+        return $this->render('part/index.html.twig', [
             'parts' => $parts,
         ]);
     }

@@ -1,11 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Part{% endblock %}
+{% block title %}Nouvelle pièce détachée{% endblock %}
 
 {% block body %}
-    <h1>Create new Part</h1>
-
-    {{ include('part/_form.html.twig') }}
-
-    <a href="{{ path('part_index') }}">back to list</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-8 mt-4 mb-4">
+                <div class="row align-items-center mb-4">
+                    <div class="col-5">
+                        <h2>Création pièce</h2>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-primary btn-sm" href="{{ path('part_index') }}" role="button">Listes des pièces</a>
+                    </div>
+                </div>
+                <div class="row">
+            <div class="col-12 mb-4">
+                {{ include('part/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+

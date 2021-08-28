@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit WorkOrder{% endblock %}
+
+{% block body %}
+    <h1>Edit WorkOrder</h1>
+
+    {{ include('work_order/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('work_order_index') }}">back to list</a>
+
+    {{ include('work_order/_delete_form.html.twig') }}
+{% endblock %}
