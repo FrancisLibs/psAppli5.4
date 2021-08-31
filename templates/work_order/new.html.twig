@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New WorkOrder{% endblock %}
+
+{% block body %}
+    <h1>Create new WorkOrder</h1>
+
+    {{ include('work_order/_form.html.twig') }}
+
+    <a href="{{ path('work_order_index') }}">back to list</a>
+{% endblock %}

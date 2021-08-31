@@ -29,7 +29,7 @@ class MachineController extends AbstractController
             10 /*limit per page*/
         );
 
-        return $this->render('machine/list.html.twig', [
+        return $this->render('machine/index.html.twig', [
             'machines' => $machines,
         ]);
     }
