@@ -8,18 +8,20 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto topnav">
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('work_order_index') }}" >Bons de travail</a>
-            </li>
-            <li>
-                <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
-            </li>
+            {% if app.user %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('work_order_index') }}" >Bons de travail</a>
+                </li>
+                <li>
+                    <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
+                </li>
+            {% endif %}
             {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                     <a href="{{ path('admin') }}" class="nav-link">Administration</a>
