@@ -110,7 +110,11 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> machine
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
@@ -127,7 +131,11 @@ class PartController extends AbstractController
      */
     public function delete(Request $request, Part $part): Response
     {
+<<<<<<< HEAD
         if ($this->isCsrfTokenValid('delete'.$part->getId(), $request->request->get('_token'))) {
+=======
+        if ($this->isCsrfTokenValid('delete' . $part->getId(), $request->request->get('_token'))) {
+>>>>>>> machine
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($part);
             $entityManager->flush();

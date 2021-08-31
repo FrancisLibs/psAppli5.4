@@ -8,6 +8,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto topnav">
+<<<<<<< HEAD
             {% if app.user %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
@@ -22,6 +23,20 @@
                     <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
                 </li>
             {% endif %}
+=======
+             <li class="nav-item active">
+                <a class="nav-link" href="{{ path('part') }}">Pièces détachées</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
+            </li>
+            <li>
+                <a href="{{ path('admin') }}" class="nav-link">Bons de travail</a>
+            </li>
+            <li>
+                <a href="{{ path('admin') }}" class="nav-link">Préventif</a>
+            </li>
+>>>>>>> machine
             {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                     <a href="{{ path('admin') }}" class="nav-link">Administration</a>
