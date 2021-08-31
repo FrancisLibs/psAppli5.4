@@ -1,13 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Part{% endblock %}
+{% block title %}Pièce détachée - Edition{% endblock %}
 
 {% block body %}
-    <h1>Edit Part</h1>
-
-    {{ include('part/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('part_index') }}">back to list</a>
-
-    {{ include('part/_delete_form.html.twig') }}
+    <div class="row mt-5">
+        <div class="col-6 mx-auto">
+            <div class="row align-items-center">
+                <div class="col-3">
+                    <h3>Edition pièce</h3>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-primary btn-sm mr-3" href="{{ path('part_index') }}" role="button">Retour à la liste</a>
+                    {{ include('part/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <article class="row">
+        <div class="mt-4 col-6 mx-auto">
+            {{ include('part/_form.html.twig') }}
+        </div>
+    </article>
 {% endblock %}

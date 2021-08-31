@@ -18,6 +18,11 @@ class Part
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $code;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $designation;
@@ -38,21 +43,28 @@ class Part
     private $stock;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="boolean")
      */
-    private $status;
+    private $validity;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $code;
+    
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
 
     public function getDesignation(): ?string
     {
@@ -107,26 +119,14 @@ class Part
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getValidity(): ?string
     {
-        return $this->status;
+        return $this->validity;
     }
 
-    public function setStatus(string $status): self
+    public function setValidity(string $validity): self
     {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
+        $this->validity = $validity;
 
         return $this;
     }

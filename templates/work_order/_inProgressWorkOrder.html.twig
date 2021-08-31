@@ -1,0 +1,22 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(workOrders, 'Date', 'w.createdAt') }}</th>
+            <th>{{ knp_pagination_sortable(workOrders, 'Machine', 'w.machine') }}</th>
+            <th>{{ knp_pagination_sortable(workOrders, 'Travaux', 'w.subject') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for workOrder in workOrders %}
+            <tr>
+                <td>{{ workorder.createdAt}}</td>
+                <td>{{ workorder.machine.name}}</td>
+                <td>{{ workorder.subject}}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Il n'y a pas de BT enregistrés</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Part;
 use App\Form\PartType;
+use App\Data\SearchPart;
+use App\Form\SearchPartForm;
 use App\Repository\PartRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -16,20 +20,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class PartController extends AbstractController
 {
-    /**
-     * @Route("/", name="part_index", methods={"GET"})
-     */
-    public function index(Request $request, PaginatorInterface $paginator, PartRepository $partRepository): Response
-    {
-        $parts = $partRepository->findAll();
+    private $partRepository;
+    private $manager;
 
-        $parts = $paginator->paginate(
-            $parts, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
-        );
+    public function __construct(PartRepository $partRepository, EntityManagerInterface $manager)
+    {
+        $this->partRepository = $partRepository;
+        $this->manager = $manager;
+    }
+
+    /**
+     * @ Liste des pièces détachées
+     * 
+     * @Route("/", name="part_index", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     * @param Request $request
+     */
+    public function index(Request $request): Response
+    {
+        $data = new SearchPart();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchPartForm::class, $data);
+        $form->handleRequest($request);
+        $parts = $this->partRepository->findSearch($data);
+        //dd($parts);
+        // if ($request->get('ajax')) {
+        //     return new JsonResponse([
+        //         'content'       =>  $this->renderView('ident/_idents.html.twig', ['idents' => $idents]),
+        //         'sorting'       =>  $this->renderView('ident/_sorting.html.twig', ['idents' => $idents]),
+        //         'pagination'    =>  $this->renderView('ident/_pagination.html.twig', ['idents' => $idents]),
+        //     ]);
+        // }
         return $this->render('part/index.html.twig', [
-            'parts' => $parts,
+            'parts' =>  $parts,
+            'form'  =>  $form->createView(),
         ]);
     }
 
@@ -38,12 +62,19 @@ class PartController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $organisation = $this->getUser()->getOrganisation();
         $part = new Part();
         $form = $this->createForm(PartType::class, $part);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $part->setValidity(true);
+            $part->setOrganisation($organisation);
+            $part->setCode(strtoupper($part->getCode()));
+            $part->setReference(strtoupper($part->getReference()));
+            $part->setDesignation(ucfirst($part->getDesignation()));
+            $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
             $entityManager->persist($part);
             $entityManager->flush();
 
@@ -75,6 +106,11 @@ class PartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $part->setCode(strtoupper($part->getCode()));
+            $part->setReference(strtoupper($part->getReference()));
+            $part->setDesignation(ucfirst($part->getDesignation()));
+            $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
+            
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);

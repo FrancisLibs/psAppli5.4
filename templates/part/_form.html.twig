@@ -4,7 +4,7 @@
             {{ form_label(form.code) }}  
             {{ form_widget(form.code) }}  
         </div>
-        <div class="col-9">
+        <div class="col-8">
             {{ form_label(form.designation) }}
             {{ form_widget(form.designation) }}
         </div>
@@ -15,21 +15,21 @@
             {{ form_widget(form.reference) }}
         </div>
     </div>
-    <div class="row justify-content-center mb-4">
-        <div class="col-3">
+    <div class="row justify-content-start mb-4">
+        <div class="col-2">
             {{ form_label(form.stock.place) }}
             {{ form_widget(form.stock.place) }}
         </div>
-        <div class="col-3">
+        <div class="col-2">
             {{ form_label(form.stock.qteStock) }}
             {{ form_widget(form.stock.qteStock) }}      
         </div>
-        <div class="col-3">
+        <div class="col-2">
             {{ form_label(form.stock.qteMax) }}
             {{ form_widget(form.stock.qteMax) }}
         </div>
-        <div class="col-3">
-             {{ form_label(form.stock.qteMin) }}
+        <div class="col-2">
+            {{ form_label(form.stock.qteMin) }}
             {{ form_widget(form.stock.qteMin) }}
         </div>
     </div>

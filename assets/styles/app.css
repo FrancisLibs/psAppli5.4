@@ -5,3 +5,7 @@ body {
 .logo_profil {
   width: 40px;
 }
+
+.bg-color-orange {
+  background-color: orange;
+}
