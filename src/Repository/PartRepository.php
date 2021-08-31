@@ -3,48 +3,70 @@
 namespace App\Repository;
 
 use App\Entity\Part;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Data\SearchPart;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @method Part|null find($id, $lockMode = null, $lockVersion = null)
- * @method Part|null findOneBy(array $criteria, array $orderBy = null)
- * @method Part[]    findAll()
- * @method Part[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
+
 class PartRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Part::class);
+        $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return Part[] Returns an array of Part objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Récupère les commandes liées à une recherche
+     *
+     * @param SearchPart $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchPart $search): PaginationInterface
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('p')
+            ->orderBy('p.code', 'ASC')
+            ->select('p', 's')
+            ->join('p.stock', 's');
 
-    /*
-    public function findOneBySomeField($value): ?Part
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($search->code)) {
+            $query = $query
+                ->andWhere('p.code LIKE :code')
+                ->setParameter('code', "%{$search->code}%")
+            ;
+        }
+
+        if (!empty($search->designation)) {
+            $query = $query
+                ->andWhere('p.designation LIKE :designation')
+                ->setParameter('designation', "%{$search->designation}%")
+            ;
+        }
+
+        if (!empty($search->reference)) {
+            $query = $query
+                ->andWhere('p.reference LIKE :reference')
+                ->setParameter('reference',"%{$search->reference}%")
+            ;
+        }
+
+        if (!empty($search->place)) {
+            $query = $query
+                ->andWhere('s.place LIKE :place')
+                ->setParameter('place', "%{$search->place}%");
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
     }
-    */
 }

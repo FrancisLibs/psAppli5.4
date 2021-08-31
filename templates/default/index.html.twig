@@ -8,14 +8,14 @@
         </nav>
         <section class="col-8">
             <div class="row mb-3">
-                <div class="col-4">
+                <div class="col-3">
                     <h3>BT en cours</h3>
                 </div>
                 <div class="col-3">
                     <a href="#" class="btn btn-primary btn-sm">Nouveau BT</a>
                 </div>
             </div>
-            {% include('workOrder/_inProgressWorkOrder.html.twig') %}
+            {% include('work_order/_inProgressWorkOrder.html.twig') %}
             {# display navigation #}
             <div class="navigation">
                 {{ knp_pagination_render(workOrders) }}

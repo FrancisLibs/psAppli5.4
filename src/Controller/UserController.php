@@ -46,7 +46,7 @@ class UserController extends AbstractController
     /**
      * Users list
      * 
-     * @Route("/admin/user/index", name="user_list")
+     * @Route("/admin/user/index", name="user_index")
      * @extraSecurity("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @param EntityManagerInterface $manager
@@ -56,7 +56,7 @@ class UserController extends AbstractController
     {
         $users = $this->userRepository->findAll();
 
-        return $this->render('user/list.html.twig', [
+        return $this->render('user/index.html.twig', [
             'users' => $users,
         ]);
     }
