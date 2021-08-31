@@ -54,7 +54,6 @@ class Part
         return $this->id;
     }
 
-<<<<<<< HEAD
     public function getCode(): ?string
     {
         return $this->code;
@@ -66,9 +65,6 @@ class Part
 
         return $this;
     }
-=======
-
->>>>>>> machine
 
     public function getDesignation(): ?string
     {
@@ -131,21 +127,6 @@ class Part
     public function setValidity(string $validity): self
     {
         $this->validity = $validity;
-<<<<<<< HEAD
-=======
-
-        return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
->>>>>>> machine
 
         return $this;
     }
