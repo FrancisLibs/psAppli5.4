@@ -40,7 +40,7 @@ class Part
     /**
      * @ORM\Column(type="string", length=10)
      */
-    private $status;
+    private $validity;
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -52,7 +52,7 @@ class Part
         return $this->id;
     }
 
-    
+
 
     public function getDesignation(): ?string
     {
@@ -107,14 +107,14 @@ class Part
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getValidity(): ?string
     {
-        return $this->status;
+        return $this->validity;
     }
 
-    public function setStatus(string $status): self
+    public function setValidity(string $validity): self
     {
-        $this->status = $status;
+        $this->validity = $validity;
 
         return $this;
     }
