@@ -9,10 +9,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-
 class PartRepository extends ServiceEntityRepository
 {
-
     private $paginator;
 
     public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
@@ -22,7 +20,7 @@ class PartRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les commandes liées à une recherche
+     * Récupère les pièces liées à une recherche
      *
      * @param SearchPart $search
      * @return PaginationInterface
@@ -32,7 +30,8 @@ class PartRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.code', 'ASC')
             ->select('p', 's')
-            ->join('p.stock', 's');
+            ->join('p.stock', 's')
+        ;
 
         if (!empty($search->code)) {
             $query = $query
@@ -58,7 +57,8 @@ class PartRepository extends ServiceEntityRepository
         if (!empty($search->place)) {
             $query = $query
                 ->andWhere('s.place LIKE :place')
-                ->setParameter('place', "%{$search->place}%");
+                ->setParameter('place', "%{$search->place}%")
+            ;
         }
 
         $query = $query->getQuery();

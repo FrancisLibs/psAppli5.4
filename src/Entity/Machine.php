@@ -22,7 +22,7 @@ class Machine
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $Constructor;
+    private $constructor;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -62,12 +62,12 @@ class Machine
 
     public function getConstructor(): ?string
     {
-        return $this->Constructor;
+        return $this->constructor;
     }
 
-    public function setConstructor(string $Constructor): self
+    public function setConstructor(string $constructor): self
     {
-        $this->Constructor = $Constructor;
+        $this->constructor = $constructor;
 
         return $this;
     }

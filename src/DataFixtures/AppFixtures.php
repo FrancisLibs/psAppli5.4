@@ -21,19 +21,12 @@ class AppFixtures extends Fixture
 {
     private $passwordHasher;
     private $manager;
-    private $URepo;
-    private $MRepo;
 
-    public function __construct(
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager,
-        UserRepository $URepo,
-        MachineRepository $MRepo
-    ) {
+    public function __construct(UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager ) 
+    {
         $this->passwordHasher = $passwordHasher;
         $this->manager = $entityManager;
-        $this->URepo = $URepo;
-        $this->MRepo = $MRepo;
     }
 
     public function load(ObjectManager $manager)
@@ -43,13 +36,15 @@ class AppFixtures extends Fixture
         //ORGANISATIONS
         $organisationArray = ['Pierre Schmidt W1', 'Pierre Schmidt W2', 'Pierre Schmidt R2', 'Stoeffler'];
         foreach ($organisationArray as $org) {
-            $organisation = (new Organisation())->setDesignation($org);
+            $organisation = (new Organisation())
+                ->setDesignation($org)
+            ;
             $manager->persist($organisation);
             //WORKSHOP
             $workshops = ['boucherie', 'conditionnement', 'mise en cartons', 'charcuterie', 'préparation mêlée'];
             for ($i = 0; $i < 5; $i++) {
                 $workshop = (new Workshop());
-                $workshop->setName(array_rand($workshops, 1))
+                $workshop->setName($workshops[array_rand($workshops, 1)])
                     ->setOrganisation($organisation);
                 $manager->persist($workshop);
 
@@ -59,23 +54,34 @@ class AppFixtures extends Fixture
                     $machine->setConstructor(strtoupper($faker->word))
                         ->setModel(strtoupper($faker->word))
                         ->setSerialNumber($faker->word)
-                        ->setWorkshop($workshop);
+                        ->setWorkshop($workshop)
+                        ->setStatus(1)
+                    ;
                     $manager->persist($machine);
                 }
             }
             //USERS
-            for ($i = 0; $i < 5; $i++) {
-                $user  = (new User());
-                $user->setUsername($faker->lastName)
-                    ->setPhoneNumber($faker->phoneNumber)
-                    ->setFirstName($faker->firstName)
-                    ->setLastName($faker->lastName)
-                    ->setPassword($this->passwordHasher->hashPassword($user, 'password'))
-                    ->setRoles(['ROLE_USER'])
-                    ->setOrganisation($organisation)
-                    ->setEmail($faker->email);
-                $this->manager->persist($user);
-            }
+            $user  = (new User());
+            $user->setUsername('admin' . substr($organisation->getDesignation(), -2))
+                ->setPhoneNumber($faker->phoneNumber)
+                ->setFirstName($faker->firstName)
+                ->setLastName($faker->lastName)
+                ->setPassword($this->passwordHasher->hashPassword($user, 'password'))
+                ->setRoles(['ROLE_ADMIN'])
+                ->setOrganisation($organisation)
+                ->setEmail($faker->email);
+            $this->manager->persist($user);
+
+            $user  = (new User());
+            $user->setUsername('user'. substr($organisation->getDesignation(), -2))
+                ->setPhoneNumber($faker->phoneNumber)
+                ->setFirstName($faker->firstName)
+                ->setLastName($faker->lastName)
+                ->setPassword($this->passwordHasher->hashPassword($user, 'password'))
+                ->setRoles(['ROLE_USER'])
+                ->setOrganisation($organisation)
+                ->setEmail($faker->email);
+            $this->manager->persist($user);
 
             //PARTS
             for ($i = 0; $i < 20; $i++) {
@@ -99,29 +105,6 @@ class AppFixtures extends Fixture
                     ->setStock($stock);
                 $manager->persist($part);
             }
-            // //WORKORDERS
-            // $machines = $this->MRepo->findAll();
-            // $machineArray = array();
-            // foreach ($machines as $machine) {
-            //     $machineArray [] = $machine;
-            // }
-
-            // $users = $this->URepo->findAll();
-            // $userArray = array();
-            // foreach ($users as $user) {
-            //     $userArray[] = $user;
-            // }
-
-            // for ($i = 0; $i < 3; $i++) {
-            //     $workOrder = (new WorkOrder());
-            //     $workOrder->setCreatedAt($faker->dateTime('now', null));
-            //     $machine = array_rand($machineArray, 1);
-            //     $workOrder->setMachine($machine);
-            //     $user = array_rand($userArray, 1);
-            //     $workOrder->setUser($user);
-            //     $workOrder->setStartDate($faker->dateTime('now', null));
-            //     $workOrder->setStatus('open');
-            // }
         }
         $this->manager->flush();
     }
