@@ -1,0 +1,37 @@
+<div class="mt-5">
+    <h3 class="mx-auto mb-2" style="width: 80px; color: #ffff;">Filtres</h3>
+    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+
+        <div class="mt-2 d-flex">
+            <div class="filterbtn">
+                {{ form_row(form.constructor) }}
+            </div>
+            <div>
+                <button class="resetBtn btn btn-primary">Reset</button>
+            </div>
+        </div>
+       
+        <div class="mt-2 d-flex">
+            <div class="filterbtn">
+                {{ form_row(form.model) }}
+            </div>
+            <div>
+                <button class="resetBtn btn btn-primary">Reset</button>
+            </div>
+        </div>
+
+        <div class="mt-2 d-flex">
+            <div class="filterbtn">
+                {{ form_row(form.workshop) }}
+            </div>
+            <div>
+                <button class="resetBtn btn btn-primary">Reset</button>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+        </div>
+        
+    {{ form_end(form) }}
+</div>

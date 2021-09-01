@@ -1,4 +1,24 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form) }}   
+    <div class="row mb-4">
+        <div class="col-3">
+            {{ form_label(form.constructor) }}  
+            {{ form_widget(form.constructor) }}  
+        </div>
+        <div class="col-8">
+            {{ form_label(form.model) }}
+            {{ form_widget(form.model) }}
+        </div>
+    </div>
+    <div class="row justify-content-start mb-4">
+        <div class="col-3">
+            {{ form_label(form.workshop) }}
+            {{ form_widget(form.workshop) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-center">
+            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+        </div>
+    </div>
 {{ form_end(form) }}
+

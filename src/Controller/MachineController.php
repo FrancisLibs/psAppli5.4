@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Machine;
 use App\Form\MachineType;
+use App\Data\SearchMachine;
+use App\Form\SearchMachineForm;
 use App\Repository\MachineRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -16,21 +20,35 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MachineController extends AbstractController
 {
-    /**
-     * @Route("/", name="machine_index", methods={"GET"})
-     */
-    public function index(Request $request, PaginatorInterface $paginator, MachineRepository $machineRepository ): Response
-    {
-        $machines = $machineRepository->findAll();
+    private $machineRepository;
+    private $manager;
 
-        $machines = $paginator->paginate(
-            $machines, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
-        );
+    public function __construct(MachineRepository $machineRepository, EntityManagerInterface $manager)
+    {
+        $this->machineRepository = $machineRepository;
+        $this->manager = $manager;
+    }
+
+    /**
+     * @ Liste des machines
+     * 
+     * @Route("/", name="machine_index", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     * 
+     * @param Request $request
+     */
+    public function index(Request $request): Response
+    {
+        $data = new SearchMachine();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchMachineForm::class, $data);
+        $form->handleRequest($request);
+        $machines = $this->machineRepository->findSearch($data);
+
 
         return $this->render('machine/index.html.twig', [
-            'machines' => $machines,
+            'machines'  => $machines,
+            'form'      =>  $form->createView(),
         ]);
     }
 

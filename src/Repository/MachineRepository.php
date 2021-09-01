@@ -3,48 +3,64 @@
 namespace App\Repository;
 
 use App\Entity\Machine;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Data\SearchMachine;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @method Machine|null find($id, $lockMode = null, $lockVersion = null)
- * @method Machine|null findOneBy(array $criteria, array $orderBy = null)
- * @method Machine[]    findAll()
- * @method Machine[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class MachineRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Machine::class);
+        $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return Machine[] Returns an array of Machine objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Récupère les machines liées à une recherche
+     *
+     * @param SearchMachine $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchMachine $search): PaginationInterface
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        //dd($search);
+        $query = $this->createQueryBuilder('m')
+            ->orderBy('m.constructor', 'ASC')
+            ->select('m', 'w')
+            ->join('m.workshop', 'w')
         ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Machine
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($search->constructor)) {
+            $query = $query
+                ->andWhere('m.constructor LIKE :constructor')
+                ->setParameter('constructor', "%{$search->constructor}%")
+            ;
+        }
+
+        if (!empty($search->model)) {
+            $query = $query
+                ->andWhere('m.model LIKE :model')
+                ->setParameter('model', "%{$search->model}%")
+            ;
+        }
+
+        if (!empty($search->workshop)) {
+            $query = $query
+                ->andWhere('w.name LIKE :name')
+                ->setParameter('name', "%{$search->workshop}%")
+            ;
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
     }
-    */
 }
