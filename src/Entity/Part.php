@@ -47,6 +47,11 @@ class Part
      */
     private $validity;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $remarque;
+
     
 
     public function getId(): ?int
@@ -127,6 +132,18 @@ class Part
     public function setValidity(string $validity): self
     {
         $this->validity = $validity;
+
+        return $this;
+    }
+
+    public function getRemarque(): ?string
+    {
+        return $this->remarque;
+    }
+
+    public function setRemarque(?string $remarque): self
+    {
+        $this->remarque = $remarque;
 
         return $this;
     }

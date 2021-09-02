@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste ateliers{% endblock %}  
+
+{% block body %}
+    <main class="row mt-5">
+        <aside class="col-2">
+        </aside>
+        <article class="col-10 mx-auto">
+            <div class="row align-items-start">
+                <div class="col-3">
+                    <h3>Ateliers</h3>
+                </div>
+                <div class="col-3">
+                    <a class="btn btn-primary btn-sm" href="{{ path('workshop_new') }}" role="button">Nouvel atelier</a>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    {% include 'workshop/_workshopList.html.twig' with {workshops: workshops} only %}
+                </div>
+            </div>
+        </article>
+    </main>
+{% endblock %}

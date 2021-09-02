@@ -1,0 +1,18 @@
+{{ form_start(form) }}   
+    <div class="row mb-4">
+        <div class="col-5">
+            {{ form_label(form.name) }}  
+            {{ form_widget(form.name) }}  
+        </div>
+        <div class="col-8">
+            {{ form_label(form.organisation) }}
+            {{ form_widget(form.organisation) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-center">
+            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+        </div>
+    </div>
+{{ form_end(form) }}
+
