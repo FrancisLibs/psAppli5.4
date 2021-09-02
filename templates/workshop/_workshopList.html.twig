@@ -1,0 +1,19 @@
+<table class="table table-sm">
+    <thead>
+        {% include 'workshop/_sorting.html.twig' %}
+    </thead>
+    <tbody>
+        {% for workshop in workshops %}
+            <tr>
+                <td><a href="{{ path('workshop_show', {'id': workshop.id}) }}">{{ workshop.name }}</a></td>
+                <td class="text-center">
+                    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}"><i class="bi bi-pencil-square"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Il n'y a pas de pièce enregistrée</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

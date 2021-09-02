@@ -62,7 +62,7 @@ class WorkOrder
     /**
      * @ORM\Column(type="dateinterval", nullable=true)
      */
-    private $machineStop;
+    private $machineStopTime;
 
     /**
      * @ORM\Column(type="time", nullable=true)
@@ -175,14 +175,14 @@ class WorkOrder
         return $this;
     }
 
-    public function getMachineStop(): ?\DateInterval
+    public function getMachineStopTime(): ?\DateInterval
     {
-        return $this->machineStop;
+        return $this->machineStopTime;
     }
 
-    public function setMachineStop(?\DateInterval $machineStop): self
+    public function setMachineStopTime(?\DateInterval $machineStopTime): self
     {
-        $this->machineStop = $machineStop;
+        $this->machineStopTime = $machineStopTime;
 
         return $this;
     }
