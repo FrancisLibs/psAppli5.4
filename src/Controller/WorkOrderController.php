@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\WorkOrder;
-use App\Form\WorkOrderType;
-use App\Repository\WorkOrderRepository;
+use App\Entity\Workorder;
+use App\Form\WorkorderType;
+use App\Data\SearchWorkorder;
+use App\Form\SearchWorkorderForm;
+use App\Repository\WorkorderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,23 +17,38 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/work/order")
  */
-class WorkOrderController extends AbstractController
+class WorkorderController extends AbstractController
 {
+    private $workorderRepository;
+    private $manager;
+
+    public function __construct(WorkorderRepository $workorderRepository, EntityManagerInterface $manager)
+    {
+        $this->workorderRepository = $workorderRepository;
+        $this->manager = $manager;
+    }
+
     /**
      * @Route("/", name="work_order_index", methods={"GET"})
      */
-    public function index(Request $request, PaginatorInterface $paginator, WorkOrderRepository $workOrderRepository): Response
+    public function index(Request $request): Response
     {
-        $workOrders = $workOrderRepository->findAll();
-
-        $workOrders = $paginator->paginate(
-            $workOrders, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
-        );
-
-        return $this->render('work_order/index.html.twig', [
-            'workOrders'    =>  $workOrders,
+        $data = new SearchWorkorder();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchWorkorderForm::class, $data);
+        $form->handleRequest($request);
+        $workorders = $this->workorderRepository->findSearch($data);
+        //dd($parts);
+        // if ($request->get('ajax')) {
+        //     return new JsonResponse([
+        //         'content'       =>  $this->renderView('ident/_idents.html.twig', ['idents' => $idents]),
+        //         'sorting'       =>  $this->renderView('ident/_sorting.html.twig', ['idents' => $idents]),
+        //         'pagination'    =>  $this->renderView('ident/_pagination.html.twig', ['idents' => $idents]),
+        //     ]);
+        // }
+        return $this->render('workorder/index.html.twig', [
+            'workorders' =>  $workorders,
+            'form'  =>  $form->createView(),
         ]);
     }
 
@@ -39,20 +57,20 @@ class WorkOrderController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $workOrder = new WorkOrder();
-        $form = $this->createForm(WorkOrderType::class, $workOrder);
+        $workorder = new Workorder();
+        $form = $this->createForm(WorkorderType::class, $workorder);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($workOrder);
+            $entityManager->persist($workorder);
             $entityManager->flush();
 
             return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('work_order/new.html.twig', [
-            'work_order' => $workOrder,
+            'work_order' => $workorder,
             'form' => $form,
         ]);
     }
@@ -60,19 +78,19 @@ class WorkOrderController extends AbstractController
     /**
      * @Route("/{id}", name="work_order_show", methods={"GET"})
      */
-    public function show(WorkOrder $workOrder): Response
+    public function show(Workorder $workorder): Response
     {
-        return $this->render('work_order/show.html.twig', [
-            'work_order' => $workOrder,
+        return $this->render('workorder/show.html.twig', [
+            'workorder' => $workorder,
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="work_order_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, WorkOrder $workOrder): Response
+    public function edit(Request $request, Workorder $workorder): Response
     {
-        $form = $this->createForm(WorkOrderType::class, $workOrder);
+        $form = $this->createForm(WorkorderType::class, $workorder);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,7 +100,7 @@ class WorkOrderController extends AbstractController
         }
 
         return $this->renderForm('work_order/edit.html.twig', [
-            'work_order' => $workOrder,
+            'work_order' => $workorder,
             'form' => $form,
         ]);
     }
@@ -90,11 +108,11 @@ class WorkOrderController extends AbstractController
     /**
      * @Route("/{id}", name="work_order_delete", methods={"POST"})
      */
-    public function delete(Request $request, WorkOrder $workOrder): Response
+    public function delete(Request $request, Workorder $workorder): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$workOrder->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$workorder->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($workOrder);
+            $entityManager->remove($workorder);
             $entityManager->flush();
         }
 

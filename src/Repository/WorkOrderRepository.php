@@ -2,49 +2,60 @@
 
 namespace App\Repository;
 
-use App\Entity\WorkOrder;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Workorder;
+use App\Data\SearchWorkorder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @method WorkOrder|null find($id, $lockMode = null, $lockVersion = null)
- * @method WorkOrder|null findOneBy(array $criteria, array $orderBy = null)
- * @method WorkOrder[]    findAll()
- * @method WorkOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class WorkOrderRepository extends ServiceEntityRepository
+class WorkorderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
-        parent::__construct($registry, WorkOrder::class);
+        parent::__construct($registry, Workorder::class);
+        $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return WorkOrder[] Returns an array of WorkOrder objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Récupère les machines liées à une recherche
+     *
+     * @param SearchWorkorder $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchWorkorder $search): PaginationInterface
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('w')
+            ->orderBy('w.createdAt', 'ASC')
+            ->select('w', 'm')
+            ->join('w.machine', 'm');
 
-    /*
-    public function findOneBySomeField($value): ?WorkOrder
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($search->machine)) {
+            $query = $query
+                ->andWhere('m.machine LIKE :machine')
+                ->setParameter('machine', "%{$search->machine}%");
+        }
+
+        if (!empty($search->user)) {
+            $query = $query
+                ->andWhere('w.user LIKE :user')
+                ->setParameter('user', "%{$search->user}%");
+        }
+
+        if (!empty($search->status)) {
+            $query = $query
+                ->andWhere('w.status LIKE :status')
+                ->setParameter('status', "%{$search->status}%");
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
     }
-    */
 }

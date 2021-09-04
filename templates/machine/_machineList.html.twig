@@ -6,6 +6,7 @@
     {% for machine in machines %}
         <tr>
             <td><a href="{{ path('machine_show', {'id': machine.id}) }}">{{ machine.constructor }}</a></td>
+            <td class="text-center">{{ machine.designation }}</td>
             <td class="text-center">{{ machine.model }}</td>
             <td class="text-center">{{ machine.workshop.name }}</td>
             <td class="text-center"><a href="{{ path('machine_edit', {'id': machine.id}) }}"><i class="bi bi-pencil-square"></i></a></td>

@@ -41,18 +41,23 @@ class Machine
     private $workshop;
 
     /**
-     * @ORM\OneToMany(targetEntity=WorkOrder::class, mappedBy="machine", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="machine", orphanRemoval=true)
      */
-    private $workOrders;
+    private $workorders;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $designation;
+
     public function __construct()
     {
-        $this->workOrders = new ArrayCollection();
+        $this->workorders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,29 +114,29 @@ class Machine
     }
 
     /**
-     * @return Collection|WorkOrder[]
+     * @return Collection|Workorder[]
      */
-    public function getWorkOrders(): Collection
+    public function getWorkorders(): Collection
     {
-        return $this->workOrders;
+        return $this->workorders;
     }
 
-    public function addWorkOrder(WorkOrder $workOrder): self
+    public function addWorkorder(Workorder $workorder): self
     {
-        if (!$this->workOrders->contains($workOrder)) {
-            $this->workOrders[] = $workOrder;
-            $workOrder->setMachine($this);
+        if (!$this->workorders->contains($workorder)) {
+            $this->workorders[] = $workorder;
+            $workorder->setMachine($this);
         }
 
         return $this;
     }
 
-    public function removeWorkOrder(WorkOrder $workOrder): self
+    public function removeWorkorder(Workorder $workorder): self
     {
-        if ($this->workOrders->removeElement($workOrder)) {
+        if ($this->workorders->removeElement($workorder)) {
             // set the owning side to null (unless already changed)
-            if ($workOrder->getMachine() === $this) {
-                $workOrder->setMachine(null);
+            if ($workorder->getMachine() === $this) {
+                $workorder->setMachine(null);
             }
         }
 
@@ -146,6 +151,18 @@ class Machine
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDesignation(): ?string
+    {
+        return $this->designation;
+    }
+
+    public function setDesignation(string $designation): self
+    {
+        $this->designation = $designation;
 
         return $this;
     }

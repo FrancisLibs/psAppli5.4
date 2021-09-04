@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Entity\Stock;
 use App\Entity\Machine;
 use App\Entity\Workshop;
-use App\Entity\WorkOrder;
+use App\Entity\Workorder;
 use App\Entity\Organisation;
 use App\Repository\MachineRepository;
 use App\Repository\UserRepository;
@@ -22,9 +22,10 @@ class AppFixtures extends Fixture
     private $passwordHasher;
     private $manager;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager ) 
-    {
+    public function __construct(
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
+    ) {
         $this->passwordHasher = $passwordHasher;
         $this->manager = $entityManager;
     }
@@ -37,8 +38,7 @@ class AppFixtures extends Fixture
         $organisationArray = ['Pierre Schmidt W1', 'Pierre Schmidt W2', 'Pierre Schmidt R2', 'Stoeffler'];
         foreach ($organisationArray as $org) {
             $organisation = (new Organisation())
-                ->setDesignation($org)
-            ;
+                ->setDesignation($org);
             $manager->persist($organisation);
             //WORKSHOP
             $workshops = ['boucherie', 'conditionnement', 'mise en cartons', 'charcuterie', 'préparation mêlée'];
@@ -49,6 +49,10 @@ class AppFixtures extends Fixture
                 $manager->persist($workshop);
 
                 //MACHINES
+                $designation = [
+                    'Thermoformeuse', 'Clippeuse', 'Poussoir', 'Ligne d\'accrochage',
+                    'Balance', 'Bascule', 'Cutter', 'Machine à glace'
+                ];
                 for ($i = 0; $i < 5; $i++) {
                     $machine = (new Machine());
                     $machine->setConstructor(strtoupper($faker->word))
@@ -56,7 +60,7 @@ class AppFixtures extends Fixture
                         ->setSerialNumber($faker->word)
                         ->setWorkshop($workshop)
                         ->setStatus(1)
-                    ;
+                        ->setDesignation($designation[array_rand($designation, 1)]);
                     $manager->persist($machine);
                 }
             }
@@ -73,7 +77,7 @@ class AppFixtures extends Fixture
             $this->manager->persist($user);
 
             $user  = (new User());
-            $user->setUsername('user'. substr($organisation->getDesignation(), -2))
+            $user->setUsername('user' . substr($organisation->getDesignation(), -2))
                 ->setPhoneNumber($faker->phoneNumber)
                 ->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName)

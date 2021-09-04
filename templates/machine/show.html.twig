@@ -22,6 +22,10 @@
             <table class="table">
                 <tbody>
                     <tr>
+                        <th>Désignation</th>
+                        <td>{{ machine.designation }}</td>
+                    </tr>
+                    <tr>
                         <th>Constructeur</th>
                         <td>{{ machine.constructor }}</td>
                     </tr>
@@ -36,6 +40,9 @@
                     <tr>
                     <th>Status</th>
                         <td>{{ machine.status }}</td>
+                    </tr>
+                     <th>Atelier</th>
+                        <td>{{ machine.workshop.name }}</td>
                     </tr>
                 </tbody>
             </table>

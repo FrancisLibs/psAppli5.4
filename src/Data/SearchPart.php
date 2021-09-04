@@ -21,21 +21,21 @@ class SearchPart
     /**
      * Désignation
      *
-     * @var Designation
+     * @var string
      */
     public $designation;
 
     /**
      * Référence
      *
-     * @var Reference
+     * @var string
      */
     public $reference;
 
     /**
      * Emplacement stock
      *
-     * @var Place
+     * @var string
      */
     public $place;
 }

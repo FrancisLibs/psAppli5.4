@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\WorkOrderRepository;
+use App\Repository\WorkorderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=WorkOrderRepository::class)
+ * @ORM\Entity(repositoryClass=WorkorderRepository::class)
  */
-class WorkOrder
+class Workorder
 {
     /**
      * @ORM\Id
@@ -23,13 +23,13 @@ class WorkOrder
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="workOrders")
+     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="workorders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $machine;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workOrders")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workorders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

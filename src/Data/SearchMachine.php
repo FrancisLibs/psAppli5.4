@@ -12,6 +12,13 @@ class SearchMachine
     public $page = 1;
 
     /**
+     * La désignation de la machine
+     *
+     * @var string
+     */
+    public $designation;
+
+    /**
      * Le constructeur de la machine
      *
      * @var string

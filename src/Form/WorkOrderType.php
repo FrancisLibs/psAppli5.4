@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\WorkOrder;
+use App\Entity\Workorder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WorkOrderType extends AbstractType
+class WorkorderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,7 +18,7 @@ class WorkOrderType extends AbstractType
             ->add('endDate')
             ->add('subject')
             ->add('duration')
-            ->add('machineStop')
+            ->add('machineStopTime')
             ->add('startTime')
             ->add('endTime')
             ->add('machine')

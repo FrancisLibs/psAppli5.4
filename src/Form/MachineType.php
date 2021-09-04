@@ -15,6 +15,7 @@ class MachineType extends AbstractType
     {
         $builder
             ->add('constructor')
+            ->add('designation')
             ->add('model')
             ->add('workshop', EntityType::class, [
                 'class' =>  Workshop::class,

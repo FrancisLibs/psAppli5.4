@@ -2,39 +2,40 @@
 
 namespace App\Form;
 
-use App\Data\SearchMachine;
+use App\Data\SearchWorkorder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-class SearchMachineForm extends AbstractType
+class SearchWorkorderForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('designation', TextType::class, [
+            ->add('status', TextType::class, [
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Désignation...']
+                'attr'      => ['placeholder' => 'Status...']
             ])
 
-            ->add('constructor', TextType::class, [
+            ->add('createdAt', DateTimeType::class, [
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Constructeur...']
+                'attr'      => ['placeholder' => 'Date...']
             ])
 
-            ->add('model', TextType::class, [
+            ->add('machine', TextType::class, [
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Modèle...']
+                'attr'      => ['placeholder' => 'Machine...']
             ])
 
-            ->add('workshop', TextType::class, [
+            ->add('user', TextType::class, [
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Atelier']
+                'attr'      => ['placeholder' => 'Technicien...']
             ])
         ;
     }
@@ -42,7 +43,7 @@ class SearchMachineForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SearchMachine::class,
+            'data_class' => SearchWorkorder::class,
             'method' => 'GET',
             'csrf_protection' => false
         ]);
