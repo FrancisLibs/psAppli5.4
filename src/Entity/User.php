@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -72,6 +74,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="user")
+     */
+    private $workorders;
+
+    public function __construct()
+    {
+        $this->workorders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -247,6 +259,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workorder[]
+     */
+    public function getWorkorders(): Collection
+    {
+        return $this->workorders;
+    }
+
+    public function addWorkorder(Workorder $workorder): self
+    {
+        if (!$this->workorders->contains($workorder)) {
+            $this->workorders[] = $workorder;
+            $workorder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorder(Workorder $workorder): self
+    {
+        if ($this->workorders->removeElement($workorder)) {
+            // set the owning side to null (unless already changed)
+            if ($workorder->getUser() === $this) {
+                $workorder->setUser(null);
+            }
+        }
 
         return $this;
     }

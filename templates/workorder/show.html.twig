@@ -9,10 +9,10 @@
                 <div class="col-4">
                     <h3>Bon de Travail</h3>
                 </div>
-                <div class="d-flex justify-content-start">
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste pièces</a>
+                <div class="d-flex justify-content-start align-items-center">
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
-                    {{ include('work_order/_delete_form.html.twig') }}
+                    {{ include('workorder/_delete_form.html.twig') }}
                 </div>
             </div>
         </div>
@@ -22,44 +22,52 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <th>Id</th>
-                        <td>{{ work_order.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>CreatedAt</th>
-                        <td>{{ work_order.createdAt ? work_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <th>Créé le</th>
+                        <td>{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s') : '' }}</td>
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>{{ work_order.status }}</td>
+                        <td>{{ workorder.status }}</td>
                     </tr>
                     <tr>
-                        <th>StartDate</th>
-                        <td>{{ work_order.startDate ? work_order.startDate|date('Y-m-d') : '' }}</td>
+                        <th>Date début</th>
+                        <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>EndDate</th>
-                        <td>{{ work_order.endDate ? work_order.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <th>Heure début</th>
+                        <td>{{ workorder.startTime ? workorder.startTime|date('H:i:s') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>Subject</th>
-                        <td>{{ work_order.subject }}</td>
+                        <th>Date fin</th>
+                        <td>{{ workorder.endDate ? workorder.endDate|date('d-m-Y H:i:s') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>Duration</th>
-                        <td>{{ work_order.duration ? work_order.duration|date('Y-m-d') : '' }}</td>
+                        <th>Heure de fin</th>
+                        <td>{{ workorder.endTime ? workorder.endTime|date('H:i:s') : '' }}</td>
+                    </tr>
+                    {% if workorder.request %}
+                        <tr>
+                            <th>Demande</th>
+                            <td>{{ workorder.request }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Réalisation</th>
+                        <td>{{ workorder.implementation }}</td>
+                    </tr>
+                    {% if workorder.remark %}
+                        <tr>
+                            <th>Remarque</th>
+                            <td>{{ workorder.remark }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Durée</th>
+                        <td>{{ workorder.duration ? workorder.duration|date('H:i') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>MachineStop</th>
-                        <td>{{ work_order.machineStop ? work_order.machineStop.format('%y year(s), %m month(s), %d day(s)') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>StartTime</th>
-                        <td>{{ work_order.startTime ? work_order.startTime|date('H:i:s') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>EndTime</th>
-                        <td>{{ work_order.endTime ? work_order.endTime|date('H:i:s') : '' }}</td>
+                        <th>Temps arrêt machine</th>
+                        <td>{{ workorder.machineStopTime ? workorder.machineStopTime|date('H:i:s') : ''  }}</td>
                     </tr>
                 </tbody>
             </table>

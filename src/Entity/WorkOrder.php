@@ -10,6 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Workorder
 {
+    const EN_COURS = 1;
+    const CLOTURE = 2;
+    const CURATIF = 1;
+    const PREVENTIF = 2;
+    const AMELIORATIF = 3;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -29,40 +35,29 @@ class Workorder
     private $machine;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workorders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="string", length=10)
      */
     private $status;
 
     /**
-     * @ORM\Column(type="date")
-     */
-    private $startDate;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $endDate;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $subject;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="time", nullable=true)
      */
     private $duration;
 
     /**
-     * @ORM\Column(type="dateinterval", nullable=true)
+     * @ORM\Column(type="time", nullable=true)
      */
     private $machineStopTime;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $startDate;
 
     /**
      * @ORM\Column(type="time", nullable=true)
@@ -73,6 +68,32 @@ class Workorder
      * @ORM\Column(type="time", nullable=true)
      */
     private $endTime;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workorders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $remark;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $request;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $implementation;
 
     public function getId(): ?int
     {
@@ -103,38 +124,21 @@ class Workorder
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
-        return $this->status;
+        switch ($this->status) {
+            case 1:
+                return 'En cours';
+                break;
+            case 2:
+                return 'Cloturé';
+                break;
+        }
     }
 
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getStartDate(): ?\DateTimeInterface
-    {
-        return $this->startDate;
-    }
-
-    public function setStartDate(\DateTimeInterface $startDate): self
-    {
-        $this->startDate = $startDate;
 
         return $this;
     }
@@ -151,18 +155,6 @@ class Workorder
         return $this;
     }
 
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(?string $subject): self
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
     public function getDuration(): ?\DateTimeInterface
     {
         return $this->duration;
@@ -175,14 +167,26 @@ class Workorder
         return $this;
     }
 
-    public function getMachineStopTime(): ?\DateInterval
+    public function getMachineStopTime(): ?\DateTimeInterface
     {
         return $this->machineStopTime;
     }
 
-    public function setMachineStopTime(?\DateInterval $machineStopTime): self
+    public function setMachineStopTime(?\DateTimeInterface $machineStopTime): self
     {
         $this->machineStopTime = $machineStopTime;
+
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
 
         return $this;
     }
@@ -194,7 +198,7 @@ class Workorder
 
     public function setStartTime(?\DateTimeInterface $startTime): self
     {
-        $this->startTime = $startTime;
+        $this->endTime = $startTime;
 
         return $this;
     }
@@ -207,6 +211,66 @@ class Workorder
     public function setEndTime(?\DateTimeInterface $endTime): self
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
+
+    public function setRemark(?string $remark): self
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getRequest(): ?string
+    {
+        return $this->request;
+    }
+
+    public function setRequest(?string $request): self
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    public function getImplementation(): ?string
+    {
+        return $this->implementation;
+    }
+
+    public function setImplementation(?string $implementation): self
+    {
+        $this->implementation = $implementation;
 
         return $this;
     }

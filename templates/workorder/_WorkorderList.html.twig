@@ -2,17 +2,19 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
             <th>{{ knp_pagination_sortable(workorders, 'Machine', 'w.machine') }}</th>
+            <th>{{ knp_pagination_sortable(workorders, 'Intervenant', 'w.user') }}</th>
+            <th>{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
             <th>{{ knp_pagination_sortable(workorders, 'Travaux', 'w.subject') }}</th>
         </tr>
     </thead>
     <tbody>
         {% for workorder in workorders %}
             <tr>
-                <td>{{ workorder.createdAt}}</td>
-                <td>{{ workorder.machine.name}}</td>
-                <td>{{ workorder.subject}}</td>
+                <td><a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.machine.designation ~ workorder.machine.internalCode}}</a></td>
+                <td>{{ workorder.user.firstName }}</td>
+                <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
+                <td>{{ workorder.request }}</td>
             </tr>
         {% else %}
             <tr>

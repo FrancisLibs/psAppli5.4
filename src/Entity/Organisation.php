@@ -29,9 +29,15 @@ class Organisation
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Workshop::class, mappedBy="organisation")
+     */
+    private $workshops;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->workshops = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,6 +81,36 @@ class Organisation
             // set the owning side to null (unless already changed)
             if ($user->getOrganisation() === $this) {
                 $user->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workshop[]
+     */
+    public function getWorkshops(): Collection
+    {
+        return $this->workshops;
+    }
+
+    public function addWorkshop(Workshop $workshop): self
+    {
+        if (!$this->workshops->contains($workshop)) {
+            $this->workshops[] = $workshop;
+            $workshop->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkshop(Workshop $workshop): self
+    {
+        if ($this->workshops->removeElement($workshop)) {
+            // set the owning side to null (unless already changed)
+            if ($workshop->getOrganisation() === $this) {
+                $workshop->setOrganisation(null);
             }
         }
 

@@ -19,6 +19,15 @@ class WorkshopRepository extends ServiceEntityRepository
         parent::__construct($registry, Workshop::class);
     }
 
+    public function findWorkshops($organisation)
+    {
+        return $this->createQueryBuilder('w')
+            ->Where('w.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Workshop[] Returns an array of Workshop objects
     //  */

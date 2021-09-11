@@ -20,6 +20,11 @@ class Machine
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $designation;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $constructor;
@@ -51,9 +56,9 @@ class Machine
     private $status;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=8)
      */
-    private $designation;
+    private $internalCode;
 
     public function __construct()
     {
@@ -63,6 +68,18 @@ class Machine
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDesignation(): ?string
+    {
+        return $this->designation;
+    }
+
+    public function setDesignation(string $designation): self
+    {
+        $this->designation = $designation;
+
+        return $this;
     }
 
     public function getConstructor(): ?string
@@ -155,15 +172,20 @@ class Machine
         return $this;
     }
 
-    public function getDesignation(): ?string
+    public function getInternalCode(): ?string
     {
-        return $this->designation;
+        return $this->internalCode;
     }
 
-    public function setDesignation(string $designation): self
+    public function setInternalCode(string $internalCode): self
     {
-        $this->designation = $designation;
+        $this->internalCode = $internalCode;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->designation;
     }
 }

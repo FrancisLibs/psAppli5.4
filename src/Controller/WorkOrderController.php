@@ -57,20 +57,29 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $organisation = $this->getUser()->getOrganisation();
         $workorder = new Workorder();
-        $form = $this->createForm(WorkorderType::class, $workorder);
+        $workorder->setUser($this->getUser());
+        $workorder->setCreatedAt(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
+        $workorder->setStatus($workorder::EN_COURS);
+        $workorder->setStartDate(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
+        $workorder->setEndDate(new \DateTime('2021-1-1'), new \DateTimeZone('Europe/Paris'));
+
+        $form = $this->createForm(WorkorderType::class, $workorder, [
+            'organisation' => $organisation
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($workorder);
-            $entityManager->flush();
+            $workorder->setCreatedAt(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
+            $this->manager->persist($workorder);
+            $this->manager->flush();
 
-            return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('work_order_show', ['id' => $workorder->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('work_order/new.html.twig', [
-            'work_order' => $workorder,
+        return $this->renderForm('workorder/new.html.twig', [
+            'workorder' => $workorder,
             'form' => $form,
         ]);
     }
@@ -90,6 +99,7 @@ class WorkorderController extends AbstractController
      */
     public function edit(Request $request, Workorder $workorder): Response
     {
+        // dd($workorder);
         $form = $this->createForm(WorkorderType::class, $workorder);
         $form->handleRequest($request);
 
@@ -99,8 +109,8 @@ class WorkorderController extends AbstractController
             return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('work_order/edit.html.twig', [
-            'work_order' => $workorder,
+        return $this->renderForm('workorder/edit.html.twig', [
+            'workorder' => $workorder,
             'form' => $form,
         ]);
     }
@@ -110,7 +120,7 @@ class WorkorderController extends AbstractController
      */
     public function delete(Request $request, Workorder $workorder): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$workorder->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $workorder->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($workorder);
             $entityManager->flush();
