@@ -23,7 +23,7 @@
                 <tbody>
                     <tr>
                         <th>Créé le</th>
-                        <td>{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s') : '' }}</td>
+                        <td>{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s', timezone="Europe/Paris") : '' }}</td>
                     </tr>
                     <tr>
                         <th>Status</th>
@@ -31,19 +31,19 @@
                     </tr>
                     <tr>
                         <th>Date début</th>
-                        <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y') : '' }}</td>
+                        <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
                     </tr>
                     <tr>
                         <th>Heure début</th>
-                        <td>{{ workorder.startTime ? workorder.startTime|date('H:i:s') : '' }}</td>
+                        <td>{{ workorder.startTime ? workorder.startTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
                     </tr>
                     <tr>
                         <th>Date fin</th>
-                        <td>{{ workorder.endDate ? workorder.endDate|date('d-m-Y H:i:s') : '' }}</td>
+                        <td>{{ workorder.endDate ? workorder.endDate|date('d-m-Y H:i:s', timezone="Europe/Paris") : '' }}</td>
                     </tr>
                     <tr>
                         <th>Heure de fin</th>
-                        <td>{{ workorder.endTime ? workorder.endTime|date('H:i:s') : '' }}</td>
+                        <td>{{ workorder.endTime ? workorder.endTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
                     </tr>
                     {% if workorder.request %}
                         <tr>

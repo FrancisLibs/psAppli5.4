@@ -7,6 +7,7 @@ use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
 use App\Form\SearchWorkorderForm;
 use App\Repository\WorkorderRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,25 +58,30 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $organisation = $this->getUser()->getOrganisation();
+        $dateTime = new \DateTime('now', new \DateTimeZone('Europe/paris'));
+        dd($dateTime->format('d-m-Y H:m'));
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+        $date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $workorder = new Workorder();
-        $workorder->setUser($this->getUser());
-        $workorder->setCreatedAt(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
-        $workorder->setStatus($workorder::EN_COURS);
-        $workorder->setStartDate(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
-        $workorder->setEndDate(new \DateTime('2021-1-1'), new \DateTimeZone('Europe/Paris'));
+        $workorder->setCreatedAt($date);
+        $workorder->setOrganisation($organisation);
 
         $form = $this->createForm(WorkorderType::class, $workorder, [
             'organisation' => $organisation
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $workorder->setCreatedAt(new \DateTime('now'), new \DateTimeZone('Europe/Paris'));
+            $workorder->setUser($user);
+            $workorder->setStatus($workorder::EN_COURS);
             $this->manager->persist($workorder);
             $this->manager->flush();
 
-            return $this->redirectToRoute('work_order_show', ['id' => $workorder->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('work_order_show', [
+                'id' => $workorder->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('workorder/new.html.twig', [
@@ -99,7 +105,7 @@ class WorkorderController extends AbstractController
      */
     public function edit(Request $request, Workorder $workorder): Response
     {
-        // dd($workorder);
+
         $form = $this->createForm(WorkorderType::class, $workorder);
         $form->handleRequest($request);
 

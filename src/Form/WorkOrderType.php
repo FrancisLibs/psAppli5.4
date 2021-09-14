@@ -47,14 +47,11 @@ class WorkorderType extends AbstractType
                 'choices'  => [
                     'Curatif' => 1,
                     'Préventif' => 2,
-                    'Développement' => 3,
+                    'Amélioratif' => 3,
                 ],
-                'expanded' => true,
-                'multiple' => false,
-                'data' => 1
             ])
             ->add('request', TextType::class, [
-            'label' => 'Demande'
+                'label' => 'Demande'
             ])
             ->add('implementation', TextType::class, [
                 'label' => 'Réalisation'
@@ -63,32 +60,51 @@ class WorkorderType extends AbstractType
                 'label' => 'Remarque',
                 'required' => false,
             ])
-            ->add('duration',TimeType::class, [
+            ->add('duration', TimeType::class, [
+                'input' => 'datetime',
                 'label' => false,
                 'widget' => 'choice',
             ])
             ->add('startDate', DateType::class, [
+                'input' => 'datetime',
                 'label' => false,
                 'widget' => 'choice',
             ])
             ->add('endDate', DateType::class, [
-                'label' => false,
-                'widget' => 'choice',
-            ])
-            ->add('startTime', TimeType::class, [
+                'input' => 'datetime',
                 'label' => false,
                 'widget' => 'choice',
             ])
             ->add('endTime', TimeType::class, [
                 'label' => false,
-                'widget' => 'choice',
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                // 'format' => 'HHmm'
+            ])
+            ->add('startTime', TimeType::class, [
+                'label' => false,
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                // 'format' => 'HHmm'
             ])
             ->add('machineStopTime', TimeType::class, [
+                'input' => 'datetime',
                 'label' =>  false,
                 'widget' => 'choice',
             ])
-
         ;
+        // Préselection de la case "curatif" du type
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                $form = $event->getData();
+                // Preset de startTime
+                if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+                if (is_null($form->getEndDate())) $form->setEndDate(new \DateTime('now'));
+                if (is_null($form->getEndTime())) $form->setEndTime(new \DateTime('now'));
+                if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
+            }
+        );
 
         $formModifier = function (FormInterface $form, Workshop $workshop = null) {
             $machines = null === $workshop ? [] : $workshop->getMachines();

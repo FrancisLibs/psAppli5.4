@@ -5,7 +5,9 @@ window.onload = () => {
   workshop.addEventListener("change", function () {
     let form = this.closest("form");
     let data = this.name + "=" + this.value;
-  
+    // console.log(data);
+    // console.log(form.action);
+
     fetch(form.action, {
       method: form.getAttribute("method"),
       body: data,

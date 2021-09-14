@@ -60,12 +60,7 @@ class Workorder
     private $startDate;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $startTime;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="time")
      */
     private $endTime;
 
@@ -81,11 +76,6 @@ class Workorder
     private $remark;
 
     /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $type;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $request;
@@ -94,6 +84,23 @@ class Workorder
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $implementation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="workorders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+    private $startTime;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
+
 
     public function getId(): ?int
     {
@@ -191,18 +198,6 @@ class Workorder
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?\DateTimeInterface $startTime): self
-    {
-        $this->endTime = $startTime;
-
-        return $this;
-    }
-
     public function getEndTime(): ?\DateTimeInterface
     {
         return $this->endTime;
@@ -239,18 +234,6 @@ class Workorder
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getRequest(): ?string
     {
         return $this->request;
@@ -271,6 +254,42 @@ class Workorder
     public function setImplementation(?string $implementation): self
     {
         $this->implementation = $implementation;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(?\DateTimeInterface $startTime): self
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

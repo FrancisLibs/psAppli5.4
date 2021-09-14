@@ -22,8 +22,8 @@ class WorkshopRepository extends ServiceEntityRepository
     public function findWorkshops($organisation)
     {
         return $this->createQueryBuilder('w')
-            ->Where('w.organisation = :organisation')
-            ->setParameter('organisation', $organisation)
+            ->Where('w.organisation = :val')
+            ->setParameter('val', $organisation)
             ->getQuery()
             ->getResult();
     }

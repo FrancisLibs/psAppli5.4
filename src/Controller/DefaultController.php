@@ -20,13 +20,8 @@ class DefaultController extends AbstractController
         if(!$user){
             return $this->redirectToRoute('app_login');
         }
-
-        $workorders = $workorderRepository->findAll();
-        $workorders = $paginator->paginate(
-            $workorders, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            5 /*limit per page*/
-        );
+        $organisation = $user->getOrganisation();
+        $workorders = $workorderRepository->findByOrganisation($organisation);
 
         return $this->render('default/index.html.twig', [
             'workorders'    => $workorders,

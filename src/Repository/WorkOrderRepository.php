@@ -58,4 +58,19 @@ class WorkorderRepository extends ServiceEntityRepository
             15
         );
     }
+    
+    /**
+     * @return Workorder[] Returns an array of workorder
+    */
+
+    public function findByOrganisation($organisation)
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisation)
+            ->orderBy('w.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

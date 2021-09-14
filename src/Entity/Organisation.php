@@ -34,10 +34,16 @@ class Organisation
      */
     private $workshops;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="organisation")
+     */
+    private $workorders;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->workshops = new ArrayCollection();
+        $this->workorders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +117,36 @@ class Organisation
             // set the owning side to null (unless already changed)
             if ($workshop->getOrganisation() === $this) {
                 $workshop->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workorder[]
+     */
+    public function getWorkorders(): Collection
+    {
+        return $this->workorders;
+    }
+
+    public function addWorkorder(Workorder $workorder): self
+    {
+        if (!$this->workorders->contains($workorder)) {
+            $this->workorders[] = $workorder;
+            $workorder->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorder(Workorder $workorder): self
+    {
+        if ($this->workorders->removeElement($workorder)) {
+            // set the owning side to null (unless already changed)
+            if ($workorder->getOrganisation() === $this) {
+                $workorder->setOrganisation(null);
             }
         }
 

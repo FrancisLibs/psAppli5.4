@@ -1,17 +1,17 @@
-<table class="table table-striped">
-    <thead>
+<table class="table table-striped table-sm">
+    {# <thead>
         <tr>
             <th>{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
             <th>{{ knp_pagination_sortable(workorders, 'Machine', 'w.machine') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Travaux', 'w.subject') }}</th>
+            <th>{{ knp_pagination_sortable(workorders, 'Travaux', 'w.implementation') }}</th>
         </tr>
-    </thead>
+    </thead> #}
     <tbody>
         {% for workorder in workorders %}
             <tr>
-                <td>{{ workorder.createdAt}}</td>
-                <td>{{ workorder.machine.name}}</td>
-                <td>{{ workorder.subject}}</td>
+                <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
+                <td>{{ workorder.machine.designation}}</td>
+                <td>{{ workorder.implementation}}</td>
             </tr>
         {% else %}
             <tr>
