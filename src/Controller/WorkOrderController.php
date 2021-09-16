@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use DateTimeZone;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
+use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\WorkorderRepository;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,11 +59,10 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $dateTime = new \DateTime('now', new \DateTimeZone('Europe/paris'));
-        dd($dateTime->format('d-m-Y H:m'));
+        $dateTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $date = $dateTime;
         $workorder = new Workorder();
         $workorder->setCreatedAt($date);
         $workorder->setOrganisation($organisation);
@@ -105,17 +105,23 @@ class WorkorderController extends AbstractController
      */
     public function edit(Request $request, Workorder $workorder): Response
     {
+        $workshop = $workorder->getMachine()->getWorkshop();
 
-        $form = $this->createForm(WorkorderType::class, $workorder);
+        $form = $this->createForm(WorkorderEditType::class, $workorder);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('work_order_show', [
+                'id' => $workorder->getId()
+                ],
+                    Response::HTTP_SEE_OTHER
+                );
         }
 
-        return $this->renderForm('workorder/edit.html.twig', [
+        return $this->renderForm('workorder/modif.html.twig', [
             'workorder' => $workorder,
             'form' => $form,
         ]);

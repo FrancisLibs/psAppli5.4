@@ -47,11 +47,6 @@ class Workorder
     /**
      * @ORM\Column(type="time", nullable=true)
      */
-    private $duration;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
     private $machineStopTime;
 
     /**
@@ -60,7 +55,7 @@ class Workorder
     private $startDate;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="time", nullable=true)
      */
     private $endTime;
 
@@ -92,7 +87,7 @@ class Workorder
     private $organisation;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="time")
      */
     private $startTime;
 
@@ -158,18 +153,6 @@ class Workorder
     public function setEndDate(?\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getDuration(): ?\DateTimeInterface
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?\DateTimeInterface $duration): self
-    {
-        $this->duration = $duration;
 
         return $this;
     }

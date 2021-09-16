@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class WorkorderType extends AbstractType
+class WorkorderEditType extends AbstractType
 {
     private $workshopRepository;
 
@@ -31,15 +31,6 @@ class WorkorderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('workshop', EntityType::class, [
-                'class' => Workshop::class,
-                'choices' => $this->workshopRepository->findWorkshops($options['organisation']),
-                'choice_label'  =>  'name',
-                'label' =>  'Atelier',
-                'mapped'    =>  false,
-                'placeholder'   =>  'Atelier...',
-                'required' => false,
-            ])
             ->add('machine', EntityType::class, [
                 'placeholder'   =>  'Machine (Choisir un atelier...)',
                 'class' => Machine::class,
@@ -62,6 +53,11 @@ class WorkorderType extends AbstractType
             ->add('remark', TextareaType::class, [
                 'label' => 'Remarque',
                 'required' => false,
+            ])
+            ->add('duration', TimeType::class, [
+                'input' => 'datetime',
+                'label' => false,
+                'widget' => 'choice',
             ])
             ->add('startDate', DateType::class, [
                 'input' => 'datetime',
@@ -92,42 +88,13 @@ class WorkorderType extends AbstractType
                 'widget' => 'choice',
             ])
         ;
-        // Préselection de la case "curatif" du type
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
-                $form = $event->getData();
-                // Preset de startTime
-                if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-                if (is_null($form->getEndDate())) $form->setEndDate(new \DateTime('now'));
-                if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
-            }
-        );
-
-        $formModifier = function (FormInterface $form, Workshop $workshop = null) {
-            $machines = null === $workshop ? [] : $workshop->getMachines();
-            $form->add('machine', EntityType::class, [
-                'class' => Machine::class,
-                'choices' => $machines,
-                'choice_label'  => 'designation',
-                'label' => 'Machine'
-            ]);
-        };
-
-        $builder->get('workshop')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $workshop = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $workshop);
-            }
-        );
+    
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => WorkOrder::class,
-            'organisation' => null,
             'translation_domain' => 'forms'
         ]);
     }

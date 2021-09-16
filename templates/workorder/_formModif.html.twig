@@ -7,10 +7,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-3">
-                    {{ form_label(form.workshop) }}  
-                    {{ form_widget(form.workshop) }}  
-                </div>
                 <div class="col-5">
                     {{ form_label(form.machine) }}  
                     {{ form_widget(form.machine) }}  
@@ -75,8 +71,9 @@
                     {{ form_widget(form.startTime) }}
                 </div>
                 <div class="col-3">
-                    <span>Durée :</span>
-                    <p></p>
+                    <span>Durée</span>
+                    {{ form_label(form.duration) }}
+                    {{ form_widget(form.duration) }}
                 </div>
             </div>
             <div class="row pt-2">
