@@ -8,7 +8,6 @@ use App\Data\SearchPart;
 use App\Form\SearchPartForm;
 use App\Repository\PartRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,10 +37,16 @@ class PartController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
         $data = new SearchPart();
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchPartForm::class, $data);
+        $form = $this->createForm(SearchPartForm::class,$data, [
+            'organisation' => $organisation
+        ]);
+
         $form->handleRequest($request);
+        
         $parts = $this->partRepository->findSearch($data);
         //dd($parts);
         // if ($request->get('ajax')) {

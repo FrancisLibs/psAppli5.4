@@ -33,11 +33,6 @@ class Part
     private $reference;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="parts")
-     */
-    private $organisation;
-
-    /**
      * @ORM\OneToOne(targetEntity=Stock::class, mappedBy="part", cascade={"persist", "remove"})
      */
     private $stock;
@@ -52,8 +47,13 @@ class Part
      */
     private $remarque;
 
-    
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="parts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
 
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -95,18 +95,6 @@ class Part
         return $this;
     }
 
-    public function getOrganisation(): ?Organisation
-    {
-        return $this->organisation;
-    }
-
-    public function setOrganisation(?Organisation $organisation): self
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
     public function getStock(): ?Stock
     {
         return $this->stock;
@@ -144,6 +132,18 @@ class Part
     public function setRemarque(?string $remarque): self
     {
         $this->remarque = $remarque;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }

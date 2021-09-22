@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stock{% endblock %}
+
+{% block body %}
+    <h1>Stock</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ stock.id }}</td>
+            </tr>
+            <tr>
+                <th>Place</th>
+                <td>{{ stock.place }}</td>
+            </tr>
+            <tr>
+                <th>QteMin</th>
+                <td>{{ stock.qteMin }}</td>
+            </tr>
+            <tr>
+                <th>QteMax</th>
+                <td>{{ stock.qteMax }}</td>
+            </tr>
+            <tr>
+                <th>QteStock</th>
+                <td>{{ stock.qteStock }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('stock_index') }}">back to list</a>
+
+    <a href="{{ path('stock_edit', {'id': stock.id}) }}">edit</a>
+
+    {{ include('stock/_delete_form.html.twig') }}
+{% endblock %}

@@ -111,16 +111,18 @@ class WorkorderController extends AbstractController
         
         $form->handleRequest($request);
 
+        //dd($form);
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $this->getDoctrine()->getManager()->flush();
-
+            
             return $this->redirectToRoute('work_order_show', [
                 'id' => $workorder->getId()
                 ],
                     Response::HTTP_SEE_OTHER
                 );
         }
-
         return $this->renderForm('workorder/modif.html.twig', [
             'workorder' => $workorder,
             'form' => $form,

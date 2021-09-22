@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(201, 197, 197);
+  background-color: rgb(201, 197, 197);
 }
 
 .logo_profil {
@@ -8,4 +8,9 @@ body {
 
 .bg-color-orange {
   background-color: orange;
+}
+
+/* Formulaire nouveau BT  */
+.caseTemps {
+  width: 100px;
 }

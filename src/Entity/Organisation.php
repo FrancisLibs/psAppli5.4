@@ -39,11 +39,17 @@ class Organisation
      */
     private $workorders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Part::class, mappedBy="organisation")
+     */
+    private $parts;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->workshops = new ArrayCollection();
         $this->workorders = new ArrayCollection();
+        $this->parts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,4 +158,35 @@ class Organisation
 
         return $this;
     }
+
+    /**
+     * @return Collection|Part[]
+     */
+    public function getParts(): Collection
+    {
+        return $this->parts;
+    }
+
+    public function addPart(Part $part): self
+    {
+        if (!$this->parts->contains($part)) {
+            $this->parts[] = $part;
+            $part->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePart(Part $part): self
+    {
+        if ($this->parts->removeElement($part)) {
+            // set the owning side to null (unless already changed)
+            if ($part->getOrganisation() === $this) {
+                $part->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+   
 }

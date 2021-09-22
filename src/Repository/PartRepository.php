@@ -27,11 +27,19 @@ class PartRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchPart $search): PaginationInterface
     {
+
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.code', 'ASC')
-            ->select('p', 's')
+            ->select('p', 's', 'o')
             ->join('p.stock', 's')
+            ->join('p.organisation', 'o')
         ;
+        
+        if (!empty($search->organisation)) {
+            $query = $query
+                ->andWhere('o.id = :organisation')
+                ->setParameter('organisation', $search->organisation);
+        }
 
         if (!empty($search->code)) {
             $query = $query

@@ -19,6 +19,13 @@ class SearchPart
     public $code;
 
     /**
+     * Organisation
+     *
+     * @var string
+     */
+    public $organisation;
+
+    /**
      * Désignation
      *
      * @var string

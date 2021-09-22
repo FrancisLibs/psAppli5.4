@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class WorkorderType extends AbstractType
@@ -66,12 +67,18 @@ class WorkorderType extends AbstractType
             ->add('startDate', DateType::class, [
                 'input' => 'datetime',
                 'label' => false,
-                'widget' => 'choice',
+                'widget' => 'single_text',
+            ])
+            ->add('startTime', TimeType::class, [
+                'label' => false,
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                // 'format' => 'HHmm'
             ])
             ->add('endDate', DateType::class, [
                 'input' => 'datetime',
                 'label' => false,
-                'widget' => 'choice',
+                'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
                 'label' => false,
@@ -80,27 +87,36 @@ class WorkorderType extends AbstractType
                 'required'  => false,
                 // 'format' => 'HHmm'
             ])
-            ->add('startTime', TimeType::class, [
-                'label' => false,
-                'widget' => 'single_text',
-                'input' => 'datetime',
-                // 'format' => 'HHmm'
+            ->add('durationDay', TextType::class, [
+                'disabled' =>  true,
+                'label' =>  'jours',
             ])
-            ->add('machineStopTime', TimeType::class, [
-                'input' => 'datetime',
-                'label' =>  false,
-                'widget' => 'choice',
+            ->add('durationHour', TextType::class, [
+                'disabled' =>  true,
+                'label' =>  'Heures'
+            ])
+            ->add('durationMinute', TextType::class, [
+                'disabled' =>  true,
+                'label' =>  'Minutes'
+            ])
+            ->add('stopTimeHour', TextType::class, [
+                'required' => false,
+            ])
+            ->add('stopTimeMinute', TextType::class, [
+                'required' => false,
             ])
         ;
-        // Préselection de la case "curatif" du type
+
+        // Préselection des dates et temps du BT
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
                 $form = $event->getData();
                 // Preset de startTime
                 if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-                if (is_null($form->getEndDate())) $form->setEndDate(new \DateTime('now'));
                 if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
+                if (is_null($form->getEndDate())) $form->setEndDate(new \DateTime('now'));
+                if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
             }
         );
 

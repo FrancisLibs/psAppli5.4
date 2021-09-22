@@ -42,17 +42,17 @@ class Workorder
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $endDate;
+    private $startDate;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="time")
      */
-    private $machineStopTime;
+    private $startTime;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $startDate;
+    private $endDate;
 
     /**
      * @ORM\Column(type="time", nullable=true)
@@ -87,14 +87,34 @@ class Workorder
     private $organisation;
 
     /**
-     * @ORM\Column(type="time")
-     */
-    private $startTime;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $durationDay;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $durationHour;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $durationMinute;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $stopTimeHour;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $stopTimeMinute;
 
 
     public function getId(): ?int
@@ -145,30 +165,6 @@ class Workorder
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(?\DateTimeInterface $endDate): self
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getMachineStopTime(): ?\DateTimeInterface
-    {
-        return $this->machineStopTime;
-    }
-
-    public function setMachineStopTime(?\DateTimeInterface $machineStopTime): self
-    {
-        $this->machineStopTime = $machineStopTime;
-
-        return $this;
-    }
-
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;
@@ -177,6 +173,30 @@ class Workorder
     public function setStartDate(?\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(?\DateTimeInterface $startTime): self
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
 
         return $this;
     }
@@ -253,18 +273,6 @@ class Workorder
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
     public function getType(): ?int
     {
         return $this->type;
@@ -273,6 +281,66 @@ class Workorder
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDurationDay(): ?int
+    {
+        return $this->durationDay;
+    }
+
+    public function setDurationDay(?int $durationDay): self
+    {
+        $this->durationDay = $durationDay;
+
+        return $this;
+    }
+
+    public function getDurationHour(): ?int
+    {
+        return $this->durationHour;
+    }
+
+    public function setDurationHour(?int $durationHour): self
+    {
+        $this->durationHour = $durationHour;
+
+        return $this;
+    }
+
+    public function getDurationMinute(): ?int
+    {
+        return $this->durationMinute;
+    }
+
+    public function setDurationMinute(?int $durationMinute): self
+    {
+        $this->durationMinute = $durationMinute;
+
+        return $this;
+    }
+
+    public function getStopTimeHour(): ?int
+    {
+        return $this->stopTimeHour;
+    }
+
+    public function setStopTimeHour(?int $stopTimeHour): self
+    {
+        $this->stopTimeHour = $stopTimeHour;
+
+        return $this;
+    }
+
+    public function getStopTimeMinute(): ?int
+    {
+        return $this->stopTimeMinute;
+    }
+
+    public function setStopTimeMinute(?int $stopTimeMinute): self
+    {
+        $this->stopTimeMinute = $stopTimeMinute;
 
         return $this;
     }
