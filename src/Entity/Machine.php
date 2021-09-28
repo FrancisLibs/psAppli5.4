@@ -60,6 +60,11 @@ class Machine
      */
     private $internalCode;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $buyDate;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
@@ -187,5 +192,17 @@ class Machine
     public function __toString()
     {
         return $this->designation;
+    }
+
+    public function getBuyDate(): ?\DateTimeInterface
+    {
+        return $this->buyDate;
+    }
+
+    public function setBuyDate(?\DateTimeInterface $buyDate): self
+    {
+        $this->buyDate = $buyDate;
+
+        return $this;
     }
 }

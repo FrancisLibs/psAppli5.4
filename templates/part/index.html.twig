@@ -3,13 +3,10 @@
 {% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
-    <main class="row mt-5">
-        <aside class="col-2">
-            {% include 'part/_filter.html.twig' %}
-        </aside>
-        <article class="col-10 mx-auto">
-            <div class="row align-items-start">
-                <div class="col-3">
+    <main class="row mt-4">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-3 offset-2">
                     <h3>Pièces détachées</h3>
                 </div>
                 <div class="col-3">
@@ -17,13 +14,16 @@
                 </div>
             </div>
             <div class="row mt-4">
-                <div class="col-12">
+                <aside class="col-2">
+                    {% include 'part/_filter.html.twig' %}
+                </aside>
+                <section class="col-10">
                     {% include 'part/_partList.html.twig' with {parts: parts} only %}
-                </div>
+                </section>
             </div>
             {# display navigation #}
             <div class="row mt-4">
-                <div class="col-5 navigation">
+                <div class="col-4 offset-2 navigation">
                     {{ knp_pagination_render(parts) }}
                 </div>
             </div>

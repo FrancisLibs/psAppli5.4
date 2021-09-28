@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PartRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,7 @@ class Part
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=20)
      */
     private $code;
 
@@ -52,6 +54,16 @@ class Part
      * @ORM\JoinColumn(nullable=false)
      */
     private $organisation;
+
+    /**
+     * @ORM\OneToMany(targetEntity=WorkorderPart::class, mappedBy="part")
+     */
+    private $workorderParts;
+
+    public function __construct()
+    {
+        $this->workorderParts = new ArrayCollection();
+    }
 
     
     public function getId(): ?int
@@ -144,6 +156,36 @@ class Part
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkorderPart[]
+     */
+    public function getWorkorderParts(): Collection
+    {
+        return $this->workorderParts;
+    }
+
+    public function addWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if (!$this->workorderParts->contains($workorderPart)) {
+            $this->workorderParts[] = $workorderPart;
+            $workorderPart->setPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if ($this->workorderParts->removeElement($workorderPart)) {
+            // set the owning side to null (unless already changed)
+            if ($workorderPart->getPart() === $this) {
+                $workorderPart->setPart(null);
+            }
+        }
 
         return $this;
     }

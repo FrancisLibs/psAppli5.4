@@ -24,7 +24,6 @@ class SearchPartForm extends AbstractType
                 'choice_label' => 'designation',
                 'label'     => false,
                 'required'  => false,
-                'placeholder' => 'Organisation...',
             ])
             ->add('code', TextType::class, [
                 'label'     => false,
@@ -65,6 +64,7 @@ class SearchPartForm extends AbstractType
             'method' => 'GET',
             'csrf_protection' => false,
             'organisation' => null,
+            'selectPart' => null,
         ]);
     }
 

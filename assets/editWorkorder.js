@@ -11,7 +11,7 @@ window.onload = () => {
     workorderFormImplementation.value = workorderFormRequest.value;
   });
 
-  // Calcul des temps lors de l'affichege de l'édition
+  // Calcul des temps lors de l'affichage de l'édition
   calcTemps();
 
   // Gestion du temps de l'intervention

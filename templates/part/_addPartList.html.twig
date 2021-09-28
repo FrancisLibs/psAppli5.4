@@ -1,0 +1,31 @@
+<table class="table table-sm">
+    <thead>
+        {% include 'part/_sorting.html.twig' %}
+    </thead>
+    <tbody>
+        {% for part in parts %}
+            <tr>
+                <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
+                <td class="text-center">{{ part.designation }}</td>
+                <td class="text-center">{{ part.reference }}</td>
+                {% if part.stock.qteStock < part.stock.qteMin %}
+                    <td class="text-center text-danger">{{ part.stock.qteStock }}</td>
+                {% else %}
+                    <td class="text-center">{{ part.stock.qteStock }}</td>
+                {% endif %}
+                <td class="text-center">{{ part.stock.place }}</td>
+                <td class="text-center">
+                    {% if not addPart %}
+                        <a href="{{ path('part_edit', {'id': part.id}) }}"><i class="bi bi-pencil-square"></i></a>
+                    {% else %}
+                        <a href="{{ path('cart_add', {'id': part.id, 'workorderId': workorderId}) }}"><i class="bi bi-plus-circle"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Il n'y a pas de pièce enregistrée</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -2,15 +2,14 @@
 
 namespace App\Controller;
 
-use DateTimeZone;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
 use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
+use App\Repository\PartRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +22,13 @@ class WorkorderController extends AbstractController
 {
     private $workorderRepository;
     private $manager;
+    private $partRepository;
 
-    public function __construct(WorkorderRepository $workorderRepository, EntityManagerInterface $manager)
+    public function __construct(WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
     {
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
+        $this->partRepository = $partRepository;
     }
 
     /**
@@ -108,20 +109,22 @@ class WorkorderController extends AbstractController
         $workshop = $workorder->getMachine()->getWorkshop();
 
         $form = $this->createForm(WorkorderEditType::class, $workorder);
-        
+
         $form->handleRequest($request);
 
         //dd($form);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $this->getDoctrine()->getManager()->flush();
-            
-            return $this->redirectToRoute('work_order_show', [
-                'id' => $workorder->getId()
+
+            return $this->redirectToRoute(
+                'work_order_show',
+                [
+                    'id' => $workorder->getId()
                 ],
-                    Response::HTTP_SEE_OTHER
-                );
+                Response::HTTP_SEE_OTHER
+            );
         }
         return $this->renderForm('workorder/modif.html.twig', [
             'workorder' => $workorder,
@@ -142,4 +145,6 @@ class WorkorderController extends AbstractController
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
 }

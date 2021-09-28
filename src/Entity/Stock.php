@@ -43,6 +43,11 @@ class Stock
      */
     private $qteStock;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $approQte;
+
     public function getPart(): ?Part
     {
         return $this->part;
@@ -99,6 +104,18 @@ class Stock
     public function setQteStock(?int $qteStock): self
     {
         $this->qteStock = $qteStock;
+
+        return $this;
+    }
+
+    public function getApproQte(): ?int
+    {
+        return $this->approQte;
+    }
+
+    public function setApproQte(?int $approQte): self
+    {
+        $this->approQte = $approQte;
 
         return $this;
     }

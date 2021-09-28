@@ -46,9 +46,7 @@ class PartController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-        
         $parts = $this->partRepository->findSearch($data);
-        //dd($parts);
         // if ($request->get('ajax')) {
         //     return new JsonResponse([
         //         'content'       =>  $this->renderView('ident/_idents.html.twig', ['idents' => $idents]),

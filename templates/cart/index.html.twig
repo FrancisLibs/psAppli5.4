@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pièces du BT{% endblock %}
+
+{% block body %}
+    <main class="row mt-4">
+        <div class="col-8 mx-auto">
+            <div class="row align-items-start">
+                <div class="col-4">
+                    <h3>Pièces sélectionnées</h3>
+                </div>
+                <div class="col-3">
+                    <a class="btn btn-primary btn-sm" href="{{ path('add_part', {'id': workorderId}) }}" role="button">Retour à la sélection</a>
+                </div>
+            </div>
+            {% if items | length > 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Désignation</th>
+                            <th>Référence</th>
+                            <th>Quantité</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.part.code }}</td>
+                                <td>{{ item.part.designation }}</td>
+                                <td>{{ item.part.reference }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>
+                                    <a href="{{ path('cart_remove', {'id': item.part.id, 'workorderId': workorderId}) }}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Il n'ya a pas de pièces sélectionnées</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

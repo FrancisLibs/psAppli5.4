@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Workshop;
 use App\Data\SearchMachine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -31,10 +33,12 @@ class SearchMachineForm extends AbstractType
                 'attr'      => ['placeholder' => 'Modèle...']
             ])
 
-            ->add('workshop', TextType::class, [
+            ->add('workshop', EntityType::class, [
+                'class'     => Workshop::class,
+                'choice_label' => 'name',
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Atelier']
+                'attr'      => ['placeholder' => false]
             ])
         ;
     }

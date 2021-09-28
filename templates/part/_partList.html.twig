@@ -1,20 +1,20 @@
-<table class="table table-sm">
+<table class="table table-sm part_table">
     <thead>
         {% include 'part/_sorting.html.twig' %}
     </thead>
     <tbody>
         {% for part in parts %}
             <tr>
-                <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
-                <td class="text-center">{{ part.designation }}</td>
-                <td class="text-center">{{ part.reference }}</td>
+                <td class="font_size_table"><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
+                <td class="text-center font_size_table">{{ part.designation }}</td>
+                <td class="text-center font_size_table">{{ part.reference }}</td>
                 {% if part.stock.qteStock < part.stock.qteMin %}
-                    <td class="text-center rounded-circle bg-color-orange">{{ part.stock.qteStock }}</td>
+                    <td class="text-center text-danger font_size_table">{{ part.stock.qteStock }}</td>
                 {% else %}
-                    <td class="text-center">{{ part.stock.qteStock }}</td>
+                    <td class="text-center font_size_table">{{ part.stock.qteStock }}</td>
                 {% endif %}
-                <td class="text-center">{{ part.stock.place }}</td>
-                <td class="text-center">
+                <td class="text-center font_size_table">{{ part.stock.place }}</td>
+                <td class="text-center font_size_table">
                     <a href="{{ path('part_edit', {'id': part.id}) }}"><i class="bi bi-pencil-square"></i></a>
                 </td>
             </tr>

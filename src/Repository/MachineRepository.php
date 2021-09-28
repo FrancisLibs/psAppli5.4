@@ -27,6 +27,7 @@ class MachineRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchMachine $search): PaginationInterface
     {
+        //dd($search);
         $query = $this->createQueryBuilder('m')
             ->orderBy('m.constructor', 'ASC')
             ->select('m', 'w')
@@ -55,8 +56,8 @@ class MachineRepository extends ServiceEntityRepository
 
         if (!empty($search->workshop)) {
             $query = $query
-                ->andWhere('w.name LIKE :name')
-                ->setParameter('name', "%{$search->workshop}%")
+                ->andWhere('w.id = :workshop')
+                ->setParameter('workshop', $search->workshop)
             ;
         }
 

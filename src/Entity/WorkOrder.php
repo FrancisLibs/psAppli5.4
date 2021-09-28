@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WorkorderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -116,6 +118,16 @@ class Workorder
      */
     private $stopTimeMinute;
 
+    /**
+     * @ORM\OneToMany(targetEntity=WorkorderPart::class, mappedBy="workorder", orphanRemoval=true)
+     */
+    private $workorderParts;
+
+    public function __construct()
+    {
+        $this->workorderParts = new ArrayCollection();
+    }
+    
 
     public function getId(): ?int
     {
@@ -341,6 +353,36 @@ class Workorder
     public function setStopTimeMinute(?int $stopTimeMinute): self
     {
         $this->stopTimeMinute = $stopTimeMinute;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WorkorderPart[]
+     */
+    public function getWorkorderParts(): Collection
+    {
+        return $this->workorderParts;
+    }
+
+    public function addWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if (!$this->workorderParts->contains($workorderPart)) {
+            $this->workorderParts[] = $workorderPart;
+            $workorderPart->setWorkorder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if ($this->workorderParts->removeElement($workorderPart)) {
+            // set the owning side to null (unless already changed)
+            if ($workorderPart->getWorkorder() === $this) {
+                $workorderPart->setWorkorder(null);
+            }
+        }
 
         return $this;
     }

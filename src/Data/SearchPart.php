@@ -12,18 +12,18 @@ class SearchPart
     public $page = 1;
 
     /**
-     * Le code de la pièce
-     *
-     * @var string
-     */
-    public $code;
-
-    /**
      * Organisation
      *
      * @var string
      */
     public $organisation;
+    
+    /**
+     * Le code de la pièce
+     *
+     * @var string
+     */
+    public $code;
 
     /**
      * Désignation

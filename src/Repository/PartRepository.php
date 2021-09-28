@@ -27,7 +27,6 @@ class PartRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchPart $search): PaginationInterface
     {
-
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.code', 'ASC')
             ->select('p', 's', 'o')

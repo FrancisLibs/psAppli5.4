@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pièces détachées{% endblock %}
+
+{% block body %}
+    <main class="row">
+        <section class="col-10 offset-2">
+            <div class="row">
+                <div class="col-4 mt-5 d-flex justify-content-between align-items-center">
+                    <h2>Pièces détachées</h2>
+                    <a class="btn btn-primary btn-sm" href="{{ path('work_order_show', {'id': workorderId}) }}" role="button">Retour au BT</a>
+                </div>
+                <div class="col-5 mt-2 offset-3 border border-primary rounded p-2">
+                    <div class="d-flex justify-content-start">
+                        <h4>Panier</h4>
+                        {% if items %}
+                            <a href="{{ path('cart_index', {'workorderId': workorderId}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Visualiser</a>
+                            <a href="#" class="ml-4 btn btn-warning btn-sm btn_panier">Valider</a>
+                            <a href="{{ path('cart_empty', {'workorderId': workorderId}) }}" class="ml-4 btn btn-danger btn-sm btn_panier">vider</a>
+                        {% endif %}
+                    </div>
+                    {% if items %}
+                        {% for item in items %}
+                            <span><a href="{{ path('cart_remove', {'id': item.part.id, 'workorderId': workorderId}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
+                            <span class="items_display"><strong>{{ item.quantity }}x {{ item.part.code }}</strong>{{ item.part.designation }}</span><br>
+                        {% endfor %}
+                    {% else %}
+                        <p>Il n'y a aucune pièce sélectionnée</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+        <section class="row">
+            <aside class="col-2 mt-1">
+                {% include 'part/_filter.html.twig' %}
+            </aside>
+            <article class="col-10">
+                <div class="mt-2">
+                    {% include 'part/_addPartList.html.twig' with {
+                        parts: parts, 
+                        addPart: addPart, 
+                        workorderId: workorderId
+                    } only %}
+                </div>
+                {# display navigation #}
+                <div class="navigation">
+                    {{ knp_pagination_render(parts) }}
+                </div>
+            </article>
+        </section>
+    </main>
+{% endblock %}

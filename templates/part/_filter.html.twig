@@ -1,15 +1,16 @@
-<div class="mt-5">
-    <h3 class="mx-auto mb-2" style="width: 80px; color: #ffff;">Filtres</h3>
+<div>
     {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-
-        <div class="d-flex">
-            <div class="filterbtn">
-                {{ form_row(form.organisation)}}
+    
+        {% if form.organisation is defined %}
+            <div class="d-flex">
+                <div class="filterbtn">
+                    {{ form_row(form.organisation)}}
+                </div>
+                <div>
+                    <button class="resetBtn btn btn-primary">Reset</button>
+                </div>
             </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
-            </div>
-        </div>
+        {% endif %}
 
         <div class="d-flex">
             <div class="filterbtn">

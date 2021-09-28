@@ -3,7 +3,7 @@
     {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
 
         <div class="mt-2 d-flex">
-            <div class="filterbtn">
+            <div class="filterbtn form_width">
                 {{ form_row(form.designation) }}
             </div>
             <div>
@@ -12,7 +12,7 @@
         </div>
 
         <div class="mt-2 d-flex">
-            <div class="filterbtn">
+            <div class="filterbtn form_width">
                 {{ form_row(form.constructor) }}
             </div>
             <div>
@@ -21,7 +21,7 @@
         </div>
        
         <div class="mt-2 d-flex">
-            <div class="filterbtn">
+            <div class="filterbtn form_width">
                 {{ form_row(form.model) }}
             </div>
             <div>
@@ -30,15 +30,12 @@
         </div>
 
         <div class="mt-2 d-flex">
-            <div class="filterbtn">
+            <div class="filterbtn form_width">
                 {{ form_row(form.workshop) }}
-            </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
             </div>
         </div>
 
-        <div class="mt-2">
+        <div class="mt-2 form_width">
             <button type="submit" class="btn btn-primary w-100">Filtrer</button>
         </div>
         

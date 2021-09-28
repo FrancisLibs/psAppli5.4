@@ -14,3 +14,32 @@ body {
 .caseTemps {
   width: 100px;
 }
+
+/* Affichage des pièces dans l'encart du panier */
+.items_display {
+  font-size: 0.7em;
+}
+
+.btn_supp {
+  max-height: 2em;
+  font-size: 0.6em;
+  padding-top: 0px;
+}
+
+.btn_panier {
+  max-height: 1.5em;
+  font-size: 1em;
+  padding-top: 0px;
+  margin-top: 5px;
+}
+
+/* Index pièces et machines */
+.font_size_table {
+  font-size: 0.9em;
+}
+
+/* Index machines largeur champ formulaire */
+.form_width{
+  width: 56%;
+  margin-right: 5px;
+}
