@@ -1,13 +1,9 @@
 <div>
     {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-    
         {% if form.organisation is defined %}
             <div class="d-flex">
                 <div class="filterbtn">
                     {{ form_row(form.organisation)}}
-                </div>
-                <div>
-                    <button class="resetBtn btn btn-primary">Reset</button>
                 </div>
             </div>
         {% endif %}

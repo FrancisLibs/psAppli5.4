@@ -15,25 +15,28 @@
             {{ form_widget(form.reference) }}
         </div>
     </div>
-    <div class="border border-primary rounded p-2">
-        <h4>Stock</h4>
-        <div class="row justify-content-start mb-4">
-            <div class="col-3">
-                {{ form_label(form.stock.place) }}
-                {{ form_widget(form.stock.place) }}
-            </div>
-            <div class="col-3">
-                {{ form_label(form.stock.qteStock) }}
-                {{ form_widget(form.stock.qteStock) }}      
-            </div>
-            <div class="col-3">
-                {{ form_label(form.stock.qteMax) }}
-                {{ form_widget(form.stock.qteMax) }}
-            </div>
-            <div class="col-3">
-                {{ form_label(form.stock.qteMin) }}
-                {{ form_widget(form.stock.qteMin) }}
-            </div>
+    <div class="row mb-4">
+        <div class="col-3">
+            {{ form_label(form.stock.place) }}
+            {{ form_widget(form.stock.place) }}
+        </div>
+        <div class="col-3">
+            {{ form_label(form.stock.qteStock) }}
+            {{ form_widget(form.stock.qteStock) }}      
+        </div>
+        <div class="col-3">
+            {{ form_label(form.stock.qteMax) }}
+            {{ form_widget(form.stock.qteMax) }}
+        </div>
+        <div class="col-3">
+            {{ form_label(form.stock.qteMin) }}
+            {{ form_widget(form.stock.qteMin) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-3">
+            {{ form_label(form.stock.approQte) }}
+            {{ form_widget(form.stock.approQte) }}
         </div>
     </div>
     <div class="row">

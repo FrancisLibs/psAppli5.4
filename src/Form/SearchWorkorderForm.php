@@ -23,6 +23,7 @@ class SearchWorkorderForm extends AbstractType
             ->add('createdAt', DateTimeType::class, [
                 'label'     => false,
                 'required'  => false,
+                'widget'    => 'single_text',
                 'attr'      => ['placeholder' => 'Date...']
             ])
 

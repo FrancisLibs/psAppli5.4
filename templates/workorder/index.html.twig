@@ -3,19 +3,19 @@
 {% block title %}Bons de travail{% endblock %}
 
 {% block body %}
-    <main class="row mt-5">
+    <header class="row mt-5">
+        <div class="col-3 offset-2">
+            <h2>Bons de travail</h2>
+        </div>
+        <div class="col-3">
+            <a class="btn btn-primary btn-sm" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
+        </div>
+    </header>
+    <main class="row">
         <aside class="col-2">
             {% include 'workorder/_filter.html.twig' %}
         </aside>
-        <article class="col-10 mx-auto">
-            <div class="row align-items-center">
-                <div class="col-3">
-                    <h2>Bons de travail</h2>
-                </div>
-                <div class="col-3">
-                    <a class="btn btn-primary btn-sm" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
-                </div>
-            </div>
+        <article class="col-10">
             <div class="mt-5">
                 {% include 'workorder/_workorderList.html.twig' with {workorders: workorders} only %}
             </div>

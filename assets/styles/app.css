@@ -33,9 +33,14 @@ body {
   margin-top: 5px;
 }
 
+/* formulaire de sélection de pièces */
+.resetBtn{
+  margin-left: 10px;
+}
+
 /* Index pièces et machines */
 .font_size_table {
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 /* Index machines largeur champ formulaire */
