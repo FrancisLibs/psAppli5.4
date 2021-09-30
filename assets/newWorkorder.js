@@ -6,9 +6,7 @@ window.onload = () => {
   workshop.addEventListener("change", function () {
     let form = this.closest("form");
     let data = this.name + "=" + this.value;
-    // console.log(data);
-    // console.log(form.action);
-
+    
     fetch(form.action, {
       method: form.getAttribute("method"),
       body: data,
@@ -19,8 +17,9 @@ window.onload = () => {
       .then((response) => response.text())
       .then((html) => {
         let content = document.createElement("html");
+        console.log(content);
         content.innerHTML = html;
-
+        
         let nouveauSelect = content.querySelector("#workorder_machine");
         document.querySelector("#workorder_machine").replaceWith(nouveauSelect);
       });
@@ -37,7 +36,7 @@ window.onload = () => {
   });
 
   // Gestion du temps de l'intervention
- 
+
   // Date et heure de début
   let time_zone = document.querySelector("#time_management");
   time_zone.addEventListener("change", function () {
@@ -51,7 +50,7 @@ window.onload = () => {
     let minuteD = heureDebut.substr(3, 2);
     let heureF = heureFin.substr(0, 2);
     let minuteF = heureFin.substr(3, 2);
-  
+
     let dateD = new Date(startDate.value);
     let dateF = new Date(endDate.value);
 
@@ -62,7 +61,6 @@ window.onload = () => {
 
     // Test si calcul possible
     if (heureF && minuteF) {
-
       //Calcul de la durée
       let diffTemps = Math.abs(dateF - dateD);
       diffTemps = diffTemps / 1000;

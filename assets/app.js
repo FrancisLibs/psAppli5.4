@@ -10,3 +10,7 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+import { PartIndex } from "./JS/PartIndex";
+
+new PartIndex(document.querySelector(".part-js-filter"));

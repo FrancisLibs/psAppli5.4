@@ -1,8 +1,10 @@
 <table class="table table-sm part_table">
     <thead>
-        {% include 'part/_sorting.html.twig' %}
+        <thead class="js-filter-sorting">
+            {% include 'part/_sorting.html.twig' %}
+        </thead>
     </thead>
-    <tbody>
+    <tbody class="js-filter-content">
         {% for part in parts %}
             <tr>
                 <td class="font_size_table"><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>

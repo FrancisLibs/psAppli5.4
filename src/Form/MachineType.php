@@ -24,7 +24,8 @@ class MachineType extends AbstractType
                 'label' => 'Constructeur'
             ])
             ->add('model', TextType::class, [
-                'label' => 'Modèle'
+                'label' => 'Modèle',
+                'required' => false,
             ])
             ->add('workshop', EntityType::class, [
                 'class' =>  Workshop::class,
@@ -32,7 +33,8 @@ class MachineType extends AbstractType
                 'label' => 'Atelier'
             ])
             ->add('serialNumber', TextType::class, [
-                'label' => 'Numéro de série'
+                'label' => 'Numéro de série',
+                'required' => false,
             ])
             ->add('internalCode', TextType::class, [
                 'label' => 'Code machine'
@@ -40,7 +42,8 @@ class MachineType extends AbstractType
             ->add('BuyDate', DateType::class, [
                 'input' => 'datetime',
                 'widget' => 'single_text',
-                'label' => 'Date d\'achat'
+                'label' => 'Date d\'achat',
+                'required' => false,
             ])
         ;
     }

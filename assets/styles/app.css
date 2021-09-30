@@ -34,7 +34,7 @@ body {
 }
 
 /* formulaire de sélection de pièces */
-.resetBtn{
+.resetBtn {
   margin-left: 10px;
 }
 
@@ -44,7 +44,22 @@ body {
 }
 
 /* Index machines largeur champ formulaire */
-.form_width{
+.form_width {
   width: 56%;
   margin-right: 5px;
+}
+
+/* champs show BT */
+.champs_bt {
+  background-color: white;
+  border-radius: 5px;
+  padding: 2px;
+  padding-left: 4px;
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(#bfc6c7, white);
+  height: 70px;
+  border-radius: 7px;
 }

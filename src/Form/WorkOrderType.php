@@ -104,8 +104,7 @@ class WorkorderType extends AbstractType
             ])
             ->add('stopTimeMinute', TextType::class, [
                 'required' => false,
-            ])
-        ;
+            ]);
 
         // Préselection des dates et temps du BT
         $builder->addEventListener(
@@ -133,8 +132,9 @@ class WorkorderType extends AbstractType
         $builder->get('workshop')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($formModifier) {
+                $form = $event->getForm()->getParent();
                 $workshop = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $workshop);
+                $formModifier($form, $workshop);
             }
         );
     }

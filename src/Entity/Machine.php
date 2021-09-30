@@ -30,11 +30,6 @@ class Machine
     private $constructor;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $model;
-
-    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $serialNumber;
@@ -46,7 +41,7 @@ class Machine
     private $workshop;
 
     /**
-     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="machine", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="machine")
      */
     private $workorders;
 
@@ -64,6 +59,16 @@ class Machine
      * @ORM\Column(type="date", nullable=true)
      */
     private $buyDate;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $model;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
 
     public function __construct()
     {
@@ -95,18 +100,6 @@ class Machine
     public function setConstructor(string $constructor): self
     {
         $this->constructor = $constructor;
-
-        return $this;
-    }
-
-    public function getModel(): ?string
-    {
-        return $this->model;
-    }
-
-    public function setModel(string $model): self
-    {
-        $this->model = $model;
 
         return $this;
     }
@@ -202,6 +195,30 @@ class Machine
     public function setBuyDate(?\DateTimeInterface $buyDate): self
     {
         $this->buyDate = $buyDate;
+
+        return $this;
+    }
+
+    public function getModel(): ?string
+    {
+        return $this->model;
+    }
+
+    public function setModel(?string $model): self
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

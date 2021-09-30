@@ -3,7 +3,7 @@
 {% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
-    <main class="row mt-4">
+    <main class="row mt-4 part-js-filter" >
         <div class="col-12">
             <div class="row">
                 <div class="col-3 offset-2">
@@ -23,7 +23,7 @@
             </div>
             {# display navigation #}
             <div class="row mt-4">
-                <div class="col-4 offset-2 navigation">
+                <div class="col-4 offset-2 navigation js-filter-pagination">
                     {{ knp_pagination_render(parts) }}
                 </div>
             </div>

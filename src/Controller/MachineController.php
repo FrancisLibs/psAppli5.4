@@ -62,9 +62,9 @@ class MachineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($machine);
-            $entityManager->flush();
+            $machine->setStatus(true);
+            $this->manager->persist($machine);
+            $this->manager->flush();
 
             return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -110,10 +110,10 @@ class MachineController extends AbstractController
      */
     public function delete(Request $request, Machine $machine): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$machine->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($machine);
-            $entityManager->flush();
+        $token = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete'.$machine->getId(), $token)) {
+            $machine->setStatus(false);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
