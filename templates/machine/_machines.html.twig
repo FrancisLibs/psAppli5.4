@@ -1,0 +1,14 @@
+{% for machine in machines %}
+    <tr>
+        <td class="text-left font_size_table"><a href="{{ path('machine_show', {'id': machine.id}) }}">{{ machine.internalCode }}</a></td>
+        <td class="text-center font_size_table">{{ machine.constructor }}</a></td>
+        <td class="text-center font_size_table">{{ machine.designation }}</td>
+        <td class="text-center font_size_table">{{ machine.model }}</td>
+        <td class="text-center font_size_table">{{ machine.workshop.name }}</td>
+        <td class="text-center"><a href="{{ path('machine_edit', {'id': machine.id}) }}"><i class="bi bi-pencil-square"></i></a></td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Il n'y a aucune machine enregistrée</td>
+    </tr>
+{% endfor %}
