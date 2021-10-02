@@ -12,5 +12,7 @@ import './styles/app.css';
 import './bootstrap';
 
 import { PartIndex } from "./JS/PartIndex";
-
 new PartIndex(document.querySelector(".part-js-filter"));
+
+import { MachineIndex } from "./JS/MachineIndex";
+new MachineIndex(document.querySelector(".machine-js-filter"));

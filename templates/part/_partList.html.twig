@@ -1,30 +1,8 @@
 <table class="table table-sm part_table">
-    <thead>
-        <thead class="js-filter-sorting">
-            {% include 'part/_sorting.html.twig' %}
-        </thead>
+    <thead class="js-filter-sorting">
+        {% include 'part/_sorting.html.twig' %}
     </thead>
     <tbody class="js-filter-content">
-        {% for part in parts %}
-            <tr>
-                <td class="font_size_table"><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
-                <td class="text-center font_size_table">{{ part.designation }}</td>
-                <td class="text-center font_size_table">{{ part.reference }}</td>
-                {% if part.stock.qteStock < part.stock.qteMin %}
-                    <td class="text-center text-danger font_size_table">{{ part.stock.qteStock }}</td>
-                {% else %}
-                    <td class="text-center font_size_table">{{ part.stock.qteStock }}</td>
-                {% endif %}
-                <td class="text-center font_size_table">{{ part.stock.place }}</td>
-                <td class="text-center font_size_table">{{ part.stock.approQte }}</td>
-                <td class="text-center font_size_table">
-                    <a href="{{ path('part_edit', {'id': part.id}) }}"><i class="bi bi-pencil-square"></i></a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">Il n'y a pas de pièce enregistrée</td>
-            </tr>
-        {% endfor %}
+        {% include 'part/_parts.html.twig' %}
     </tbody>
 </table>

@@ -8,10 +8,10 @@ use App\Data\SearchMachine;
 use App\Form\SearchMachineForm;
 use App\Repository\MachineRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -44,10 +44,15 @@ class MachineController extends AbstractController
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
-
-
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines]),
+                'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
+                'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
+            ]);
+        }
         return $this->render('machine/index.html.twig', [
-            'machines'  => $machines,
+            'machines'  =>  $machines,
             'form'      =>  $form->createView(),
         ]);
     }

@@ -11,7 +11,7 @@
             <a class="btn btn-primary btn-sm" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row machine-js-filter">
         <aside class="col-2">
             {% include 'machine/_filter.html.twig' %}
         </aside>
@@ -23,8 +23,8 @@
             </div>
             {# display navigation #}
             <div class="row mt-4">
-                <div class="col-5 navigation">
-                    {{ knp_pagination_render(machines) }}
+                <div class="col-5 navigation js-filter-pagination">
+                    {% include 'machine/_pagination.html.twig' %}
                 </div>
             </div>
         </article>

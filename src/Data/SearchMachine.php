@@ -16,6 +16,13 @@ class SearchMachine
      *
      * @var string
      */
+    public $internalCode;
+
+    /**
+     * La désignation de la machine
+     *
+     * @var string
+     */
     public $designation;
 
     /**

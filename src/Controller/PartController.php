@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -47,13 +48,13 @@ class PartController extends AbstractController
 
         $form->handleRequest($request);
         $parts = $this->partRepository->findSearch($data);
-        // if ($request->get('ajax')) {
-        //     return new JsonResponse([
-        //         'content'       =>  $this->renderView('ident/_idents.html.twig', ['idents' => $idents]),
-        //         'sorting'       =>  $this->renderView('ident/_sorting.html.twig', ['idents' => $idents]),
-        //         'pagination'    =>  $this->renderView('ident/_pagination.html.twig', ['idents' => $idents]),
-        //     ]);
-        // }
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts]),
+                'sorting'       =>  $this->renderView('part/_sorting.html.twig', ['parts' => $parts]),
+                'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
+            ]);
+        }
         return $this->render('part/index.html.twig', [
             'parts' =>  $parts,
             'form'  =>  $form->createView(),

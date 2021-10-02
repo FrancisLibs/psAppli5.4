@@ -14,13 +14,9 @@ export class PartIndex {
     }
 
     this.form = element.querySelector(".js-filter-form");
-    console.log("form : " + this.form);
     this.content = element.querySelector(".js-filter-content");
-    console.log("content : " + this.content);
     this.sorting = element.querySelector(".js-filter-sorting");
-    console.log("sorting : " + this.sorting);
     this.pagination = element.querySelector(".js-filter-pagination");
-    console.log("pagination : " + this.pagination);
     this.bindEvents();
   }
 
@@ -41,7 +37,6 @@ export class PartIndex {
         e.target.parentNode.parentNode.childNodes[1].children[0].firstChild
           .nodeName;
       let champAReseter = e.target.parentNode.parentNode;
-      //console.log(champAReseter);
       let nomDuChampAReseter = "";
 
       switch (typeChamp) {
@@ -54,7 +49,6 @@ export class PartIndex {
         case "INPUT":
           // reset du champ de recherche INPUT
           champAReseter = champAReseter.querySelector("input");
-          //console.log(champAReseter);
           nomDuChampAReseter = champAReseter.getAttribute("name");
           champAReseter.value = "";
           break;
@@ -78,7 +72,7 @@ export class PartIndex {
 
     const inputForm = this.form.querySelectorAll("input");
     inputForm.forEach((input) => {
-      input.addEventListener("change", this.loadForm.bind(this));
+      input.addEventListener("keyup", this.loadForm.bind(this));
     });
 
     const selectForm = this.form.querySelectorAll("select");

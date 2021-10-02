@@ -15,6 +15,11 @@ class SearchMachineForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('internalCode', TextType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Code...']
+            ])
             ->add('designation', TextType::class, [
                 'label'     => false,
                 'required'  => false,
@@ -38,7 +43,7 @@ class SearchMachineForm extends AbstractType
                 'choice_label' => 'name',
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => false]
+                'placeholder' => 'Atelier'
             ])
         ;
     }

@@ -24,7 +24,7 @@
             {# display navigation #}
             <div class="row mt-4">
                 <div class="col-4 offset-2 navigation js-filter-pagination">
-                    {{ knp_pagination_render(parts) }}
+                    {% include 'part/_pagination.html.twig' %}
                 </div>
             </div>
         </article>

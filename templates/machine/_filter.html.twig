@@ -3,6 +3,15 @@
 
         <div class="mt-2 d-flex">
             <div class="filterbtn form_width">
+                {{ form_row(form.internalCode) }}
+            </div>
+            <div>
+                <button class="resetBtn btn btn-primary">Reset</button>
+            </div>
+        </div>
+
+        <div class="mt-2 d-flex">
+            <div class="filterbtn form_width">
                 {{ form_row(form.designation) }}
             </div>
             <div>
