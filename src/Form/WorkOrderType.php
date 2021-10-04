@@ -112,10 +112,10 @@ class WorkorderType extends AbstractType
             function (FormEvent $event) {
                 $form = $event->getData();
                 // Preset de startTime
-                if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+                if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now'));
                 if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
-                if (is_null($form->getEndDate())) $form->setEndDate(new \DateTime('now'));
-                if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
+                if (is_null($form->getEndDate()))   $form->setEndDate(new \DateTime('now'));
+               //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
             }
         );
 

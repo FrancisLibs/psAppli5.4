@@ -63,6 +63,7 @@ class PartController extends AbstractController
 
     /**
      * @Route("/new", name="part_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {

@@ -14,7 +14,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function index(Request $request, WorkorderRepository $workorderRepository,PaginatorInterface $paginator): Response
+    public function index(Request $request, WorkorderRepository $workorderRepository): Response
     {
         $user = $this->getUser();
         if(!$user){

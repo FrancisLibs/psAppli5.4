@@ -81,7 +81,9 @@ class UserController extends AbstractController
             $this->manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié.");
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('user_profil', [
+                'id' => $user->getId(),
+            ]);
         }
         return $this->render('user/modify.html.twig', [
             'form'  => $form->createView(),

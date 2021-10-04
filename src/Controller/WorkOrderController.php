@@ -107,15 +107,10 @@ class WorkorderController extends AbstractController
     public function edit(Request $request, Workorder $workorder): Response
     {
         $workshop = $workorder->getMachine()->getWorkshop();
-
         $form = $this->createForm(WorkorderEditType::class, $workorder);
-
         $form->handleRequest($request);
 
-        //dd($form);
-
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute(

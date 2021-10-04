@@ -2,6 +2,14 @@ body {
   background-color: rgb(201, 197, 197);
 }
 
+/* Page login image de fond */
+.background_picture {
+  margin: 0;
+  padding: 0;
+  background: url("/public/images/conditionnement.png") no-repeat center fixed;
+  background-size: cover; /* version standardisée */
+}
+
 .logo_profil {
   width: 40px;
 }

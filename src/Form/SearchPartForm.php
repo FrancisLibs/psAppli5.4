@@ -16,7 +16,7 @@ class SearchPartForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $organisation = $options['organisation'];
+        //$organisation = $options['organisation'];
 
         $builder
             ->add('organisation', EntityType::class, [
