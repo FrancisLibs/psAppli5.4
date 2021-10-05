@@ -6,8 +6,16 @@ body {
 .background_picture {
   margin: 0;
   padding: 0;
-  background: url("/public/images/conditionnement.png") no-repeat center fixed;
-  background-size: cover; /* version standardisée */
+  background: url("/public/images/conditionnement3.png") no-repeat center center
+    fixed;
+  background-size: cover;
+}
+
+.login_frame {
+  width: 28%;
+  border: 1px solid white;
+  margin: auto;
+  margin-top: 2em;
 }
 
 .logo_profil {
