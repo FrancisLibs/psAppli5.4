@@ -71,7 +71,7 @@ class MachineRepository extends ServiceEntityRepository
         return $this->paginator->paginate(
             $query,
             $search->page,
-            15
+            20
         );
     }
 }

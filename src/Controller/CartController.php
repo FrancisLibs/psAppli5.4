@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -35,7 +36,7 @@ class CartController extends AbstractController
      * Liste des pièces dans le panier
      * 
      * @Route("/cart/{workorderId}", name="cart_index")
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @param   workorderId
      * @return  response
      */
@@ -63,7 +64,7 @@ class CartController extends AbstractController
      * Appel de la liste des pièces pour les ajouter au panier
      * 
      * @Route("/{id}/add_part/", name="add_part", methods={"GET"})
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @param   Workorder $workorder
      * @param   Request $request 
      * @return  Response
@@ -118,37 +119,51 @@ class CartController extends AbstractController
      * Ajoute une pièce dans le panier
      * 
      * @Route("/cart/add/{id}/{workorderId}", name="cart_add")
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @param   id              $id de la pièce ajoutée
      * @param   workorderId     id du workorder
      * @return redirectResponse
      */
-    public function add($id, $workorderId): RedirectResponse
+    public function add(Part $part, $workorderId): RedirectResponse
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
+        $id = $part->getId();
 
+        // Quantité dans le stock
+        $qteStock = $part->getStock()->getQteStock();
+
+        // Quantité dans le panier
         if (!empty($panier[$id])) {
-            $panier[$id]++;
+            $qteCart = $panier[$id];
         } else {
-            $panier[$id] = 1;
+            $qteCart = 0;
         }
 
-        $session->set('panier', $panier);
+        // Test si possible de mettre pièce dans le panier
+        if ($qteStock > 0 && $qteStock > $qteCart) {
 
-        $panierWithData = [];
-        foreach ($panier as $id => $quantity) {
-            $panierWithData[] = [
-                'part' => $this->partRepository->find($id),
-                'quantity' => $quantity,
-            ];
+            if (!empty($panier[$id])) {
+                $panier[$id]++;
+            } else {
+                $panier[$id] = 1;
+            }
+
+            $session->set('panier', $panier);
+
+            $panierWithData = [];
+            foreach ($panier as $id => $quantity) {
+                $panierWithData[] = [
+                    'part' => $this->partRepository->find($id),
+                    'quantity' => $quantity,
+                ];
+            }
+
+            $total = 0;
+            foreach ($panierWithData as $item) {
+                $total += $item['quantity'];
+            }
         }
-
-        $total = 0;
-        foreach ($panierWithData as $item) {
-            $total += $item['quantity'];
-        }
-
         return $this->redirectToRoute('add_part', [
             'id' => $workorderId,
         ]);
@@ -156,9 +171,9 @@ class CartController extends AbstractController
 
     /**
      * Enlève une pièce du panier
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/cart/remove/{id}/{workorderId}", name="cart_remove")
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @param   id              id de la pièce à enlever
      * @param   workorderId     id du workorder
      * @return  RedirectResponse
@@ -184,6 +199,7 @@ class CartController extends AbstractController
      * Vidange du panier
      * 
      * @Route("/cart/empty/{workorderId}", name="cart_empty")
+     * @Security("is_granted('ROLE_USER')")
      * 
      * @param workorderId   id du panier
      * @return RedirectResponse
@@ -205,7 +221,7 @@ class CartController extends AbstractController
      * Vidange du panier
      * 
      * @Route("/cart/validation/{id}", name="cart_valid")
-     * 
+     * @Security("is_granted('ROLE_USER')")
      * @param workorderId   id du panier
      * @return RedirectResponse
      */
@@ -216,11 +232,16 @@ class CartController extends AbstractController
 
         // Affection des pièces du panier au bt
         foreach ($panier as $id => $qte) {
+
+            // Ajout de la pièce au bt
             $workorderPart = new WorkorderPart();
             $part = $this->partRepository->find($id);
             $workorderPart->setPart($part);
             $workorderPart->setQuantity($qte);
             $workorder->addWorkorderPart($workorderPart);
+
+            // Rectification de la quantité de pièce en stock
+            $part->getStock()->setQteStock($part->getStock()->getQteStock() - $qte);
             $this->manager->persist($workorder);
             $this->manager->persist($workorderPart);
         }

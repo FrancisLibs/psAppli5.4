@@ -59,6 +59,7 @@ class MachineController extends AbstractController
 
     /**
      * @Route("/new", name="machine_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -82,6 +83,7 @@ class MachineController extends AbstractController
 
     /**
      * @Route("/{id}", name="machine_show", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function show(Machine $machine): Response
     {
@@ -92,6 +94,7 @@ class MachineController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="machine_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Machine $machine): Response
     {
@@ -112,6 +115,7 @@ class MachineController extends AbstractController
 
     /**
      * @Route("/{id}", name="machine_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Machine $machine): Response
     {

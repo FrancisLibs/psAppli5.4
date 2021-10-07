@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\Stock;
 use App\Form\Stock1Type;
 use App\Repository\StockRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/stock")
@@ -17,6 +18,7 @@ class StockController extends AbstractController
 {
     /**
      * @Route("/", name="stock_index", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function index(StockRepository $stockRepository): Response
     {
@@ -27,6 +29,7 @@ class StockController extends AbstractController
 
     /**
      * @Route("/new", name="stock_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -50,6 +53,7 @@ class StockController extends AbstractController
 
     /**
      * @Route("/{id}", name="stock_show", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function show(Stock $stock): Response
     {
@@ -60,6 +64,7 @@ class StockController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="stock_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Stock $stock): Response
     {
@@ -80,6 +85,7 @@ class StockController extends AbstractController
 
     /**
      * @Route("/{id}", name="stock_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Stock $stock): Response
     {

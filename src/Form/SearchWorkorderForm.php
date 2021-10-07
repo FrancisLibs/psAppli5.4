@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Workorder;
 use App\Data\SearchWorkorder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class SearchWorkorderForm extends AbstractType
@@ -14,16 +16,20 @@ class SearchWorkorderForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('status', TextType::class, [
+            ->add('status', ChoiceType::class, [
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Status...']
+                'placeholder' => 'Status...',
+                'choices'   => [
+                    'en cours' => Workorder::EN_COURS ,
+                    'cloturé' => Workorder::CLOTURE
+                ],
             ])
 
             ->add('createdAt', DateTimeType::class, [
                 'label'     => false,
                 'required'  => false,
-                'widget'    => 'single_text',
+                'widget'    => 'single_text', 
                 'attr'      => ['placeholder' => 'Date...']
             ])
 

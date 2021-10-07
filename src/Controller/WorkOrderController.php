@@ -13,7 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @Route("/work/order")
@@ -33,6 +35,7 @@ class WorkorderController extends AbstractController
 
     /**
      * @Route("/", name="work_order_index", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function index(Request $request): Response
     {
@@ -57,6 +60,7 @@ class WorkorderController extends AbstractController
 
     /**
      * @Route("/new", name="work_order_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -93,6 +97,7 @@ class WorkorderController extends AbstractController
 
     /**
      * @Route("/{id}", name="work_order_show", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function show(Workorder $workorder): Response
     {
@@ -103,6 +108,7 @@ class WorkorderController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="work_order_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Workorder $workorder): Response
     {
@@ -121,22 +127,35 @@ class WorkorderController extends AbstractController
                 Response::HTTP_SEE_OTHER
             );
         }
-        return $this->renderForm('workorder/modif.html.twig', [
+        return $this->renderForm('workorder/edit.html.twig', [
             'workorder' => $workorder,
             'form' => $form,
+            'edit' => true,
         ]);
     }
 
     /**
      * @Route("/{id}", name="work_order_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function delete(Request $request, Workorder $workorder): Response
     {
         if ($this->isCsrfTokenValid('delete' . $workorder->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($workorder);
-            $entityManager->flush();
+            $this->manager->remove($workorder);
+            $this->manager->flush();
         }
+
+        return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/closing/{id}", name="work_order_closing")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function closing(Workorder $workorder): RedirectResponse
+    {
+        $workorder->setStatus(Workorder::CLOTURE);
+        $this->manager->flush();
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
     }

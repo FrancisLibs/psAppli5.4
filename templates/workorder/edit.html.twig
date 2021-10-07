@@ -18,7 +18,11 @@
     </div>
     <article class="row">
         <div class="mt-4 col-8 mx-auto">
-            {{ include('workorder/_form.html.twig') }}
+            {% if edit %}
+                {{ include('workorder/_formModif.html.twig') }}
+            {% else %}
+                {{ include('workorder/_form.html.twig') }}
+            {% endif %}
         </div>
     </article>
 {% endblock %}

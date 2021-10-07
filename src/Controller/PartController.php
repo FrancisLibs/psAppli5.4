@@ -94,6 +94,7 @@ class PartController extends AbstractController
 
     /**
      * @Route("/{id}", name="part_show", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function show(Part $part): Response
     {
@@ -104,6 +105,7 @@ class PartController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="part_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Part $part): Response
     {
@@ -129,6 +131,7 @@ class PartController extends AbstractController
 
     /**
      * @Route("/{id}", name="part_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Part $part): Response
     {

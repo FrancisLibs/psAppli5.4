@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-8 mx-auto">
+        <div class="col-7 offset-1">
             <div class="row align-items-center">
                 <div class="col-4">
                     <h3>Bon de Travail</h3>
@@ -13,13 +13,16 @@
                     <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
-                    {{ include('workorder/_delete_form.html.twig') }}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-danger btn-sm mr-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
+                    {% endif %}
+                    {# {{ include('workorder/_delete_form.html.twig') }} #}
                 </div>
             </div>
         </div>
     </div>
-    <article class="row">
-        <div class="col-8 offset-2 mt-4">
+    <article class="row mt-4">
+        <div class="col-11 offset-1">
             {% include 'workorder/_show.html.twig' %}
         </div>
     </article>
