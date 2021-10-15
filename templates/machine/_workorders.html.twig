@@ -1,0 +1,29 @@
+<h3>Bons de travail</h3>
+{% if machine.workorders|length > 0 %}       
+    {% for workorder in machine.workorders %}
+        <div class="border border-info rounded p-2 m-1">
+            <div class="row">
+                <div class="col-5">
+                    <span><strong>Date : </strong></span>
+                    <a href="{{ path('work_order_show', {'id': workorder.id}) }}">
+                        {{ workorder.startDate|date('d-m-Y') }}
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span><strong>Demande : </strong></span>
+                    {{ workorder.request }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span><strong>Réalisation : </strong></span>
+                    {{ workorder.implementation }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <span>Il n'y a aucun BT enregistré</span>
+{% endif %}

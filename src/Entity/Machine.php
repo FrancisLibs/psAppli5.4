@@ -51,7 +51,7 @@ class Machine
     private $status;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=15)
      */
     private $internalCode;
 
@@ -70,9 +70,15 @@ class Machine
      */
     private $active;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Part::class, inversedBy="machines")
+     */
+    private $parts;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
+        $this->parts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,6 +225,30 @@ class Machine
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Part[]
+     */
+    public function getParts(): Collection
+    {
+        return $this->parts;
+    }
+
+    public function addPart(Part $part): self
+    {
+        if (!$this->parts->contains($part)) {
+            $this->parts[] = $part;
+        }
+
+        return $this;
+    }
+
+    public function removePart(Part $part): self
+    {
+        $this->parts->removeElement($part);
 
         return $this;
     }

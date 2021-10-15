@@ -1,25 +1,8 @@
-
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>{{ knp_pagination_sortable(workorders, 'Machine', 'w.machine') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Intervenant', 'w.user') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Travaux', 'w.subject') }}</th>
-        </tr>
+    <thead class="js-filter-sorting">
+        {% include 'workorder/_sorting.html.twig' %}
     </thead>
-    <tbody>
-        {% for workorder in workorders %}
-            <tr>
-                <td><a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.machine.designation ~ workorder.machine.internalCode}}</a></td>
-                <td>{{ workorder.user.firstName }}</td>
-                <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ workorder.request }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">Il n'y a pas de bons de travail enregistré</td>
-            </tr>
-        {% endfor %}
+    <tbody class="js-filter-content">
+        {% include 'workorder/_workorders.html.twig' %}
     </tbody>
 </table>

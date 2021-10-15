@@ -60,9 +60,15 @@ class Part
      */
     private $workorderParts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Machine::class, mappedBy="parts")
+     */
+    private $machines;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
+        $this->machines = new ArrayCollection();
     }
 
     
@@ -185,6 +191,33 @@ class Part
             if ($workorderPart->getPart() === $this) {
                 $workorderPart->setPart(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Machine[]
+     */
+    public function getMachines(): Collection
+    {
+        return $this->machines;
+    }
+
+    public function addMachine(Machine $machine): self
+    {
+        if (!$this->machines->contains($machine)) {
+            $this->machines[] = $machine;
+            $machine->addPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMachine(Machine $machine): self
+    {
+        if ($this->machines->removeElement($machine)) {
+            $machine->removePart($this);
         }
 
         return $this;

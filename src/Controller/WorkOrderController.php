@@ -13,9 +13,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @Route("/work/order")
@@ -36,6 +37,9 @@ class WorkorderController extends AbstractController
     /**
      * @Route("/", name="work_order_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
+     * 
+     * @param Request $request
+     * @return Response 
      */
     public function index(Request $request): Response
     {
@@ -44,14 +48,13 @@ class WorkorderController extends AbstractController
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
-        //dd($parts);
-        // if ($request->get('ajax')) {
-        //     return new JsonResponse([
-        //         'content'       =>  $this->renderView('ident/_idents.html.twig', ['idents' => $idents]),
-        //         'sorting'       =>  $this->renderView('ident/_sorting.html.twig', ['idents' => $idents]),
-        //         'pagination'    =>  $this->renderView('ident/_pagination.html.twig', ['idents' => $idents]),
-        //     ]);
-        // }
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('workorder/_workorders.html.twig', ['workorders' => $workorders]),
+                'sorting'       =>  $this->renderView('workorder/_sorting.html.twig', ['workorders' => $workorders]),
+                'pagination'    =>  $this->renderView('workorder/_pagination.html.twig', ['workorders' => $workorders]),
+            ]);
+        }
         return $this->render('workorder/index.html.twig', [
             'workorders' =>  $workorders,
             'form'  =>  $form->createView(),

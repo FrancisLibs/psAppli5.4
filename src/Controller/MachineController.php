@@ -36,6 +36,7 @@ class MachineController extends AbstractController
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
+     * @return Response
      */
     public function index(Request $request): Response
     {

@@ -218,10 +218,11 @@ class CartController extends AbstractController
     }
 
     /**
-     * Vidange du panier
+     * Validation du panier
      * 
      * @Route("/cart/validation/{id}", name="cart_valid")
      * @Security("is_granted('ROLE_USER')")
+     * 
      * @param workorderId   id du panier
      * @return RedirectResponse
      */
@@ -240,6 +241,13 @@ class CartController extends AbstractController
             $workorderPart->setQuantity($qte);
             $workorder->addWorkorderPart($workorderPart);
 
+            // Ajout de la pièce à la machine
+            $machine = $workorder->getMachine();
+            $parts = $machine->getParts();
+            if(!$parts->contains($part)) {
+                $machine->addPart($part);
+            }
+            
             // Rectification de la quantité de pièce en stock
             $part->getStock()->setQteStock($part->getStock()->getQteStock() - $qte);
             $this->manager->persist($workorder);

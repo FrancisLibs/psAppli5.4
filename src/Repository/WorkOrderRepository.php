@@ -29,26 +29,27 @@ class WorkorderRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
-            ->select('w', 'm')
-            ->join('w.machine', 'm');
+            ->select('w', 'm', 'u')
+            ->join('w.machine', 'm')
+            ->join('w.user', 'u');
 
         if (!empty($search->machine)) {
             $query = $query
-                ->andWhere('m.machine LIKE :machine')
+                ->andWhere('m.designation LIKE :machine')
                 ->setParameter('machine', "%{$search->machine}%");
         }
 
         if (!empty($search->user)) {
             $query = $query
-                ->andWhere('w.user LIKE :user')
+                ->andWhere('u.username LIKE :user')
                 ->setParameter('user', "%{$search->user}%");
         }
 
-        if (!empty($search->status)) {
-            $query = $query
-                ->andWhere('w.status LIKE :status')
-                ->setParameter('status', "%{$search->status}%");
-        }
+        // if (!empty($search->status)) {
+        //     $query = $query
+        //         ->andWhere('w.status LIKE :status')
+        //         ->setParameter('status', "%{$search->status}%");
+        // }
 
         $query = $query->getQuery();
 

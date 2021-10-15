@@ -11,12 +11,12 @@ class SearchWorkorder
      */
     public $page = 1;
 
-    /**
-     * Date de création
-     *
-     * @var dateTime
-     */
-    public $createdAt;
+    // /**
+    //  * Date de création
+    //  *
+    //  * @var dateTime
+    //  */
+    // public $createdAt;
 
     /**
      * Machine
@@ -32,10 +32,10 @@ class SearchWorkorder
      */
     public $user;
 
-    /**
-     * Status
-     *
-     * @var status
-     */
-    public $status;
+    // /**
+    //  * Status
+    //  *
+    //  * @var status
+    //  */
+    // public $status;
 }

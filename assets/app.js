@@ -16,3 +16,6 @@ new PartIndex(document.querySelector(".part-js-filter"));
 
 import { MachineIndex } from "./JS/MachineIndex";
 new MachineIndex(document.querySelector(".machine-js-filter"));
+
+import { WorkorderIndex } from "./JS/WorkorderIndex";
+new WorkorderIndex(document.querySelector(".workorder-js-filter"));

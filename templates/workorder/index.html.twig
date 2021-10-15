@@ -5,14 +5,14 @@
 {% block body %}
     <header class="row mt-5">
         <div class="col-3 offset-2">
-            <h2>Bons de travails</h2>
+            <h2>Bons de travail</h2>
         </div>
         <div class="col-3">
             <a class="btn btn-primary btn-sm" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
         </div>
     </header>
-    <main class="row">
-        <aside class="col-2">
+    <main class="row workorder-js-filter">
+        <aside class="col-2 mt-5">
             {% include 'workorder/_filter.html.twig' %}
         </aside>
         <article class="col-10">
@@ -20,8 +20,8 @@
                 {% include 'workorder/_workorderList.html.twig' with {workorders: workorders} only %}
             </div>
             {# display navigation #}
-            <div class="navigation">
-                {{ knp_pagination_render(workorders) }}
+            <div class="navigation js-filter-pagination">
+                {% include 'workorder/_pagination.html.twig' %}
             </div>
         </article>
     </main>
