@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Organisation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -65,7 +66,10 @@ class RegistrationFormType extends AbstractType
                 'choice_label' => 'designation',
                 'multiple' => false,
                 'expanded' => true,
-            ]);
+            ])
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+            ])
         ;
     }
 
