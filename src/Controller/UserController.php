@@ -85,7 +85,7 @@ class UserController extends AbstractController
                 'id' => $user->getId(),
             ]);
         }
-        return $this->render('user/modify.html.twig', [
+        return $this->render('user/edit.html.twig', [
             'form'  => $form->createView(),
             'user'  => $user,
         ]);
@@ -109,12 +109,12 @@ class UserController extends AbstractController
                 $this->manager->remove($user);
                 $this->manager->flush();
                 $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
-                return $this->redirectToRoute('user_list');
+                return $this->redirectToRoute('user_index');
             }
 
             if ($user == $currentUser) {
                 $this->addFlash('error', 'Vous ne pouvez pas vous supprimer vous-même');
-                return $this->redirectToRoute('user_list');
+                return $this->redirectToRoute('user_index');
             }
         }
 

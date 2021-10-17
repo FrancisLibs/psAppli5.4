@@ -33,15 +33,17 @@
         <div class="col-6">
             {{ form_label(registrationForm.phoneNumber) }}
             {{ form_widget(registrationForm.phoneNumber) }}        
-        </div>                
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            {{ form_label(registrationForm.imageFile) }}
+            {{ form_widget(registrationForm.imageFile) }}        
+        </div>                 
     </div>
     <div class="row">
         <div class="col-4 text-center">
             <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
         </div>
-        <div class="col-7 offset-1 text-danger">
-                Un email de validation vous parviendra quelques minutes après votre validation.
-                Merci d'y confirmer votre inscription.
-            </div>
     </div>
 {{ form_end(registrationForm) }}

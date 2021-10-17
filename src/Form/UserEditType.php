@@ -41,6 +41,7 @@ class UserEditType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
+                'label' => 'Photo',
             ])  
         ;
     }

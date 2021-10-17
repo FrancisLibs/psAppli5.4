@@ -69,6 +69,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
+                'label' => 'Photo',
             ])
         ;
     }

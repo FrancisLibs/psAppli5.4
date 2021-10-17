@@ -5,7 +5,7 @@
 {% block body %}
     <div class="row mt-4 align-items-center">
         <div class="col-2 offset-2">
-            <h1>Profil</h1>
+            <h1>{{ user.username}}</h1>
         </div>
         <div class="col-3">
             <a class="btn btn-primary btn-sm" href="{{ path('user_edit', {'id': user.id}) }}" role="button">Modification</a>
@@ -15,20 +15,22 @@
         <div class="col-8 offset-2">
             <div class="row align-items-center">
                 <div class="col-5">
-                    <p class="profil-font-size">Identifiant : {{ user.username}}</p>
+                    
                     <p class="profil-font-size">Organisation : {{ user.organisation.designation}}</p>
                     <p class="profil-font-size">Nom : {{ user.firstName ~ " " ~ user.lastName}}</p>
                     <p class="profil-font-size">Email : {{ user.email }}</p>
                     <p class="profil-font-size">Téléphone : {{ user.phoneNumber }}</p>
-                    <p class="profil-font-size">Roles :
+                    <p class="profil-font-size">Roles :<br>
                     {% for role in user.roles %}
-                        {{ role }}
+                        {{ role }}<br>
                     {% endfor %}
                     </p>
                 </div>
                 <div class="col-4">
                     {% if user.imageName %}
-                    <img src="{{ vich_uploader_asset(user, 'imageFile') }}" alt="Photo d'identité de {{ user.username }}" />
+                        <img src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_thumb_filter') }}" alt="Photo d'identité de {{ user.username }}" />
+                    {% else %}
+                        <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_thumb_filter') }}" alt="Photo d'identité de {{ user.username }}" />
                     {% endif %}
                 </div>
             </div>

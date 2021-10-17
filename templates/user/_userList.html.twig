@@ -31,7 +31,7 @@
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
                             <button type="submit" class="btn"><i class="bi bi-trash"></i></button>
-                            <span data-path="{{ path('user_remove', { id : user.id }) }}"></span>
+                            {# <span data-path="{{ path('user_remove', { id : user.id }) }}"></span> #}
                         </form>
                     </td>                          
                 </tr>
