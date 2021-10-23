@@ -1,21 +1,10 @@
 {{ form_start(form) }} 
-    <div class="mt-1 rounded p-3 machines">
+    <div class="machines">
         <div class="row">
-            <div class="text-primary">
-                <h4>Machine</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                {{ form_label(form.workshop) }}  
-                {{ form_widget(form.workshop) }}  
-            </div>
-            <div class="col-5">
-                {{ form_label(form.machine) }}<br> 
-                {{ form_widget(form.machine) }}  
-            </div>
-            <div class="col-2">
-                {{ form_label(form.type) }}  
+            <div class="col-2 mt-3 text-primary">
+                <h4>Type BT</h4>
+            </div> 
+            <div class="col-2 mt-3">
                 {{ form_widget(form.type) }}  
             </div>
         </div>

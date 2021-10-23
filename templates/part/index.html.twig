@@ -30,3 +30,7 @@
         </article>
     </main>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('part') }}
+{% endblock %}

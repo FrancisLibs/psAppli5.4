@@ -31,12 +31,6 @@ class Workorder
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="workorders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $machine;
-
-    /**
      * @ORM\Column(type="string", length=10)
      */
     private $status;
@@ -123,9 +117,30 @@ class Workorder
      */
     private $workorderParts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Machine::class, inversedBy="workorders")
+     */
+    private $machines;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $Preventive;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $template;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cycle_days;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
+        $this->machines = new ArrayCollection();
     }
     
 
@@ -142,18 +157,6 @@ class Workorder
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getMachine(): ?Machine
-    {
-        return $this->machine;
-    }
-
-    public function setMachine(?Machine $machine): self
-    {
-        $this->machine = $machine;
 
         return $this;
     }
@@ -383,6 +386,66 @@ class Workorder
                 $workorderPart->setWorkorder(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Machine[]
+     */
+    public function getMachines(): Collection
+    {
+        return $this->machines;
+    }
+
+    public function addMachine(Machine $machine): self
+    {
+        if (!$this->machines->contains($machine)) {
+            $this->machines[] = $machine;
+        }
+
+        return $this;
+    }
+
+    public function removeMachine(Machine $machine): self
+    {
+        $this->machines->removeElement($machine);
+
+        return $this;
+    }
+
+    public function getPreventive(): ?bool
+    {
+        return $this->Preventive;
+    }
+
+    public function setPreventive(bool $Preventive): self
+    {
+        $this->Preventive = $Preventive;
+
+        return $this;
+    }
+
+    public function getTemplate(): ?bool
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?bool $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getCycleDays(): ?int
+    {
+        return $this->cycle_days;
+    }
+
+    public function setCycleDays(?int $cycle_days): self
+    {
+        $this->cycle_days = $cycle_days;
 
         return $this;
     }

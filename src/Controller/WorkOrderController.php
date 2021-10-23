@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/work/order")
@@ -62,10 +64,10 @@ class WorkorderController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="work_order_new", methods={"GET","POST"})
+     * @Route("/new/{id?}", name="work_order_new", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Machine $machine = null): Response
     {
         $dateTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $user = $this->getUser();
@@ -74,6 +76,9 @@ class WorkorderController extends AbstractController
         $workorder = new Workorder();
         $workorder->setCreatedAt($date);
         $workorder->setOrganisation($organisation);
+        if ($machine) {
+            $workorder->addMachine($machine);
+        }
 
         $form = $this->createForm(WorkorderType::class, $workorder, [
             'organisation' => $organisation
@@ -84,6 +89,7 @@ class WorkorderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
             $workorder->setStatus($workorder::EN_COURS);
+            $workorder->setPreventive(false);
             $this->manager->persist($workorder);
             $this->manager->flush();
 
@@ -110,12 +116,21 @@ class WorkorderController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="work_order_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}/{machine?}", name="work_order_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Request $request, Workorder $workorder): Response
+    public function edit(Request $request, Machine $machine = null, Workorder $workorder): Response
     {
-        $workshop = $workorder->getMachine()->getWorkshop();
+        // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
+        // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
+        if ($machine) {
+            $workorderMachines = $workorder->getMachines();
+            foreach ($workorderMachines as $workorderMachine) {
+                $workorder->removeMachine($workorderMachine);
+            }
+            $workorder->addMachine($machine);
+        }
+
         $form = $this->createForm(WorkorderEditType::class, $workorder);
         $form->handleRequest($request);
 
@@ -162,6 +177,4 @@ class WorkorderController extends AbstractController
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    
 }

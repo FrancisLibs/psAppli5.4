@@ -31,11 +31,11 @@ class WorkorderEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('machine', EntityType::class, [
-                'placeholder'   =>  'Machine (Choisir un atelier...)',
-                'class' => Machine::class,
-                'choice_label'  =>  'designation',
-            ])
+            // ->add('machine', EntityType::class, [
+            //     'placeholder'   =>  'Machine (Choisir un atelier...)',
+            //     'class' => Machine::class,
+            //     'choice_label'  =>  'designation',
+            // ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
                 'choices'  => [

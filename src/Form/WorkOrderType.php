@@ -32,20 +32,20 @@ class WorkorderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('workshop', EntityType::class, [
-                'class' => Workshop::class,
-                'choices' => $this->workshopRepository->findWorkshops($options['organisation']),
-                'choice_label'  =>  'name',
-                'label' =>  'Atelier',
-                'mapped'    =>  false,
-                'placeholder'   =>  'Atelier...',
-                'required' => false,
-            ])
-            ->add('machine', EntityType::class, [
-                'placeholder'   =>  'Machine (Choisir un atelier...)',
-                'class' => Machine::class,
-                'choice_label'  =>  'designation',
-            ])
+            // ->add('workshop', EntityType::class, [
+            //     'class' => Workshop::class,
+            //     'choices' => $this->workshopRepository->findWorkshops($options['organisation']),
+            //     'choice_label'  =>  'name',
+            //     'label' =>  'Atelier',
+            //     'mapped'    =>  false,
+            //     'placeholder'   =>  'Atelier...',
+            //     'required' => false,
+            // ])
+            // ->add('machine', EntityType::class, [
+            //     'placeholder'   =>  'Machine (Choisir un atelier...)',
+            //     'class' => Machine::class,
+            //     'choice_label'  =>  'designation',
+            // ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
                 'choices'  => [
@@ -119,24 +119,24 @@ class WorkorderType extends AbstractType
             }
         );
 
-        $formModifier = function (FormInterface $form, Workshop $workshop = null) {
-            $machines = null === $workshop ? [] : $workshop->getMachines();
-            $form->add('machine', EntityType::class, [
-                'class' => Machine::class,
-                'choices' => $machines,
-                'choice_label'  => 'designation',
-                'label' => 'Machine'
-            ]);
-        };
+        // $formModifier = function (FormInterface $form, Workshop $workshop = null) {
+        //     $machines = null === $workshop ? [] : $workshop->getMachines();
+        //     $form->add('machine', EntityType::class, [
+        //         'class' => Machine::class,
+        //         'choices' => $machines,
+        //         'choice_label'  => 'designation',
+        //         'label' => 'Machine'
+        //     ]);
+        // };
 
-        $builder->get('workshop')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $form = $event->getForm()->getParent();
-                $workshop = $event->getForm()->getData();
-                $formModifier($form, $workshop);
-            }
-        );
+        // $builder->get('workshop')->addEventListener(
+        //     FormEvents::POST_SUBMIT,
+        //     function (FormEvent $event) use ($formModifier) {
+        //         $form = $event->getForm()->getParent();
+        //         $workshop = $event->getForm()->getData();
+        //         $formModifier($form, $workshop);
+        //     }
+        // );
     }
 
     public function configureOptions(OptionsResolver $resolver)

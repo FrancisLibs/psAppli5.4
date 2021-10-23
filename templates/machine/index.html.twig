@@ -18,7 +18,7 @@
         <article class="col-10">
             <div class="row mt-4">
                 <div class="col-12">
-                    {% include 'machine/_machineList.html.twig' with {machines: machines} only %}
+                    {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, workorderId: workorderId} only %}
                 </div>
             </div>
             {# display navigation #}

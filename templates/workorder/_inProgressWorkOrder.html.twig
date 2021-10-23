@@ -10,7 +10,11 @@
         {% for workorder in workorders %}
             <tr>
                 <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ workorder.machine.designation}}</td>
+                <td>
+                    {% for machine in workorder.machines %}
+                        {{ machine.designation }}
+                    {% endfor %}
+                </td>
                 <td>{{ workorder.implementation}}</td>
             </tr>
         {% else %}

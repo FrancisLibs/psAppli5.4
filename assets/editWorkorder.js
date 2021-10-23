@@ -1,4 +1,3 @@
-// Chargement ajax de la liste des machines de l'atelier sélectionné
 window.onload = () => {
   // Gestion du bouton copier
   let button = document.querySelector("#btn_copy");
@@ -8,6 +7,7 @@ window.onload = () => {
     workorderForm["workorder_edit[implementation]"];
   button.addEventListener("click", function (e) {
     e.preventDefault();
+    console.log("ok");
     workorderFormImplementation.value = workorderFormRequest.value;
   });
 

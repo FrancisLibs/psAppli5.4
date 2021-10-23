@@ -1,25 +1,29 @@
 
 <div class="row">
-    <div class="col-3">
-        <p>Créé le</p>
-        <p class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s', timezone="Europe/Paris") : '' }}</p>
-    </div>
-    <div class="col-2">
-        <p>Par</p>
-        <p class="champs_bt text-center">{{ workorder.user.firstName }}</p>
-    </div>
-    <div class="col-2">
-        <p>Statut BT</p>
-        <p class="champs_bt text-center">{{ workorder.status }}</p>
-    </div>
-    <div class="col-4">
-        <p>Machine</p>
-        <p class="champs_bt">{{ workorder.machine }}</p>
+    <div class="col-5 d-flex justify-content-between">
+        <div>
+            <span>Créé le</span>
+            <span class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s', timezone="Europe/Paris") : '' }}</span>
+        </div>
+        <div>
+            <span>Par</span>
+            <span class="champs_bt text-center">{{ workorder.user.firstName }}</span>
+        </div>
+        <div>
+            <span>Statut</span>
+            <span class="champs_bt text-center">{{ workorder.status }}</span>
+        </div>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col-6">
         <div class="row">
+            <div class="col-12">
+                <p>Machine</p>
+                {% for machine in workorder.machines %}
+                    <p class="champs_bt">{{ machine.designation }}</p>
+                {% endfor %}
+            </div>
             <div class="col-12">
                 {% if workorder.request %}
                     <p>Demande</p>
@@ -65,7 +69,8 @@
                 <thead>
                     <tr>
                         <th scope="col">Code</th>
-                        <th scope="col">Désignation</th>
+                        <th class="text-center">Qte</th>
+                        <th class="text-center" scope="col">Désignation</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +79,10 @@
                             <td>
                                 {{ part.part.code }}
                             </td>
-                            <td>
+                            <td class="text-center" s>
+                                {{ part.quantity }}
+                            </td>
+                            <td class="text-center" s>
                                 {{ part.part.designation }}
                             </td>
                         </tr>

@@ -41,11 +41,6 @@ class Machine
     private $workshop;
 
     /**
-     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="machine")
-     */
-    private $workorders;
-
-    /**
      * @ORM\Column(type="string", length=10)
      */
     private $status;
@@ -74,6 +69,11 @@ class Machine
      * @ORM\ManyToMany(targetEntity=Part::class, inversedBy="machines")
      */
     private $parts;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Workorder::class, mappedBy="machines")
+     */
+    private $workorders;
 
     public function __construct()
     {
@@ -130,36 +130,6 @@ class Machine
     public function setWorkshop(?Workshop $workshop): self
     {
         $this->workshop = $workshop;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Workorder[]
-     */
-    public function getWorkorders(): Collection
-    {
-        return $this->workorders;
-    }
-
-    public function addWorkorder(Workorder $workorder): self
-    {
-        if (!$this->workorders->contains($workorder)) {
-            $this->workorders[] = $workorder;
-            $workorder->setMachine($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkorder(Workorder $workorder): self
-    {
-        if ($this->workorders->removeElement($workorder)) {
-            // set the owning side to null (unless already changed)
-            if ($workorder->getMachine() === $this) {
-                $workorder->setMachine(null);
-            }
-        }
 
         return $this;
     }
@@ -249,6 +219,33 @@ class Machine
     public function removePart(Part $part): self
     {
         $this->parts->removeElement($part);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workorder[]
+     */
+    public function getWorkorders(): Collection
+    {
+        return $this->workorders;
+    }
+
+    public function addWorkorder(Workorder $workorder): self
+    {
+        if (!$this->workorders->contains($workorder)) {
+            $this->workorders[] = $workorder;
+            $workorder->addMachine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorder(Workorder $workorder): self
+    {
+        if ($this->workorders->removeElement($workorder)) {
+            $workorder->removeMachine($this);
+        }
 
         return $this;
     }

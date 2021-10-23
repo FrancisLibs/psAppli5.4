@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @Route("/part")
@@ -22,11 +23,13 @@ class PartController extends AbstractController
 {
     private $partRepository;
     private $manager;
+    private $requestStack;
 
-    public function __construct(PartRepository $partRepository, EntityManagerInterface $manager)
+    public function __construct(PartRepository $partRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->partRepository = $partRepository;
         $this->manager = $manager;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -38,15 +41,21 @@ class PartController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        // Utilisation de la session pour sauvegarder l'objet de recherche
+        $session = $this->requestStack->getSession();
+
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
+
         $data = new SearchPart();
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchPartForm::class,$data, [
+        $form = $this->createForm(SearchPartForm::class, $data, [
             'organisation' => $organisation
         ]);
 
         $form->handleRequest($request);
+        $session->set('data', $data);// Sauvegarde de la recherche
+
         $parts = $this->partRepository->findSearch($data);
         if ($request->get('ajax')) {
             return new JsonResponse([
@@ -73,15 +82,14 @@ class PartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $part->setValidity(true);
             $part->setOrganisation($organisation);
             $part->setCode(strtoupper($part->getCode()));
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
-            $entityManager->persist($part);
-            $entityManager->flush();
+            $this->manager->persist($part);
+            $this->manager->flush();
 
             return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -117,8 +125,8 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
-            
-            $this->getDoctrine()->getManager()->flush();
+
+            $this->manager->flush();
 
             return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -135,10 +143,9 @@ class PartController extends AbstractController
      */
     public function delete(Request $request, Part $part): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$part->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($part);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $part->getId(), $request->request->get('_token'))) {
+            $this->manager->remove($part);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);

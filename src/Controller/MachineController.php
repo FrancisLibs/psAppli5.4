@@ -32,29 +32,51 @@ class MachineController extends AbstractController
     /**
      * @ Liste des machines
      * 
-     * @Route("/", name="machine_index", methods={"GET"})
+     * @Route("/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request $request
+     * @param Request   $request
+     * @param Boolean   $select
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request, $mode = null, ?int $workorderId): Response
     {
+        // dump($mode);
+        // dd($workorderId);
         $data = new SearchMachine();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
-        if ($request->get('ajax')) {
+        if ($request->get('ajax') && $mode == 'select') {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'select']),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
         }
+
+        if ($request->get('ajax') && $mode == 'modif') {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'modif', 'workorderId' => $workorderId]),
+                'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
+                'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
+            ]);
+        }
+
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' =>$machines, 'mode' => null]),
+                'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
+                'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
+            ]);
+        }
+
         return $this->render('machine/index.html.twig', [
-            'machines'  =>  $machines,
-            'form'      =>  $form->createView(),
+            'machines'      =>  $machines,
+            'form'          =>  $form->createView(),
+            'mode'          =>  $mode,
+            'workorderId'   => $workorderId,
         ]);
     }
 
@@ -83,7 +105,7 @@ class MachineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="machine_show", methods={"GET"})
+     * @Route("/show/{id}", name="machine_show", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function show(Machine $machine): Response

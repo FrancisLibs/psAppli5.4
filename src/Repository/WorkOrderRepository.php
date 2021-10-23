@@ -30,7 +30,7 @@ class WorkorderRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
             ->select('w', 'm', 'u')
-            ->join('w.machine', 'm')
+            ->join('w.machines', 'm')
             ->join('w.user', 'u');
 
         if (!empty($search->machine)) {

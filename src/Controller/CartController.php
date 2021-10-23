@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
@@ -30,6 +29,66 @@ class CartController extends AbstractController
         $this->partRepository = $partRepository;
         $this->requestStack = $requestStack;
         $this->manager = $manager;
+    }
+
+    /**
+     * Appel de la liste des pièces à ajouter au panier
+     * 
+     * @Route("/{id}/add_part/", name="add_part", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     * @param   Workorder $workorder
+     * @param   Request $request 
+     * @return  Response
+     */
+    public function addPart(Workorder $workorder, Request $request): Response
+    {
+        $session = $this->requestStack->getSession();
+        $panier = $session->get('panier', []);
+
+        $panierWithData = [];
+        foreach ($panier as $id => $quantity) {
+            $panierWithData[] = [
+                'part' => $this->partRepository->find($id),
+                'quantity' => $quantity,
+            ];
+        }
+
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+        
+        $data = $session->get('data', null);
+        //dd($data);
+        if (!$data) {
+            $data = new SearchPart();
+        }
+        $data->organisation = $organisation;
+        
+        $form = $this->createForm(SearchPartForm::class, $data);
+        
+        $form->remove('organisation');
+
+        $form->handleRequest($request);
+        $session->set('data', $data);
+        $parts = $this->partRepository->findSearch($data);
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('part/_partsAdd.html.twig', [
+                    'parts' => $parts,
+                    'addPart' => true,
+                    'workorderId' => $workorder->getId(),
+                ]),
+                'sorting'       =>  $this->renderView('part/_sortingAdd.html.twig', ['parts' => $parts]),
+                'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
+            ]);
+        }
+
+        return $this->render('workorder/addPart.html.twig', [
+            'addPart' => true,
+            'parts' =>  $parts,
+            'form'  =>   $form->createView(),
+            'workorderId' => $workorder->getId(),
+            'items' => $panierWithData,
+        ]);
     }
 
     /**
@@ -61,61 +120,6 @@ class CartController extends AbstractController
     }
 
     /**
-     * Appel de la liste des pièces pour les ajouter au panier
-     * 
-     * @Route("/{id}/add_part/", name="add_part", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * @param   Workorder $workorder
-     * @param   Request $request 
-     * @return  Response
-     */
-    public function addPart(Workorder $workorder, Request $request): Response
-    {
-        $session = $this->requestStack->getSession();
-        $panier = $session->get('panier', []);
-
-        $panierWithData = [];
-        foreach ($panier as $id => $quantity) {
-            $panierWithData[] = [
-                'part' => $this->partRepository->find($id),
-                'quantity' => $quantity,
-            ];
-        }
-
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
-
-        $data = new SearchPart();
-        $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchPartForm::class, $data, [
-            'organisation' => $organisation
-        ]);
-        $form->remove('organisation');
-
-        $form->handleRequest($request);
-        $parts = $this->partRepository->findSearch($data);
-        if ($request->get('ajax')) {
-            return new JsonResponse([
-                'content'       =>  $this->renderView('part/_partsAdd.html.twig', [
-                    'parts' => $parts,
-                    'addPart' => true,
-                    'workorderId' => $workorder->getId(),
-                ]),
-                'sorting'       =>  $this->renderView('part/_sortingAdd.html.twig', ['parts' => $parts]),
-                'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
-            ]);
-        }
-
-        return $this->render('workorder/addPart.html.twig', [
-            'addPart' => true,
-            'parts' =>  $parts,
-            'form'  =>   $form->createView(),
-            'workorderId' => $workorder->getId(),
-            'items' => $panierWithData,
-        ]);
-    }
-
-    /**
      * Ajoute une pièce dans le panier
      * 
      * @Route("/cart/add/{id}/{workorderId}", name="cart_add")
@@ -140,7 +144,7 @@ class CartController extends AbstractController
             $qteCart = 0;
         }
 
-        // Test si possible de mettre pièce dans le panier
+        // Test si selon la quantité disponible, il est possible de mettre la pièce dans le panier
         if ($qteStock > 0 && $qteStock > $qteCart) {
 
             if (!empty($panier[$id])) {
@@ -242,12 +246,12 @@ class CartController extends AbstractController
             $workorder->addWorkorderPart($workorderPart);
 
             // Ajout de la pièce à la machine
-            $machine = $workorder->getMachine();
-            $parts = $machine->getParts();
-            if(!$parts->contains($part)) {
-                $machine->addPart($part);
+            $machines = $workorder->getMachines();
+            $parts = $machines->first()->getParts();
+            if (!$parts->contains($part)) {
+                $machines->first()->addPart($part);
             }
-            
+
             // Rectification de la quantité de pièce en stock
             $part->getStock()->setQteStock($part->getStock()->getQteStock() - $qte);
             $this->manager->persist($workorder);

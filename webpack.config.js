@@ -21,7 +21,8 @@ Encore
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
   .addEntry("app", "./assets/app.js")
-  .addEntry("newWorkorder", "./assets/newWorkOrder.js")
+  .addEntry("newWorkorder", "./assets/newWorkorder.js")
+  .addEntry("part", "./assets/JS/part.js")
   // .addEntry("newWorkorder", "./assets/newWorkorder.js")
   // .addEntry("editWorkorder", "./assets/editWorkorder.js")
 
