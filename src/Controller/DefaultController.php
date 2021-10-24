@@ -16,7 +16,7 @@ class DefaultController extends AbstractController
      * @Route("/", name="home")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function index(Request $request, WorkorderRepository $workorderRepository): Response
+    public function index(WorkorderRepository $workorderRepository): Response
     {
         $user = $this->getUser();
         if(!$user){

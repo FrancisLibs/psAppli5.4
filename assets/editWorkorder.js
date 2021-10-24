@@ -7,12 +7,8 @@ window.onload = () => {
     workorderForm["workorder_edit[implementation]"];
   button.addEventListener("click", function (e) {
     e.preventDefault();
-    console.log("ok");
     workorderFormImplementation.value = workorderFormRequest.value;
   });
-
-  // Calcul des temps lors de l'affichage de l'édition
-  calcTemps();
 
   // Gestion du temps de l'intervention
   function calcTemps() {
@@ -56,7 +52,10 @@ window.onload = () => {
     }
   }
 
+  // Calcul des temps lors de l'affichage de l'édition
+  calcTemps();
+
   // Date et heure de début
-  let time_zone = document.querySelector("#time_management");
-  time_zone.addEventListener("change", calcTemps, false);
+  let timeZone = document.querySelector("#time_management");
+  timeZone.addEventListener("change", calcTemps, false);
 };
