@@ -54,7 +54,7 @@ class PartController extends AbstractController
         ]);
 
         $form->handleRequest($request);
-        $session->set('data', $data);// Sauvegarde de la recherche
+        $session->set('data', $data); // Sauvegarde de la recherche
 
         $parts = $this->partRepository->findSearch($data);
         if ($request->get('ajax')) {
@@ -101,7 +101,7 @@ class PartController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="part_show", methods={"GET"})
+     * @Route("/show/{id}", name="part_show", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function show(Part $part): Response
@@ -112,7 +112,7 @@ class PartController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="part_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="part_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Part $part): Response
@@ -138,7 +138,7 @@ class PartController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="part_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="part_delete", methods={"POST"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Part $part): Response
@@ -147,6 +147,26 @@ class PartController extends AbstractController
             $this->manager->remove($part);
             $this->manager->flush();
         }
+
+        return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/approzero", name="appro_to_zero")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function setApproToZero(): Response
+    {
+        $parts = $this->partRepository->findAll();
+
+        foreach ($parts as $part) {
+            $approQte = $part->getStock()->getApproQte();
+            if ($approQte == null) {
+                $part->getStock()->setApproQte(0);
+                $this->manager->persist($part);
+            }
+        }
+        $this->manager->flush();
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }

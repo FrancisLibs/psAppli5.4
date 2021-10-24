@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\PartRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PartRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PartRepository::class)
+ * @UniqueEntity(fields={"code"}, message="Il y a déjà une pièce avec ce code")
  */
 class Part
 {
@@ -21,16 +24,19 @@ class Part
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
      */
     private $designation;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\NotBlank
      */
     private $reference;
 

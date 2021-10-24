@@ -32,7 +32,7 @@ class MachineController extends AbstractController
     /**
      * @ Liste des machines
      * 
-     * @Route("/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
+     * @Route("/list/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request   $request
@@ -41,8 +41,6 @@ class MachineController extends AbstractController
      */
     public function index(Request $request, $mode = null, ?int $workorderId): Response
     {
-        // dump($mode);
-        // dd($workorderId);
         $data = new SearchMachine();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
@@ -92,6 +90,7 @@ class MachineController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $machine->setStatus(true);
+            $machine->setInternalCode(strtoupper($machine->getInternalCode()));
             $this->manager->persist($machine);
             $this->manager->flush();
 
@@ -116,7 +115,7 @@ class MachineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="machine_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="machine_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Machine $machine): Response
@@ -137,7 +136,7 @@ class MachineController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="machine_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="machine_delete", methods={"POST"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Machine $machine): Response

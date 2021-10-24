@@ -17,6 +17,9 @@ class MachineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('internalCode', TextType::class, [
+                'label' => 'Code machine'
+            ])
             ->add('designation', TextType::class, [
                 'label' => 'Désignation'
             ])
@@ -35,9 +38,6 @@ class MachineType extends AbstractType
             ->add('serialNumber', TextType::class, [
                 'label' => 'Numéro de série',
                 'required' => false,
-            ])
-            ->add('internalCode', TextType::class, [
-                'label' => 'Code machine'
             ])
             ->add('BuyDate', DateType::class, [
                 'input' => 'datetime',

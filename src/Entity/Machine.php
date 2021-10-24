@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\MachineRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MachineRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MachineRepository::class)
+ * @UniqueEntity(fields={"internalCode"}, message="Il y a déjà une machine avec ce code")
  */
 class Machine
 {
@@ -21,11 +24,13 @@ class Machine
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $designation;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
      */
     private $constructor;
 
@@ -47,6 +52,9 @@ class Machine
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-zA-Z]{5}[0-9]{5}$/")
+     * message="Le code ne respecte pas le format !"
      */
     private $internalCode;
 

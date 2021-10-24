@@ -11,6 +11,9 @@
                 </div>
                 <div class="col-3">
                     <a class="btn btn-primary btn-sm" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary btn-sm" href="{{ path('appro_to_zero') }}" role="button">approtozero</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="row mt-4">
