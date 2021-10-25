@@ -35,23 +35,26 @@ class PartController extends AbstractController
     /**
      * @ Liste des pièces détachées
      * 
-     * @Route("/", name="part_index", methods={"GET"})
+     * @Route("/{edit?}", name="part_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
+     * 
      * @param Request $request
      */
-    public function index(Request $request): Response
+    public function index(Request $request, $edit = null): Response
     {
         // Utilisation de la session pour sauvegarder l'objet de recherche
         $session = $this->requestStack->getSession();
+        $organisation = $this->getUser()->getOrganisation();
 
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
-
-        $data = new SearchPart();
+        if ($edit) {
+            $data = $session->get('data');
+        } else {
+            $data = new SearchPart();
+        }
+       
+        $data->organisation = $organisation;
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchPartForm::class, $data, [
-            'organisation' => $organisation
-        ]);
+        $form = $this->createForm(SearchPartForm::class, $data);
 
         $form->handleRequest($request);
         $session->set('data', $data); // Sauvegarde de la recherche
@@ -128,7 +131,9 @@ class PartController extends AbstractController
 
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('part_index', [
+                'edit' => true,
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('part/edit.html.twig', [

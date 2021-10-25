@@ -52,7 +52,7 @@ class Stock
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $price;
+    private $steadyPrice;
 
     public function getPart(): ?Part
     {
@@ -126,14 +126,14 @@ class Stock
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getSteadyPrice(): ?float
     {
-        return $this->price;
+        return $this->steadyPrice;
     }
 
-    public function setPrice(?float $price): self
+    public function setSteadyPrice(?float $steadyPrice): self
     {
-        $this->price = $price;
+        $this->steadyPrice = $steadyPrice;
 
         return $this;
     }

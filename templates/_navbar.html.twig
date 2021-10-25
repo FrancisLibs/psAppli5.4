@@ -45,8 +45,11 @@
             {% if app.user %}
                 <li class="nav-item dropdown px-3">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="logo_profil" src="{{ asset("images/profil3.png") }}" alt="Profil">
-                    </a>
+                        {% if app.user.imageName %}
+                            <img src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                        {% else %}
+                            <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                        {% endif %}</a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li>
                             <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>

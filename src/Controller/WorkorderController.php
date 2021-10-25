@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Knp\Snappy\Pdf;
 use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,12 +29,14 @@ class WorkorderController extends AbstractController
     private $workorderRepository;
     private $manager;
     private $partRepository;
+    private $pdf;
 
-    public function __construct(WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
+    public function __construct(Pdf $pdf, WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
     {
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
         $this->partRepository = $partRepository;
+        $this->pdf = $pdf;
     }
 
     /**
@@ -175,5 +179,26 @@ class WorkorderController extends AbstractController
         $this->manager->flush();
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Impression d'un BT
+     * 
+     * @Route("/pdf/{id}", name="pdf_workorder")
+     * @Security("is_granted('ROLE_USER')")
+     * 
+     */
+    public function pdfAction(\Knp\Snappy\Pdf $knpSnappyPdf, Workorder $workorder)
+    {
+        $html = $this->renderView('workorder/show.html.twig', [
+            'workorder' => $workorder,
+        ]);
+
+        $this->pdf->setOption('enable-local-file-access', true);
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            'test.pdf'
+        );
     }
 }

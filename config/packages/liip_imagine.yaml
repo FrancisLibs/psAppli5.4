@@ -6,7 +6,14 @@ liip_imagine:
         # use and setup the "thumbnail" filter
         thumbnail:
           # set the thumbnail size to "32x32" pixels
-          size: [320, 320]
-
+          size: [220, 220]
+          # crop the input image, if required
+          mode: outbound
+    my_little_filter:
+      filters:
+        # use and setup the "thumbnail" filter
+        thumbnail:
+          # set the thumbnail size to "32x32" pixels
+          size: [50, 50]
           # crop the input image, if required
           mode: outbound
