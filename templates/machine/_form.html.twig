@@ -1,6 +1,7 @@
 {{ form_start(form) }}  
     <div class="row mb-2">
         <div class="col-3">
+            {{ form_errors(form.internalCode) }}
             {{ form_label(form.internalCode) }}
             {{ form_widget(form.internalCode) }}
         </div>

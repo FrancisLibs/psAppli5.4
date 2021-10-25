@@ -91,6 +91,7 @@ class MachineController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $machine->setStatus(true);
             $machine->setInternalCode(strtoupper($machine->getInternalCode()));
+            $machine->setActive(true);
             $this->manager->persist($machine);
             $this->manager->flush();
 
