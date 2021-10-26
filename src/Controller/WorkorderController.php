@@ -77,6 +77,7 @@ class WorkorderController extends AbstractController
         $organisation = $user->getOrganisation();
         $date = $dateTime;
         $workorder = new Workorder();
+        $workorder->setPreventive(false);
         $workorder->setCreatedAt($date);
         $workorder->setOrganisation($organisation);
         if ($machine) {

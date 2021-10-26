@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Préventif{% endblock %}
+
+{% block body %}
+    <header class="row mt-5">
+        <div class="col-4 offset-2">
+            <h2>Bons de travail préventifs</h2>
+        </div>
+        <div class="col-3">
+            <a class="btn btn-primary btn-sm" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
+        </div>
+    </header>
+    <main class="row preventive-js-filter">
+        <aside class="col-2 mt-5">
+            {% include 'preventive/_filter.html.twig' %}
+        </aside> 
+        <article class="col-10">
+            <div class="mt-5">
+                {% include 'preventive/_workorderList.html.twig' with {workorders: workorders} only %}
+            </div>
+            {# display navigation #}
+            <div class="navigation js-filter-pagination">
+                {% include 'preventive/_pagination.html.twig' %}
+            </div>
+        </article>
+    </main>
+{% endblock %}

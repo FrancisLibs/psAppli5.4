@@ -131,7 +131,7 @@ class Workorder
     /**
      * @ORM\Column(type="boolean")
      */
-    private $Preventive;
+    private $preventive;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -422,12 +422,12 @@ class Workorder
 
     public function getPreventive(): ?bool
     {
-        return $this->Preventive;
+        return $this->preventive;
     }
 
-    public function setPreventive(bool $Preventive): self
+    public function setPreventive(bool $preventive): self
     {
-        $this->Preventive = $Preventive;
+        $this->preventive = $preventive;
 
         return $this;
     }

@@ -32,10 +32,24 @@ class SearchWorkorder
      */
     public $user;
 
+    /**
+     * Préventif
+     *
+     * @var preventive
+     */
+    public $preventive;
+
     // /**
     //  * Status
     //  *
     //  * @var status
     //  */
     // public $status;
+
+    /**
+     * Organisation
+     *
+     * @var string
+     */
+    public $organisation;
 }

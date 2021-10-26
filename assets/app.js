@@ -19,3 +19,6 @@ new MachineIndex(document.querySelector(".machine-js-filter"));
 
 import { WorkorderIndex } from "./JS/WorkorderIndex";
 new WorkorderIndex(document.querySelector(".workorder-js-filter"));
+
+import { PreventiveIndex } from "./JS/PreventiveIndex";
+new PreventiveIndex(document.querySelector(".preventive-js-filter"));

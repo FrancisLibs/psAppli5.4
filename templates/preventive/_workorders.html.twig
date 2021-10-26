@@ -1,0 +1,19 @@
+{% for workorder in workorders %}
+    <tr>
+        <td>
+            <a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.id }}</a>
+        </td>
+        <td class="text-center">
+            {% for machine in workorder.machines %}
+                {{ machine.designation}}
+            {% endfor %}    
+        </td>
+        <td class="text-center">{{ workorder.user.firstName }}</td>
+        <td class="text-center">{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
+        <td class="text-center">{{ workorder.request }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Il n'y a pas de bons de travail enregistré</td>
+    </tr>
+{% endfor %}

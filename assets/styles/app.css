@@ -6,7 +6,7 @@ html, body {
 .background_picture {
   margin: 0;
   padding: 0;
-  background: url("/public/images/conditionnement3.png") no-repeat center center
+  background: url("/public/images/conditionnement4.png") no-repeat center center
     fixed;
   background-size: cover;
 }

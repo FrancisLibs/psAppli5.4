@@ -28,6 +28,11 @@ class Schedule
     private $nextDate;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $daysBefore;
+
+    /**
      * @ORM\OneToOne(targetEntity=Workorder::class, inversedBy="schedule", cascade={"persist", "remove"})
      */
     private $workorder;
@@ -57,6 +62,18 @@ class Schedule
     public function setNextDate(\DateTimeInterface $nextDate): self
     {
         $this->nextDate = $nextDate;
+
+        return $this;
+    }
+
+    public function getDaysBefore(): ?int
+    {
+        return $this->daysBefore;
+    }
+
+    public function setDaysBefore(?int $daysBefore): self
+    {
+        $this->daysBefore = $daysBefore;
 
         return $this;
     }
