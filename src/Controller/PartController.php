@@ -35,7 +35,7 @@ class PartController extends AbstractController
     /**
      * @ Liste des pièces détachées
      * 
-     * @Route("/{edit?}", name="part_index", methods={"GET"})
+     * @Route("/list/{edit?}", name="part_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
@@ -44,14 +44,13 @@ class PartController extends AbstractController
     {
         // Utilisation de la session pour sauvegarder l'objet de recherche
         $session = $this->requestStack->getSession();
-        $organisation = $this->getUser()->getOrganisation();
 
         if ($edit) {
             $data = $session->get('data');
         } else {
             $data = new SearchPart();
         }
-       
+        $organisation = $this->getUser()->getOrganisation();
         $data->organisation = $organisation;
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchPartForm::class, $data);
@@ -85,7 +84,7 @@ class PartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $part->setValidity(true);
+            $part->setActive(true);
             $part->setOrganisation($organisation);
             $part->setCode(strtoupper($part->getCode()));
             $part->setReference(strtoupper($part->getReference()));
@@ -149,7 +148,7 @@ class PartController extends AbstractController
     public function delete(Request $request, Part $part): Response
     {
         if ($this->isCsrfTokenValid('delete' . $part->getId(), $request->request->get('_token'))) {
-            $this->manager->remove($part);
+            $part->setActive(false);
             $this->manager->flush();
         }
 
@@ -169,6 +168,9 @@ class PartController extends AbstractController
             if ($approQte == null) {
                 $part->getStock()->setApproQte(0);
                 $this->manager->persist($part);
+            }
+            if($part->getActive() == false){
+                $part->setActive(true);
             }
         }
         $this->manager->flush();

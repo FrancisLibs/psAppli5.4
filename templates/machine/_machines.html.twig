@@ -3,18 +3,17 @@
         {% if mode == 'select' or mode == 'modif' %}
             <td class="text-left font_size_table">{{ machine.internalCode }}</td>
         {% else %}
-            <td class="text-left font_size_table"><a href="{{ path('machine_show', {'id': machine.id}) }}">{{ machine.internalCode }}</a></td>
+            <td class="text-left font_size_table"><a href="{{ path('machine_edit', {'id': machine.id}) }}">{{ machine.internalCode }}</a></td>
         {% endif %}
         <td class="text-center font_size_table">{{ machine.constructor }}</a></td>
         <td class="text-center font_size_table">{{ machine.designation }}</td>
-        <td class="text-center font_size_table">{{ machine.model }}</td>
         <td class="text-center font_size_table">{{ machine.workshop.name }}</td>
         {% if mode == 'select' %}
             <td><a href="{{ path('work_order_new', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
+        {% elseif mode == 'selectPreventive' %}
+            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
         {% elseif mode == 'modif' %}
             <td><a href="{{ path('work_order_edit', {'machine': machine.id, 'id': workorderId}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
-        {% else %}
-            <td class="text-center"><a href="{{ path('machine_edit', {'id': machine.id}) }}"><i class="bi bi-pencil-square"></i></a></td>
         {% endif %}
     </tr>
 {% else %}

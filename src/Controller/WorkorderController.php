@@ -40,6 +40,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Liste des bt
+     * 
      * @Route("/", name="work_order_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
@@ -50,6 +52,7 @@ class WorkorderController extends AbstractController
     {
         $data = new SearchWorkorder();
         $data->page = $request->get('page', 1);
+        $data->organisation=$this->getUser()->getOrganisation()->getId();
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
@@ -72,14 +75,15 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request, Machine $machine = null): Response
     {
-        $dateTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $date = $dateTime;
+
         $workorder = new Workorder();
         $workorder->setPreventive(false);
-        $workorder->setCreatedAt($date);
+        $workorder->setTemplate(false);
+        $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         $workorder->setOrganisation($organisation);
+
         if ($machine) {
             $workorder->addMachine($machine);
         }

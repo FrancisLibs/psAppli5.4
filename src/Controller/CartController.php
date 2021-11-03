@@ -57,7 +57,7 @@ class CartController extends AbstractController
         $organisation = $user->getOrganisation();
         
         $data = $session->get('data', null);
-        //dd($data);
+        
         if (!$data) {
             $data = new SearchPart();
         }
@@ -132,9 +132,10 @@ class CartController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
+
         $id = $part->getId();
 
-        // Quantité dans le stock
+        // Quantité dans le stock de pièces
         $qteStock = $part->getStock()->getQteStock();
 
         // Quantité dans le panier

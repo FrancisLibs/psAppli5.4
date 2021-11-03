@@ -9,6 +9,7 @@
     <tbody>
         {% for workorder in workorders %}
             <tr>
+                <td><a href="{{path('work_order_edit', {'id': workorder.id}) }}">{{ workorder.id }}</a></td>
                 <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
                 <td>
                     {% for machine in workorder.machines %}

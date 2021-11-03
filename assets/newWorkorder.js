@@ -1,5 +1,5 @@
 window.onload = () => {
-  // Gestion du bouton copier
+  // Gestion du bouton copier entre demande et réalisation
   let button = document.querySelector("#btn_copy");
   let workorderForm = document.forms.workorder;
   let workorderFormRequest = workorderForm["workorder[request]"];

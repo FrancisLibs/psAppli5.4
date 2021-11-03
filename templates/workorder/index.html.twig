@@ -7,12 +7,10 @@
         <div class="col-3 offset-2">
             <h2>Bons de travail</h2>
         </div>
-        <div class="col-3">
-            <a class="btn btn-primary btn-sm" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
-        </div>
     </header>
     <main class="row workorder-js-filter">
         <aside class="col-2 mt-5">
+            <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
             {% include 'workorder/_filter.html.twig' %}
         </aside>
         <article class="col-10">

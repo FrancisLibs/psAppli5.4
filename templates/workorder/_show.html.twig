@@ -29,8 +29,10 @@
                     <p>Demande</p>
                     <p class="champs_bt">{{ workorder.request }}</p>
                 {% endif %}
-                <p>Réalisation</p>
-                <p class="champs_bt">{{ workorder.implementation }}</p>
+                {% if workorder.implementation %}
+                    <p>Réalisation</p>
+                    <p class="champs_bt">{{ workorder.implementation }}</p>
+                {% endif %}
                 {% if workorder.remark %}
                     <p>Remarque</p>
                     <p class="champs_bt">{{ workorder.remark }}</p>
@@ -40,31 +42,33 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-3 text-center">
                         <p>Date début</p>
                         <p class="champs_bt text-center">{{ workorder.startDate ? workorder.startDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</p>
                     </div>
-                    <div class="col-3">
+                    <div class="col-3 text-center">
                         <p>Heure début</p>
                         <p class="champs_bt text-center">{{ workorder.startTime ? workorder.startTime|date('H:i:s', timezone="Europe/Paris") : '' }}</p>
                     </div>
-                    <div class="col-3">
-                        <p>Date fin</p>
-                        <p class="champs_bt text-center">{{ workorder.endDate ? workorder.endDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</p>
-                    </div>
-                    <div class="col-3">
-                        <p>Heure de fin</p>
-                        {% if workorder.endTime %}
+                    {% if workorder.endDate %}
+                        <div class="col-3 text-center">
+                            <p>Date fin</p>
+                            <p class="champs_bt text-center">{{ workorder.endDate ? workorder.endDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</p>
+                        </div>
+                    {% endif %}
+                    {% if workorder.endTime %}
+                        <div class="col-3 text-center">
+                            <p>Heure de fin</p>
                             <p class="champs_bt text-center">{{ workorder.endTime ? workorder.endTime|date('H:i:s', timezone="Europe/Paris") : ''  }}</p>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-5 mt-2 mb-3 border rounded border-primary pt-2">
-        <h5>Pièces détachées</h5>
-        {% if workorder.workorderParts is not empty %}
+    {% if workorder.workorderParts is not empty %}
+        <div class="col-5 mt-2 mb-3 border rounded border-primary pt-2">
+            <h5>Pièces détachées</h5>
             <table class="table table-sm">
                 <thead>
                     <tr>
@@ -89,10 +93,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-        {% else %}
-            Il n'y a pas de pièces dans ce BT
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 </div>
 
 

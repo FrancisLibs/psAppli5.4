@@ -48,7 +48,7 @@ class Part
     /**
      * @ORM\Column(type="boolean")
      */
-    private $validity;
+    private $active;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -136,14 +136,14 @@ class Part
         return $this;
     }
 
-    public function getValidity(): ?string
+    public function getActive(): ?string
     {
-        return $this->validity;
+        return $this->active;
     }
 
-    public function setValidity(string $validity): self
+    public function setActive(string $active): self
     {
-        $this->validity = $validity;
+        $this->active = $active;
 
         return $this;
     }

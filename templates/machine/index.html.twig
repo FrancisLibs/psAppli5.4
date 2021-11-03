@@ -3,30 +3,47 @@
 {% block title %}Machines{% endblock %}
 
 {% block body %}
-    <div class="row mt-4">
-        <div class="col-2 offset-2">
-            <h3>Machines</h3>
-        </div>
-        <div class="col-3">
-            <a class="btn btn-primary btn-sm" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
+    <div class="row mt-4 mb-4">
+        <div class="col-10 offset-2">
+            <div class="row">
+                <div class="col-2">
+                    <h3>Machines</h3>
+                </div>
+                {% if machinesWithData %}
+                    <div class="col-10">
+                        <div class="border border-primary rounded p-1">
+                            <h5 class="text-primary mb-2">Machines du BT préventif : 
+                                {{ machinesWithData|length }}
+                                <a href="{{ path('preventive_new') }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
+                            </h5>
+                            <div class="d-flex flex-wrap justify-content-start mr-2 p-2 mb-2 ">
+                                {% for machine in machinesWithData %}
+                                    <div class="mr-3 border-dark border rounded p-1 mb-2">
+                                        {{ machine.internalCode }} {{ machine.designation}}
+                                        <a href="{{ path('remove_machine_from_cart', {'id': machine.id}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-    <div class="row machine-js-filter">
+    <section class="row machine-js-filter">
         <aside class="col-2">
+            {% if mode != 'selectPreventive' %}
+                <a class="btn btn-primary btn-sm mt-2 mb-3" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
+            {% endif %}
             {% include 'machine/_filter.html.twig' %}
         </aside>
         <article class="col-10">
-            <div class="row mt-4">
-                <div class="col-12">
-                    {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, workorderId: workorderId} only %}
-                </div>
-            </div>
+            {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, workorderId: workorderId} only %}
+        </article>
             {# display navigation #}
-            <div class="row mt-4">
-                <div class="col-5 navigation js-filter-pagination">
-                    {% include 'machine/_pagination.html.twig' %}
-                </div>
+            <div class="col-5 offset-2 navigation js-filter-pagination">
+                {% include 'machine/_pagination.html.twig' %}
             </div>
         </article>
-    </div>
+    </section>
 {% endblock %}

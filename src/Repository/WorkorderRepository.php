@@ -26,13 +26,33 @@ class WorkorderRepository extends ServiceEntityRepository
      * @param SearchWorkorder $search
      * @return PaginationInterface
      */
+    public function findAllWorkorders($organisation)
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisation)
+            ->andWhere('w.template = :enabled')
+            ->setParameter('enabled', false)
+            ->orderBy('w.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les bons de travail liés à une recherche
+     *
+     * @param SearchWorkorder $search
+     * @return PaginationInterface
+     */
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
+        //dd($search);
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
-            ->select('w', 'm', 'u')
+            ->select('w', 'm', 'u', 'o')
             ->join('w.machines', 'm')
             ->join('w.user', 'u')
+            ->join('w.organisation', 'o')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', "$search->organisation");
 
@@ -56,10 +76,10 @@ class WorkorderRepository extends ServiceEntityRepository
             15
         );
     }
-    
+
     /**
      * @return Workorder[] Returns an array of workorder
-    */
+     */
 
     public function findByOrganisation($organisation)
     {
@@ -68,8 +88,7 @@ class WorkorderRepository extends ServiceEntityRepository
             ->setParameter('val', $organisation)
             ->orderBy('w.createdAt', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -78,21 +97,21 @@ class WorkorderRepository extends ServiceEntityRepository
      * @param SearchWorkorder $search
      * @return PaginationInterface
      */
-    public function findPreventiveWorkorders(SearchPreventive $search)
+    public function findPreventiveWorkorders(SearchPreventive $search): PaginationInterface
     {
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
             ->select('w', 'm')
             ->join('w.machines', 'm')
             ->andWhere('w.organisation = :val')
-            ->setParameter('val', $search->organisation->getDesignation())
+            ->setParameter('val', $search->organisation)
             ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true);
 
         if (!empty($search->machine)) {
             $query = $query
-            ->andWhere('m.designation LIKE :machine')
-            ->setParameter('machine', "%{$search->machine}%");
+                ->andWhere('m.designation LIKE :machine')
+                ->setParameter('machine', "%{$search->machine}%");
         }
 
         $query = $query->getQuery();

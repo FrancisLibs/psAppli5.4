@@ -32,6 +32,8 @@ class PartRepository extends ServiceEntityRepository
             ->select('p', 's', 'o')
             ->join('p.stock', 's')
             ->join('p.organisation', 'o')
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
         ;
         
         if (!empty($search->organisation)) {

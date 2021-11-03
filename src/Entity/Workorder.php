@@ -13,8 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Workorder
 {
+    // Statut
     const EN_COURS = 1;
     const CLOTURE = 2;
+    
+    // Type
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
@@ -27,7 +30,7 @@ class Workorder
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 
@@ -43,7 +46,7 @@ class Workorder
     private $startDate;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="time", nullable=true)
      * @Assert\NotBlank
      */
     private $startTime;
@@ -78,7 +81,6 @@ class Workorder
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank
      */
     private $implementation;
 

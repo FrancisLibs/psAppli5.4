@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -22,11 +23,13 @@ class MachineController extends AbstractController
 {
     private $machineRepository;
     private $manager;
+    private $requestStack;
 
-    public function __construct(MachineRepository $machineRepository, EntityManagerInterface $manager)
+    public function __construct(MachineRepository $machineRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->machineRepository = $machineRepository;
         $this->manager = $manager;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -35,12 +38,27 @@ class MachineController extends AbstractController
      * @Route("/list/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request   $request
-     * @param Boolean   $select
-     * @return Response
+     * @param   Request   $request
+     * @param   Boolean   $select
+     * @return  Response
      */
     public function index(Request $request, $mode = null, ?int $workorderId): Response
     {
+        $machinesWithData = [];
+        $session = $this->requestStack->getSession();
+        
+        // En mode selectPréventive (création BT préventif) 
+        // on cherche les machines qu'on a mises dans la session
+        if($mode == "selectPreventive"){
+            $machines = $session->get('machines');
+            // If machines in session
+            if ($machines) {
+                foreach ($machines as $id) {
+                    $machinesWithData[] = $this->machineRepository->find($id);
+                }
+            }
+        }
+
         $data = new SearchMachine();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
@@ -62,19 +80,27 @@ class MachineController extends AbstractController
             ]);
         }
 
-        if ($request->get('ajax')) {
+        if ($request->get('ajax') && $mode == 'selectPreventive') {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' =>$machines, 'mode' => null]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'selectPreventive', 'workorderId' => $workorderId]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
         }
 
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => null]),
+                'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
+                'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
+            ]);
+        }
         return $this->render('machine/index.html.twig', [
             'machines'      =>  $machines,
             'form'          =>  $form->createView(),
             'mode'          =>  $mode,
-            'workorderId'   => $workorderId,
+            'workorderId'   =>  $workorderId,
+            'machinesWithData'  =>  $machinesWithData,
         ]);
     }
 
@@ -143,8 +169,8 @@ class MachineController extends AbstractController
     public function delete(Request $request, Machine $machine): Response
     {
         $token = $request->request->get('_token');
-        if ($this->isCsrfTokenValid('delete'.$machine->getId(), $token)) {
-            $machine->setStatus(false);
+        if ($this->isCsrfTokenValid('delete' . $machine->getId(), $token)) {
+            $machine->setActive(false);
             $this->manager->flush();
         }
 

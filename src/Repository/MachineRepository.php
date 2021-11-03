@@ -31,6 +31,8 @@ class MachineRepository extends ServiceEntityRepository
             ->orderBy('m.constructor', 'ASC')
             ->select('m', 'w')
             ->join('m.workshop', 'w')
+            ->andWhere('m.active = :disabled')
+            ->setParameter('disabled', true)
         ;
 
         if (!empty($search->internalCode)) {

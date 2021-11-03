@@ -9,15 +9,13 @@
                 <div class="col-3 offset-2">
                     <h3>Pièces détachées</h3>
                 </div>
-                <div class="col-3">
-                    <a class="btn btn-primary btn-sm" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-primary btn-sm" href="{{ path('appro_to_zero') }}" role="button">approtozero</a>
-                    {% endif %}
-                </div>
             </div>
             <div class="row mt-4">
                 <aside class="col-2">
+                    <a class="btn btn-primary btn-sm mb-3" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                    {# {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary btn-sm" href="{{ path('appro_to_zero') }}" role="button">approtozero</a>
+                    {% endif %} #}
                     {% include 'part/_filter.html.twig' %}
                 </aside>
                 <section class="col-10">

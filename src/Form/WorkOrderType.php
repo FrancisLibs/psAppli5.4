@@ -32,20 +32,6 @@ class WorkorderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('workshop', EntityType::class, [
-            //     'class' => Workshop::class,
-            //     'choices' => $this->workshopRepository->findWorkshops($options['organisation']),
-            //     'choice_label'  =>  'name',
-            //     'label' =>  'Atelier',
-            //     'mapped'    =>  false,
-            //     'placeholder'   =>  'Atelier...',
-            //     'required' => false,
-            // ])
-            // ->add('machine', EntityType::class, [
-            //     'placeholder'   =>  'Machine (Choisir un atelier...)',
-            //     'class' => Machine::class,
-            //     'choice_label'  =>  'designation',
-            // ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
                 'choices'  => [
@@ -65,19 +51,18 @@ class WorkorderType extends AbstractType
                 'required' => false,
             ])
             ->add('startDate', DateType::class, [
-                'input' => 'datetime',
                 'label' => false,
+                'input' => 'datetime',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
                 'label' => false,
                 'widget' => 'single_text',
                 'input' => 'datetime',
-                // 'format' => 'HHmm'
             ])
             ->add('endDate', DateType::class, [
-                'input' => 'datetime',
                 'label' => false,
+                'input' => 'datetime',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
@@ -85,19 +70,18 @@ class WorkorderType extends AbstractType
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,
-                // 'format' => 'HHmm'
             ])
             ->add('durationDay', TextType::class, [
-                'disabled' =>  true,
                 'label' =>  'jours',
+                // 'disabled' =>  true,
             ])
             ->add('durationHour', TextType::class, [
-                'disabled' =>  true,
-                'label' =>  'Heures'
+                'label' =>  'Heures',
+                // 'disabled' =>  true,
             ])
             ->add('durationMinute', TextType::class, [
-                'disabled' =>  true,
-                'label' =>  'Minutes'
+                'label' =>  'Minutes',
+                // 'disabled' =>  true,
             ])
             ->add('stopTimeHour', TextType::class, [
                 'required' => false,
@@ -115,7 +99,7 @@ class WorkorderType extends AbstractType
                 if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now'));
                 if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
                 if (is_null($form->getEndDate()))   $form->setEndDate(new \DateTime('now'));
-               //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
+                //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
             }
         );
 

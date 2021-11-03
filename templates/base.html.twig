@@ -15,17 +15,17 @@
         {% endblock %}
     </head>
 
-    {% if app.request.get('_route') == 'app_login' %}
-         <body class="background_picture">
-    {% else %}
-        <body>
-    {% endif %}
-
-    {% if app.request.get('_route') != 'app_login' %}
-        {% include '_navbar.html.twig' %}
-    {% endif %}
+    <body>
+        {% if app.request.get('_route') != 'app_login' %}
+            {% include '_navbar.html.twig' %}
+        {% endif %}
+        {% if app.request.get('_route') == 'app_login' %}
+            <div class="container-fluid header">
+        {% else %}
+            <div class="container-fluid">
+        {% endif %}
         <!-- Page Content -->
-        <div class="container-fluid">
+        
             <div class="row">
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}

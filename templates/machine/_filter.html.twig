@@ -1,51 +1,47 @@
-<div class="mt-5">
-    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.internalCode) }}
+        </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
 
-        <div class="mt-2 d-flex">
-            <div class="filterbtn form_width">
-                {{ form_row(form.internalCode) }}
-            </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
-            </div>
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.designation) }}
         </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
 
-        <div class="mt-2 d-flex">
-            <div class="filterbtn form_width">
-                {{ form_row(form.designation) }}
-            </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
-            </div>
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.constructor) }}
         </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
+    
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.model) }}
+        </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
 
-        <div class="mt-2 d-flex">
-            <div class="filterbtn form_width">
-                {{ form_row(form.constructor) }}
-            </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
-            </div>
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.workshop) }}
         </div>
-       
-        <div class="mt-2 d-flex">
-            <div class="filterbtn form_width">
-                {{ form_row(form.model) }}
-            </div>
-            <div>
-                <button class="resetBtn btn btn-primary">Reset</button>
-            </div>
-        </div>
+    </div>
 
-        <div class="mt-2 d-flex">
-            <div class="filterbtn form_width">
-                {{ form_row(form.workshop) }}
-            </div>
-        </div>
-
-        <div class="mt-2 form_width">
-            <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-        </div>
-        
-    {{ form_end(form) }}
-</div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+    </div> 
+{{ form_end(form) }}

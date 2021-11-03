@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau bon de travail{% endblock %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-3 offset-2 d-flex justify-content-between align-items-center">
+            <h2>Nouveau BT préventif</h2>
+            {# <a class="btn btn-primary btn-sm" href="{{ path('work_order_index') }}" role="button">Listes des BT</a> #}
+        </div>
+        <div class="col-3 offset-2 text-right">
+            <h5>{{ workorder.createdAt|date('d-m-Y') }}</h5>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-8 offset-2 mb-4">
+            <div class="row mt-2 ">
+                <div class="col-2 text-primary">
+                    <h4>Machine</h4>
+                </div>
+                {% if machinesWithData %}
+                    <div class="col-8">
+                        <div>
+                            <div class="d-flex flex-wrap justify-content-start mr-2 p-2 mb-2 ">
+                                {% for machine in machinesWithData %}
+                                    <div class="mr-3 border-dark border rounded p-1 mb-2">
+                                        {{ machine.internalCode }} {{ machine.designation}}
+                                        <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'new': true}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-2">
+                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button">Choix Machine(s)</a>
+                </div>
+            </div>
+            {{ include('preventive/_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('newWorkorder') }}
+{% endblock %}
+
+

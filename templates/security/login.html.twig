@@ -3,51 +3,48 @@
 {% block title %}Connexion !{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="login_frame mt-5" style="background: white;">
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
+    <div class="main">
+        <div class="row">
+            <div class="login_frame mt-5 rounded" style="background: #b0f4ff;">
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-                {% if app.user %}
-                    <div class="mb-3">
-                        Tu es connecté en tant que  {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    {% if app.user %}
+                        <div class="mb-3">
+                            Tu es connecté en tant que  {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+                    <div class="d-flex justify-content-center pt-4 pb-4">
+                        <img src="images/logo.png" style="width: 80%;" alt="Charcuterie Pierre Schmidt">
                     </div>
-                {% endif %}
-                <div class="d-flex justify-content-center pt-4 pb-4">
-                    <img src="images/logo.png" style="width: 80%;" alt="Charcuterie Pierre Schmidt">
-                </div>
-                <div class="col-10 mx-auto">
-                    <label for="inputUsername">Identifiant</label>
-                    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-                </div>
-                <div class="mt-3 mb-3 col-10 mx-auto">
-                    <label for="inputPassword">Mot de passe</label>
-                    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-                </div>
-                <div class="mt-3 mb-3 col-8 mx-auto">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                     
-                    {# <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" name="_remember_me">Remember me
-                        </label>
-                    </div> #}
-                    <div class="text-center pt-2">
-                        <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>
+                    <div class="col-10 mx-auto">
+                        <label for="inputUsername">Identifiant</label>
+                        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
                     </div>
-                </div>
-                <div class="mt-4">
-                    <div class="row">
-                        <div class="col-4 mx-auto text-center mb-5">
-                            <button class="btn btn-lg btn-primary btn-sm" type="submit">
-                                Se connecter
-                            </button>
+                    <div class="mt-3 mb-3 col-10 mx-auto">
+                        <label for="inputPassword">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                    </div>
+                    <div class="mt-3 mb-3 col-8 mx-auto">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        
+                        <div class="text-center pt-2">
+                            <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>
                         </div>
                     </div>
-                </div>
-            </form>
+                    <div class="mt-4">
+                        <div class="row">
+                            <div class="col-4 mx-auto text-center mb-5">
+                                <button class="btn btn-lg btn-primary btn-sm" type="submit">
+                                    Se connecter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div> 
 {% endblock %}

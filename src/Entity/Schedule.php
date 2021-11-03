@@ -33,6 +33,11 @@ class Schedule
     private $daysBefore;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $duration;
+
+    /**
      * @ORM\OneToOne(targetEntity=Workorder::class, inversedBy="schedule", cascade={"persist", "remove"})
      */
     private $workorder;
@@ -74,6 +79,18 @@ class Schedule
     public function setDaysBefore(?int $daysBefore): self
     {
         $this->daysBefore = $daysBefore;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

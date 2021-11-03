@@ -22,8 +22,8 @@ class DefaultController extends AbstractController
         if(!$user){
             return $this->redirectToRoute('app_login');
         }
-        $organisation = $user->getOrganisation();
-        $workorders = $workorderRepository->findByOrganisation($organisation);
+        $organisation = $user->getOrganisation()->getid();
+        $workorders = $workorderRepository->findAllWorkorders($organisation);
 
         return $this->render('default/index.html.twig', [
             'workorders'    => $workorders,

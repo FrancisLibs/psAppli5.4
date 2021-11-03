@@ -7,49 +7,49 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto topnav align-items-center">
-            {% if app.user %}
-                <div class="mr-5 d-flex">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('work_order_index') }}" >Bons de travail</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ path('preventive_index') }}" class="nav-link">Préventif</a>
-                    </li>
-                </div>
-            {% endif %}
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item mx-2">
+                <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+            </li>
+            <li class="nav-item mx-2">
+                <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
+            </li>
+            <li class="nav-item mx-2">
+                <a class="nav-link" href="{{ path('work_order_index') }}" >Bons de travail</a>
+            </li>
+            <li class="nav-item mx-2">
+                <a href="{{ path('preventive_index') }}" class="nav-link">Préventif</a>
+            </li>
             {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
+                <li class="nav-item mx-2">
                     <a href="{{ path('admin') }}" class="nav-link">Administration</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-2">
                     <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
                 </li>
             {% endif %}
+        </ul>
+        <div class="d-flex justify-content-center align-items-center mr-5 navbar-nav">
+            <div class="mr-3">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                    </li>
+                {% endif %}
+            </div>
             {% if app.user %}
-                <li class="nav-item">
-                    <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
-                </li>
-            {% endif %}
-
-            {% if app.user %}
-                <li class="nav-item dropdown px-3">
+                <li class="navbar-nav dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if app.user.imageName %}
                             <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
                         {% else %}
                             <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                        {% endif %}</a>
+                        {% endif %}
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li>
                             <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
@@ -60,6 +60,6 @@
                     </ul>
                 </li>
             {% endif %}
-        </ul>
+        </div>
     </div>
 </nav>
