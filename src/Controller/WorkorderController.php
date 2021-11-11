@@ -13,6 +13,7 @@ use App\Repository\PartRepository;
 use App\Repository\MachineRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,13 +34,21 @@ class WorkorderController extends AbstractController
     private $machineRepository;
     private $pdf;
 
-    public function __construct(Pdf $pdf, MachineRepository $machineRepository, WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
+    public function __construct(
+        Pdf $pdf, 
+        MachineRepository $machineRepository, 
+        WorkorderRepository $workorderRepository,  
+        PartRepository $partRepository,
+        WorkorderStatusRepository $workorderStatusRepository,
+        EntityManagerInterface $manager,
+        )
     {
         $this->workorderRepository = $workorderRepository;
-        $this->manager = $manager;
         $this->partRepository = $partRepository;
         $this->machineRepository = $machineRepository;
         $this->pdf = $pdf;
+        $this->workorderStatusRepository = $workorderStatusRepository;
+        $this->manager = $manager;
     }
 
     /**
@@ -99,11 +108,11 @@ class WorkorderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
-            $workorder->setStatus($workorder::EN_COURS);
+            $status = $this->statusRepository->findOneBy(['name' => 'EN_COURS']);
+            $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
             $this->manager->persist($workorder);
             $this->manager->flush();
-            
 
             return $this->redirectToRoute('work_order_show', [
                 'id' => $workorder->getId()
@@ -185,7 +194,8 @@ class WorkorderController extends AbstractController
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        $workorder->setStatus(Workorder::CLOTURE);
+        $status = $this->statusRepository->findOneBy(['name' => 'CLOTURE']);
+        $workorder->setWorkorderStatus($status);
         $this->manager->flush();
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);

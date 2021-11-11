@@ -13,14 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Workorder
 {
-    // Statut
-    const EN_COURS = 1;
-    const EN_ATTENTE = 2;
-    const EN_PREPARATION = 3;
-    const EN_RETARD = 4;
-    const CLOTURE = 5;
-
-    // Type
+       // Type
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
@@ -36,11 +29,6 @@ class Workorder
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
-
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $status;
 
     /**
      * @ORM\Column(type="date", nullable=true)
@@ -148,6 +136,16 @@ class Workorder
      */
     private $schedule;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $templateNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=WorkorderStatus::class, inversedBy="workorders")
+     */
+    private $workorderStatus;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -168,25 +166,6 @@ class Workorder
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        switch ($this->status) {
-            case 1:
-                return 'En cours';
-                break;
-            case 2:
-                return 'Cloturé';
-                break;
-        }
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
 
         return $this;
     }
@@ -467,6 +446,30 @@ class Workorder
         }
 
         $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    public function getTemplateNumber(): ?int
+    {
+        return $this->templateNumber;
+    }
+
+    public function setTemplateNumber(?int $templateNumber): self
+    {
+        $this->templateNumber = $templateNumber;
+
+        return $this;
+    }
+
+    public function getWorkorderStatus(): ?WorkorderStatus
+    {
+        return $this->workorderStatus;
+    }
+
+    public function setWorkorderStatus(?WorkorderStatus $workorderStatus): self
+    {
+        $this->workorderStatus = $workorderStatus;
 
         return $this;
     }
