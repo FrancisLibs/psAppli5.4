@@ -38,18 +38,20 @@ class MachineController extends AbstractController
      * @Route("/list/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param   Request   $request
-     * @param   Boolean   $select
+     * @param   Request $request
+     * @param   string  $mode
+     * @param   int     $workorder
+     * 
      * @return  Response
      */
-    public function index(Request $request, $mode = null, ?int $workorderId): Response
+    public function index(Request $request, string $mode = null, int $workorderId = null): Response
     {
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
-        
-        // En mode selectPréventive (création BT préventif) 
+
+        // En mode "selectPréventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
-        if($mode == "selectPreventive"){
+        if ($mode == "selectPreventive" || $mode == 'editPreventive') {
             $machines = $session->get('machines');
             // If machines in session
             if ($machines) {
@@ -66,7 +68,7 @@ class MachineController extends AbstractController
         $machines = $this->machineRepository->findSearch($data);
         if ($request->get('ajax') && $mode == 'select') {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'select']),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
@@ -74,15 +76,15 @@ class MachineController extends AbstractController
 
         if ($request->get('ajax') && $mode == 'modif') {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'modif', 'workorderId' => $workorderId]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'workorderId' => $workorderId]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
         }
 
-        if ($request->get('ajax') && $mode == 'selectPreventive') {
+        if ($request->get('ajax') && ($mode == 'selectPreventive' || $mode = 'editPreventive')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => 'selectPreventive', 'workorderId' => $workorderId]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'workorderId' => $workorderId]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);

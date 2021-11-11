@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bon de Travail{% endblock %}
+{% block title %}Bon de travail préventif{% endblock %}
 
 {% block body %}
     <div class="row mt-5">
         <div class="col-7 offset-1">
             <div class="row align-items-center">
-                <div class="col-4">
-                    <h3>Bon de Travail</h3>
+                <div class="col-5">
+                    <h3>Bon de Travail préventif</h3>
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
                     {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a> #}
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('preventive_index') }}" role="button">Liste BT</a>
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('preventive_edit', {'id': workorder.id}) }}">Edition</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-danger btn-sm mr-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
                     {% endif %}
@@ -24,7 +24,7 @@
     </div>
     <article class="row mt-4">
         <div class="col-11 offset-1">
-            {% include 'workorder/_show.html.twig' %}
+            {% include 'preventive/_show.html.twig' %}
         </div>
     </article>
 {% endblock %}

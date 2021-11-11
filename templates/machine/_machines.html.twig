@@ -11,10 +11,12 @@
         {% if mode == 'select' %}
             <td><a href="{{ path('work_order_new', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
         {% elseif mode == 'selectPreventive' %}
-            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
+            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
+        {% elseif mode == 'editPreventive' %}
+            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode, 'workorderId': workorderId}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
         {% elseif mode == 'modif' %}
             <td><a href="{{ path('work_order_edit', {'machine': machine.id, 'id': workorderId}) }}" class="btn btn-primary btn-sm py-1" role="button">Select</a></td>
-        {% endif %}
+         {% endif %}
     </tr>
 {% else %}
     <tr>

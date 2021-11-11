@@ -24,7 +24,7 @@
                 <div class="col-2 text-primary">
                     <h4>Machine</h4>
                 </div>
-                 <div class="col-3">
+                 <div class="col-4">
                     {% for machine in workorder.machines %}
                         {{ machine.designation }}
                     {% endfor %}
@@ -41,4 +41,8 @@
             {% endif %}
         </div>
     </article>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('editWorkorder') }}
 {% endblock %}

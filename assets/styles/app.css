@@ -64,6 +64,14 @@ html {
   margin-left: 10px;
 }
 
+.case_machine {
+  border: solid black 1px;
+  border-radius: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: center;
+}
+
 /* Index pièces et machines */
 .font_size_table {
   font-size: 0.8em;

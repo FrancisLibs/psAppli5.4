@@ -10,6 +10,7 @@ use App\Data\SearchWorkorder;
 use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
+use App\Repository\MachineRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,13 +30,15 @@ class WorkorderController extends AbstractController
     private $workorderRepository;
     private $manager;
     private $partRepository;
+    private $machineRepository;
     private $pdf;
 
-    public function __construct(Pdf $pdf, WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
+    public function __construct(Pdf $pdf, MachineRepository $machineRepository, WorkorderRepository $workorderRepository, EntityManagerInterface $manager, PartRepository $partRepository)
     {
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
         $this->partRepository = $partRepository;
+        $this->machineRepository = $machineRepository;
         $this->pdf = $pdf;
     }
 
@@ -52,7 +55,7 @@ class WorkorderController extends AbstractController
     {
         $data = new SearchWorkorder();
         $data->page = $request->get('page', 1);
-        $data->organisation=$this->getUser()->getOrganisation()->getId();
+        $data->organisation = $this->getUser()->getOrganisation()->getId();
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
@@ -100,6 +103,7 @@ class WorkorderController extends AbstractController
             $workorder->setPreventive(false);
             $this->manager->persist($workorder);
             $this->manager->flush();
+            
 
             return $this->redirectToRoute('work_order_show', [
                 'id' => $workorder->getId()
@@ -127,7 +131,7 @@ class WorkorderController extends AbstractController
      * @Route("/edit/{id}/{machine?}", name="work_order_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Request $request, Machine $machine = null, Workorder $workorder): Response
+    public function edit(Workorder $workorder, $machine = null, Request $request): Response
     {
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
@@ -136,7 +140,8 @@ class WorkorderController extends AbstractController
             foreach ($workorderMachines as $workorderMachine) {
                 $workorder->removeMachine($workorderMachine);
             }
-            $workorder->addMachine($machine);
+            $id = $machine;
+            $workorder->addMachine($this->machineRepository->find($id));
         }
 
         $form = $this->createForm(WorkorderEditType::class, $workorder);

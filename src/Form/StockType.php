@@ -23,7 +23,9 @@ class StockType extends AbstractType
             ->add('approQte', IntegerType::class, [
                 'label' => 'Qte en commande'
             ])
-        ;
+            ->add('steadyPrice', IntegerType::class, [
+                'label' => 'Prix'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

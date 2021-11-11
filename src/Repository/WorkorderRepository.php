@@ -46,7 +46,6 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
-        //dd($search);
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
             ->select('w', 'm', 'u', 'o')
@@ -54,7 +53,10 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.user', 'u')
             ->join('w.organisation', 'o')
             ->andWhere('w.organisation = :val')
-            ->setParameter('val', "$search->organisation");
+            ->setParameter('val', "$search->organisation")
+            ->andWhere('w.template = :disabled')
+            ->setParameter('disabled', false)
+        ;
 
         if (!empty($search->machine)) {
             $query = $query

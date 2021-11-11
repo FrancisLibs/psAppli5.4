@@ -15,8 +15,11 @@ class Workorder
 {
     // Statut
     const EN_COURS = 1;
-    const CLOTURE = 2;
-    
+    const EN_ATTENTE = 2;
+    const EN_PREPARATION = 3;
+    const EN_RETARD = 4;
+    const CLOTURE = 5;
+
     // Type
     const CURATIF = 1;
     const PREVENTIF = 2;
@@ -150,7 +153,7 @@ class Workorder
         $this->workorderParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
     }
-    
+
 
     public function getId(): ?int
     {

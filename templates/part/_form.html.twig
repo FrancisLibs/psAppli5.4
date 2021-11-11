@@ -1,5 +1,5 @@
 {{ form_start(form) }}   
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-3">
             {{ form_label(form.code) }}  
             {{ form_widget(form.code) }}  
@@ -9,13 +9,19 @@
             {{ form_widget(form.designation) }}
         </div>
     </div>
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-6">
             {{ form_label(form.reference) }}
             {{ form_widget(form.reference) }}
         </div>
     </div>
-    <div class="row mb-4">
+     <div class="row mb-3">
+        <div class="col-12">
+            {{ form_label(form.remark) }}
+            {{ form_widget(form.remark) }}
+        </div>
+    </div>
+    <div class="row mb-3">
         <div class="col-3">
             {{ form_label(form.stock.place) }}
             {{ form_widget(form.stock.place) }}
@@ -37,6 +43,10 @@
         <div class="col-3">
             {{ form_label(form.stock.approQte) }}
             {{ form_widget(form.stock.approQte) }}
+        </div>
+        <div class="col-3">
+            {{ form_label(form.stock.steadyPrice) }}
+            {{ form_widget(form.stock.steadyPrice) }}
         </div>
     </div>
     <div class="row">

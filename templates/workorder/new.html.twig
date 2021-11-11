@@ -21,11 +21,13 @@
                 <div class="col-3">
                     <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'select'}) }}" role="button">Choix de la Machine</a>
                 </div>
-                <div>
-                    {% for machine in workorder.machines %}
-                        {{ machine.designation }}<br>
-                    {% endfor %}
-                </div>
+                {% if workorder.machines is not empty %}
+                    <div class="case_machine">
+                        {% for machine in workorder.machines %}
+                            {{ machine.designation }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             {{ include('workorder/_form.html.twig') }}
         </div>

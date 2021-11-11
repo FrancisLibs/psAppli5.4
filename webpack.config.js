@@ -23,8 +23,7 @@ Encore
   .addEntry("app", "./assets/app.js")
   .addEntry("newWorkorder", "./assets/newWorkorder.js")
   .addEntry("part", "./assets/JS/part.js")
-  // .addEntry("newWorkorder", "./assets/newWorkorder.js")
-  // .addEntry("editWorkorder", "./assets/editWorkorder.js")
+  .addEntry("editWorkorder", "./assets/editWorkorder.js")
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")

@@ -7,12 +7,12 @@
         <div class="col-4 offset-2">
             <h2>Bons de travail préventifs</h2>
         </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-sm" href="{{ path('preventive_new') }}" role="button">Nouveau bon de travail préventif</a>
-        </div>
     </header>
     <main class="row preventive-js-filter">
         <aside class="col-2 mt-5">
+            <div class="mb-4">
+                <a class="btn btn-primary btn-sm" href="{{ path('preventive_new') }}" role="button">Nouveau bon de travail préventif</a>
+            </div>
             {% include 'preventive/_filter.html.twig' %}
         </aside> 
         <article class="col-10">

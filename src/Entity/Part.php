@@ -53,7 +53,7 @@ class Part
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $remarque;
+    private $remark;
 
     /**
      * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="parts")
@@ -148,14 +148,14 @@ class Part
         return $this;
     }
 
-    public function getRemarque(): ?string
+    public function getRemark(): ?string
     {
-        return $this->remarque;
+        return $this->remark;
     }
 
-    public function setRemarque(?string $remarque): self
+    public function setRemark(?string $remark): self
     {
-        $this->remarque = $remarque;
+        $this->remark = $remark;
 
         return $this;
     }

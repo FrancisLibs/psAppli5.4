@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Part;
 use App\Form\StockType;
-use App\Entity\Organisation;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PartType extends AbstractType
 {
@@ -18,6 +18,9 @@ class PartType extends AbstractType
             ->add('designation')
             ->add('reference')
             ->add('code')
+            ->add('remark', TextareaType::class, [
+                'label' =>  'Remarque'
+            ])
             ->add('stock', StockType::class)
         ;
     }
