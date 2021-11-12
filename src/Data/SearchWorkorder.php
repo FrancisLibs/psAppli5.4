@@ -39,12 +39,12 @@ class SearchWorkorder
      */
     public $preventive;
 
-    // /**
-    //  * Status
-    //  *
-    //  * @var status
-    //  */
-    // public $status;
+    /**
+     * Status
+     *
+     * @var status
+     */
+    public $status;
 
     /**
      * Organisation

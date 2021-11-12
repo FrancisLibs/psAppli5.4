@@ -64,12 +64,12 @@ class MachineCartController extends AbstractController
 
     /**
      * 
-     * @Route("/remove/{id?}/{workorderId?}", name="remove_machine_from_cart", methods={"GET"})
+     * @Route("/remove/{id}/{mode}/{workorderId?}", name="remove_machine_from_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @return RedirectResponse
      */
-    public function removeMachine(?int $id, ?int $workorderId, string $mode = null): Response
+    public function removeMachine(int $id, string $mode, ?int $workorderId): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);

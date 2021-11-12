@@ -10,13 +10,13 @@ window.onload = () => {
   });
 
   // Gestion du temps de l'intervention
-
   // Date et heure de début
+  // Calcul de la durée si on a date et heure de début et date et heure de fin
   let time_zone = document.querySelector("#time_management");
   time_zone.addEventListener("change", function () {
     // Lecture des champs début intervention et création d'un dateTime
-    let startDate = document.querySelector("#workorder_startDate");
-    let endDate = document.querySelector("#workorder_endDate");
+    let startDate = workorderForm["workorder[startDate]"].value;
+    let endDate = workorderForm["workorder[endDate]"].value;
     let heureDebut = workorderForm["workorder[startTime]"].value;
     let heureFin = workorderForm["workorder[endTime]"].value;
 
@@ -53,4 +53,20 @@ window.onload = () => {
       workorderForm["workorder[durationMinute]"].value = minutes;
     }
   });
+
+  // time_zone.addEventListener("keyUp", function (e) {
+  //   e.preventDefault();
+  //   // Lecture des valeurs de durée
+  //   let durationDay = workorderForm["workorder[durationDay]"].value;
+  //   let durationHour = workorderForm["workorder[durationHour]"].value;
+  //   let durationMinute = workorderForm["workorder[durationMinute]"].value;
+
+  //   if(durationDay > 0){
+
+  //   }
+  //   if (durationHour > 0) {
+  //   }
+  //   if (durationminute > 0) {
+  //   }
+  // });
 };

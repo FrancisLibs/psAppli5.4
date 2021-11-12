@@ -3,39 +3,20 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Entity\Workorder;
 use App\Data\SearchWorkorder;
+use App\Entity\WorkorderStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+
 
 class SearchWorkorderForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // ->add('status', ChoiceType::class, [
-            //     'label'     => false,
-            //     'required'  => false,
-            //     'placeholder' => 'Status...',
-            //     'choices'   => [
-            //         'en cours' => Workorder::EN_COURS ,
-            //         'cloturé' => Workorder::CLOTURE
-            //     ],
-            // ])
-
-            // ->add('createdAt', DateType::class, [
-            //     'label'     => false,
-            //     'required'  => false,
-            //     'widget'    => 'single_text', 
-            //     'attr'      => ['placeholder' => 'Date...']
-            // ])
-
             ->add('machine', TextType::class, [
                 'label'     => false,
                 'required'  => false,
@@ -44,10 +25,19 @@ class SearchWorkorderForm extends AbstractType
 
             ->add('user', EntityType::class, [
                 'class'     => User::class,
-                'choice_label'   =>  'firstName',
+                'choice_label'   =>  'userName',
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Technicien...']
+                'placeholder' => 'Technicien...',
+            ])
+
+            ->add('status', EntityType::class, [
+                'class'     => WorkorderStatus::class,
+                'choice_label'   =>  'name',
+                'label'     => false,
+                'required'  => false,
+                'placeholder' => 'Status...',
+
             ]);
     }
 

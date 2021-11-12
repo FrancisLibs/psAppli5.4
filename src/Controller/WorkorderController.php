@@ -40,7 +40,7 @@ class WorkorderController extends AbstractController
         WorkorderRepository $workorderRepository,  
         PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
-        EntityManagerInterface $manager,
+        EntityManagerInterface $manager
         )
     {
         $this->workorderRepository = $workorderRepository;
@@ -68,6 +68,7 @@ class WorkorderController extends AbstractController
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
+        //dd($workorders);
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('workorder/_workorders.html.twig', ['workorders' => $workorders]),
@@ -108,7 +109,7 @@ class WorkorderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
-            $status = $this->statusRepository->findOneBy(['name' => 'EN_COURS']);
+            $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
             $this->manager->persist($workorder);

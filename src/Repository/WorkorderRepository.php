@@ -21,7 +21,7 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les bons de travail liés à une recherche
+     * Récupère les bons de travail de la page d'accueil
      *
      * @param SearchWorkorder $search
      * @return PaginationInterface
@@ -48,12 +48,13 @@ class WorkorderRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.createdAt', 'ASC')
-            ->select('w', 'm', 'u', 'o')
+            ->select('w', 'm', 'u', 'o', 's')
             ->join('w.machines', 'm')
             ->join('w.user', 'u')
             ->join('w.organisation', 'o')
+            ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
-            ->setParameter('val', "$search->organisation")
+            ->setParameter('val', $search->organisation)
             ->andWhere('w.template = :disabled')
             ->setParameter('disabled', false)
         ;
@@ -66,8 +67,14 @@ class WorkorderRepository extends ServiceEntityRepository
 
         if (!empty($search->user)) {
             $query = $query
-                ->andWhere('u.username LIKE :user')
-                ->setParameter('user', "%{$search->user}%");
+                ->andWhere('u.id = :user')
+                ->setParameter('user', $search->user);
+        }
+
+        if (!empty($search->status)) {
+            $query = $query
+                ->andWhere('s.id = :status')
+                ->setParameter('status', $search->status);
         }
 
         $query = $query->getQuery();

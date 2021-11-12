@@ -14,6 +14,7 @@ use App\Repository\MachineRepository;
 use App\Repository\ScheduleRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,16 +33,19 @@ class PreventiveController extends AbstractController
     private $scheduleRepository;
     private $requestStack;
     private $machineRepository;
+    private $workorderStatusRepository;
 
     public function __construct(
-        EntityManagerInterface $manager,
+        WorkorderStatusRepository $workorderStatusRepository,
         WorkorderRepository $workorderRepository,
         ScheduleRepository $scheduleRepository,
         MachineRepository $machineRepository,
+        EntityManagerInterface $manager,
         RequestStack $requestStack
     ) {
         $this->manager = $manager;
         $this->workorderRepository = $workorderRepository;
+        $this->workorderStatusRepository = $workorderStatusRepository;
         $this->scheduleRepository = $scheduleRepository;
         $this->requestStack = $requestStack;
         $this->machineRepository = $machineRepository;
@@ -99,8 +103,8 @@ class PreventiveController extends AbstractController
     public function create(Request $request, Machine $machine = null): Response
     {
         // Récupération des machines lors d'un BT préventif
-        $session = $this->requestStack->getSession();
         $machinesWithData = [];
+        $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
         if ($machines) {
             foreach ($machines as $id) {
@@ -113,7 +117,8 @@ class PreventiveController extends AbstractController
         $workorder->setOrganisation($user->getOrganisation());
         $workorder->setUser($user);
         $workorder->setType(Workorder::PREVENTIF);
-        $workorder->setStatus(Workorder::EN_COURS);
+        $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+        $workorder->setWorkorderStatus($status);
         $workorder->setPreventive(true);
         $workorder->setTemplate(true);
 
@@ -155,11 +160,11 @@ class PreventiveController extends AbstractController
 
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
-
         return $this->renderForm('preventive/new.html.twig', [
             'workorder' => $workorder,
             'form' => $form,
-            'machinesWithData' => $machinesWithData,
+            'mode' => 'newPreventive',
+            'machinesWithData' => $machinesWithData,    
         ]);
     }
 
@@ -178,20 +183,21 @@ class PreventiveController extends AbstractController
      * @Route("/edit/{id}/{mode?}", name="preventive_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Request $request, Workorder $workorder, string $mode = null): Response
+    public function edit(Request $request, Workorder $workorder, ?string $mode): Response
     {
         if ($mode == 'editPreventive') {
-            // Attribution des machines en session au BT préventif
+            // Attribution des éventuelles machines en session au BT préventif
             $session = $this->requestStack->getSession();
             $machines = $session->get('machines');
-            
-            foreach ($machines as $key => $id) {
-                $machine = $this->machineRepository->find($id);
-                $workorder->addMachine($machine);
-                unset($machines[$key]);
+            if($machines){
+                foreach ($machines as $key => $id) {
+                    $machine = $this->machineRepository->find($id);
+                    $workorder->addMachine($machine);
+                    unset($machines[$key]);
+                }
+                $session->set('machines', $machines);
+                $this->manager->flush();
             }
-            $session->set('machines', $machines);
-            $this->manager->flush();
         }
         $form = $this->createForm(WorkorderEditType::class, $workorder);
         $form->remove('implementation')

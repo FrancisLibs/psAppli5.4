@@ -99,6 +99,9 @@ class WorkorderType extends AbstractType
                 if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now'));
                 if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
                 if (is_null($form->getEndDate()))   $form->setEndDate(new \DateTime('now'));
+                if (is_null($form->getDurationDay()))   $form->setDurationDay(0);
+                if (is_null($form->getDurationHour()))   $form->setDurationHour(0);
+                if (is_null($form->getDurationMinute()))   $form->setDurationMinute(0);
                 //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
             }
         );
