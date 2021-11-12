@@ -157,14 +157,13 @@ class PreventiveController extends AbstractController
                     'workorder' => $workorder
                 ]);
             }
-
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
         return $this->renderForm('preventive/new.html.twig', [
             'workorder' => $workorder,
             'form' => $form,
             'mode' => 'newPreventive',
-            'machinesWithData' => $machinesWithData,    
+            'machinesWithData' => $machinesWithData,
         ]);
     }
 
@@ -189,7 +188,7 @@ class PreventiveController extends AbstractController
             // Attribution des éventuelles machines en session au BT préventif
             $session = $this->requestStack->getSession();
             $machines = $session->get('machines');
-            if($machines){
+            if ($machines) {
                 foreach ($machines as $key => $id) {
                     $machine = $this->machineRepository->find($id);
                     $workorder->addMachine($machine);
@@ -215,15 +214,21 @@ class PreventiveController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute(
-                'preventive_show',
-                [
-                    'id' => $workorder->getId()
-                ],
-                Response::HTTP_SEE_OTHER
-            );
+            // Vérification si machines dans le BT
+            $machines = $workorder->getMachines();
+            if (!$machines->isEmpty()) {
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirectToRoute(
+                    'preventive_show',
+                    [
+                        'id' => $workorder->getId()
+                    ],
+                    Response::HTTP_SEE_OTHER
+                );
+            }
+            $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
         return $this->renderForm('preventive/edit.html.twig', [
             'workorder' => $workorder,
