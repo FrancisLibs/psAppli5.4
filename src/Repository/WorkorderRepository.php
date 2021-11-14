@@ -131,4 +131,23 @@ class WorkorderRepository extends ServiceEntityRepository
             15
         );
     }
+
+    /**
+     * Récupère les bons de travail de la page d'accueil
+     *
+     * @param SearchWorkorder $search
+     * @return PaginationInterface
+     */
+    public function findLastTemplate($organisation)
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisation)
+            ->andWhere('w.template = :enabled')
+            ->setParameter('enabled', true)
+            ->orderBy('w.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -112,9 +112,10 @@ class PreventiveController extends AbstractController
             }
         }
         $user = $this->getUser();
+        $organisation = $user->getOrganisation();
         $workorder = new Workorder();
         $workorder->setCreatedAt(new \DateTime());
-        $workorder->setOrganisation($user->getOrganisation());
+        $workorder->setOrganisation($organisation);
         $workorder->setUser($user);
         $workorder->setType(Workorder::PREVENTIF);
         $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
@@ -147,9 +148,21 @@ class PreventiveController extends AbstractController
                     $workorder->addMachine($this->machineRepository->find($id));
                 }
 
-                // suppression des machines en session
+                // Suppression des machines en session
                 $session->remove('machines');
 
+                // Numéro de template
+                if (!$workorder->getTemplateNumber()) {
+                    // Recherche du prochain numéro
+                    $lastTemplateNumber = $this->workorderRepository->findLastTemplate($organisation)->getTemplateNumber();
+                    if (!$lastTemplateNumber) {
+                        $nextTemplateNumber = 1;
+                    }
+                    if ($lastTemplateNumber) {
+                        $nextTemplateNumber = $lastTemplateNumber + 1;
+                    }
+                    $workorder->setTemplateNumber($nextTemplateNumber);
+                }
                 $this->manager->persist($workorder);
                 $this->manager->flush();
 

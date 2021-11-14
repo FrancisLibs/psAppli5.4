@@ -1,16 +1,16 @@
 {% for workorder in workorders %}
     <tr>
-        <td>
+        <td class="font_size_table">
             <a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.id }}</a>
         </td>
-        <td class="text-center">
+        <td class="text-center font_size_table">
             {% for machine in workorder.machines %}
                 {{ machine.designation}}
             {% endfor %}    
         </td>
-        <td class="text-center">{{ workorder.user.firstName }}</td>
-        <td class="text-center">{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
-        <td class="text-center">{{ workorder.request }}</td>
+        <td class="text-center font_size_table">{{ workorder.user.firstName }}</td>
+        <td class="text-center font_size_table">{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
+        <td class="text-center font_size_table">{{ workorder.request }}</td>
     </tr>
 {% else %}
     <tr>

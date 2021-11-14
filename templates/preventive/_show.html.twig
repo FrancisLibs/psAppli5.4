@@ -2,6 +2,10 @@
 <div class="row">
     <div class="col-5 d-flex justify-content-between">
         <div>
+            <span>Numéro : </span>
+            <span class="champs_bt text-center">{{ workorder.templateNumber }}</span>
+        </div>
+        <div>
             <span>Créé le : </span>
             <span class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</span>
         </div>
@@ -13,7 +17,7 @@
 </div>
 <div class="row mt-3">
     <div class="col-7">
-        <div class="row">
+        <div class="row align-items-center">
             <div class="col-2">
                 <p>Machine(s) : </p>
             </div>
