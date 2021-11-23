@@ -2,13 +2,14 @@
 
 namespace App\Form;
 
-use App\Data\SearchPreventive;
+use App\Data\SearchTemplate;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class SearchPreventiveForm extends AbstractType
+class SearchTemplateForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,7 +25,7 @@ class SearchPreventiveForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SearchPreventive::class,
+            'data_class' => SearchTemplate::class,
             'method' => 'GET',
             'csrf_protection' => false
         ]);

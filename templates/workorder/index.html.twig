@@ -5,16 +5,16 @@
 {% block body %}
     <header class="row mt-5">
         <div class="col-3 offset-2">
-            <h2>Bons de travail</h2>
+            <h2>Bons de travails</h2>
         </div>
     </header>
     <main class="row workorder-js-filter">
-        <aside class="col-2 mt-5">
+        <aside class="col-2 mt-4">
             <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
             {% include 'workorder/_filter.html.twig' %}
         </aside>
         <article class="col-10">
-            <div class="mt-5">
+            <div class="mt-4">
                 {% include 'workorder/_workorderList.html.twig' with {workorders: workorders} only %}
             </div>
             {# display navigation #}

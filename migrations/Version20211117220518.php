@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20211101073131 extends AbstractMigration
+final class Version20211117220518 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20211101073131 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE workorder CHANGE created_at created_at DATETIME DEFAULT NULL, CHANGE start_time start_time TIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE workorder ADD preventive_date DATETIME DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE workorder CHANGE created_at created_at DATETIME NOT NULL, CHANGE start_time start_time TIME NOT NULL');
+        $this->addSql('ALTER TABLE workorder DROP preventive_date');
     }
 }

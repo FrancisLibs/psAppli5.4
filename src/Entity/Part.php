@@ -71,6 +71,16 @@ class Part
      */
     private $machines;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="templatesParts")
+     */
+    private $template;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="parts")
+     */
+    private $provider;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -225,6 +235,30 @@ class Part
         if ($this->machines->removeElement($machine)) {
             $machine->removePart($this);
         }
+
+        return $this;
+    }
+
+    public function getTemplate(): ?Template
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?Template $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getProvider(): ?Provider
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(?Provider $provider): self
+    {
+        $this->provider = $provider;
 
         return $this;
     }

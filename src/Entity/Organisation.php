@@ -46,12 +46,18 @@ class Organisation
      */
     private $parts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Template::class, mappedBy="organisation")
+     */
+    private $templates;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->workshops = new ArrayCollection();
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,6 +191,36 @@ class Organisation
             // set the owning side to null (unless already changed)
             if ($part->getOrganisation() === $this) {
                 $part->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Template[]
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->templates->contains($template)) {
+            $this->templates[] = $template;
+            $template->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTemplate(Template $template): self
+    {
+        if ($this->templates->removeElement($template)) {
+            // set the owning side to null (unless already changed)
+            if ($template->getOrganisation() === $this) {
+                $template->setOrganisation(null);
             }
         }
 

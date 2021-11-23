@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\MachineRepository;
-use App\Repository\WorkorderRepository;
+use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class MachineCartController extends AbstractController
 {
     private $machineRepository;
-    private $workorderrepository;
+    private $templateRepository;
     private $manager;
     private $requestStack;
 
@@ -27,17 +27,17 @@ class MachineCartController extends AbstractController
         MachineRepository $machineRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack,
-        WorkorderRepository $workorderrepository
+        TemplateRepository $templateRepository
     ) {
         $this->machineRepository = $machineRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
-        $this->workorderrepository = $workorderrepository;
+        $this->TemplateRepository = $templateRepository;
     }
 
     /**
      * 
-     * @Route("/add/{id}/{mode}/{workorderId?}", name="add_machine_to_cart", methods={"GET"})
+     * @Route("/add/{id}/{mode}/{templateId?}", name="add_machine_to_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request   $request
@@ -46,7 +46,7 @@ class MachineCartController extends AbstractController
      * 
      * @return redirectToRoute
      */
-    public function addMachine(Request $request, int $id, $mode = null, int $workorderId = null): Response
+    public function addMachine(Request $request, int $id, $mode = null, int $templateId = null): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -58,18 +58,18 @@ class MachineCartController extends AbstractController
 
         return $this->redirectToRoute('machine_index', [
             'mode' => $mode,
-            'workorderId'   => $workorderId,
+            'templateId'   => $templateId,
         ]);
     }
 
     /**
      * 
-     * @Route("/remove/{id}/{mode}/{workorderId?}", name="remove_machine_from_cart", methods={"GET"})
+     * @Route("/remove/{id}/{mode}/{templateId?}", name="remove_machine_from_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @return RedirectResponse
      */
-    public function removeMachine(int $id, string $mode, ?int $workorderId): Response
+    public function removeMachine(int $id, string $mode, ?int $templateId): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -89,7 +89,7 @@ class MachineCartController extends AbstractController
         }
         return $this->redirectToRoute('machine_index', [
             'mode'  =>  "editPreventive",
-            'workorderId'   =>  $workorderId,
+            'templateId'   =>  $templateId,
         ]);
     }
 }

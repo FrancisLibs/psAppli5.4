@@ -1,5 +1,13 @@
 {% for workorder in workorders %}
-    <tr>
+    {% if workorder.preventive and workorder.workorderStatus.name == "EN_PREP." %}
+        <tr style="background-color: #81c2fb;">
+    {% elseif workorder.preventive and workorder.workorderStatus.name == "EN_COURS" %}
+        <tr style="background-color: #a0d93a;">
+    {% elseif workorder.preventive and workorder.workorderStatus.name == "EN_RETARD" %}
+        <tr style="background-color: #f92f2f;">
+    {% else %}
+        <tr>
+    {% endif %}
         <td class="font_size_table">
             <a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.id }}</a>
         </td>
@@ -9,7 +17,11 @@
             {% endfor %}    
         </td>
         <td class="text-center font_size_table">{{ workorder.user.firstName }}</td>
-        <td class="text-center font_size_table">{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
+        {% if workorder.preventive %}
+            <td class="text-center font_size_table">{{ workorder.preventiveDate ? workorder.preventiveDate|date('d-m-Y') : '' }}</td>
+        {% else %}
+            <td class="text-center font_size_table">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y') : '' }}</td>
+        {% endif %}
         <td class="text-center font_size_table">{{ workorder.request }}</td>
     </tr>
 {% else %}

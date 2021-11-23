@@ -2,13 +2,25 @@
 <div class="row">
     <div class="col-5 d-flex justify-content-between">
         <div>
-            <span>Créé le : </span>
-            <span class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y H:i:s', timezone="Europe/Paris") : '' }}</span>
+            {% if not workorder.preventive %}
+                <span>Créé le : </span>
+                <span class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</span>
+            {% else %}
+                <span>Date prévue : </span>
+                <span class="champs_bt text-center">{{ workorder.preventiveDate|date('d-m-Y') }}</span>
+            {% endif %}
         </div>
-        <div>
-            <span>Par : </span>
-            <span class="champs_bt text-center">{{ workorder.user.firstName }}</span>
-        </div>
+        {% if not workorder.preventive %}
+            <div>
+                <span>Par : </span>
+                <span class="champs_bt text-center">{{ workorder.user.firstName }}</span>
+            </div>
+        {% else %}
+            <div>
+                <span>Préventif : </span>
+                <span class="champs_bt text-center">{{ workorder.templateNumber }}</span>
+            </div>
+        {% endif %}
         <div>
             <span>Statut : </span>
             <span class="champs_bt text-center">{{ workorder.workorderStatus.name }}</span>
@@ -18,11 +30,26 @@
 <div class="row mt-3">
     <div class="col-6">
         <div class="row">
-            <div class="col-12 d-flex justify-content-start">
-                <p>Machine : </p>
-                {% for machine in workorder.machines %}
-                    <p class="champs_bt border border-dark rounded">{{ machine.designation }}</p>
-                {% endfor %}
+            <div class="col-2">
+                Machine : 
+            </div>
+            <div class="col-9 d-flex justify-content-start">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Numéro</th>
+                            <th class="text-center" scope="col">Désignation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for machine in workorder.machines %}
+                            <tr>
+                                <td>{{ machine.internalCode }}</td>
+                                <td class="text-center">{{ machine.designation }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             {% if workorder.request %}
                 <div class="col-12 d-flex justify-content-start">
@@ -38,7 +65,7 @@
             {% endif %}
             {% if workorder.remark %}
                 <div class="col-12 d-flex justify-content-start">
-                    <p>Remarque</p>
+                    <p>Remarque : </p>
                     <p class="champs_bt">{{ workorder.remark }}</p>
                 </div>
             {% endif %}

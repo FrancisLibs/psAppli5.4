@@ -35,16 +35,16 @@ class MachineController extends AbstractController
     /**
      * @ Liste des machines
      * 
-     * @Route("/list/{mode?}/{workorderId?}", name="machine_index", methods={"GET"})
+     * @Route("/list/{mode?}/{templateId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param   Request $request
      * @param   string  $mode
-     * @param   int     $workorder
+     * @param   int     $templateId
      * 
      * @return  Response
      */
-    public function index(Request $request, string $mode = null, int $workorderId = null): Response
+    public function index(Request $request, string $mode = null, int $templateId = null): Response
     {
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
@@ -101,7 +101,7 @@ class MachineController extends AbstractController
             'machines'      =>  $machines,
             'form'          =>  $form->createView(),
             'mode'          =>  $mode,
-            'workorderId'   =>  $workorderId,
+            'templateId'    =>  $templateId,
             'machinesWithData'  =>  $machinesWithData,
         ]);
     }

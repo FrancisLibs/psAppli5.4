@@ -83,10 +83,16 @@ class Machine
      */
     private $workorders;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Template::class, mappedBy="machines")
+     */
+    private $templates;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -253,6 +259,33 @@ class Machine
     {
         if ($this->workorders->removeElement($workorder)) {
             $workorder->removeMachine($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Template[]
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->templates->contains($template)) {
+            $this->templates[] = $template;
+            $template->addMachine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTemplate(Template $template): self
+    {
+        if ($this->templates->removeElement($template)) {
+            $template->removeMachine($this);
         }
 
         return $this;

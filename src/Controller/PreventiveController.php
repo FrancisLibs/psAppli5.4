@@ -3,25 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Machine;
-use App\Entity\Workorder;
-use App\Form\ScheduleType;
-use App\Form\WorkorderType;
-use App\Form\PreventiveType;
-use App\Data\SearchPreventive;
-use App\Form\WorkorderEditType;
-use App\Form\SearchPreventiveForm;
+use App\Entity\Template;
+use App\Form\TemplateType;
+use App\Data\SearchTemplate;
+use App\Form\SearchTemplateForm;
 use App\Repository\MachineRepository;
-use App\Repository\ScheduleRepository;
-use App\Repository\WorkorderRepository;
+use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use function PHPUnit\Framework\isNull;
 
 /**
  * @Route("/preventive")
@@ -29,24 +26,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PreventiveController extends AbstractController
 {
     private $manager;
-    private $workorderRepository;
-    private $scheduleRepository;
     private $requestStack;
     private $machineRepository;
-    private $workorderStatusRepository;
+    private $templateRepository;
 
     public function __construct(
         WorkorderStatusRepository $workorderStatusRepository,
-        WorkorderRepository $workorderRepository,
-        ScheduleRepository $scheduleRepository,
+        TemplateRepository $templateRepository,
         MachineRepository $machineRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack
     ) {
         $this->manager = $manager;
-        $this->workorderRepository = $workorderRepository;
+        $this->templateRepository = $templateRepository;
         $this->workorderStatusRepository = $workorderStatusRepository;
-        $this->scheduleRepository = $scheduleRepository;
         $this->requestStack = $requestStack;
         $this->machineRepository = $machineRepository;
     }
@@ -54,7 +47,7 @@ class PreventiveController extends AbstractController
     /**
      * Liste des BT préventifs
      * 
-     * @Route("/", name="preventive_index", methods={"GET"})
+     * @Route("/", name="template_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request 
@@ -62,38 +55,36 @@ class PreventiveController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        // Vidange de la session s'il reste ds machines inutilisées
+        // Vidange de la session s'il reste ds machines dedans
         $this->emptyMachineCart($request);
 
-        $data = new SearchPreventive();
+        $data = new SearchTemplate();
 
         $data->page = $request->get('page', 1);
         $data->organisation = $this->getUser()->getOrganisation();
-        $data->preventive = true;
 
-        $form = $this->createForm(SearchPreventiveForm::class, $data);
+        $form = $this->createForm(SearchTemplateForm::class, $data);
 
         $form->handleRequest($request);
 
-        $workorders = $this->workorderRepository->findPreventiveWorkorders($data);
-        if ($request->get('ajax')) {
-            return new JsonResponse([
-                'content'       =>  $this->renderView('workorder/_workorders.html.twig', ['workorders' => $workorders]),
-                'sorting'       =>  $this->renderView('workorder/_sorting.html.twig', ['workorders' => $workorders]),
-                'pagination'    =>  $this->renderView('workorder/_pagination.html.twig', ['workorders' => $workorders]),
-            ]);
-        }
-
+        $templates = $this->templateRepository->findTemplates($data);
+        // if ($request->get('ajax')) {
+        //     return new JsonResponse([
+        //         'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
+        //         'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
+        //         'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
+        //     ]);
+        // }
         return $this->render('preventive/index.html.twig', [
-            'workorders' =>  $workorders,
+            'templates' =>  $templates,
             'form'  =>  $form->createView(),
         ]);
     }
 
     /**
-     * Création d'un BT préventif
+     * Création d'un template préventif
      * 
-     * @Route("/new/{id?}", name="preventive_new", methods={"GET", "POST"})
+     * @Route("/new/{id?}", name="template_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Machine $machine
@@ -113,29 +104,12 @@ class PreventiveController extends AbstractController
         }
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $workorder = new Workorder();
-        $workorder->setCreatedAt(new \DateTime());
-        $workorder->setOrganisation($organisation);
-        $workorder->setUser($user);
-        $workorder->setType(Workorder::PREVENTIF);
-        $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
-        $workorder->setWorkorderStatus($status);
-        $workorder->setPreventive(true);
-        $workorder->setTemplate(true);
+        $template = new Template();
+        $template->setCreatedAt(new \DateTime());
+        $template->setOrganisation($organisation);
+        $template->setUser($user);
 
-        $form = $this->createForm(WorkorderType::class, $workorder);
-        $form->remove('implementation')
-            ->remove('type')
-            ->remove('startDate')
-            ->remove('startTime')
-            ->remove('endDate')
-            ->remove('endTime')
-            ->remove('durationDay')
-            ->remove('durationHour')
-            ->remove('durationMinute')
-            ->remove('stopTimeHour')
-            ->remove('stopTimeMinute')
-            ->add('schedule', ScheduleType::class);
+        $form = $this->createForm(TemplateType::class, $template);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -145,35 +119,33 @@ class PreventiveController extends AbstractController
             if (!empty($machines)) {
                 // Ajout des machines au BT préventif
                 foreach ($machines as $id) {
-                    $workorder->addMachine($this->machineRepository->find($id));
+                    $template->addMachine($this->machineRepository->find($id));
                 }
 
                 // Suppression des machines en session
                 $session->remove('machines');
 
                 // Numéro de template
-                if (!$workorder->getTemplateNumber()) {
-                    // Recherche du prochain numéro
-                    $lastTemplateNumber = $this->workorderRepository->findLastTemplate($organisation)->getTemplateNumber();
-                    if (!$lastTemplateNumber) {
-                        $nextTemplateNumber = 1;
-                    }
-                    if ($lastTemplateNumber) {
-                        $nextTemplateNumber = $lastTemplateNumber + 1;
-                    }
-                    $workorder->setTemplateNumber($nextTemplateNumber);
+                $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
+                if ($lastTemplate) {
+                    $lastNumber = $lastTemplate->getTemplateNumber();
+                    $template->setTemplateNumber($lastNumber + 1);
+                } else {
+                    $template->setTemplateNumber(1);
                 }
-                $this->manager->persist($workorder);
+                // Activation du template
+                $template->setActive(true);
+
                 $this->manager->flush();
 
                 return $this->render('preventive/show.html.twig', [
-                    'workorder' => $workorder
+                    'template' => $template
                 ]);
             }
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
         return $this->renderForm('preventive/new.html.twig', [
-            'workorder' => $workorder,
+            'template' => $template,
             'form' => $form,
             'mode' => 'newPreventive',
             'machinesWithData' => $machinesWithData,
@@ -181,21 +153,21 @@ class PreventiveController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="preventive_show", methods={"GET"})
+     * @Route("/{id}", name="template_show", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function show(Workorder $workorder): Response
+    public function show(Template $template): Response
     {
         return $this->render('preventive/show.html.twig', [
-            'workorder' => $workorder,
+            'template' => $template,
         ]);
     }
 
     /**
-     * @Route("/edit/{id}/{mode?}", name="preventive_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}/{mode?}", name="template_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Request $request, Workorder $workorder, ?string $mode): Response
+    public function edit(Request $request, Template $template, ?string $mode): Response
     {
         if ($mode == 'editPreventive') {
             // Attribution des éventuelles machines en session au BT préventif
@@ -204,39 +176,27 @@ class PreventiveController extends AbstractController
             if ($machines) {
                 foreach ($machines as $key => $id) {
                     $machine = $this->machineRepository->find($id);
-                    $workorder->addMachine($machine);
+                    $template->addMachine($machine);
                     unset($machines[$key]);
                 }
                 $session->set('machines', $machines);
                 $this->manager->flush();
             }
         }
-        $form = $this->createForm(WorkorderEditType::class, $workorder);
-        $form->remove('implementation')
-            ->remove('type')
-            ->remove('startDate')
-            ->remove('startTime')
-            ->remove('endDate')
-            ->remove('endTime')
-            ->remove('durationDay')
-            ->remove('durationHour')
-            ->remove('durationMinute')
-            ->remove('stopTimeHour')
-            ->remove('stopTimeMinute')
-            ->add('schedule', ScheduleType::class);
+        $form = $this->createForm(TemplateType::class, $template);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Vérification si machines dans le BT
-            $machines = $workorder->getMachines();
+            $machines = $template->getMachines();
             if (!$machines->isEmpty()) {
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->redirectToRoute(
-                    'preventive_show',
+                    'template_show',
                     [
-                        'id' => $workorder->getId()
+                        'id' => $template->getId()
                     ],
                     Response::HTTP_SEE_OTHER
                 );
@@ -244,7 +204,7 @@ class PreventiveController extends AbstractController
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
         return $this->renderForm('preventive/edit.html.twig', [
-            'workorder' => $workorder,
+            'template' => $template,
             'form' => $form,
             'mode' => 'editPreventive',
         ]);
@@ -259,16 +219,16 @@ class PreventiveController extends AbstractController
      * @param Request 
      * @return Response 
      */
-    public function removeMachine(Workorder $workorder, Machine $machine)
+    public function removeMachine(Template $template, Machine $machine)
     {
         $machine = $this->machineRepository->find($machine);
-        $workorder->removeMachine($machine);
+        $template->removeMachine($machine);
         $this->manager->flush();
 
         return $this->redirectToRoute(
             'preventive_edit',
             [
-                'id' => $workorder->getId()
+                'id' => $template->getId()
             ],
             Response::HTTP_SEE_OTHER
         );
@@ -282,6 +242,20 @@ class PreventiveController extends AbstractController
             unset($machines[$cle]);
         }
         $session->set('machines', $machines);
-        return $this->redirectToRoute('preventive_index');
+        return $this->redirectToRoute('template_index');
+    }
+
+    /**
+     * @Route("/{id}", name="template_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function delete(Request $request, Template $template): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $template->getId(), $request->request->get('_token'))) {
+            $template->setActive(false);
+            $this->manager->flush();
+        }
+
+        return $this->redirectToRoute('template_index', [], Response::HTTP_SEE_OTHER);
     }
 }

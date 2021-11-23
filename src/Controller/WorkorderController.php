@@ -11,6 +11,7 @@ use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
 use App\Repository\MachineRepository;
+use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
@@ -32,20 +33,23 @@ class WorkorderController extends AbstractController
     private $manager;
     private $partRepository;
     private $machineRepository;
+    private $templateRepository;
+    private $workorderStatusRepository;
     private $pdf;
 
     public function __construct(
-        Pdf $pdf, 
-        MachineRepository $machineRepository, 
-        WorkorderRepository $workorderRepository,  
+        Pdf $pdf,
+        MachineRepository $machineRepository,
+        WorkorderRepository $workorderRepository,
+        TemplateRepository $templateRepository,
         PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
         EntityManagerInterface $manager
-        )
-    {
+    ) {
         $this->workorderRepository = $workorderRepository;
         $this->partRepository = $partRepository;
         $this->machineRepository = $machineRepository;
+        $this->templateRepository = $templateRepository;
         $this->pdf = $pdf;
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->manager = $manager;
@@ -68,7 +72,7 @@ class WorkorderController extends AbstractController
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
-        //dd($workorders);
+
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('workorder/_workorders.html.twig', ['workorders' => $workorders]),
@@ -93,7 +97,6 @@ class WorkorderController extends AbstractController
 
         $workorder = new Workorder();
         $workorder->setPreventive(false);
-        $workorder->setTemplate(false);
         $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         $workorder->setOrganisation($organisation);
 
@@ -108,6 +111,7 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($workorder);
             $workorder->setUser($user);
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
@@ -143,6 +147,7 @@ class WorkorderController extends AbstractController
      */
     public function edit(Workorder $workorder, $machine = null, Request $request): Response
     {
+        //dd($workorder);
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
         if ($machine) {
@@ -153,11 +158,12 @@ class WorkorderController extends AbstractController
             $id = $machine;
             $workorder->addMachine($this->machineRepository->find($id));
         }
-
+        //dd($workorder);
         $form = $this->createForm(WorkorderEditType::class, $workorder);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($workorder);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute(
@@ -195,8 +201,36 @@ class WorkorderController extends AbstractController
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        $status = $this->statusRepository->findOneBy(['name' => 'CLOTURE']);
-        $workorder->setWorkorderStatus($status);
+        dd($workorder);
+        // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
+        if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
+            if ($workorder->getPreventive()) {
+                // récupération du template
+                $templateNumber = $workorder->getTemplateNumber();
+                $template = $this->templateRepository->findOneBy(['templateNumber' => $templateNumber]);
+                $period = $template->getPeriod() * 24 * 60 * 60;
+                $oldNextDate = $template->getNextDate()->getTimeStamp();
+                $today = (new \DateTime())->getTimeStamp();
+
+                // Si glissant, affection de la date du jour à la période
+                $date = new \DateTime();
+                if ($template->getSliding()) {
+                    $date->setTimestamp($today + $period);
+                    $template->setNextDate($date);
+                } else { // Sinon, affection de l'ancienne date à la période
+                    $date->setTimestamp($oldNextDate + $period);
+                    $template->setNextDate($date);
+                }
+            }
+
+            $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
+            $workorder->setWorkorderStatus($status);
+        }else{
+            $this->addFlash('error', 'Il manque des infos de durée d\'intervention');
+            return $this->redirectToRoute('work_order_edit', [
+                'id' => $workorder->getId(),
+            ], Response::HTTP_SEE_OTHER);
+        }
         $this->manager->flush();
 
         return $this->redirectToRoute('work_order_index', [], Response::HTTP_SEE_OTHER);

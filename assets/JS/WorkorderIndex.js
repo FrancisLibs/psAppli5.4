@@ -17,10 +17,6 @@ export class WorkorderIndex {
     this.content = element.querySelector(".js-filter-content");
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
-    console.log(this.form);
-    console.log(this.content);
-    console.log(this.sorting);
-    console.log(this.pagination);
     this.bindEvents();
   }
 
@@ -83,10 +79,16 @@ export class WorkorderIndex {
     selectForm.forEach((select) => {
       select.addEventListener("change", this.loadForm.bind(this));
     });
+
+    const checkbox = this.form.querySelectorAll("input");
+    checkbox.forEach((checkbox) => {
+      checkbox.addEventListener("change", this.loadForm.bind(this));
+    });
   }
 
   async loadForm() {
     const data = new FormData(this.form);
+
     const url = new URL(
       this.form.getAttribute("action") || window.location.href
     );
@@ -95,6 +97,7 @@ export class WorkorderIndex {
     data.forEach((value, key) => {
       params.append(key, value);
     });
+    console.log(url.pathname + "?" + params.toString());
     return this.loadUrl(url.pathname + "?" + params.toString());
   }
 

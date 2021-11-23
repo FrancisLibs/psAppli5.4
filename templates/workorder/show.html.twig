@@ -4,10 +4,14 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-7 offset-1">
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <h3>Bon de Travail</h3>
+        <div class="col-6 offset-1">
+            <div class="row justify-content-between">
+                <div class="col-6">
+                    {% if workorder.preventive %}
+                        <h3>Bon de Travail préventif</h3>
+                    {% else %}
+                        <h3>Bon de Travail</h3>
+                    {% endif %}
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
                     {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a> #}

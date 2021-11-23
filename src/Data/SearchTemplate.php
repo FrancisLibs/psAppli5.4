@@ -2,12 +2,12 @@
 
 namespace App\Data;
 
-class SearchPreventive 
+class SearchTemplate 
 {
     /**
      * Numéro de page pour knp_paginator
      *
-     * @var page
+     * @var int 
      */
     public $page = 1;
 
@@ -24,11 +24,4 @@ class SearchPreventive
      * @var organisation
      */
     public $organisation;
-
-    /**
-     * Preventive
-     *
-     * @var preventive
-     */
-    public $preventive;
 }

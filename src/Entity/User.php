@@ -114,9 +114,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Template::class, mappedBy="user")
+     */
+    private $templates;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
+        $this->templates = new ArrayCollection();
     }
 
     /**
@@ -380,5 +386,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             $this->username,
             $this->password
         ) = unserialize($serialized, ['allowed classes' => false]);
+    }
+
+    /**
+     * @return Collection|Template[]
+     */
+    public function getTemplates(): Collection
+    {
+        return $this->templates;
+    }
+
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->templates->contains($template)) {
+            $this->templates[] = $template;
+            $template->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTemplate(Template $template): self
+    {
+        if ($this->templates->removeElement($template)) {
+            // set the owning side to null (unless already changed)
+            if ($template->getUser() === $this) {
+                $template->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

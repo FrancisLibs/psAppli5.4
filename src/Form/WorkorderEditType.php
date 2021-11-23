@@ -31,11 +31,6 @@ class WorkorderEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('machine', EntityType::class, [
-            //     'placeholder'   =>  'Machine (Choisir un atelier...)',
-            //     'class' => Machine::class,
-            //     'choice_label'  =>  'designation',
-            // ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
                 'choices'  => [
@@ -75,18 +70,14 @@ class WorkorderEditType extends AbstractType
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,
-                // 'format' => 'HHmm'
             ])
             ->add('durationDay', TextType::class, [
-                'disabled' =>  true,
                 'label' =>  'jours',
             ])
             ->add('durationHour', TextType::class, [
-                'disabled' =>  true,
                 'label' =>  'Heures'
             ])
             ->add('durationMinute', TextType::class, [
-                'disabled' =>  true,
                 'label' =>  'Minutes'
             ])
             ->add('stopTimeHour', TextType::class, [

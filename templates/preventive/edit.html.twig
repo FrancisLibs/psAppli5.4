@@ -10,9 +10,9 @@
                     <h2>Edition bon de travail préventif</h2>
                 </div>
                 <div class="d-flex justify-content-start">
-                    <a class="btn btn-primary btn-sm mr-3" href="{{ path('preventive_index') }}" role="button">Liste des BT</a>
+                    <a class="btn btn-primary btn-sm mr-3" href="{{ path('template_index') }}" role="button">Liste des BT</a>
                     {% if is_granted('ROLE_ADMIN') %}
-                        {{ include('workorder/_delete_form.html.twig') }}
+                        {{ include('preventive/_delete_form.html.twig') }}
                     {% endif %}
                 </div>
             </div>
@@ -25,13 +25,13 @@
                     <h4>Machine(s)</h4>
                 </div>
                 <div class="col-2">
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'workorderId': workorder.id, 'mode': mode}) }}" role="button">Ajouter machine</a>
+                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'templateId': template.id, 'mode': mode}) }}" role="button">Ajouter machine</a>
                 </div>
                  <div class="inline-flex justify-content-start">
-                    {% for machine in workorder.machines %}
+                    {% for machine in template.machines %}
                         <div class="d-flex justify-content-start align-items-center border border-dark rounded mb-1 p-1">
                             <span>{{ machine.designation }}</span>
-                            <a href="{{ path('preventive_machine_remove', {'id': workorder.id, 'machine': machine.id })}}" class="ml-2  btn btn-warning btn-sm">Supp</a>
+                            <a href="{{ path('preventive_machine_remove', {'id': template.id, 'machine': machine.id })}}" class="ml-2  btn btn-warning btn-sm">Supp</a>
                         </div>
                     {% endfor %}
                 </div>
@@ -42,5 +42,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {# {{ encore_entry_script_tags('editWorkorder') }} #}
+    {# {{ encore_entry_script_tags('editTemplate') }} #}
 {% endblock %}

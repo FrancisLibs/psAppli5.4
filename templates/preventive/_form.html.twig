@@ -24,21 +24,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-3">
-                {{ form_label(form.schedule.period) }}  
-                {{ form_widget(form.schedule.period) }} 
+            <div class="col-2">
+                {{ form_label(form.period) }}  
+                {{ form_widget(form.period) }} 
             </div>
-            <div class="col-3">
-                {{ form_label(form.schedule.nextDate) }}  
-                {{ form_widget(form.schedule.nextDate) }} 
+            <div class="col-2">
+                {{ form_label(form.sliding) }}  
+                {{ form_widget(form.sliding) }} 
             </div>
-            <div class="col-3">
-                {{ form_label(form.schedule.daysBefore) }}  
-                {{ form_widget(form.schedule.daysBefore) }} 
+            <div class="col-2">
+                {{ form_label(form.nextDate) }}  
+                {{ form_widget(form.nextDate) }} 
             </div>
-            <div class="col-3">
-                {{ form_label(form.schedule.duration) }}  
-                {{ form_widget(form.schedule.duration) }} 
+            <div class="col-2">
+                {{ form_label(form.daysBefore) }}  
+                {{ form_widget(form.daysBefore) }} 
+            </div>
+            <div class="col-2">
+                {{ form_label(form.daysBeforeLate) }}  
+                {{ form_widget(form.daysBeforeLate) }} 
+            </div>
+            <div class="col-2">
+                {{ form_label(form.duration) }}  
+                {{ form_widget(form.duration) }} 
             </div>
         </div>
         <div class="row mt-3">

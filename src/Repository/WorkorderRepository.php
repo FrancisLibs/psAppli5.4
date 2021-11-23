@@ -21,19 +21,17 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les bons de travail de la page d'accueil
-     *
-     * @param SearchWorkorder $search
-     * @return PaginationInterface
+     * Récupère tous le bons de travail d'une organisation
+     * @param int $organisation
+     * @return Workorder[] Returns an array of workorder
      */
-    public function findAllWorkorders($organisation)
+
+    public function findByOrganisation($organisation)
     {
         return $this->createQueryBuilder('w')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisation)
-            ->andWhere('w.template = :enabled')
-            ->setParameter('enabled', false)
-            ->orderBy('w.id', 'ASC')
+            ->orderBy('w.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -47,7 +45,7 @@ class WorkorderRepository extends ServiceEntityRepository
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
         $query = $this->createQueryBuilder('w')
-            ->orderBy('w.createdAt', 'ASC')
+            ->orderBy('w.id', 'DESC')
             ->select('w', 'm', 'u', 'o', 's')
             ->join('w.machines', 'm')
             ->join('w.user', 'u')
@@ -55,8 +53,6 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $search->organisation)
-            ->andWhere('w.template = :disabled')
-            ->setParameter('disabled', false)
         ;
 
         if (!empty($search->machine)) {
@@ -77,50 +73,10 @@ class WorkorderRepository extends ServiceEntityRepository
                 ->setParameter('status', $search->status);
         }
 
-        $query = $query->getQuery();
-
-        return $this->paginator->paginate(
-            $query,
-            $search->page,
-            15
-        );
-    }
-
-    /**
-     * @return Workorder[] Returns an array of workorder
-     */
-
-    public function findByOrganisation($organisation)
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.organisation = :val')
-            ->setParameter('val', $organisation)
-            ->orderBy('w.createdAt', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Récupère les bons de travail préventifs liés à une recherche
-     *
-     * @param SearchWorkorder $search
-     * @return PaginationInterface
-     */
-    public function findPreventiveWorkorders(SearchPreventive $search): PaginationInterface
-    {
-        $query = $this->createQueryBuilder('w')
-            ->orderBy('w.createdAt', 'ASC')
-            ->select('w', 'm')
-            ->join('w.machines', 'm')
-            ->andWhere('w.organisation = :val')
-            ->setParameter('val', $search->organisation)
-            ->andWhere('w.preventive = :enabled')
-            ->setParameter('enabled', true);
-
-        if (!empty($search->machine)) {
+        if (!empty($search->preventive)) {
             $query = $query
-                ->andWhere('m.designation LIKE :machine')
-                ->setParameter('machine', "%{$search->machine}%");
+                ->andWhere('w.preventive = :disabled')
+                ->setParameter('disabled', $search->preventive);
         }
 
         $query = $query->getQuery();
@@ -133,21 +89,32 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les bons de travail de la page d'accueil
+     * Compte les BT préventifs avec un numéro de template
      *
-     * @param SearchWorkorder $search
-     * @return PaginationInterface
+     * @param int $templateNumber
      */
-    public function findLastTemplate($organisation)
+    public function countPreventiveWorkorder($templateNumber){
+        return $this->createQueryBuilder('w')
+        ->select('count(w.id)')
+        ->andWhere('w.templateNumber = :val')
+        ->setParameter('val', $templateNumber)
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
+    /**
+     * Récupère les bons de travail préventifs
+     *
+     * @param int $organisationId
+     */
+    public function findAllPreventiveWorkorders($organisationId)
     {
         return $this->createQueryBuilder('w')
             ->andWhere('w.organisation = :val')
-            ->setParameter('val', $organisation)
-            ->andWhere('w.template = :enabled')
+            ->setParameter('val', $organisationId)
+            ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true)
-            ->orderBy('w.id', 'DESC')
-            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
     }
 }

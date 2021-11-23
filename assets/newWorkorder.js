@@ -1,5 +1,5 @@
 window.onload = () => {
-  // Gestion du bouton copier entre demande et réalisation
+  // Gestion du bouton copier entre demande et réalisation-----------
   let button = document.querySelector("#btn_copy");
   let workorderForm = document.forms.workorder;
   let workorderFormRequest = workorderForm["workorder[request]"];
@@ -8,6 +8,7 @@ window.onload = () => {
     e.preventDefault();
     workorderFormImplementation.value = workorderFormRequest.value;
   });
+  // -------------------------------------------------------------------
 
   // Gestion du temps de l'intervention
   // Date et heure de début
@@ -25,8 +26,8 @@ window.onload = () => {
     let heureF = heureFin.substr(0, 2);
     let minuteF = heureFin.substr(3, 2);
 
-    let dateD = new Date(startDate.value);
-    let dateF = new Date(endDate.value);
+    let dateD = new Date(startDate);
+    let dateF = new Date(endDate);
 
     dateD.setHours(heureD);
     dateD.setMinutes(minuteD);
@@ -46,27 +47,11 @@ window.onload = () => {
       let resteHeure = Math.floor(resteJour - heures * 3600);
       let minutes = Math.floor(resteHeure / 60);
       let secondes = Math.floor(resteHeure - minutes * 60);
-
+     
       // Affichage
       workorderForm["workorder[durationDay]"].value = jours;
       workorderForm["workorder[durationHour]"].value = heures;
       workorderForm["workorder[durationMinute]"].value = minutes;
     }
   });
-
-  // time_zone.addEventListener("keyUp", function (e) {
-  //   e.preventDefault();
-  //   // Lecture des valeurs de durée
-  //   let durationDay = workorderForm["workorder[durationDay]"].value;
-  //   let durationHour = workorderForm["workorder[durationHour]"].value;
-  //   let durationMinute = workorderForm["workorder[durationMinute]"].value;
-
-  //   if(durationDay > 0){
-
-  //   }
-  //   if (durationHour > 0) {
-  //   }
-  //   if (durationminute > 0) {
-  //   }
-  // });
 };

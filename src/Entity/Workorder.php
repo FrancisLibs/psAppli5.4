@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Workorder
 {
-       // Type
+    // Type
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
@@ -26,125 +26,169 @@ class Workorder
     private $id;
 
     /**
+     * Date de la création du BT
+     * 
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
+     * Date de début de l'intervention
+     * 
      * @ORM\Column(type="date", nullable=true)
      * @Assert\NotBlank
      */
     private $startDate;
 
     /**
+     * Heure de début de l'intervention
+     * 
      * @ORM\Column(type="time", nullable=true)
      * @Assert\NotBlank
      */
     private $startTime;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * Date de fin d'intervention
      * 
+     * @ORM\Column(type="date", nullable=true)
      */
     private $endDate;
 
     /**
+     * Heure de fin d'intervention
+     * 
      * @ORM\Column(type="time", nullable=true)
      */
     private $endTime;
 
     /**
+     * Technicien de l'intervention
+     * 
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workorders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * Remarque sur l'intervention
+     * 
      * @ORM\Column(type="text", nullable=true)
      */
     private $remark;
 
     /**
+     * Demande du travail
+     * 
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank
      */
     private $request;
 
     /**
+     * Travaux réalisés
+     * 
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $implementation;
 
     /**
+     * Organisation liée à l'intervention
+     * 
      * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="workorders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $organisation;
 
     /**
+     * Type d'intervention (Curatif, Préventif, Amélioratif)
+     * 
      * @ORM\Column(type="integer")
      */
     private $type;
 
     /**
+     * Durée en jours
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $durationDay;
 
     /**
+     * Durée en heures
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $durationHour;
 
     /**
+     * Durée en minutes
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $durationMinute;
 
     /**
+     * Arrêt machine en heures
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $stopTimeHour;
 
     /**
+     * Arrêt machine en minutes
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $stopTimeMinute;
 
     /**
+     * Pièces détachées ratachées à l'intervention
+     * 
      * @ORM\OneToMany(targetEntity=WorkorderPart::class, mappedBy="workorder", orphanRemoval=true)
      */
     private $workorderParts;
 
     /**
+     * Machines de l'intervention
+     * 
      * @ORM\ManyToMany(targetEntity=Machine::class, inversedBy="workorders")
      */
     private $machines;
 
     /**
+     * Est-ce un préventif ?
+     * 
      * @ORM\Column(type="boolean")
      */
     private $preventive;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $template;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Schedule::class, mappedBy="workorder", cascade={"persist", "remove"})
-     */
-    private $schedule;
-
-    /**
+     * Le numéro de template si préventif
+     * 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $templateNumber;
 
     /**
+     * Le statut du BT
      * @ORM\ManyToOne(targetEntity=WorkorderStatus::class, inversedBy="workorders")
      */
     private $workorderStatus;
+
+    /**
+     * Date de réalisation demandée par le préventif
+     * 
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $preventiveDate;
+
+    /**
+     * Nb de jours avant d'être en retard (préventif)
+     * 
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $daysBeforeLate;
 
     public function __construct()
     {
@@ -416,40 +460,6 @@ class Workorder
         return $this;
     }
 
-    public function getTemplate(): ?bool
-    {
-        return $this->template;
-    }
-
-    public function setTemplate(?bool $template): self
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    public function getSchedule(): ?Schedule
-    {
-        return $this->schedule;
-    }
-
-    public function setSchedule(?Schedule $schedule): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($schedule === null && $this->schedule !== null) {
-            $this->schedule->setWorkorder(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($schedule !== null && $schedule->getWorkorder() !== $this) {
-            $schedule->setWorkorder($this);
-        }
-
-        $this->schedule = $schedule;
-
-        return $this;
-    }
-
     public function getTemplateNumber(): ?int
     {
         return $this->templateNumber;
@@ -470,6 +480,30 @@ class Workorder
     public function setWorkorderStatus(?WorkorderStatus $workorderStatus): self
     {
         $this->workorderStatus = $workorderStatus;
+
+        return $this;
+    }
+
+    public function getPreventiveDate(): ?\DateTimeInterface
+    {
+        return $this->preventiveDate;
+    }
+
+    public function setPreventiveDate(?\DateTimeInterface $preventiveDate): self
+    {
+        $this->preventiveDate = $preventiveDate;
+
+        return $this;
+    }
+
+    public function getDaysBeforeLate(): ?int
+    {
+        return $this->daysBeforeLate;
+    }
+
+    public function setDaysBeforeLate(?int $daysBeforeLate): self
+    {
+        $this->daysBeforeLate = $daysBeforeLate;
 
         return $this;
     }

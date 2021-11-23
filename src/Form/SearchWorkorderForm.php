@@ -8,6 +8,7 @@ use App\Entity\WorkorderStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -22,7 +23,6 @@ class SearchWorkorderForm extends AbstractType
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Machine...']
             ])
-
             ->add('user', EntityType::class, [
                 'class'     => User::class,
                 'choice_label'   =>  'userName',
@@ -30,7 +30,6 @@ class SearchWorkorderForm extends AbstractType
                 'required'  => false,
                 'placeholder' => 'Technicien...',
             ])
-
             ->add('status', EntityType::class, [
                 'class'     => WorkorderStatus::class,
                 'choice_label'   =>  'name',
@@ -38,6 +37,10 @@ class SearchWorkorderForm extends AbstractType
                 'required'  => false,
                 'placeholder' => 'Status...',
 
+            ])
+            ->add('preventive', CheckboxType::class, [
+                'label'     => 'Préventif',
+                'required'  => false,
             ]);
     }
 

@@ -4,20 +4,17 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-7 offset-1">
-            <div class="row align-items-center">
+        <div class="col-6 offset-1">
+            <div class="row justify-content-between">
                 <div class="col-5">
                     <h3>Bon de Travail préventif</h3>
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
-                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a> #}
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('preventive_index') }}" role="button">Liste BT</a>
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('preventive_edit', {'id': workorder.id}) }}">Edition</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-danger btn-sm mr-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
-                    {% endif %}
-                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Pdf</a> #}
-                    {# {{ include('workorder/_delete_form.html.twig') }} #}
+                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': template.id}) }}">Pièces détachées</a> #}
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('template_index') }}" role="button">Liste BT</a>
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('template_edit', {'id': template.id}) }}">Edition</a>
+                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('pdf_workorder', {'id': template.id}) }}">Pdf</a> #}
+                    {{ include('preventive/_delete_form.html.twig') }}
                 </div>
             </div>
         </div>
