@@ -19,7 +19,8 @@ class PartType extends AbstractType
             ->add('reference')
             ->add('code')
             ->add('remark', TextareaType::class, [
-                'label' =>  'Remarque'
+                'label' => 'Remarque',
+                'required' => false,
             ])
             ->add('stock', StockType::class)
         ;

@@ -3,12 +3,13 @@
 {% block title %}Provider index{% endblock %}
 
 {% block body %}
-    <h1>Provider index</h1>
+    <h1>Fournisseurs</h1>
 
-    <table class="table">
+    <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Code</th>
                 <th>Name</th>
                 <th>Address</th>
                 <th>PostalCode</th>
@@ -22,6 +23,7 @@
         {% for provider in providers %}
             <tr>
                 <td>{{ provider.id }}</td>
+                <td>{{ provider.code }}</td>
                 <td>{{ provider.Name }}</td>
                 <td>{{ provider.address }}</td>
                 <td>{{ provider.postalCode }}</td>

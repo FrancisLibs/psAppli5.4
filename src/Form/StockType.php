@@ -24,7 +24,9 @@ class StockType extends AbstractType
                 'label' => 'Qte en commande'
             ])
             ->add('steadyPrice', IntegerType::class, [
-                'label' => 'Prix'
+                'label' => 'Prix',
+                'required' => false,
+
             ]);
     }
 
