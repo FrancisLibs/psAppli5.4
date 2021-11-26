@@ -35,21 +35,21 @@ class MachineController extends AbstractController
     /**
      * @ Liste des machines
      * 
-     * @Route("/list/{mode?}/{templateId?}", name="machine_index", methods={"GET"})
+     * @Route("/list/{mode?}/{documentId?}", name="machine_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param   Request $request
      * @param   string  $mode
-     * @param   int     $templateId
+     * @param   int     $documentId
      * 
      * @return  Response
      */
-    public function index(Request $request, string $mode = null, int $templateId = null): Response
-    {
+    public function index(Request $request, string $mode = null, ?int $documentId): Response
+    { 
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
-        // En mode "selectPréventive" ou "editpreventive"
+        // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
         if ($mode == "selectPreventive" || $mode == 'editPreventive') {
             $machines = $session->get('machines');
@@ -76,7 +76,7 @@ class MachineController extends AbstractController
 
         if ($request->get('ajax') && $mode == 'modif') {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'workorderId' => $workorderId]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'documentId' => $documentId]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
@@ -84,7 +84,7 @@ class MachineController extends AbstractController
 
         if ($request->get('ajax') && ($mode == 'selectPreventive' || $mode = 'editPreventive')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'workorderId' => $workorderId]),
+                'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode, 'documentId' => $documentId]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
@@ -101,8 +101,9 @@ class MachineController extends AbstractController
             'machines'      =>  $machines,
             'form'          =>  $form->createView(),
             'mode'          =>  $mode,
-            'templateId'    =>  $templateId,
+            'documentId'    =>  $documentId,
             'machinesWithData'  =>  $machinesWithData,
+
         ]);
     }
 

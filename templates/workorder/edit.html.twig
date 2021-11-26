@@ -22,20 +22,31 @@
             </div>
         </div>
     </div>
-    <article class="row">
+    <article class="row mt-5">
         <div class="col-8 offset-2 mt-4">
-            <div class="row align-items-center">
+            <div class="row">
                 <div class="col-2 text-primary">
-                    <h4>Machine</h4>
+                    <h4>Machine(s)</h4>
                 </div>
-                 <div class="col-4">
-                    {% for machine in workorder.machines %}
-                        {{ machine.designation }}
-                    {% endfor %}
-                </div>
-                <div class="col-3">
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'workorderId': workorder.id}) }}" role="button">Changer de machine</a>
-                </div>
+                 <table class="table col-5 table-sm table-striped">
+                    <thead>
+                        <th>Code</th>
+                        <th class="text-center">Désignation</th>
+                    </thead>
+                    <tbody>
+                        {% for machine in workorder.machines %}
+                            <tr>
+                                <td>{{ machine.internalCode }}</td>
+                                <td class="text-center">{{ machine.designation }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                 {% if not workorder.preventive %}
+                    <div class="col-3">
+                        <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'documentId': workorder.id}) }}" role="button">Changer de machine</a>
+                    </div>
+                {% endif %}
             </div>
             
             {% if edit %}

@@ -37,7 +37,7 @@ class MachineCartController extends AbstractController
 
     /**
      * 
-     * @Route("/add/{id}/{mode}/{templateId?}", name="add_machine_to_cart", methods={"GET"})
+     * @Route("/add/{id}/{mode}/{documentId?}", name="add_machine_to_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request   $request
@@ -46,7 +46,7 @@ class MachineCartController extends AbstractController
      * 
      * @return redirectToRoute
      */
-    public function addMachine(Request $request, int $id, $mode = null, int $templateId = null): Response
+    public function addMachine(Request $request, int $id, $mode = null, ?int $documentId): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -58,18 +58,18 @@ class MachineCartController extends AbstractController
 
         return $this->redirectToRoute('machine_index', [
             'mode' => $mode,
-            'templateId'   => $templateId,
+            'documentId'   => $documentId,
         ]);
     }
 
     /**
      * 
-     * @Route("/remove/{id}/{mode}/{templateId?}", name="remove_machine_from_cart", methods={"GET"})
+     * @Route("/remove/{id}/{mode}/{documentId?}", name="remove_machine_from_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @return RedirectResponse
      */
-    public function removeMachine(int $id, string $mode, ?int $templateId): Response
+    public function removeMachine(int $id, string $mode, ?int $documentId): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -78,18 +78,17 @@ class MachineCartController extends AbstractController
         $session->set('machines', $machines);
 
         if ($mode == 'newPreventive') {
-            return $this->redirectToRoute('preventive_new', [
-                'mode' => $mode,
-            ]);
+            return $this->redirectToRoute('template_new');
         }
         if ($mode == 'editPreventive') {
-            return $this->redirectToRoute('preventive_edit', [
+            return $this->redirectToRoute('machine_index', [
+                'documentId' => $documentId,
                 'mode' => $mode,
             ]);
         }
         return $this->redirectToRoute('machine_index', [
             'mode'  =>  "editPreventive",
-            'templateId'   =>  $templateId,
+            'templateId'   =>  $documentId,
         ]);
     }
 }

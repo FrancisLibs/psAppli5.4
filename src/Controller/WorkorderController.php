@@ -24,6 +24,8 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use function PHPUnit\Framework\isEmpty;
+
 /**
  * @Route("/work/order")
  */
@@ -111,11 +113,14 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($workorder);
             $workorder->setUser($user);
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
+            if ($workorder->getMachines()->isEmpty()) {
+                $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
+                return $this->redirectToRoute('work_order_new');
+            }
             $this->manager->persist($workorder);
             $this->manager->flush();
 
@@ -147,7 +152,6 @@ class WorkorderController extends AbstractController
      */
     public function edit(Workorder $workorder, $machine = null, Request $request): Response
     {
-        //dd($workorder);
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
         if ($machine) {
@@ -158,12 +162,12 @@ class WorkorderController extends AbstractController
             $id = $machine;
             $workorder->addMachine($this->machineRepository->find($id));
         }
-        //dd($workorder);
+
         $form = $this->createForm(WorkorderEditType::class, $workorder);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($workorder);
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute(
@@ -225,7 +229,7 @@ class WorkorderController extends AbstractController
 
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
             $workorder->setWorkorderStatus($status);
-        }else{
+        } else {
             $this->addFlash('error', 'Il manque des infos de durée d\'intervention');
             return $this->redirectToRoute('work_order_edit', [
                 'id' => $workorder->getId(),

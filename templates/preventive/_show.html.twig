@@ -1,73 +1,80 @@
 
 <div class="row">
     <div class="col-5 d-flex justify-content-between">
-        <div>
-            <span>Numéro : </span>
-            <span class="champs_bt text-center">{{ template.templateNumber }}</span>
+        <div class="d-flex justify-content-start">
+            <h4 class="text-primary">Numéro : </h4>
+            <h5 class="champs_bt text-center">{{ template.templateNumber }}</h5>
         </div>
-        <div>
-            <span>Créé le : </span>
-            <span class="champs_bt text-center">{{ template.createdAt ? template.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</span>
+        <div class="d-flex justify-content-start">
+            <h4 class="text-primary">Créé le : </h4>
+            <h5 class="champs_bt text-center">{{ template.createdAt ? template.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</h5>
         </div>
-        <div>
-            <span>Par : </span>
-            <span class="champs_bt text-center">{{ template.user.firstName }}</span>
+        <div class="d-flex justify-content-start">
+            <h4 class="text-primary">Par : </h4>
+            <h5 class="champs_bt text-center">{{ template.user.firstName }}</h5>
         </div>
     </div>
+</div>
+<div class="row mt-4">
+    <div class="col-2">
+        <h4 class="text-primary">Machine(s) : </h4>
+    </div>
+    <div class="col-4">
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Numéro</th>
+                    <th class="text-center" scope="col">Désignation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for machine in template.machines %}
+                    <tr>
+                        <td>{{ machine.internalCode }}</td>
+                        <td class="text-center">{{ machine.designation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    {% if template.request %}
+        <div class="col-12 d-flex justify-content-start align-itmes-baseline mt-2">
+            <h4 class="text-primary">Demande : </h4>
+            <p class="champs_bt">{{ template.request }}</p>
+        </div>
+        {% endif %}
+    {% if template.remark %}
+        <div class="col-12 d-flex justify-content-start align-itmes-baseline mt-2">
+            <h4 class="text-primary">Remarque : </h4>
+            <p class="champs_bt">{{ template.remark }}</p>
+        </div>
+    {% endif %}
 </div>
 <div class="row mt-3">
-    <div class="col-7">
-        <div class="row">
-            <div class="col-2">
-                <p>Machine(s) : </p>
-            </div>
-            <div class="col-7 d-flex justify-content-start flex-wrap mt-2">
-                {% for machine in template.machines %}
-                    <p class="champs_bt border border-dark rounded px-2">{{ machine.designation }}</p>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="row">
-            {% if template.request %}
-                <div class="col-12 d-flex justify-content-start mt-2">
-                    <p>Demande : </p>
-                    <p class="champs_bt">{{ template.request }}</p>
-                </div>
-             {% endif %}
-            {% if template.remark %}
-                <div class="col-12 d-flex justify-content-start mt-2">
-                    <p>Remarque</p>
-                    <p class="champs_bt">{{ template.remark }}</p>
-                </div>
-            {% endif %}
-        </div>
-        <div class="row mt-3">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Période</th>
-                        <th scope="col" class="text-center">Glissant</th>
-                        <th scope="col" class="text-center">Prochaine date</th>
-                        <th scope="col" class="text-center">Préparation</th>
-                        <th scope="col" class="text-center">Durée</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ template.period }}</td>
-                        {% if template.sliding %}
-                            <td class="text-center">OUI</td>
-                        {% else %}
-                            <td class="text-center">NON</td>
-                        {% endif %}
-                        <td class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
-                        <td class="text-center">{{ template.daysBefore }}</td>
-                        <td class="text-center">{{ template.duration }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="table col-7">
+        <thead>
+            <tr>
+                <th scope="col">Période</th>
+                <th scope="col" class="text-center">Glissant</th>
+                <th scope="col" class="text-center">Prochaine date</th>
+                <th scope="col" class="text-center">Préparation</th>
+                <th scope="col" class="text-center">Durée</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ template.period }}</td>
+                {% if template.sliding %}
+                    <td class="text-center">OUI</td>
+                {% else %}
+                    <td class="text-center">NON</td>
+                {% endif %}
+                <td class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
+                <td class="text-center">{{ template.daysBefore }}</td>
+                <td class="text-center">{{ template.duration }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
-

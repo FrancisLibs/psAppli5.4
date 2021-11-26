@@ -55,7 +55,6 @@ window.onload = () => {
 
     // Test si calcul possible il faut que l'heure de fin soit définie
     if (params.heureF && params.minuteF) {
-      console.log("ok");
       //Calcul de la durée
       let diffTemps = Math.abs(params.dateF - params.dateD);
       diffTemps = diffTemps / 1000;
@@ -75,7 +74,7 @@ window.onload = () => {
     }
   }
 
-  // // Si modif case duration (jours, heures ou minutes) calcul des autres données
+  // Si modif case duration (jours, heures ou minutes) calcul des autres données
   function duration() {
     let params = readParams();
     // Création objet Date
@@ -99,9 +98,18 @@ window.onload = () => {
     let newCalculateDate = new Date(newDate).toISOString().substring(0, 10);
     let newCalculateTime = new Date(newDate).toISOString().substring(11, 16);
 
-    console.log(newCalculateTime);
     workorderForm["workorder_edit[endDate]"].value = newCalculateDate;
     workorderForm["workorder_edit[endTime]"].value = newCalculateTime;
+
+    if (workorderForm["workorder_edit[endTime]"].value == "") {
+      workorderForm["workorder_edit[endTime]"].value = 0;
+    }
+    if (workorderForm["workorder_edit[durationDay]"].value == "") {
+      workorderForm["workorder_edit[durationDay]"].value = 0;
+    }
+    if (workorderForm["workorder_edit[durationHour]"].value == "") {
+      workorderForm["workorder_edit[durationHour]"].value = 0;
+    }
   }
 
   // Calcul des temps au moment du chargement de la page

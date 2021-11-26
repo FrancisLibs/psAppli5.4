@@ -53,7 +53,7 @@ class Machine
     /**
      * @ORM\Column(type="string", length=15)
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-zA-Z]{6}[0-9]{5}$/")
+     * @Assert\Regex("/^[a-zA-Z]{6}[0-9]{4}$/")
      * message="Le code ne respecte pas le format !"
      */
     private $internalCode;

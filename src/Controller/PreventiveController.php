@@ -136,8 +136,9 @@ class PreventiveController extends AbstractController
                 // Activation du template
                 $template->setActive(true);
 
+                $this->manager->persist($template);
                 $this->manager->flush();
-
+                
                 return $this->render('preventive/show.html.twig', [
                     'template' => $template
                 ]);
@@ -225,9 +226,7 @@ class PreventiveController extends AbstractController
         $template->removeMachine($machine);
         $this->manager->flush();
 
-        return $this->redirectToRoute(
-            'preventive_edit',
-            [
+        return $this->redirectToRoute('template_edit', [
                 'id' => $template->getId()
             ],
             Response::HTTP_SEE_OTHER

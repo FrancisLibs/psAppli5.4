@@ -14,7 +14,9 @@
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('template_index') }}" role="button">Liste BT</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('template_edit', {'id': template.id}) }}">Edition</a>
                     {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('pdf_workorder', {'id': template.id}) }}">Pdf</a> #}
-                    {{ include('preventive/_delete_form.html.twig') }}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {{ include('preventive/_delete_form.html.twig') }}
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -3,20 +3,24 @@
 {% block title %}Machine{% endblock %}
 
 {% block body %}
-    <main class="row mt-5">
-        <section class="col-5">
-            <div class="row align-items-center">
-                <div class="col-3 mr-3">
-                    <h3>Machine</h3>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        {{ include('machine/_delete_form.html.twig') }}
-                    {% endif %}
-                </div>
+    <div class="row mt-5 mb-2">
+        <div class="col-6 d-flex justify-content-between align-items-center">
+            <h3 class="text-primary">Machine</h3>
+            <div class="d-flex justify-content-start">
+                <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
+                <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    {{ include('machine/_delete_form.html.twig') }}
+                {% endif %}
             </div>
+        </div>
+        <div class="col-6">
+            <h3 class="text-primary">Bons de travail</h3>
+        </div>
+    </div>
+
+    <article class="row">
+        <section class="col-6">
             <div class="border border-info rounded p-2">
                 <p><strong>Code : </strong>{{ machine.internalCode }}</p>
                 <p><strong>Nom : </strong>{{ machine.designation }}</p>
@@ -28,11 +32,26 @@
                 <p><strong>Atelier : </strong>{{ machine.workshop.name }}</p>
             </div>
         </section>
-        <section class="col-7">
-            {{ include('machine/_workorders.html.twig') }}
+        <section class="col-6">
+            <div>
+                {% if machine.workorders|length > 0 %}
+                    {{ include('machine/_workorders.html.twig') }}
+                {% else %}
+                    <span>Il n'y a aucun BT enregistré</span>
+                {% endif %}
+            </div>
         </section>
-        <section class="col-5 mt-3">
-            {{ include('machine/_parts.html.twig') }}
-        </section>
-    </main>
+    </article>
+    {% if machine.parts is not empty %}
+        <div class="row">  
+            <div class="col-6 mt-3">
+                <h3 class="text-primary">Pièces détachées</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 mt-2">
+                {{ include('machine/_parts.html.twig') }}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

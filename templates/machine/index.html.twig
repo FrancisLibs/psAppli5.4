@@ -15,7 +15,7 @@
                             <h5 class="text-primary mb-2">Machines du BT préventif : 
                                 {{ machinesWithData|length }}
                                 {% if mode == 'editPreventive' %}
-                                    <a href="{{ path('template_edit', {'id': templateId, 'mode': mode}) }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
+                                    <a href="{{ path('template_edit', {'id': documentId, 'mode': mode}) }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
                                 {% else %}
                                     <a href="{{ path('template_new') }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
                                 {% endif %}
@@ -25,7 +25,7 @@
                                     <div class="mr-3 border-dark border rounded p-1 mb-2">
                                         {{ machine.internalCode }} {{ machine.designation}}
                                         {% if( mode == 'editPreventive') %}
-                                            <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode, 'templateId': templateId}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
+                                            <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
                                         {% else %}
                                             <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
                                         {% endif %}
@@ -46,7 +46,7 @@
             {% include 'machine/_filter.html.twig' %}
         </aside>
         <article class="col-10">
-            {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, templateId: templateId} only %}
+            {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, documentId: documentId} only %}
         </article>
             {# display navigation #}
             <div class="col-5 offset-2 navigation js-filter-pagination">

@@ -25,7 +25,7 @@
                     <h4>Machine(s)</h4>
                 </div>
                 <div class="col-2">
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'templateId': template.id, 'mode': mode}) }}" role="button">Ajouter machine</a>
+                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'documentId': template.id, 'mode': mode}) }}" role="button">Ajouter machine</a>
                 </div>
                  <div class="inline-flex justify-content-start">
                     {% for machine in template.machines %}
@@ -42,5 +42,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {# {{ encore_entry_script_tags('editTemplate') }} #}
+    {{ encore_entry_script_tags('editWorkorder') }}
 {% endblock %}
