@@ -79,7 +79,7 @@ window.onload = () => {
     // Création objet Date
     let date = new Date(params.startDate);
     // Convertion en time stamp
-    dateTimeStamp = date.getTime();
+    let dateTimeStamp = date.getTime();
 
     // Ajout de l'heure et des minutes
     let hours = params.heureD * 60 * 60 * 1000;
