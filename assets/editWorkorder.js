@@ -40,7 +40,6 @@ window.onload = () => {
   function calcTemps() {
     // Lecture des champs début intervention et création d'un dateTime
     let params = readParams();
-    console.log(params);
 
     params.dateD.setHours(params.heureD);
     params.dateD.setMinutes(params.minuteD);
@@ -80,12 +79,12 @@ window.onload = () => {
     // Création objet Date
     let date = new Date(params.startDate);
     // Convertion en time stamp
-    date_timeStamp = date.getTime();
+    dateTimeStamp = date.getTime();
 
     // Ajout de l'heure et des minutes
     let hours = params.heureD * 60 * 60 * 1000;
     let minutes = params.minuteD * 60 * 1000;
-    date_timeStamp = date_timeStamp + hours + minutes;
+    dateTimeStamp = dateTimeStamp + hours + minutes;
 
     // conversion des jours, heures, minutes en milisecondes
     let durationDay = params.durationDay * 24 * 60 * 60 * 1000;
@@ -93,7 +92,7 @@ window.onload = () => {
     let durationMinute = params.durationMinute * 60 * 1000;
 
     // Ajout du temps à la date et à l'heure de début
-    let newDate = date_timeStamp + durationDay + durationHour + durationMinute;
+    let newDate = dateTimeStamp + durationDay + durationHour + durationMinute;
 
     let newCalculateDate = new Date(newDate).toISOString().substring(0, 10);
     let newCalculateTime = new Date(newDate).toISOString().substring(11, 16);
@@ -101,13 +100,13 @@ window.onload = () => {
     workorderForm["workorder_edit[endDate]"].value = newCalculateDate;
     workorderForm["workorder_edit[endTime]"].value = newCalculateTime;
 
-    if (workorderForm["workorder_edit[endTime]"].value == "") {
+    if (workorderForm["workorder_edit[endTime]"].value === "") {
       workorderForm["workorder_edit[endTime]"].value = 0;
     }
-    if (workorderForm["workorder_edit[durationDay]"].value == "") {
+    if (workorderForm["workorder_edit[durationDay]"].value === "") {
       workorderForm["workorder_edit[durationDay]"].value = 0;
     }
-    if (workorderForm["workorder_edit[durationHour]"].value == "") {
+    if (workorderForm["workorder_edit[durationHour]"].value === "") {
       workorderForm["workorder_edit[durationHour]"].value = 0;
     }
   }

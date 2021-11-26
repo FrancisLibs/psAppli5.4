@@ -97,7 +97,6 @@ export class WorkorderIndex {
     data.forEach((value, key) => {
       params.append(key, value);
     });
-    console.log(url.pathname + "?" + params.toString());
     return this.loadUrl(url.pathname + "?" + params.toString());
   }
 
@@ -114,8 +113,6 @@ export class WorkorderIndex {
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
       history.replaceState({}, "", url);
-    } else {
-      console.error(response);
-    }
+    } 
   }
 }

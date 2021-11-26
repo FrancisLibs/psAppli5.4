@@ -107,8 +107,6 @@ export class MachineIndex {
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
       history.replaceState({}, "", url);
-    } else {
-      console.error(response);
-    }
+    } 
   }
 }

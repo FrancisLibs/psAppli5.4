@@ -17,10 +17,6 @@ export class PreventiveIndex {
     this.content = element.querySelector(".js-filter-content");
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
-    console.log(this.form);
-    console.log(this.content);
-    console.log(this.sorting);
-    console.log(this.pagination);
     this.bindEvents();
   }
 
@@ -111,8 +107,6 @@ export class PreventiveIndex {
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
       history.replaceState({}, "", url);
-    } else {
-      console.error(response);
     }
   }
 }
