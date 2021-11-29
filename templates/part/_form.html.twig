@@ -1,6 +1,7 @@
 {{ form_start(form) }}   
     <div class="row mb-3">
         <div class="col-3">
+            {{ form_errors(form.code) }} 
             {{ form_label(form.code) }}  
             {{ form_widget(form.code) }}  
         </div>
@@ -8,6 +9,10 @@
             {{ form_label(form.designation) }}
             {{ form_widget(form.designation) }}
         </div>
+    </div>
+    <div class="col-11 border border-info rounded">
+        <p>Le code, en majuscule, est composé d'un "C" majuscule (Charcuterie), 
+        de quatre caractères du nom de la pièce et d'un numéro d'ordre de 4 chiffres. Ex : CAIMA0048, pour aimant.</p>
     </div>
     <div class="row mb-3">
         <div class="col-6">
@@ -23,6 +28,7 @@
     </div>
     <div class="row mb-3">
         <div class="col-3">
+            {{ form_errors(form.stock.place) }}
             {{ form_label(form.stock.place) }}
             {{ form_widget(form.stock.place) }}
         </div>

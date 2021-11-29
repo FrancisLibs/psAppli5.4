@@ -205,7 +205,6 @@ class WorkorderController extends AbstractController
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        dd($workorder);
         // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
         if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
             if ($workorder->getPreventive()) {

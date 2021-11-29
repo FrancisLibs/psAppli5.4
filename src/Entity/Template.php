@@ -47,11 +47,6 @@ class Template
     private $organisation;
 
     /**
-     * @ORM\OneToMany(targetEntity=Part::class, mappedBy="template")
-     */
-    private $templatesParts;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Machine::class, inversedBy="templates")
      */
     private $machines;
@@ -98,10 +93,16 @@ class Template
      */
     private $sliding;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Part::class, mappedBy="template")
+     */
+    private $parts;
+
     public function __construct()
     {
         $this->templatesParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
+        $this->parts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,36 +166,6 @@ class Template
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Part[]
-     */
-    public function getTemplatesParts(): Collection
-    {
-        return $this->templatesParts;
-    }
-
-    public function addTemplatesPart(Part $templatesPart): self
-    {
-        if (!$this->templatesParts->contains($templatesPart)) {
-            $this->templatesParts[] = $templatesPart;
-            $templatesPart->setTemplate($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTemplatesPart(Part $templatesPart): self
-    {
-        if ($this->templatesParts->removeElement($templatesPart)) {
-            // set the owning side to null (unless already changed)
-            if ($templatesPart->getTemplate() === $this) {
-                $templatesPart->setTemplate(null);
-            }
-        }
 
         return $this;
     }
@@ -315,6 +286,33 @@ class Template
     public function setSliding(?bool $sliding): self
     {
         $this->sliding = $sliding;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Part[]
+     */
+    public function getParts(): Collection
+    {
+        return $this->parts;
+    }
+
+    public function addPart(Part $part): self
+    {
+        if (!$this->parts->contains($part)) {
+            $this->parts[] = $part;
+            $part->addTemplate($this);
+        }
+
+        return $this;
+    }
+
+    public function removePart(Part $part): self
+    {
+        if ($this->parts->removeElement($part)) {
+            $part->removeTemplate($this);
+        }
 
         return $this;
     }

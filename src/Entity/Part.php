@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PartRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PartRepository::class)
@@ -25,6 +26,8 @@ class Part
     /**
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
+     * @Assert\Regex("/^C[A-Z]{4}[0-9]{4}$/")
+     * message="Le code ne respecte pas le format !"
      */
     private $code;
 
@@ -72,19 +75,20 @@ class Part
     private $machines;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="templatesParts")
-     */
-    private $template;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="parts")
      */
     private $provider;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Template::class, inversedBy="parts")
+     */
+    private $template;
 
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
+        $this->template = new ArrayCollection();
     }
 
     
@@ -239,18 +243,6 @@ class Part
         return $this;
     }
 
-    public function getTemplate(): ?Template
-    {
-        return $this->template;
-    }
-
-    public function setTemplate(?Template $template): self
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
     public function getProvider(): ?Provider
     {
         return $this->provider;
@@ -259,6 +251,30 @@ class Part
     public function setProvider(?Provider $provider): self
     {
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Template[]
+     */
+    public function getTemplate(): Collection
+    {
+        return $this->template;
+    }
+
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->template->contains($template)) {
+            $this->template[] = $template;
+        }
+
+        return $this;
+    }
+
+    public function removeTemplate(Template $template): self
+    {
+        $this->template->removeElement($template);
 
         return $this;
     }

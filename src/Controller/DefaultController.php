@@ -80,7 +80,7 @@ class DefaultController extends AbstractController
     {
         // Recherche des templates préventifs
         $templates = $this->templateRepository->findAllTemplates($organisationId);
-
+        
         foreach ($templates as $template) {
             // Prochaine date en secondes
             $nextDate = $template->getNextDate()->getTimestamp(); // Date de réalisation

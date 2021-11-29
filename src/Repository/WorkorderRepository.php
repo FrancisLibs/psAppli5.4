@@ -29,8 +29,12 @@ class WorkorderRepository extends ServiceEntityRepository
     public function findByOrganisation($organisation)
     {
         return $this->createQueryBuilder('w')
+            ->select('w', 's')
+            ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisation)
+            ->andWhere('s.name <> :status')
+            ->setParameter('status', 'CLOTURE')
             ->orderBy('w.id', 'DESC')
             ->getQuery()
             ->getResult();

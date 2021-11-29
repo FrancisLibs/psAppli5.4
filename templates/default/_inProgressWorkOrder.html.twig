@@ -7,6 +7,7 @@
         </tr>
     </thead> #}
     <tbody>
+        {# {{ dump(workorders.machines) }} #}
         {% for workorder in workorders %}
             {% if workorder.preventive and workorder.workorderStatus.name == "EN_PREP." %}
                 <tr style="background-color: #81c2fb;">
@@ -22,6 +23,8 @@
                 <td>
                     {% for machine in workorder.machines %}
                         {{ machine.designation }}
+                    {% else %}
+                        <p>Il n'y a pas de machine dans ce BT</p>
                     {% endfor %}
                 </td>
                 <td>{{ workorder.implementation}}</td>

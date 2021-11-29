@@ -40,6 +40,13 @@ class SearchWorkorder
     public $preventive;
 
     /**
+     * Préventif
+     *
+     * @var closure
+     */
+    public $closure;
+
+    /**
      * Status
      *
      * @var status

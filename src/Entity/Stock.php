@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\StockRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\StockRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -25,7 +25,10 @@ class Stock
     private $part;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=5, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[A-Z]{2}[0-9]{3}$/")
+     * message="Le code ne respecte pas le format !"
      */
     private $place;
 
