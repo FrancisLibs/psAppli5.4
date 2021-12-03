@@ -14,7 +14,7 @@
                     {% endif %}
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
-                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a> #}
+                    <a class="btn btn-warning btn-sm mr-2" href="{{ path('add_part', {'id': workorder.id}) }}">Pièces détachées</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
                     {% if is_granted('ROLE_ADMIN') %}

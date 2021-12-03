@@ -39,7 +39,7 @@ class MachineType extends AbstractType
                 'label' => 'Numéro de série',
                 'required' => false,
             ])
-            ->add('BuyDate', DateType::class, [
+            ->add('buyDate', DateType::class, [
                 'input' => 'datetime',
                 'widget' => 'single_text',
                 'label' => 'Date d\'achat',

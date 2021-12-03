@@ -11,6 +11,7 @@
                 <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
                 {% if is_granted('ROLE_ADMIN') %}
                     {{ include('machine/_delete_form.html.twig') }}
+                    <a class="btn btn-primary btn-sm ml-2" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
                 {% endif %}
             </div>
         </div>
@@ -24,6 +25,9 @@
             <div class="border border-info rounded p-2">
                 <p><strong>Code : </strong>{{ machine.internalCode }}</p>
                 <p><strong>Nom : </strong>{{ machine.designation }}</p>
+                {% if machine.buyDate %}
+                    <p><strong>Date achat : </strong>{{ machine.buyDate|date('d-m-Y') }}</p>
+                {% endif %}
                 <p><strong>Constructeur : </strong>{{ machine.constructor }}</p>
                 {% if machine.model %}
                     <p><strong>Modèle : </strong>{{ machine.model }}</p>

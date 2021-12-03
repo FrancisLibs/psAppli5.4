@@ -40,6 +40,7 @@
                 <tr>
                     <th scope="col">Numéro</th>
                     <th class="text-center" scope="col">Désignation</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -137,20 +138,16 @@
                         <th scope="col">Code</th>
                         <th class="text-center">Qte</th>
                         <th class="text-center" scope="col">Désignation</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for part in workorder.workorderParts %}
                         <tr>
-                            <td>
-                                {{ part.part.code }}
-                            </td>
-                            <td class="text-center" s>
-                                {{ part.quantity }}
-                            </td>
-                            <td class="text-center" s>
-                                {{ part.part.designation }}
-                            </td>
+                            <td>{{ part.part.code }}</td>
+                            <td class="text-center">{{ part.quantity }}</td>
+                            <td class="text-center">{{ part.part.designation }}</td>
+                            <td><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

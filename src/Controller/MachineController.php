@@ -8,6 +8,7 @@ use App\Data\SearchMachine;
 use App\Form\SearchMachineForm;
 use App\Repository\MachineRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Expr\Clone_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,7 +45,7 @@ class MachineController extends AbstractController
      * 
      * @return  Response
      */
-    public function index(Request $request, string $mode = null, ?int $documentId): Response
+    public function index(Request $request, ?string $mode, ?int $documentId): Response
     { 
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
@@ -66,7 +67,8 @@ class MachineController extends AbstractController
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
-        if ($request->get('ajax') && $mode == 'select') {
+        
+        if ($request->get('ajax') && ($mode == 'select' || $mode == null)) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
@@ -118,6 +120,7 @@ class MachineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $machine->setCreatedAt((new \Datetime()));
             $machine->setStatus(true);
             $machine->setInternalCode(strtoupper($machine->getInternalCode()));
             $machine->setActive(true);
@@ -178,5 +181,40 @@ class MachineController extends AbstractController
         }
 
         return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/copy/{id}", name="machine_copy", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function COPY(Request $request, Machine $machine): Response
+    {
+        $newMachine = new Machine();
+
+        $newMachine = clone $machine;
+
+        $form = $this->createForm(MachineType::class, $newMachine);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $newMachine->setCreatedAt(new \Datetime());
+
+            $manager = $this->getDoctrine()->getManager();
+
+            $manager->persist($newMachine);
+            $manager->flush();
+
+            return $this->redirectToRoute('machine_show', [
+                'id' => $newMachine->getId(),
+            ], 
+            Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('machine/edit.html.twig', [
+            'machine' => $machine,
+            'form' => $form,
+        ]);
     }
 }
