@@ -83,6 +83,12 @@ class WorkorderRepository extends ServiceEntityRepository
                 ->setParameter('disabled', $search->preventive);
         }
 
+        if (empty($search->closure)) {
+            $query = $query
+                ->andWhere('w.workorderStatus <> :status')
+                ->setParameter('status', 5);
+        }
+
         $query = $query->getQuery();
 
         return $this->paginator->paginate(

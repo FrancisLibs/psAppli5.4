@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
