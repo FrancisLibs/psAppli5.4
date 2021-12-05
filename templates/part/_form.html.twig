@@ -10,14 +10,20 @@
             {{ form_widget(form.designation) }}
         </div>
     </div>
-    <div class="col-11 border border-info rounded">
-        <p>Le code, en majuscule, est composé d'un "C" majuscule (Charcuterie), 
-        de quatre caractères du nom de la pièce et d'un numéro d'ordre de 4 chiffres. Ex : CAIMA0048, pour aimant.</p>
+    <div class="row mb-2">
+        <div class="col-11 border border-info rounded">
+            <p>Le code : "C" majuscule (Charcuterie), 
+            + 4 caractères du nom de la piècec + un numéro d'ordre de 4 chiffres. <br>Ex : CAIMA0048, pour aimant.</p>
+        </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-3 align-items center">
         <div class="col-6">
             {{ form_label(form.reference) }}
             {{ form_widget(form.reference) }}
+        </div>
+        <div class="col-6">
+            {{ form_label(form.provider) }}
+            {{ form_widget(form.provider) }}
         </div>
     </div>
      <div class="row mb-3">

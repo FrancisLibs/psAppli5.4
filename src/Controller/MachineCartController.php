@@ -87,7 +87,7 @@ class MachineCartController extends AbstractController
             ]);
         }
         return $this->redirectToRoute('machine_index', [
-            'mode'  =>  "editPreventive",
+            'mode'  =>  $mode,
             'templateId'   =>  $documentId,
         ]);
     }

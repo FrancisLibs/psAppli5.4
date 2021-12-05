@@ -46,7 +46,7 @@ class MachineController extends AbstractController
      * @return  Response
      */
     public function index(Request $request, ?string $mode, ?int $documentId): Response
-    { 
+    {
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
@@ -62,12 +62,24 @@ class MachineController extends AbstractController
             }
         }
 
-        $data = new SearchMachine();
+        // Reprise de l'ancienne recherche lors de la selection des machines pour un préventif
+        $dataMachinePreventive = $session->get('dataMachinePreventive');
+        if ($mode == "selectPreventive" && $dataMachinePreventive) {
+            $data = $session->get('dataMachinePreventive');
+        } else {
+            $data = new SearchMachine();
+        }
+
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
-        
+
+        if ($mode == "selectPreventive") { // Sauvegarde de la classe de tri des machines
+            $dataMachinePreventive = $data;
+            $session->set('dataMachinePreventive', $dataMachinePreventive);
+        }
+
         if ($request->get('ajax') && ($mode == 'select' || $mode == null)) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode]),
@@ -206,10 +218,13 @@ class MachineController extends AbstractController
             $manager->persist($newMachine);
             $manager->flush();
 
-            return $this->redirectToRoute('machine_show', [
-                'id' => $newMachine->getId(),
-            ], 
-            Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'machine_show',
+                [
+                    'id' => $newMachine->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->renderForm('machine/edit.html.twig', [

@@ -57,6 +57,8 @@ class PreventiveController extends AbstractController
     {
         // Vidange de la session s'il reste ds machines dedans
         $this->emptyMachineCart($request);
+        $this->emptySearchMachine($request);
+
 
         $data = new SearchTemplate();
 
@@ -113,7 +115,6 @@ class PreventiveController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Contrôle si machine en session
             $machines = $session->get('machines', []);
             if (!empty($machines)) {
@@ -123,7 +124,9 @@ class PreventiveController extends AbstractController
                 }
 
                 // Suppression des machines en session
-                $session->remove('machines');
+                $this->emptyMachineCart($request);
+                // Suppression de la classe de recherche en session
+                $this->emptySearchMachine($request);
 
                 // Numéro de template
                 $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
@@ -138,7 +141,7 @@ class PreventiveController extends AbstractController
 
                 $this->manager->persist($template);
                 $this->manager->flush();
-                
+
                 return $this->render('preventive/show.html.twig', [
                     'template' => $template
                 ]);
@@ -226,14 +229,16 @@ class PreventiveController extends AbstractController
         $template->removeMachine($machine);
         $this->manager->flush();
 
-        return $this->redirectToRoute('template_edit', [
+        return $this->redirectToRoute(
+            'template_edit',
+            [
                 'id' => $template->getId()
             ],
             Response::HTTP_SEE_OTHER
         );
     }
 
-    public function emptyMachineCart(Request $request): Response
+    public function emptyMachineCart(Request $request)
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -241,7 +246,14 @@ class PreventiveController extends AbstractController
             unset($machines[$cle]);
         }
         $session->set('machines', $machines);
-        return $this->redirectToRoute('template_index');
+        return;
+    }
+
+    public function emptySearchMachine(Request $request)
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove('dataMachinePreventive');
+        return;
     }
 
     /**

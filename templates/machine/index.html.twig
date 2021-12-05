@@ -27,7 +27,7 @@
                                         {% if( mode == 'editPreventive') %}
                                             <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
                                         {% else %}
-                                            <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
+                                            <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode} ) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
                                         {% endif %}
                                     </div>
                                 {% endfor %}
