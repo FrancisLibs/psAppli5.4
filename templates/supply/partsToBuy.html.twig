@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Achats pièces{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+            <th scope="col">Code</th>
+            <th scope="col">Désination</th>
+            <th scope="col">Référence</th>
+            <th scope="col">Qte Stock</th>
+            <th scope="col">Qte Mini</th>
+            <th scope="col">Fournisseur</th>
+        </thead>
+        <tbody>
+            {% for part in parts %}
+                <tr>
+                    <td>{{ part.code}}</td>
+                    <td>{{ part.designation}}</td>
+                    <td>{{ part.reference}}</td>
+                    <td>{{ part.stock.qteStock}}</td>
+                    <td>{{ part.stock.qteMin}}</td>
+                    <td>{{ part.provider.name}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

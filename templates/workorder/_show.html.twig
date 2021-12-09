@@ -3,38 +3,38 @@
     <div class="col-5 d-flex justify-content-between">
         {% if workorder.preventive %}
                 <div class="d-flex justify-content-start align-items-center">
-                <h4 class="text-primary">Date prévue : </h4>
+                <h5 class="text-primary">Date prévue : </h5>
                 <h5 class="champs_bt text-center">{{ workorder.preventiveDate|date('d-m-Y') }}</h5>
             </div>
             <div class="d-flex justify-content-start align-items-center">
-                <h4 class="text-primary">Numéro de réventif : </h4>
+                <h5 class="text-primary">Numéro de réventif : </h5>
                 <h5 class="champs_bt">{{ workorder.templateNumber }}</h5>
             </div>
         {% else %}
             <div class="d-flex justify-content-start align-items-center">
-                <h4 class="text-primary">Créé le : </h4>
+                <h5 class="text-primary">Créé le : </h5>
                 <h5 class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</h5>
             </div>
             <div >
                 <div class="d-flex justify-content-start align-items-center">
-                    <H4 class="text-primary">Par : </H4>
+                    <H5 class="text-primary">Par : </H5>
                     <h5 class="champs_bt">{{ workorder.user.firstName }}</h5>
                 </div>
             </div>
             <div>
                 <div class="d-flex justify-content-start align-items-center">
-                    <h4 class="text-primary">Statut : </h4>
+                    <h5 class="text-primary">Statut : </h5>
                     <h5 class="champs_bt">{{ workorder.workorderStatus.name }}</h5>
                 </div>
             </div>
         {% endif %}
     </div>
 </div>
-<div class="row mt-4">
-    <div class="col-2">
-        <h4 class="text-primary">Machine(s) : </h4>
+<div class="row mt-3">
+    <div class="col-1">
+        <h5 class="text-primary">Machine(s) : </h5>
     </div>
-    <div class="col-4">
+    <div class="col-5">
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
@@ -54,36 +54,45 @@
         </table>
     </div>
 </div>
-<div class="row">
-    <div class="col-6 d-flex justify-content-start align-items-center">
-        {% if workorder.request %}
-            <h4 class="text-primary">Demande : </h4>
-            <span class="champs_bt">{{ workorder.request }}</span>
-        {% endif %}
+
+<div class="row mt-3">
+    <div class="col-1">
+        <h5 class="text-primary">Demande : </h5>
+    </div>
+    <div class="col-5">
+        <div>{{ workorder.request }}</div>
     </div>
 </div>
-<div class="row mt-2">
-    <div class="col-6 d-flex justify-content-start align-items-center">
-        {% if workorder.implementation %}
-            <h4 class="text-primary">Réalisation : </h4>
-            <span class="champs_bt">{{ workorder.implementation }}</span>
-        {% endif %}
+
+{% if workorder.implementation %}
+    <div class="row mt-3">
+        <div class="col-1">
+            <h5 class="text-primary">Réalisation : </h5>
+        </div>
+        <div class="col-5">
+            <div>{{ workorder.implementation }}</div>
+        </div>
+    </div>  
+{% endif %}
+
+{% if workorder.remark %}
+    <div class="row mt-3">
+        <div class="col-1">
+            <h5 class="text-primary">Remarque : </h5>
+        </div>
+        <div class="col-5">
+            <div>{{ workorder.remark }}</div>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-6 d-flex justify-content-start align-items-center">
-        {% if workorder.remark %}
-            <h4 class="text-primary">Remarque : </h4>
-            <span class="champs_bt">{{ workorder.remark }}</span>
-        {% endif %}
+{% endif %}
+<div class="row mt-3">
+    <div class="col-1">
+        <h5 class="text-primary">Durée : </h5>
     </div>
-</div>
-<div class="row">
-    <div class="col-3 d-flex justify-content-between mt-2">
-        <h4 class="text-primary">Durée : </h4> 
+    <div class="col-5">
         {% if workorder.durationDay > 0 %}
             {{ workorder.durationDay }} 
-                {% if workorder.durationDay > 1 %}
+            {% if workorder.durationDay > 1 %}
                 jours
             {% else %}
                 jour
@@ -107,53 +116,52 @@
         {% endif %}
     </div>
 </div>
-    <div class="row mt-3">
-        <div class="col-5">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-primary">Date début</th>
-                        <th scope="col" class="text-center text-primary">Heure début</th>
-                        <th scope="col" class="text-center text-primary">Date fin</th>
-                        <th scope="col" class="text-center text-primary">Heure de fin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
-                        <td class="text-center">{{ workorder.startTime ? workorder.startTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
-                        <td class="text-center">{{ workorder.endDate ? workorder.endDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
-                        <td class="text-center">{{ workorder.endTime ? workorder.endTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="row mt-3">
+    <div class="col-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-primary">Date début</th>
+                    <th scope="col" class="text-center text-primary">Heure début</th>
+                    <th scope="col" class="text-center text-primary">Date fin</th>
+                    <th scope="col" class="text-center text-primary">Heure de fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.startTime ? workorder.startTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.endDate ? workorder.endDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.endTime ? workorder.endTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    {% if workorder.workorderParts is not empty %}
-        <div class="col-5 mt-2 mb-3 border rounded border-primary pt-2">
-            <h5>Pièces détachées</h5>
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Code</th>
-                        <th class="text-center">Qte</th>
-                        <th class="text-center" scope="col">Désignation</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for part in workorder.workorderParts %}
-                        <tr>
-                            <td>{{ part.part.code }}</td>
-                            <td class="text-center">{{ part.quantity }}</td>
-                            <td class="text-center">{{ part.part.designation }}</td>
-                            <td><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endif %}
 </div>
+{% if workorder.workorderParts is not empty %}
+    <div class="col-6 mt-3 mb-3 border rounded border-primary pt-2">
+        <h5>Pièces détachées</h5>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th class="text-center">Qte</th>
+                    <th class="text-center" scope="col">Désignation</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for part in workorder.workorderParts %}
+                    <tr>
+                        <td>{{ part.part.code }}</td>
+                        <td class="text-center">{{ part.quantity }}</td>
+                        <td class="text-center">{{ part.part.designation }}</td>
+                        <td><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
 
 

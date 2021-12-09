@@ -3,48 +3,58 @@
 namespace App\Repository;
 
 use App\Entity\Provider;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Data\SearchProvider;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @method Provider|null find($id, $lockMode = null, $lockVersion = null)
- * @method Provider|null findOneBy(array $criteria, array $orderBy = null)
- * @method Provider[]    findAll()
- * @method Provider[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ProviderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+    
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Provider::class);
+        $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return Provider[] Returns an array of Provider objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Récupère les bons de travail liés à une recherche
+     *
+     * @param Searchprovider $searchProvider
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchProvider $search): PaginationInterface
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('p')
+            ->select('p')
+            ->orderBy('p.name', 'ASC');
 
-    /*
-    public function findOneBySomeField($value): ?Provider
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($search->name)) {
+            $query = $query
+                ->andWhere('p.name LIKE :name')
+                ->setParameter('name', "%{$search->name}%");
+        }
+
+        if (!empty($search->city)) {
+            $query = $query
+                ->andWhere('p.city LIKE :city')
+                ->setParameter('city', "%{$search->city}%");
+        }
+
+        if (!empty($search->code)) {
+            $query = $query
+                ->andWhere('p.code LIKE :code')
+                ->setParameter('code', "%{$search->code}%");
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
     }
-    */
 }

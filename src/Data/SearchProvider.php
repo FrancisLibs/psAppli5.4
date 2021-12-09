@@ -2,26 +2,33 @@
 
 namespace App\Data;
 
-class SearchTemplate 
+class SearchProvider
 {
     /**
      * Numéro de page pour knp_paginator
      *
-     * @var int 
+     * @var int
      */
     public $page = 1;
 
     /**
-     * Machine
+     * Nom forunisseur
      *
      * @var string
      */
-    public $machine;
+    public $name;
 
     /**
-     * Organisation
+     * Ville
      *
      * @var string
      */
-    public $organisation;
+    public $city;
+
+    /**
+     * Code
+     *
+     * @var string
+     */
+    public $code;
 }

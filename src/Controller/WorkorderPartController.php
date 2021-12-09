@@ -32,23 +32,33 @@ class WorkorderPartController extends AbstractController
     }
 
     /**
+     * Retirer des pièces détachées d'un BT en édition et réintégration dans le stock
+     * 
      * @Route("/remove/{id}/{workorderPartId}", name="remove_part")
      */
     public function remove(Workorder $workorder, int $workorderPartId): Response
     {
         $workorderParts = $workorder->getWorkorderParts();
 
-        foreach ($workorderParts as $part) {
-            if ($part->getId() == $workorderPartId) {
-                if ($part->getQuantity() > 1) {
-                    $part->setQuantity($part->getQuantity() - 1);
-                } else {
-                    $part->remove();
-                }
-            }
-        }
+        foreach ($workorderParts as $workorderPart) {
+            $workorderPartQte = $workorderPart->getQuantity();
+            $part = $workorderPart->getPart();
+            $stock=$part->getStock();
+            $qteStock = $stock->getQteStock();
 
-        $this->manager->flush();
+            if ($workorderPart->getId() == $workorderPartId) {
+                if ($workorderPartQte > 1) {
+                    --$workorderPartQte;
+                    $workorderPart->setQuantity($workorderPartQte);
+                } else {
+                    $workorderParts->removeElement($workorderPart);
+                }
+                ++$qteStock;
+                $stock->setQteStock($qteStock);
+            }
+            
+            $this->manager->flush();
+        }
 
         return $this->redirectToRoute('work_order_show', [
             'id' => $workorder->getId()

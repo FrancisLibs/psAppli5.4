@@ -21,21 +21,21 @@ class SearchWorkorder
     /**
      * Machine
      *
-     * @var machine
+     * @var string
      */
     public $machine;
 
     /**
      * Utilisateur
      *
-     * @var user
+     * @var string
      */
     public $user;
 
     /**
      * Préventif
      *
-     * @var preventive
+     * @var boolean
      */
     public $preventive;
 

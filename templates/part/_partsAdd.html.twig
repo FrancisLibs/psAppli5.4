@@ -1,6 +1,6 @@
 {% for part in parts %}
     <tr>
-        <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
+        <td>{{ part.code }}</td>
         <td class="text-center">{{ part.designation }}</td>
         <td class="text-center">{{ part.reference }}</td>
         {% if part.stock.qteStock < part.stock.qteMin %}
@@ -13,7 +13,7 @@
             {% if not addPart %}
                 <a href="{{ path('part_edit', {'id': part.id}) }}"><i class="bi bi-pencil-square"></i></a>
             {% elseif part.stock.qteStock > 0 %}
-                <a href="{{ path('cart_add', {'id': part.id, 'workorderId': workorderId}) }}"><i class="bi bi-plus-circle"></i></a>
+                <a href="{{ path('cart_add', {'id': part.id, 'workorderId': workorderId}) }}"><i class="btn btn-primary btn-sm bi bi-plus-circle"></i></a>
             {% endif %}
         </td>
     </tr>

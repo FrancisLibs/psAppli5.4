@@ -22,3 +22,6 @@ new WorkorderIndex(document.querySelector(".workorder-js-filter"));
 
 import { PreventiveIndex } from "./JS/PreventiveIndex";
 new PreventiveIndex(document.querySelector(".preventive-js-filter"));
+
+import { ProviderIndex } from "./JS/ProviderIndex";
+new ProviderIndex(document.querySelector(".provider-js-filter"));

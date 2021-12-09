@@ -13,10 +13,12 @@
             <div class="row mt-4">
                 <aside class="col-2">
                     <section>
-                        <a class="btn btn-primary btn-sm mb-3" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
-                        {# {% if is_granted('ROLE_ADMIN') %}
-                            <a class="btn btn-primary btn-sm" href="{{ path('appro_to_zero') }}" role="button">approtozero</a>
-                        {% endif %} #}
+                        <div class="d-flex flex-column">
+                            <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-primary btn-sm w-50 mb-4" href="{{ path('reception_part') }}" role="button">Réception</a>
+                            {% endif %}
+                        </div>
                         {% include 'part/_filter.html.twig' %}
                     </section>
                     <section class="text-center mt-3 d-flex flex-column ">

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Part;
 use App\Data\SearchPart;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -77,5 +78,45 @@ class PartRepository extends ServiceEntityRepository
             $search->page,
             20
         );
+    }
+
+    /**
+     * @return Part[]
+     */
+    public function findPartsToBuy($organisation)
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.provider', 'ASC')
+            ->select('p', 's', 'o', 'f')
+            ->join('p.stock', 's')
+            ->join('p.organisation', 'o')
+            ->join('p.provider', 'f')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
+            ->andWhere('s.qteStock < s.qteMin')
+            //->groupBy('f.name')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Part[]
+     */
+    public function findParts($organisation)
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.provider', 'ASC')
+            ->select('p', 's', 'o', 'f')
+            ->join('p.stock', 's')
+            ->join('p.organisation', 'o')
+            ->join('p.provider', 'f')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            //->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -1,47 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Provider index{% endblock %}
+{% block title %}Fournisseurs{% endblock %}
 
 {% block body %}
-    <h1>Fournisseurs</h1>
-
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>PostalCode</th>
-                <th>City</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for provider in providers %}
-            <tr>
-                <td>{{ provider.id }}</td>
-                <td>{{ provider.code }}</td>
-                <td>{{ provider.Name }}</td>
-                <td>{{ provider.address }}</td>
-                <td>{{ provider.postalCode }}</td>
-                <td>{{ provider.city }}</td>
-                <td>{{ provider.email }}</td>
-                <td>{{ provider.phone }}</td>
-                <td>
-                    <a href="{{ path('provider_show', {'id': provider.id}) }}">show</a>
-                    <a href="{{ path('provider_edit', {'id': provider.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('provider_new') }}">Create new</a>
+     <header class="row mt-4">
+        <div class="col-3 offset-2">
+            <h3>Fournisseurs</h3>
+        </div>
+    </header>
+     <main class="row provider-js-filter">
+        <aside class="col-2 mt-4">
+            <setion>
+                <a class="btn btn-primary btn-sm mb-3" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
+                {% include 'provider/_filter.html.twig' %}
+            </section>
+            <section class="text-center mt-3 d-flex flex-column ">
+                {% if app.user.imageName %}
+                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% else %}
+                    <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% endif %}
+                <div class="mt-2 border borer-danger rounded">
+                    {{ app.user.firstName ~ " " ~ app.user.lastName }}
+                </div>
+            </section>
+        </aside>
+        <article class="col-10">
+            <div class="mt-4">
+                {% include 'provider/_providerList.html.twig' with {providers: providers} only %}
+            </div>
+            {# display navigation #}
+            <div class="navigation js-filter-pagination">
+                {% include 'provider/_pagination.html.twig' %}
+            </div>
+        </article>
+    </main>
 {% endblock %}

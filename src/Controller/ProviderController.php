@@ -4,24 +4,58 @@ namespace App\Controller;
 
 use App\Entity\Provider;
 use App\Form\ProviderType;
+use App\Data\SearchProvider;
+use App\Form\SearchProviderForm;
 use App\Repository\ProviderRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/provider")
  */
 class ProviderController extends AbstractController
 {
-    /**
-     * @Route("/", name="provider_index", methods={"GET"})
-     */
-    public function index(ProviderRepository $providerRepository): Response
+    private $providerRepository;
+    private $manager;
+
+    public function __construct(ProviderRepository $providerRepository, EntityManagerInterface $manager)
     {
+        $this->providerRepository = $providerRepository;
+        $this->manager = $manager;
+    }
+    /**
+     * Liste des fournisseurs
+     * 
+     * @Route("/", name="provider_index", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     * 
+     * @param Request $request
+     * @return Response 
+     */
+    public function index(Request $request): Response
+    {
+        $data = new SearchProvider();
+        $data->page = $request->get('page', 1);
+        $data->organisation = $this->getUser()->getOrganisation()->getId();
+        $form = $this->createForm(SearchProviderForm::class, $data);
+        $form->handleRequest($request);
+        $providers = $this->providerRepository->findSearch($data);
+
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' => $providers]),
+                'sorting'       =>  $this->renderView('provider/_sorting.html.twig', ['providers' => $providers]),
+                'pagination'    =>  $this->renderView('provider/_pagination.html.twig', ['providers' => $providers]),
+            ]);
+        }
         return $this->render('provider/index.html.twig', [
-            'providers' => $providerRepository->findAll(),
+            'providers' =>  $providers,
+            'form'  =>  $form->createView(),
         ]);
     }
 
@@ -35,9 +69,9 @@ class ProviderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($provider);
-            $entityManager->flush();
+            $provider->setCode(strtoupper($provider->getCode()));
+            $this->Manager->persist($provider);
+            $this->Manager->flush();
 
             return $this->redirectToRoute('provider_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -67,7 +101,7 @@ class ProviderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute('provider_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -83,10 +117,9 @@ class ProviderController extends AbstractController
      */
     public function delete(Request $request, Provider $provider): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$provider->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($provider);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $provider->getId(), $request->request->get('_token'))) {
+            $this->manager->remove($provider);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('provider_index', [], Response::HTTP_SEE_OTHER);

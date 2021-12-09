@@ -1,0 +1,17 @@
+{% for provider in providers %}
+    <tr>
+        <td class="font_size_table">
+            <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id':provider.id}) }}">{{ provider.id }}</a>
+        </td>
+        <td class="text-center font_size_table">{{ provider.code}}</td>
+        <td class="text-center font_size_table">{{ provider.name }}</td>
+        <td class="text-center font_size_table">{{ provider.address }}</td>
+        <td class="text-center font_size_table">{{ provider.city }}</td>
+        <td class="text-center font_size_table">{{ provider.email }}</td>
+        <td class="text-center font_size_table">{{ provider.phone }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Il n'y a pas de fournisseur enregistré</td>
+    </tr>
+{% endfor %}

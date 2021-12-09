@@ -177,4 +177,15 @@ class PartController extends AbstractController
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("/reception", name="reception_part")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function reception(): Response
+    {
+        
+
+        return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
