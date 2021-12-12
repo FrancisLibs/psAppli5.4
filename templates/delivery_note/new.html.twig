@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saisie Bon de Livraison{% endblock %}
+
+{% block body %}
+    <div class="row mt-5">
+        <div class="col-4 offset-2 d-flex justify-content-between align-items-center">
+            <h2>Saisie Bon de Livraison</h2>
+            <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
+        </div>
+    </div>
+    <article class="row">
+        <div class="mt-4 col-3 offset-2 d-flex justify-content-between align-items-baseline">
+            <h4 class="mt-4 mb-4 mr-5 text-primary">Fournisseur : </h4>
+            {% if provider %}
+                <p>{{ provider.name }}</p>
+            {% endif %}
+            <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">fournisseur</a>
+        </div>
+    </article>
+    <article class="row">
+        <div class="mt-4 col-6 offset-2">
+            {{ include('delivery_note/_form.html.twig') }}
+        </div>
+    </article>
+{% endblock %}

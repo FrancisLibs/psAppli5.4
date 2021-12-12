@@ -59,9 +59,15 @@ class Provider
      */
     private $code;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="provider")
+     */
+    private $deliveryNotes;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +185,36 @@ class Provider
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getProvider() === $this) {
+                $deliveryNote->setProvider(null);
+            }
+        }
 
         return $this;
     }

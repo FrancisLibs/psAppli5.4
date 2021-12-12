@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\MakerBundle\Str;
 
 /**
  * @Route("/provider")
@@ -31,13 +32,13 @@ class ProviderController extends AbstractController
     /**
      * Liste des fournisseurs
      * 
-     * @Route("/", name="provider_index", methods={"GET"})
+     * @Route("/{mode?}", name="provider_index", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN')")
      * 
      * @param Request $request
      * @return Response 
      */
-    public function index(Request $request): Response
+    public function index(Request $request, ?string $mode): Response
     {
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
@@ -46,9 +47,17 @@ class ProviderController extends AbstractController
         $form->handleRequest($request);
         $providers = $this->providerRepository->findSearch($data);
 
+        if ($request->get('ajax') && ($mode == 'selectProvider')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' => $providers, 'mode' => $mode]),
+                'sorting'       =>  $this->renderView('provider/_sorting.html.twig', ['providers' => $providers]),
+                'pagination'    =>  $this->renderView('provider/_pagination.html.twig', ['providers' => $providers]),
+            ]);
+        }
+
         if ($request->get('ajax')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' => $providers]),
+                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' =>$providers]),
                 'sorting'       =>  $this->renderView('provider/_sorting.html.twig', ['providers' => $providers]),
                 'pagination'    =>  $this->renderView('provider/_pagination.html.twig', ['providers' => $providers]),
             ]);
@@ -56,6 +65,7 @@ class ProviderController extends AbstractController
         return $this->render('provider/index.html.twig', [
             'providers' =>  $providers,
             'form'  =>  $form->createView(),
+            'mode' => $mode,
         ]);
     }
 

@@ -84,11 +84,17 @@ class Part
      */
     private $template;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=DeliveryNotePart::class, mappedBy="part")
+     */
+    private $deliveryNoteParts;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
         $this->template = new ArrayCollection();
+        $this->deliveryNoteParts = new ArrayCollection();
     }
 
     
@@ -275,6 +281,33 @@ class Part
     public function removeTemplate(Template $template): self
     {
         $this->template->removeElement($template);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNotePart[]
+     */
+    public function getDeliveryNoteParts(): Collection
+    {
+        return $this->deliveryNoteParts;
+    }
+
+    public function addDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
+    {
+        if (!$this->deliveryNoteParts->contains($deliveryNotePart)) {
+            $this->deliveryNoteParts[] = $deliveryNotePart;
+            $deliveryNotePart->addPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
+    {
+        if ($this->deliveryNoteParts->removeElement($deliveryNotePart)) {
+            $deliveryNotePart->removePart($this);
+        }
 
         return $this;
     }

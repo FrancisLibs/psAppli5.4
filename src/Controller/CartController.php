@@ -18,6 +18,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @Route("/cart")
+ */
+
 class CartController extends AbstractController
 {
     private $partRepository;
@@ -34,7 +38,7 @@ class CartController extends AbstractController
     /**
      * Appel de la liste des pièces à ajouter au panier
      * 
-     * @Route("/{id}/add_part/", name="add_part", methods={"GET"})
+     * @Route("/add_part/{id}", name="add_part", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * @param   Workorder $workorder
      * @param   Request $request 

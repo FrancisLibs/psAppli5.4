@@ -1,6 +1,11 @@
 {% for part in parts %}
     <tr>
         <td class="font_size_table"><a href="{{ path('part_edit', {'id': part.id}) }}">{{ part.code }}</a></td>
+        {# {% if part.provider %}
+            <td class="text-center font_size_table">{{ part.provider.code }}</td>
+        {% else %} #}
+            <td class="text-center font_size_table"></td>
+        {# {% endif %} #}
         <td class="text-center font_size_table">{{ part.designation }}</td>
         <td class="text-center font_size_table">{{ part.reference }}</td>
         {% if part.stock.qteStock < part.stock.qteMin %}
@@ -10,6 +15,7 @@
         {% endif %}
         <td class="text-center font_size_table">{{ part.stock.place }}</td>
         <td class="text-center font_size_table">{{ part.stock.approQte }}</td>
+        
     </tr>
 {% else %}
     <tr>

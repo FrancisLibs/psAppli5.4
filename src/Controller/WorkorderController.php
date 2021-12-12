@@ -100,7 +100,6 @@ class WorkorderController extends AbstractController
         $workorder = new Workorder();
         $workorder->setPreventive(false);
         $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-        $workorder->setOrganisation($organisation);
 
         if ($machine) {
             $workorder->addMachine($machine);
@@ -114,6 +113,7 @@ class WorkorderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
+            $workorder->setOrganisation($organisation);
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
@@ -205,9 +205,10 @@ class WorkorderController extends AbstractController
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
+        
         if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
-            if ($workorder->getPreventive()) {
+            // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
+            if ($workorder->getPreventive()) { 
                 // récupération du template
                 $templateNumber = $workorder->getTemplateNumber();
                 $template = $this->templateRepository->findOneBy(['templateNumber' => $templateNumber]);

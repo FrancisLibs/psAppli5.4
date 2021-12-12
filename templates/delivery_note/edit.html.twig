@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit DeliveryNote{% endblock %}
+
+{% block body %}
+    <h1>Edit DeliveryNote</h1>
+
+    {{ include('delivery_note/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('delivery_note_index') }}">back to list</a>
+
+    {{ include('delivery_note/_delete_form.html.twig') }}
+{% endblock %}

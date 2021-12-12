@@ -1,7 +1,11 @@
 {% for provider in providers %}
     <tr>
         <td class="font_size_table">
-            <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id':provider.id}) }}">{{ provider.id }}</a>
+            {% if mode == 'selectProvider' %}
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">Select</a>
+            {% else %}
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.id }}</a>
+            {% endif %}
         </td>
         <td class="text-center font_size_table">{{ provider.code}}</td>
         <td class="text-center font_size_table">{{ provider.name }}</td>

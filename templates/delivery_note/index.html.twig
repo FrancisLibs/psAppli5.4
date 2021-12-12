@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeliveryNote index{% endblock %}
+
+{% block body %}
+    <h1>DeliveryNote index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DeliveryNoteNumber</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for delivery_note in delivery_notes %}
+            <tr>
+                <td>{{ delivery_note.id }}</td>
+                <td>{{ delivery_note.deliveryNoteNumber }}</td>
+                <td>{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('delivery_note_show', {'id': delivery_note.id}) }}">show</a>
+                    <a href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('delivery_note_new') }}">Create new</a>
+{% endblock %}

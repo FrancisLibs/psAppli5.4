@@ -21,11 +21,22 @@
                 <a href="{{ path('template_index') }}" class="nav-link">Préventif</a>
             </li>
             {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item mx-2">
-                    <a href="{{ path('admin') }}" class="nav-link">Administration</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Approvisionnement
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('delivery_note_new') }}">Réception pièces</a>
+                        {# <a class="dropdown-item" href="#">Another action</a> #}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Liste pièces</a>
+                        <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Liste BL</a>
+
+                        
+                    </div>
                 </li>
                 <li class="nav-item mx-2">
-                    <a href="{{ path('parts_to_buy') }}" class="nav-link">Approvisionnement</a>
+                    <a href="{{ path('admin') }}" class="nav-link">Administration</a>
                 </li>
                 <li class="nav-item mx-2">
                     <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
