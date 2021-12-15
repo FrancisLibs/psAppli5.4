@@ -16,20 +16,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-1 d-flex align-items-center mt-4">
-                <button class="btn btn-success mr-4 btn-sm" id="btn_copy">copy</button>
-            </div>
             <div class="col-11">
                 {{ form_label(form.request) }}  
                 {{ form_widget(form.request) }}  
 
                 {{ form_label(form.implementation) }}  
                 {{ form_widget(form.implementation) }}  
+            
+                {{ form_label(form.remark) }}  
+                {{ form_widget(form.remark) }}  
             </div>
-        </div>
-        <div class="row mt-3 ml-2">
-            {{ form_label(form.remark) }}  
-            {{ form_widget(form.remark) }}  
         </div>
     </div>
     <div class="mt-1 rounded p-3 temps" id="time_management">

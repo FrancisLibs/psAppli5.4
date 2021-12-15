@@ -1,15 +1,9 @@
 window.onload = () => {
-  // Gestion du bouton copier entre demande et réalisation-----------
-  let button = document.querySelector("#btn_copy");
   let workorderForm = document.forms.workorder_edit;
   let workorderFormRequest = workorderForm["workorder_edit[request]"];
   let workorderFormImplementation =
     workorderForm["workorder_edit[implementation]"];
 
-  button.addEventListener("click", function (e) {
-    e.preventDefault();
-    workorderFormImplementation.value = workorderFormRequest.value;
-  });
   // --------------------------------------------------------------------
 
   // Lecture des champs début intervention et création d'un dateTime

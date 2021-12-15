@@ -186,6 +186,21 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Affichage de la liste des pièces pour selection
+     *
+     * @Route("/addPart/{id}/{mode?}", name="work_order_add_part", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function addPart(Request $request, int $id, ?string $mode = null): Response
+    {
+        return $this->redirectToRoute('part_index', [
+            'documentId' => $id,
+            'mode' => $mode,
+        ]);
+    }
+
+
+    /**
      * @Route("/{id}", name="work_order_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -205,10 +220,10 @@ class WorkorderController extends AbstractController
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        
+
         if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
             // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
-            if ($workorder->getPreventive()) { 
+            if ($workorder->getPreventive()) {
                 // récupération du template
                 $templateNumber = $workorder->getTemplateNumber();
                 $template = $this->templateRepository->findOneBy(['templateNumber' => $templateNumber]);

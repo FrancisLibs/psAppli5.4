@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Twig\Node\ModuleNode;
 
 /**
  * @Route("/cart")
@@ -38,18 +39,19 @@ class CartController extends AbstractController
     /**
      * Appel de la liste des pièces à ajouter au panier
      * 
-     * @Route("/add_part/{id}", name="add_part", methods={"GET"})
+     * @Route("/add_part/{documentId?}/{mode?}", name="add_part", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
-     * @param   Workorder $workorder
-     * @param   Request $request 
+     * @param   Workorder   $workorder
+     * @param   Request     $request 
+     * @param   string      $mode
      * @return  Response
      */
-    public function addPart(Workorder $workorder, Request $request): Response
+    public function addPart(Request $request, ?int $documentId, ?string $mode): Response
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
-
         $panierWithData = [];
+
         foreach ($panier as $id => $quantity) {
             $panierWithData[] = [
                 'part' => $this->partRepository->find($id),
@@ -57,48 +59,16 @@ class CartController extends AbstractController
             ];
         }
 
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
-        
-        $data = $session->get('data', null);
-        
-        if (!$data) {
-            $data = new SearchPart();
-        }
-        $data->organisation = $organisation;
-        
-        $form = $this->createForm(SearchPartForm::class, $data);
-        
-        $form->remove('organisation');
-
-        $form->handleRequest($request);
-        $session->set('data', $data);
-        $parts = $this->partRepository->findSearch($data);
-        if ($request->get('ajax')) {
-            return new JsonResponse([
-                'content'       =>  $this->renderView('part/_partsAdd.html.twig', [
-                    'parts' => $parts,
-                    'addPart' => true,
-                    'workorderId' => $workorder->getId(),
-                ]),
-                'sorting'       =>  $this->renderView('part/_sortingAdd.html.twig', ['parts' => $parts]),
-                'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
-            ]);
-        }
-
-        return $this->render('workorder/addPart.html.twig', [
-            'addPart' => true,
-            'parts' =>  $parts,
-            'form'  =>   $form->createView(),
-            'workorderId' => $workorder->getId(),
-            'items' => $panierWithData,
+        return $this->redirectToRoute('part_index', [
+            'documentId' => $documentId,
+            'mode' => $mode,
         ]);
     }
 
     /**
      * Liste des pièces dans le panier
      * 
-     * @Route("/cart/{workorderId}", name="cart_index")
+     * @Route("/cart/{documentId}", name="cart_index")
      * @Security("is_granted('ROLE_USER')")
      * @param   workorderId
      * @return  response
@@ -126,13 +96,13 @@ class CartController extends AbstractController
     /**
      * Ajoute une pièce dans le panier
      * 
-     * @Route("/cart/add/{id}/{workorderId}", name="cart_add")
+     * @Route("/cart/add/{id}/{documentId}/{mode}", name="cart_add")
      * @Security("is_granted('ROLE_USER')")
      * @param   id              $id de la pièce ajoutée
      * @param   workorderId     id du workorder
      * @return redirectResponse
      */
-    public function add(Part $part, $workorderId): RedirectResponse
+    public function add(Part $part, int $documentId, string $mode): RedirectResponse
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
@@ -173,15 +143,16 @@ class CartController extends AbstractController
                 $total += $item['quantity'];
             }
         }
-        return $this->redirectToRoute('add_part', [
-            'id' => $workorderId,
+        return $this->redirectToRoute('part_index', [
+            'documentId' => $documentId,
+            'mode' => $mode,
         ]);
     }
 
     /**
      * Enlève une pièce du panier
      * @Security("is_granted('ROLE_USER')")
-     * @Route("/cart/remove/{id}/{workorderId}", name="cart_remove")
+     * @Route("/cart/remove/{id}/{documentId}", name="cart_remove")
      * @Security("is_granted('ROLE_USER')")
      * @param   id              id de la pièce à enlever
      * @param   workorderId     id du workorder
@@ -207,13 +178,14 @@ class CartController extends AbstractController
     /**
      * Vidange du panier
      * 
-     * @Route("/cart/empty/{workorderId}", name="cart_empty")
+     * @Route("/cart/empty/{documentId}/{mode}", name="cart_empty")
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param workorderId   id du panier
+     * @param int documentId   id du document actuel
+     * @param string mode
      * @return RedirectResponse
      */
-    public function empty($workorderId): RedirectResponse
+    public function empty(int $documentId, string $mode): RedirectResponse
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
@@ -221,8 +193,10 @@ class CartController extends AbstractController
             unset($panier[$id]);
         }
         $session->set('panier', $panier);
-        return $this->redirectToRoute('add_part', [
-            'id' => $workorderId,
+
+        return $this->redirectToRoute('part_index', [
+            'documentId' => $documentId,
+            'mode' => $mode,
         ]);
     }
 

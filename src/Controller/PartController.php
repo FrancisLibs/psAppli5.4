@@ -35,12 +35,12 @@ class PartController extends AbstractController
     /**
      * @ Liste des pièces détachées
      * 
-     * @Route("/list/{edit?}", name="part_index", methods={"GET"})
+     * @Route("/list/{documentId?}/{mode?}", name="part_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
      */
-    public function index(Request $request, $edit = null): Response
+    public function index(Request $request, ?int $documentId = null, ?string $mode = null, ?int $edit = null): Response
     {
         // Utilisation de la session pour sauvegarder l'objet de recherche
         $session = $this->requestStack->getSession();
@@ -66,9 +66,31 @@ class PartController extends AbstractController
                 'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
             ]);
         }
+        if ($mode == 'workorderAddPart') {
+            $panier = $session->get('panier', []);
+            $panierWithData = [];
+            foreach ($panier as $id => $quantity) {
+                $panierWithData[] = [
+                    'part' => $this->partRepository->find($id),
+                    'quantity' => $quantity,
+                ];
+            }
+
+            return $this->render('part/index.html.twig', [
+                'parts' =>  $parts,
+                'form'  =>  $form->createView(),
+                'mode'  =>  $mode,
+                'documentId' => $documentId,
+                'items' => $panierWithData,
+            ]);
+        }
+
         return $this->render('part/index.html.twig', [
             'parts' =>  $parts,
             'form'  =>  $form->createView(),
+            'documentId' => $documentId,
+            'mode'  =>  $mode,
+
         ]);
     }
 
@@ -169,7 +191,7 @@ class PartController extends AbstractController
                 $part->getStock()->setApproQte(0);
                 $this->manager->persist($part);
             }
-            if($part->getActive() == false){
+            if ($part->getActive() == false) {
                 $part->setActive(true);
             }
         }
@@ -184,7 +206,7 @@ class PartController extends AbstractController
      */
     public function reception(): Response
     {
-        
+
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }

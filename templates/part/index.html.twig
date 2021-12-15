@@ -5,18 +5,37 @@
 {% block body %}
     <main class="row mt-4 part-js-filter" >
         <div class="col-12">
-            <div class="row">
+            <div class="row justify-content-between">
                 <div class="col-3 offset-2">
                     <h3>Pièces détachées</h3>
                 </div>
-            </div>
+                {% if mode == "workorderAddPart" %}
+                    <div class="col-5 border border-primary rounded mb-3 mr-5 p-2">
+                        <div class="d-flex justify-content-start">
+                            <h4>Panier</h4>
+                            {% if items is defined %}
+                                <a href="{{ path('cart_valid', {'id': documentId}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Valider</a>
+                                <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ml-4 btn btn-warning btn-sm btn_panier">vider</a>
+                            {% endif %}
+                        </div>
+                        {% if items is defined %}
+                            {% for item in items %}
+                                <span><a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
+                                <span class="items_display"><strong>{{ item.quantity }}x {{ item.part.code }}</strong> : {{ item.part.designation }}</span><br>
+                            {% endfor %}
+                        {% else %}
+                            <p>Il n'y a aucune pièce sélectionnée</p>
+                        {% endif %}
+                    </div>
+                {% endif %}            </div>
             <div class="row mt-4">
                 <aside class="col-2">
                     <section>
-                        <div class="d-flex flex-column">
-                            <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a class="btn btn-primary btn-sm w-50 mb-4" href="{{ path('reception_part') }}" role="button">Réception</a>
+                        <div class="d-flex flex-column mb-3">
+                            {% if mode is defined and mode == 'workorderAddPart' %}
+                                <a class="btn btn-primary btn-sm w-50" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
+                            {% else %}
+                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
                             {% endif %}
                         </div>
                         {% include 'part/_filter.html.twig' %}
@@ -34,7 +53,7 @@
 
                 </aside>
                 <section class="col-10">
-                    {% include 'part/_partList.html.twig' with {parts: parts} only %}
+                    {% include 'part/_partList.html.twig' with {parts: parts, documentId: documentId, mode: mode} only %}
                 </section>
             </div>
             {# display navigation #}

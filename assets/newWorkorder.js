@@ -1,13 +1,8 @@
 window.onload = () => {
-  let button = document.querySelector("#btn_copy");
   let workorderForm = document.forms.workorder;
   let workorderFormRequest = workorderForm["workorder[request]"];
   let workorderFormImplementation = workorderForm["workorder[implementation]"];
 
-  button.addEventListener("click", function (e) {
-    e.preventDefault();
-    workorderFormImplementation.value = workorderFormRequest.value;
-  });
   // -------------------------------------------------------------------
 
   // Gestion du temps de l'intervention
