@@ -1,30 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DeliveryNote{% endblock %}
+{% block title %}Bon de livraison{% endblock %}
 
 {% block body %}
-    <h1>DeliveryNote</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ delivery_note.id }}</td>
-            </tr>
-            <tr>
-                <th>DeliveryNoteNumber</th>
-                <td>{{ delivery_note.deliveryNoteNumber }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('delivery_note_index') }}">back to list</a>
-
-    <a href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">edit</a>
-
-    {{ include('delivery_note/_delete_form.html.twig') }}
+    <header class="row mt-5">
+        <div class="col-2 offset-2">
+            <h3 class="text-primary">Bon de livraison</h3>
+        </div>
+        <div class="col-6 d-flex justify-content-start align-items-center">
+            <a class="btn btn-primary btn-sm mr-2" href="{{ path('delivery_note_index') }}" role="button">Liste BT</a>
+            <a class="btn btn-primary btn-sm mr-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
+            {# {% if is_granted('ROLE_ADMIN') %}
+                {{ include('delivery_note/_delete_form.html.twig') }}
+            {% endif %} #}
+        </div>
+    </header>
+    <main class="row mt-5">
+        <aside class="col-2 mt-4">
+            <div class="text-center mt-3 d-flex flex-column ">
+                {% if app.user.imageName %}
+                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% else %}
+                    <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% endif %}
+                <div class="mt-2 border borer-danger rounded">
+                    {{ app.user.firstName ~ " " ~ app.user.lastName }}
+                </div>
+            </div>
+        </aside>
+        <div class="col-5">
+            <div class="row mt-4">
+                <div class="col-6">
+                    <p><strong>Numéro de BL : </strong>{{ delivery_note.number }}</p>
+                </div>
+                <div class="col-4">
+                    <p><strong>Date : </strong>{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</p>
+                </div>
+                <div class="col-6">
+                    <p><strong>Fournisseur : </strong>{{ delivery_note.provider.name }}</p>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-8 d-flex justify-content-start align-items-center">
+                    <h3 class="text-primary mr-5">Pièces détachées</h3>
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('part_index', {'mode': 'receivedPart', 'documentId': delivery_note.id}) }}">Sélection pièces</a>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <table class="table table-sm table-striped">
+                    <head>
+                        <tr>
+                            <th scope="row">Code</th>
+                            <th scope="row" class="text-center">Désignation</th>
+                            <th scope="row" class="text-center">Référence</th>
+                            <th scope="row" class="text-center">Qte</th>
+                        </tr>
+                    </head>
+                    <body>
+                        {% for part in delivery_note.deliveryNoteParts %}
+                            <tr>
+                                <td>{{ part.id }}</td>
+                                <td class="text-center">{{ part.part.designation }}</td>
+                                <td class="text-center">{{ part.part.reference }}</td>
+                                <td class="text-center">{{ part.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    </body>
+                </table>
+            </div>
+        </div>
+    </main>
 {% endblock %}

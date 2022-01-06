@@ -1,21 +1,18 @@
-
-<div class="border border-info rounded">
-    <table class="table table-sm">
-        <head>
+<table class="table table-sm table-striped">
+    <head>
+        <tr>
+            <th>Code</th>
+            <th class="text-center">Désignation</th>
+            <th class="text-center">Qte stock</th>
+        </tr>
+    </head>
+    <tbody>
+        {% for part in machine.parts %}
             <tr>
-                <th>Code</th>
-                <th class="text-center">Désignation</th>
-                <th class="text-center">Qte stock</th>
+                <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
+                <td class="text-center">{{ part.designation }}</td>
+                <td class="text-center">{{ part.stock.qteStock }}</td>
             </tr>
-        </head>
-        <tbody>
-            {% for part in machine.parts %}
-                <tr>
-                    <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
-                    <td class="text-center">{{ part.designation }}</td>
-                    <td class="text-center">{{ part.stock.qteStock }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>      
-</div>
+        {% endfor %}
+    </tbody>
+</table>      

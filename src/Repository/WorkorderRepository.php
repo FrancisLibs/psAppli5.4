@@ -106,8 +106,11 @@ class WorkorderRepository extends ServiceEntityRepository
     public function countPreventiveWorkorder($templateNumber){
         return $this->createQueryBuilder('w')
         ->select('count(w.id)')
+        ->join('w.workorderStatus', 's')
         ->andWhere('w.templateNumber = :val')
         ->setParameter('val', $templateNumber)
+        ->andWhere('s.name <> :status')
+        ->setParameter('status', 'CLOTURE')
         ->getQuery()
         ->getSingleScalarResult();
     }
@@ -120,10 +123,13 @@ class WorkorderRepository extends ServiceEntityRepository
     public function findAllPreventiveWorkorders($organisationId)
     {
         return $this->createQueryBuilder('w')
+            ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisationId)
             ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true)
+            ->andWhere('s.name <> :status')
+            ->setParameter('status', 'CLOTURE')
             ->getQuery()
             ->getResult();
     }

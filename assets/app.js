@@ -25,3 +25,6 @@ new PreventiveIndex(document.querySelector(".preventive-js-filter"));
 
 import { ProviderIndex } from "./JS/ProviderIndex";
 new ProviderIndex(document.querySelector(".provider-js-filter"));
+
+import { DeliveryNoteIndex } from "./JS/DeliveryNoteIndex";
+new DeliveryNoteIndex(document.querySelector(".deliveryNote-js-filter"));

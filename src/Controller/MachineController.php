@@ -45,7 +45,7 @@ class MachineController extends AbstractController
      * 
      * @return  Response
      */
-    public function index(Request $request, ?string $mode, ?int $documentId): Response
+    public function index(Request $request, ?string $mode = null, ?int $documentId): Response
     {
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
@@ -61,13 +61,13 @@ class MachineController extends AbstractController
                 }
             }
         }
-
         // Reprise de l'ancienne recherche lors de la selection des machines pour un préventif
         $dataMachinePreventive = $session->get('dataMachinePreventive');
+
+        $data = new SearchMachine();
+
         if ($mode == "selectPreventive" && $dataMachinePreventive) {
-            $data = $session->get('dataMachinePreventive');
-        } else {
-            $data = new SearchMachine();
+            $data = $dataMachinePreventive;
         }
 
         $data->page = $request->get('page', 1);
@@ -76,8 +76,7 @@ class MachineController extends AbstractController
         $machines = $this->machineRepository->findSearch($data);
 
         if ($mode == "selectPreventive") { // Sauvegarde de la classe de tri des machines
-            $dataMachinePreventive = $data;
-            $session->set('dataMachinePreventive', $dataMachinePreventive);
+            $session->set('dataMachinePreventive', $data);
         }
 
         if ($request->get('ajax') && ($mode == 'select' || $mode == null)) {
@@ -111,12 +110,13 @@ class MachineController extends AbstractController
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
         }
+
         return $this->render('machine/index.html.twig', [
             'machines'      =>  $machines,
             'form'          =>  $form->createView(),
             'mode'          =>  $mode,
             'documentId'    =>  $documentId,
-            'machinesWithData'  =>  $machinesWithData,
+            'machinesWithData' =>  $machinesWithData,
 
         ]);
     }

@@ -1,37 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DeliveryNote index{% endblock %}
+{% block title %}Liste BL{% endblock %}
 
 {% block body %}
-    <h1>DeliveryNote index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>DeliveryNoteNumber</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for delivery_note in delivery_notes %}
-            <tr>
-                <td>{{ delivery_note.id }}</td>
-                <td>{{ delivery_note.deliveryNoteNumber }}</td>
-                <td>{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('delivery_note_show', {'id': delivery_note.id}) }}">show</a>
-                    <a href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('delivery_note_new') }}">Create new</a>
+    <header class="row mt-4">
+        <div class="col-3 offset-2">
+            <h3>Bons de livraison</h3>
+        </div>
+    </header>
+    <main class="row deliveryNote-js-filter">
+        <aside class="col-2 mt-4">
+            <setion>
+                <a class="btn btn-primary btn-sm mb-3" href="{{ path('delivery_note_new') }}" role="button">Nouveau bon de Livraison</a>
+                {% include 'delivery_note/_filter.html.twig' %}
+            </section>
+            <section class="text-center mt-3 d-flex flex-column ">
+                {% if app.user.imageName %}
+                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% else %}
+                    <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                {% endif %}
+                <div class="mt-2 border borer-danger rounded">
+                    {{ app.user.firstName ~ " " ~ app.user.lastName }}
+                </div>
+            </section>
+        </aside>
+        <article class="col-8">
+            <div class="mt-4">
+                {% include 'delivery_note/_delivery_note_list.html.twig' with {'delivery_notes': delivery_notes} only %}
+            </div>
+            {# display navigation #}
+            <div class="navigation js-filter-pagination">
+                {% include 'delivery_note/_pagination.html.twig' %}
+            </div>
+        </article>
+    </main>
 {% endblock %}
+
+

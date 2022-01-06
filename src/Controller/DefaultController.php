@@ -6,6 +6,7 @@ use DateInterval;
 use App\Entity\Workorder;
 use App\Repository\ParamsRepository;
 use App\Repository\TemplateRepository;
+use App\Repository\UserRepository;
 use App\Repository\WorkorderRepository;
 use App\Repository\WorkorderStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,21 +20,25 @@ class DefaultController extends AbstractController
     private $paramsRepository;
     private $workorderRepository;
     private $templateRepository;
-    private $manager;
     private $workorderStatusRepository;
+    private $userRepository;
+    private $manager;
+    
 
     public function __construct(
         EntityManagerInterface $manager,
         TemplateRepository $templateRepository,
         WorkorderRepository $workorderRepository,
         ParamsRepository $paramsRepository,
-        WorkorderStatusRepository $workorderStatusRepository
+        WorkorderStatusRepository $workorderStatusRepository,
+        UserRepository $userRepository
     ) {
         $this->paramsRepository = $paramsRepository;
         $this->workorderRepository = $workorderRepository;
         $this->templateRepository = $templateRepository;
         $this->manager = $manager;
         $this->workorderStatusRepository = $workorderStatusRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -49,8 +54,7 @@ class DefaultController extends AbstractController
         $organisationId = $user->getOrganisation()->getid();
         $workorders = $this->workorderRepository->findByOrganisation($organisationId);
 
-        //--------------------------------------------------------------------------
-        // Gestion des bons de travail préventifs
+        // Gestion des bons de travail préventifs-------------------------------------
         $today = (new \DateTime())->getTimestamp();
 
         // Dernière date de vérification cherchée dans le fichiers des paramètres
@@ -59,10 +63,11 @@ class DefaultController extends AbstractController
 
         // On vérifie tous les jours, rajout d'1 jour à la date enregistrée
         $lastPreventiveDate = $lastPreventiveDate + 24 * 60 * 60;
-        
+
         if ($lastPreventiveDate <= $today) {
             // Définition de la prochaine date à celle d'aujourd'hui
             $params->setLastPreventiveDate(new \DateTime());
+            $this->manager->persist($params);
 
             $this->preventiveProcessing($organisationId, $today);
 
@@ -70,9 +75,12 @@ class DefaultController extends AbstractController
         }
 
         // ------------------------------------------------------------------------------
+        // Récupération des utilisateurs pour l'affichage des photos
+        $users = $this->userRepository->findAll();
 
         return $this->render('default/index.html.twig', [
             'workorders'    => $workorders,
+            'users'         => $users,
         ]);
     }
 
@@ -80,7 +88,7 @@ class DefaultController extends AbstractController
     {
         // Recherche des templates préventifs
         $templates = $this->templateRepository->findAllTemplates($organisationId);
-        
+
         foreach ($templates as $template) {
             // Prochaine date en secondes
             $nextDate = $template->getNextDate()->getTimestamp(); // Date de réalisation
@@ -88,11 +96,11 @@ class DefaultController extends AbstractController
             $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
             // Date finale à prende en compte
             $nextCalculateDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
-
             // Test si template éligible
             if ($nextCalculateDate <= $today) {
+                // Contrôle si BT préventif est actif
                 if (!$this->workorderRepository->countPreventiveWorkorder($template->getTemplateNumber())) {
-                    // Création du BT préventif
+                    // Création du BT préventif, en récupérant les infos sur le template préventif
                     $workorder = new Workorder();
                     $workorder->setCreatedAt(new \DateTime())
                         ->setPreventiveDate($template->getNextDate())
@@ -122,6 +130,7 @@ class DefaultController extends AbstractController
         return;
     }
 
+    // Pour l'évolution du BT dans le temps et gérer son état, il faut modifier son statut...
     private function setpreventiveStatus($organisation, $today)
     {
         $preventiveWorkorders = $this->workorderRepository->findAllPreventiveWorkorders($organisation);
@@ -131,9 +140,6 @@ class DefaultController extends AbstractController
                 $preventiveDate = $workorder->getPreventiveDate()->getTimeStamp();
                 $daysBeforeLate = $workorder->getDaysBeforeLate() * 24 * 60 * 60;
                 $dateBerforeLate = $preventiveDate + $daysBeforeLate;
-                $date1 = (new \DateTime())->setTimestamp($today);
-                $date2 = (new \DateTime())->setTimestamp($preventiveDate);
-                $date4 = (new \DateTime())->setTimestamp($dateBerforeLate);
 
                 if ($today < $preventiveDate) {
                     $status = $this->workorderStatusRepository->findOneByName('EN_PREP.');
@@ -141,7 +147,7 @@ class DefaultController extends AbstractController
                     $status = $this->workorderStatusRepository->findOneByName('EN_COURS');
                 } elseif ($today > $dateBerforeLate) {
                     $status = $this->workorderStatusRepository->findOneByName('EN_RETARD');
-                } 
+                }
 
                 $workorder->setWorkorderStatus($status);
                 $this->manager->persist($workorder);

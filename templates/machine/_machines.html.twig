@@ -9,7 +9,7 @@
         {% elseif mode == 'modif' %}
             <td><a href="{{ path('work_order_edit', {'id': documentId, 'machine': machine.id}) }}" class="btn btn-primary btn-sm py-1" role="button">{{ machine.internalCode }}</a></td>
         {% else %}
-            <td class="text-left font_size_table"><a href="{{ path('machine_show', {'id': machine.id}) }}">{{ machine.internalCode }}</a></td>
+            <td class="text-left font_size_table "><a href="{{ path('machine_show', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50">{{ machine.internalCode }}</a></td>
         {% endif %}
         <td class="text-center font_size_table">{{ machine.constructor }}</a></td>
         <td class="text-center font_size_table">{{ machine.designation }}</td>

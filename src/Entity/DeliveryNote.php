@@ -30,12 +30,11 @@ class DeliveryNote
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="Ce champ doit être saisi")
      */
-    private $deliveryNoteNumber;
+    private $number;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message="Ce champ doit être saisi")
-     * @Assert\Date(message="Le format de la date est invalide")
      */
     private $date;
 
@@ -43,6 +42,12 @@ class DeliveryNote
      * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="deliveryNote")
      */
     private $deliveryNoteParts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="deliveryNotes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
 
     public function __construct()
     {
@@ -66,14 +71,14 @@ class DeliveryNote
         return $this;
     }
 
-    public function getDeliveryNoteNumber(): ?string
+    public function getNumber(): ?string
     {
-        return $this->deliveryNoteNumber;
+        return $this->number;
     }
 
-    public function setDeliveryNoteNumber(string $deliveryNoteNumber): self
+    public function setNumber(string $number): self
     {
-        $this->deliveryNoteNumber = $deliveryNoteNumber;
+        $this->number = $number;
 
         return $this;
     }
@@ -116,6 +121,18 @@ class DeliveryNote
                 $deliveryNotePart->setDeliveryNote(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }

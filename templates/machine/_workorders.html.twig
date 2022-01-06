@@ -2,10 +2,14 @@
         <div class="border border-info rounded p-2 m-1">
             <div class="row">
                 <div class="col-5">
+                    <span><strong>Numéro : </strong></span>
+                    <a href="{{ path('work_order_show', {'id': workorder.id}) }}">{{ workorder.id }}</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
                     <span><strong>Date : </strong></span>
-                    <a href="{{ path('work_order_show', {'id': workorder.id}) }}">
-                        {{ workorder.startDate|date('d-m-Y') }}
-                    </a>
+                    {{ workorder.startDate|date('d-m-Y') }}
                 </div>
             </div>
             <div class="row">

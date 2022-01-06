@@ -27,12 +27,7 @@
                     <td class="text-center">{{ user.firstName }}</td>
                     <td class="text-center">{{ user.lastName }}</td>
                     <td class="text-center">
-                        <form method="post" action="{{ path('user_remove', {id : user.id }) }}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
-                            <button type="submit" class="btn"><i class="bi bi-trash"></i></button>
-                            {# <span data-path="{{ path('user_remove', { id : user.id }) }}"></span> #}
-                        </form>
+                         {{ include('user/_delete_form.html.twig') }}
                     </td>                          
                 </tr>
             {% endfor %}

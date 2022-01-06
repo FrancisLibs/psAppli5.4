@@ -21,11 +21,6 @@ class DeliveryNotePart
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Part::class, inversedBy="deliveryNoteParts")
-     */
-    private $part;
-
-    /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Ce champ doit être saisi")
      */
@@ -37,38 +32,15 @@ class DeliveryNotePart
      */
     private $deliveryNote;
 
-    public function __construct()
-    {
-        $this->part = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Part::class, inversedBy="deliveryNoteParts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $part;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection|Part[]
-     */
-    public function getPart(): Collection
-    {
-        return $this->part;
-    }
-
-    public function addPart(Part $part): self
-    {
-        if (!$this->part->contains($part)) {
-            $this->part[] = $part;
-        }
-
-        return $this;
-    }
-
-    public function removePart(Part $part): self
-    {
-        $this->part->removeElement($part);
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -91,6 +63,18 @@ class DeliveryNotePart
     public function setDeliveryNote(?DeliveryNote $deliveryNote): self
     {
         $this->deliveryNote = $deliveryNote;
+
+        return $this;
+    }
+
+    public function getPart(): ?Part
+    {
+        return $this->part;
+    }
+
+    public function setPart(?Part $part): self
+    {
+        $this->part = $part;
 
         return $this;
     }

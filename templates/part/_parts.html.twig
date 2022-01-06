@@ -3,12 +3,14 @@
         <td class="font_size_table">
             {% if mode is defined and mode == 'workorderAddPart' %}
                 {% if part.stock.qteStock != 0 %}
-                    <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add', {'id': part.id, 'documentId': documentId, 'mode': mode}) }}">{{ part.code }}</a>
+                    <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
                 {% else %}
                     {{ part.code }}
                 {% endif %}
+            {% elseif mode is defined and mode == 'receivedPart' %}
+                   <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
             {% else %}
-                <a href="{{ path('part_edit', {'id': part.id}) }}">{{ part.code }}</a>
+                <a class="btn btn-sm btn-primary w-75" href="{{ path('part_edit', {'id': part.id}) }}">{{ part.code }}</a>
             {% endif %}
         </td>
         <td class="text-center font_size_table">{{ part.designation }}</td>

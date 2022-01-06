@@ -94,7 +94,7 @@ class UserController extends AbstractController
     /**
      * Delete user
      *
-     * @Route("/user/{id}/remove", name="user_remove", methods={"DELETE"})
+     * @Route("/user/{id}/delete", name="user_delete", methods={"POST"} )
      * @extraSecurity("is_granted('ROLE_ADMIN')")
      * @param                      User $user
      * @return                     RedirectResponse
@@ -104,7 +104,7 @@ class UserController extends AbstractController
         $token = $request->request->get('_token');
         $currentUser = $this->getUser();
 
-        if ($this->isCsrfTokenValid('delete', $token)) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $token)) {
             if ($user <> $currentUser) {
                 $this->manager->remove($user);
                 $this->manager->flush();
@@ -119,7 +119,7 @@ class UserController extends AbstractController
         }
 
         $this->addFlash('error', 'L\'utilisateur n\'a pas été supprimé.');
-        return $this->redirectToRoute('user_list');
+        return $this->redirectToRoute('user_index');
     }
 
     /**

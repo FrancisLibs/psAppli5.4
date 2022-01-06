@@ -51,6 +51,11 @@ class Organisation
      */
     private $templates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="organisation")
+     */
+    private $deliveryNotes;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -58,6 +63,8 @@ class Organisation
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->delivryNotes = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,5 +233,34 @@ class Organisation
 
         return $this;
     }
-   
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getOrganisation() === $this) {
+                $deliveryNote->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }   
 }

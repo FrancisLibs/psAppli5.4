@@ -55,7 +55,7 @@ class MachineCartController extends AbstractController
         }
 
         $session->set('machines', $machines);
-
+        
         return $this->redirectToRoute('machine_index', [
             'mode' => $mode,
             'documentId'   => $documentId,
@@ -80,7 +80,7 @@ class MachineCartController extends AbstractController
         if ($mode == 'newPreventive') {
             return $this->redirectToRoute('template_new');
         }
-        if ($mode == 'editPreventive') {
+        if ($mode == 'selectPreventive') {
             return $this->redirectToRoute('machine_index', [
                 'documentId' => $documentId,
                 'mode' => $mode,

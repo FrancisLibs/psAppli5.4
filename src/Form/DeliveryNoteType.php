@@ -16,7 +16,7 @@ class DeliveryNoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('deliveryNoteNumber', TextType::class, [
+            ->add('number', TextType::class, [
                 'label' => 'Numéro de BL'
             ])
             ->add('date', DateType::class, [

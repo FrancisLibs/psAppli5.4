@@ -14,20 +14,18 @@
     </div>
     <div class="row mt-3">
         <div class="col-8 offset-2 mb-4">
-            <div class="row mt-2 ">
-                <div class="col-2 text-primary">
-                    <h4>Machine</h4>
-                </div>
-                <div class="col-3">
+            <div class="row mt-2 mb-2">
+                <div class="col-7 d-flex justify-content-between">
+                    <h4 class="text-primary">Machine</h4>
+                    {% if workorder.machines is not empty %}
+                        <div class="case_machine">
+                            {% for machine in workorder.machines %}
+                                {{ machine.designation }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'select'}) }}" role="button">Choix de la Machine</a>
                 </div>
-                {% if workorder.machines is not empty %}
-                    <div class="case_machine">
-                        {% for machine in workorder.machines %}
-                            {{ machine.designation }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
             {{ include('workorder/_form.html.twig') }}
         </div>

@@ -1,0 +1,22 @@
+{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.number) }}
+        </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
+
+    <div class="mt-1 d-flex">
+        <div class="filterbtn">
+            {{ form_row(form.provider) }}
+        </div>
+        <div>
+            <button class="resetBtn btn btn-primary">Reset</button>
+        </div>
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+    </div> 
+{{ form_end(form) }}

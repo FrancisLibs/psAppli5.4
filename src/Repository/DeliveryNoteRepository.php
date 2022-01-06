@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\DeliveryNote;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Data\SearchDeliveryNote;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method DeliveryNote|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +17,46 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeliveryNoteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, DeliveryNote::class);
+        $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return DeliveryNote[] Returns an array of DeliveryNote objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Récupère les bons de livraison liés à une recherche
+     *
+     * @param SearchWorkorder $search
+     * @return PaginationInterface
+     */
+    public function findSearch(SearchDeliveryNote $search): PaginationInterface
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'DESC')
+            ->select('d')
+            ->andWhere('d.organisation = :val')
+            ->setParameter('val', $search->organisation);
 
-    /*
-    public function findOneBySomeField($value): ?DeliveryNote
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($search->number)) {
+            $query = $query
+                ->andWhere('d.number = :number')
+                ->setParameter('number', "%{$search->number}%");
+        }
+
+        if (!empty($search->user)) {
+            $query = $query
+                ->andWhere('d.provider = :provider')
+                ->setParameter('provider', $search->provider);
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
     }
-    */
 }

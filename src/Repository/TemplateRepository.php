@@ -29,7 +29,7 @@ class TemplateRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('t')
             ->select('t', 'm')
-            ->join('t.machines', 'm')
+            ->leftJoin('t.machines', 'm')
             ->orderBy('t.createdAt', 'ASC')
             ->andWhere('t.organisation = :val')
             ->setParameter('val', $search->organisation)

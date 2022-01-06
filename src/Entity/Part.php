@@ -85,7 +85,7 @@ class Part
     private $template;
 
     /**
-     * @ORM\ManyToMany(targetEntity=DeliveryNotePart::class, mappedBy="part")
+     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="part")
      */
     private $deliveryNoteParts;
 
@@ -297,7 +297,7 @@ class Part
     {
         if (!$this->deliveryNoteParts->contains($deliveryNotePart)) {
             $this->deliveryNoteParts[] = $deliveryNotePart;
-            $deliveryNotePart->addPart($this);
+            $deliveryNotePart->setPart($this);
         }
 
         return $this;
@@ -306,7 +306,10 @@ class Part
     public function removeDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
     {
         if ($this->deliveryNoteParts->removeElement($deliveryNotePart)) {
-            $deliveryNotePart->removePart($this);
+            // set the owning side to null (unless already changed)
+            if ($deliveryNotePart->getPart() === $this) {
+                $deliveryNotePart->setPart(null);
+            }
         }
 
         return $this;

@@ -194,8 +194,8 @@ class WorkorderController extends AbstractController
     public function addPart(Request $request, int $id, ?string $mode = null): Response
     {
         return $this->redirectToRoute('part_index', [
-            'documentId' => $id,
             'mode' => $mode,
+            'documentId' => $id,
         ]);
     }
 
@@ -215,6 +215,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Cloture des BT. Et calcul de la prochaine date pour les BT préventifs.
+     * 
      * @Route("/closing/{id}", name="work_order_closing")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -245,7 +247,7 @@ class WorkorderController extends AbstractController
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
             $workorder->setWorkorderStatus($status);
         } else {
-            $this->addFlash('error', 'Il manque des infos de durée d\'intervention');
+            $this->addFlash('error', 'Merci de compléter les infos de durée d\'intervention');
             return $this->redirectToRoute('work_order_edit', [
                 'id' => $workorder->getId(),
             ], Response::HTTP_SEE_OTHER);

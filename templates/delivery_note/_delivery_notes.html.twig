@@ -1,0 +1,14 @@
+<tbody>
+    {% for delivery_note in delivery_notes %}
+        <tr>
+            <td><a href="{{ path('delivery_note_show', {'id': delivery_note.id}) }}">{{ delivery_note.id }}</a></td>
+            <td class="text-center">{{ delivery_note.number }}</td>
+            <td class="text-center">{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</td>
+            <td class="text-center">{{ delivery_note.provider.name }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">Il n'y a pas de BL enregistrés</td>
+        </tr>
+    {% endfor %}
+</tbody>

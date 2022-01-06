@@ -42,7 +42,7 @@ class TemplateType extends AbstractType
                 'required' => false,
             ])
             ->add('daysBeforeLate', IntegerType::class, [
-                'label' => 'Jours av. retard',
+                'label' => 'Jours de réalisation',
                 'required' => false,
             ])
             ->add('sliding', CheckboxType::class, [

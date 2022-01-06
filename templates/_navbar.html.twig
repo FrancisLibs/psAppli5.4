@@ -26,13 +26,11 @@
                     Approvisionnement
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ path('delivery_note_new') }}">Réception pièces</a>
+                        <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
                         {# <a class="dropdown-item" href="#">Another action</a> #}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Liste pièces</a>
                         <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Liste BL</a>
-
-                        
                     </div>
                 </li>
                 <li class="nav-item mx-2">
@@ -56,22 +54,18 @@
                 {% endif %}
             </div>
             {% if app.user %}
-                <li class="navbar-nav dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if app.user.imageName %}
                             <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
                         {% else %}
                             <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
                         {% endif %}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
-                        </li>
-                        {# <li>
-                            <a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a>
-                        </li> #}
-                    </ul>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
+                        <a class="dropdown-item" href="{{ path('app_forgot_password_request') }}">Changer mot de passe</a>
+                    </div>
                 </li>
             {% endif %}
         </div>

@@ -7,33 +7,40 @@
         <div class="col-12">
             <div class="row justify-content-between">
                 <div class="col-3 offset-2">
-                    <h3>Pièces détachées</h3>
+                    {% if mode == "workorderAddPart" %}
+                        <h3>Pièces détachées -> BT</h3>
+                    {% else %}
+                        <h3>Pièces détachées</h3>
+                    {% endif %}
                 </div>
-                {% if mode == "workorderAddPart" %}
+                {% if mode == "workorderAddPart" or  mode == "receivedPart" %}
                     <div class="col-5 border border-primary rounded mb-3 mr-5 p-2">
                         <div class="d-flex justify-content-start">
                             <h4>Panier</h4>
                             {% if items is defined %}
-                                <a href="{{ path('cart_valid', {'id': documentId}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Valider</a>
+                                <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Valider</a>
                                 <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ml-4 btn btn-warning btn-sm btn_panier">vider</a>
                             {% endif %}
                         </div>
                         {% if items is defined %}
                             {% for item in items %}
-                                <span><a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
+                                <span><a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId, 'mode': mode}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
                                 <span class="items_display"><strong>{{ item.quantity }}x {{ item.part.code }}</strong> : {{ item.part.designation }}</span><br>
                             {% endfor %}
                         {% else %}
                             <p>Il n'y a aucune pièce sélectionnée</p>
                         {% endif %}
                     </div>
-                {% endif %}            </div>
+                {% endif %}            
+            </div>
             <div class="row mt-4">
                 <aside class="col-2">
                     <section>
                         <div class="d-flex flex-column mb-3">
                             {% if mode is defined and mode == 'workorderAddPart' %}
                                 <a class="btn btn-primary btn-sm w-50" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
+                            {% elseif mode is defined and mode == 'receivePart' %}
+                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Retour au BL</a>
                             {% else %}
                                 <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
                             {% endif %}

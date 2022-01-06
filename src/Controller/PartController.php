@@ -35,23 +35,25 @@ class PartController extends AbstractController
     /**
      * @ Liste des pièces détachées
      * 
-     * @Route("/list/{documentId?}/{mode?}", name="part_index", methods={"GET"})
+     * @Route("/list/{mode?}/{documentId?}", name="part_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
      */
-    public function index(Request $request, ?int $documentId = null, ?string $mode = null, ?int $edit = null): Response
+    public function index(Request $request, ?int $documentId = null, ?string $mode = null): Response
     {
         // Utilisation de la session pour sauvegarder l'objet de recherche
         $session = $this->requestStack->getSession();
 
-        if ($edit) {
+        $data = new SearchPart();
+
+        if ($mode == "workorderAddPart") {
             $data = $session->get('data');
-        } else {
-            $data = new SearchPart();
-        }
+        } 
+        
         $organisation = $this->getUser()->getOrganisation();
         $data->organisation = $organisation;
+
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchPartForm::class, $data);
 
@@ -59,14 +61,16 @@ class PartController extends AbstractController
         $session->set('data', $data); // Sauvegarde de la recherche
 
         $parts = $this->partRepository->findSearch($data);
+
         if ($request->get('ajax')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts]),
+                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts, 'mode' => $mode, 'documentId' => $documentId]),
                 'sorting'       =>  $this->renderView('part/_sorting.html.twig', ['parts' => $parts]),
                 'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
             ]);
         }
-        if ($mode == 'workorderAddPart') {
+
+        if ($mode == 'workorderAddPart' || $mode == 'receivedPart') {
             $panier = $session->get('panier', []);
             $panierWithData = [];
             foreach ($panier as $id => $quantity) {
@@ -89,8 +93,7 @@ class PartController extends AbstractController
             'parts' =>  $parts,
             'form'  =>  $form->createView(),
             'documentId' => $documentId,
-            'mode'  =>  $mode,
-
+            'mode'  =>  "index",
         ]);
     }
 
