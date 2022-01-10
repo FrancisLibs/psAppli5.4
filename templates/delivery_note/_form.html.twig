@@ -1,19 +1,40 @@
 {{ form_start(form) }}  
-    <div class="row justify-content-start align-items-end">
-        <div class="col-5">
+    <div class="row">
+        <div class="col-6">
             {{ form_errors(form.number) }}
             {{ form_label(form.number) }}
             {{ form_widget(form.number) }}
         </div>
-        <div class="col-4 offset-1">
+        <div class="col-5 offset-1 d-flex align-items-center">
             {{ form_errors(form.date) }}
-            {{ form_label(form.date) }}  
+            {{ form_label(form.date) }} 
             {{ form_widget(form.date) }}  
+        </div>
+    </div>
+    <div class="row justify-content-start align-items-end">
+        <div class="col-6 mt-5">
+            <h5 class="text-primary">{{ form_label(form.deliveryNoteParts) }}</h5>
+            {{ form_errors(form.deliveryNoteParts) }}
+            <ul>
+            {% for deliveryNotePartsField in form.deliveryNoteParts %}
+                <li>
+                    {{ form_errors(deliveryNotePartsField) }}
+                    <div class="row align-items-center">
+                         <div class="col-4">
+                            {{ form_row(deliveryNotePartsField.quantity) }}
+                        </div>
+                        <div class="col-8">
+                            {{ form_row(deliveryNotePartsField.part) }}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-3 text-center">
-            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">{{ button_label }}</button>
         </div>
     </div>
 {{ form_end(form) }}

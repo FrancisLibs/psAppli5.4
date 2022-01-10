@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\DeliveryNote;
 use App\Form\DeliveryNoteType;
 use App\Data\SearchDeliveryNote;
+use App\Repository\PartRepository;
 use App\Form\SearchDeliveryNoteForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,18 +26,20 @@ class DeliveryNoteController extends AbstractController
     private $requestStack;
     private $deliveryNoteRepository;
     private $providerRepository;
+    private $partRepositiory;
 
     public function __construct(
-        EntityManagerInterface $entityManagerInterface, 
-        RequestStack $requestStack, 
+        EntityManagerInterface $entityManagerInterface,
+        RequestStack $requestStack,
         DeliveryNoteRepository $deliveryNoteRepository,
-        ProviderRepository $providerRepository
-    )
-    {
+        ProviderRepository $providerRepository,
+        PartRepository $partRepository
+    ) {
         $this->manager = $entityManagerInterface;
         $this->requestStack = $requestStack;
         $this->deliveryNoteRepository = $deliveryNoteRepository;
         $this->providerRepository = $providerRepository;
+        $this->partRepository = $partRepository;
     }
 
     /**
@@ -46,6 +49,10 @@ class DeliveryNoteController extends AbstractController
     public function index(Request $request, DeliveryNoteRepository $deliveryNoteRepository): Response
     {
         $data = new SearchDeliveryNote();
+
+        // Effacement du fournisseur en session
+        $session = $this->requestStack->getSession();
+        $session->set('providerId', "");
 
         $organisation = $this->getUser()->getOrganisation();
         $data->organisation = $organisation;
@@ -72,9 +79,9 @@ class DeliveryNoteController extends AbstractController
 
         // Gestion du fournisseur
         if ($providerId) {
-            $session->set('provider', $providerId);
+            $session->set('providerId', $providerId);
         } else {
-            $providerId = $session->get('provider', null);
+            $providerId = $session->get('providerId', null);
         }
         if ($providerId) {
             $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
@@ -95,10 +102,17 @@ class DeliveryNoteController extends AbstractController
             ], Response::HTTP_SEE_OTHER);
         }
 
+        if (isset($provider)) {
+            return $this->renderForm('delivery_note/new.html.twig', [
+                'delivery_note' => $deliveryNote,
+                'form' => $form,
+                'provider' => $provider,
+            ]);
+        }
+
         return $this->renderForm('delivery_note/new.html.twig', [
             'delivery_note' => $deliveryNote,
             'form' => $form,
-            'provider' => $provider,
         ]);
     }
 
@@ -113,22 +127,36 @@ class DeliveryNoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="delivery_note_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit/{providerId?}", name="delivery_note_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, DeliveryNote $deliveryNote): Response
+    public function edit(Request $request, DeliveryNote $deliveryNote, ?int $providerId = null): Response
     {
+        if ($providerId) {
+            $provider = $this->providerRepository->findOneById($providerId);
+            $deliveryNote->setProvider($provider);
+            $this->manager->flush();
+        }
+
+        $user = $this->getUser();
+
         $form = $this->createForm(DeliveryNoteType::class, $deliveryNote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('delivery_note_index', [], Response::HTTP_SEE_OTHER);
+
+
+            return $this->redirectToRoute('delivery_note_show', [
+                'id' => $deliveryNote->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('delivery_note/edit.html.twig', [
-            'delivery_note' => $deliveryNote,
+            'deliveryNote' => $deliveryNote,
             'form' => $form,
+            'user' => $user,
         ]);
     }
 
@@ -143,6 +171,21 @@ class DeliveryNoteController extends AbstractController
             $entityManager->flush();
         }
 
+        return $this->redirectToRoute('delivery_note_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/removePart/{id}/{partId}", name="delivery_note_delete_part", methods={"GET"})
+     */
+    public function removePart(Request $request, DeliveryNote $deliveryNote, int $partId): Response
+    {
+        $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
+        foreach ($deliveryNoteParts as $parts) {
+            $partsId = $parts->getPart()->getId();
+            if ($partsId == $partId) {
+                
+            }
+        }
         return $this->redirectToRoute('delivery_note_index', [], Response::HTTP_SEE_OTHER);
     }
 }

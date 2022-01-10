@@ -51,13 +51,13 @@ class PartController extends AbstractController
             $data = $session->get('data');
         } 
         
-        $organisation = $this->getUser()->getOrganisation();
-        $data->organisation = $organisation;
+        $data->organisation = $this->getUser()->getOrganisation();
 
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchPartForm::class, $data);
 
         $form->handleRequest($request);
+
         $session->set('data', $data); // Sauvegarde de la recherche
 
         $parts = $this->partRepository->findSearch($data);
@@ -71,6 +71,7 @@ class PartController extends AbstractController
         }
 
         if ($mode == 'workorderAddPart' || $mode == 'receivedPart') {
+            
             $panier = $session->get('panier', []);
             $panierWithData = [];
             foreach ($panier as $id => $quantity) {

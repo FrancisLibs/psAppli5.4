@@ -77,7 +77,7 @@ class CartController extends AbstractController
     /**
      * Liste des pièces dans le panier
      * 
-     * @Route("/cart/{documentId}", name="cart_index")
+     * @Route("/{documentId}", name="cart_index")
      * @Security("is_granted('ROLE_USER')")
      * @param   workorderId
      * @return  response
@@ -105,7 +105,7 @@ class CartController extends AbstractController
     /**
      * Ajoute une pièce dans le panier
      * 
-     * @Route("/cart/add/{id}/{mode}/{documentId?}", name="cart_add")
+     * @Route("/add/{id}/{mode}/{documentId?}", name="cart_add")
      * @Security("is_granted('ROLE_USER')")
      * @param   id              $id de la pièce ajoutée
      * @param   workorderId     id du workorder
@@ -139,19 +139,6 @@ class CartController extends AbstractController
             }
 
             $session->set('panier', $panier);
-
-            // $panierWithData = [];
-            // foreach ($panier as $id => $quantity) {
-            //     $panierWithData[] = [
-            //         'part' => $this->partRepository->find($id),
-            //         'quantity' => $quantity,
-            //     ];
-            // }
-
-            // $total = 0;
-            // foreach ($panierWithData as $item) {
-            //     $total += $item['quantity'];
-            // }
         }
         return $this->redirectToRoute('part_index', [
             'documentId' => $documentId,
@@ -161,7 +148,7 @@ class CartController extends AbstractController
 
     /**
      * Enlève une pièce du panier
-     * @Route("/cart/remove/{id}/{documentId}/{mode}", name="cart_remove")
+     * @Route("/remove/{id}/{documentId}/{mode}", name="cart_remove")
      * @Security("is_granted('ROLE_USER')")
      * @param   id              id de la pièce à enlever
      * @param   workorderId     id du workorder
@@ -187,7 +174,7 @@ class CartController extends AbstractController
     /**
      * Vidange du panier
      * 
-     * @Route("/cart/empty/{documentId}/{mode}", name="cart_empty")
+     * @Route("/empty/{documentId}/{mode}", name="cart_empty")
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param int documentId   id du document actuel
@@ -212,7 +199,7 @@ class CartController extends AbstractController
     /**
      * Validation du panier
      * 
-     * @Route("/cart/validation/{documentId}/{mode}", name="cart_valid")
+     * @Route("/validation/{documentId}/{mode}", name="cart_valid")
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param workorderId   id du panier

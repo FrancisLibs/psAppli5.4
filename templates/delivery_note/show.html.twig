@@ -28,20 +28,29 @@
                 </div>
             </div>
         </aside>
-        <div class="col-5">
+        <div class="col-6">
             <div class="row mt-4">
-                <div class="col-6">
-                    <p><strong>Numéro de BL : </strong>{{ delivery_note.number }}</p>
-                </div>
                 <div class="col-4">
-                    <p><strong>Date : </strong>{{ delivery_note.date ? delivery_note.date|date('Y-m-d') : '' }}</p>
+                    <p>
+                        <strong>Numéro de BL : </strong><br>
+                        {{ delivery_note.number }}
+                    </p>
                 </div>
-                <div class="col-6">
-                    <p><strong>Fournisseur : </strong>{{ delivery_note.provider.name }}</p>
+                <div class="col-3">
+                    <p>
+                        <strong>Date : </strong><br>
+                        {{ delivery_note.date ? delivery_note.date|date('d-m-Y') : '' }}
+                    </p>
+                </div>
+                <div class="col-5">
+                    <p>
+                        <strong>Fournisseur : </strong><br>
+                        {{ delivery_note.provider.name }}
+                    </p>
                 </div>
             </div>
             <div class="row mt-5">
-                <div class="col-8 d-flex justify-content-start align-items-center">
+                <div class="col-9 d-flex justify-content-start align-items-center">
                     <h3 class="text-primary mr-5">Pièces détachées</h3>
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('part_index', {'mode': 'receivedPart', 'documentId': delivery_note.id}) }}">Sélection pièces</a>
                 </div>
@@ -54,6 +63,8 @@
                             <th scope="row" class="text-center">Désignation</th>
                             <th scope="row" class="text-center">Référence</th>
                             <th scope="row" class="text-center">Qte</th>
+                            <th scope="row" class="text-center">Action</th>
+
                         </tr>
                     </head>
                     <body>
@@ -63,6 +74,7 @@
                                 <td class="text-center">{{ part.part.designation }}</td>
                                 <td class="text-center">{{ part.part.reference }}</td>
                                 <td class="text-center">{{ part.quantity }}</td>
+                                <td class="text-center"><a href="{{ path('delivery_note_delete_part', {'id':delivery_note.id, 'partId': part.part.id}) }}" class="btn btn-danger btn-sm">Supp</a></td>
                             </tr>
                         {% endfor %}
                     </body>

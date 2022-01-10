@@ -9,16 +9,17 @@ use App\Data\SearchTemplate;
 use App\Form\SearchTemplateForm;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
+use function PHPUnit\Framework\isNull;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-use function PHPUnit\Framework\isNull;
 
 /**
  * @Route("/preventive")
@@ -70,13 +71,14 @@ class PreventiveController extends AbstractController
         $form->handleRequest($request);
 
         $templates = $this->templateRepository->findTemplates($data);
-        // if ($request->get('ajax')) {
-        //     return new JsonResponse([
-        //         'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
-        //         'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
-        //         'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
-        //     ]);
-        // }
+        
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
+                'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
+                'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
+            ]);
+        }
         return $this->render('preventive/index.html.twig', [
             'templates' =>  $templates,
             'form'  =>  $form->createView(),

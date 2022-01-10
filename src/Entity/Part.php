@@ -314,4 +314,9 @@ class Part
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->designation;
+    }
 }

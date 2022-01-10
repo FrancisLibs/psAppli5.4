@@ -1,13 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit DeliveryNote{% endblock %}
+{% block title %}Edition Bon de livraison{% endblock %}
 
 {% block body %}
-    <h1>Edit DeliveryNote</h1>
-
-    {{ include('delivery_note/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('delivery_note_index') }}">back to list</a>
-
-    {{ include('delivery_note/_delete_form.html.twig') }}
+    <div class="row mt-5">
+        <aside class="col-2 mt-4">
+            {{ include('user/_photo.html.twig') }}
+        </aside>
+        <div class="col-7">
+            <div class="row align-items-center">
+                <div class="col-5">
+                    <h3 class="text-primary">Edition Bon de livraison</h3>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-primary btn-sm mr-3" href="{{ path('delivery_note_index') }}" role="button">Liste des BL</a>
+                    {{ include('delivery_note/_delete_form.html.twig') }}
+                </div>
+            </div>
+            <div class="row align-items-center mt-5">
+                <div class="col-3">
+                    <h4>Fournisseur : </h4>
+                </div>
+                <div class="col-4">
+                    {{ deliveryNote.provider.name }}
+                </div>
+                <div class="col-2">
+                    <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'deliveryNoteChangeProv', 'documentId': deliveryNote.id}) }}">Fournisseur</a>
+                </div>
+            </div>
+            <div class="row align-items-center mt-5">
+                <div class="col-12">
+                    {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

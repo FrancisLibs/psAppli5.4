@@ -11,22 +11,22 @@
     </div>
     <div class="row mt-5 justify-content-start align-items-baseline">
         <div class="col-5 offset-2">
-            <div class="row mt-4 p-2 justify-content-start align-items-baseline border border-primary rounded">
+            <div class="row mt-4 p-2 justify-content-start align-items-center">
                 <div class="col-3">
                     <h4 class="text-primary">Fournisseur : </h4>
+                </div>
+                <div class="col-4">
+                    {% if provider is defined %}
+                        {{ provider.name }}
+                    {% endif %}
                 </div>
                 <div class="col-2">
                     <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
                 </div>
-                <div class="col-4 offset-2 text-center">
-                    {% if provider %}
-                        <p>{{ provider.name }}</p>
-                    {% endif %}
-                </div>
             </div>
             <div class="mt-5">
                 <h4 class="text-primary">Infos : </h4>
-                {{ include('delivery_note/_form.html.twig') }}
+                {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}
             </div>
         </div>
     </div>

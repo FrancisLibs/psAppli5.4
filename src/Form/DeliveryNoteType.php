@@ -23,7 +23,12 @@ class DeliveryNoteType extends AbstractType
                 'label' => 'Date de BL',
                 'input' => 'datetime',
                 'widget' => 'single_text',
-            ]);
+            ])
+            ->add('deliveryNoteParts', CollectionType::class, [
+                'entry_type' => DeliveryNotePartType::class,
+                'label' => 'Pièces détachées',
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

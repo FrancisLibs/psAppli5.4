@@ -11,25 +11,16 @@
      <main class="row provider-js-filter">
         <aside class="col-2 mt-4">
             <setion>
-                {% if mode != 'selectProvider' %}
+                {% if mode != 'selectProvider' and mode != 'editProvider' and mode != 'deliveryNoteChangeProv' %}
                     <a class="btn btn-primary btn-sm mb-3" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
                 {% endif %}
                 {% include 'provider/_filter.html.twig' %}
             </section>
-            <section class="text-center mt-3 d-flex flex-column ">
-                {% if app.user.imageName %}
-                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                {% else %}
-                    <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                {% endif %}
-                <div class="mt-2 border borer-danger rounded">
-                    {{ app.user.firstName ~ " " ~ app.user.lastName }}
-                </div>
-            </section>
+            {{ include('user/_photo.html.twig') }}
         </aside>
         <article class="col-10">
             <div class="mt-4">
-                {% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode} only %}
+                {% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode, documentId: documentId} only %}
             </div>
             {# display navigation #}
             <div class="navigation js-filter-pagination">

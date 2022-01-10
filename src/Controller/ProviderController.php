@@ -32,13 +32,13 @@ class ProviderController extends AbstractController
     /**
      * Liste des fournisseurs
      * 
-     * @Route("/{mode?}", name="provider_index", methods={"GET"})
+     * @Route("/{mode?}/{documentId?}", name="provider_index", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN')")
      * 
      * @param Request $request
      * @return Response 
      */
-    public function index(Request $request, ?string $mode): Response
+    public function index(Request $request, ?string $mode, ?int $documentId = null): Response
     {
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
@@ -57,15 +57,17 @@ class ProviderController extends AbstractController
 
         if ($request->get('ajax')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' =>$providers]),
+                'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' => $providers]),
                 'sorting'       =>  $this->renderView('provider/_sorting.html.twig', ['providers' => $providers]),
                 'pagination'    =>  $this->renderView('provider/_pagination.html.twig', ['providers' => $providers]),
             ]);
         }
+
         return $this->render('provider/index.html.twig', [
             'providers' =>  $providers,
             'form'  =>  $form->createView(),
             'mode' => $mode,
+            'documentId' => $documentId,
         ]);
     }
 
