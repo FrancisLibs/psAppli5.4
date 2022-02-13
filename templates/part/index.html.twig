@@ -9,11 +9,13 @@
                 <div class="col-3 offset-2">
                     {% if mode == "workorderAddPart" %}
                         <h3>Pièces détachées -> BT</h3>
+                    {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
+                        <h3>Pièces détachées -> BL</h3>
                     {% else %}
                         <h3>Pièces détachées</h3>
                     {% endif %}
                 </div>
-                {% if mode == "workorderAddPart" or  mode == "receivedPart" %}
+                {% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' %}
                     <div class="col-5 border border-primary rounded mb-3 mr-5 p-2">
                         <div class="d-flex justify-content-start">
                             <h4>Panier</h4>
@@ -37,10 +39,10 @@
                 <aside class="col-2">
                     <section>
                         <div class="d-flex flex-column mb-3">
-                            {% if mode is defined and mode == 'workorderAddPart' %}
+                            {% if mode == 'workorderAddPart' %}
                                 <a class="btn btn-primary btn-sm w-50" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
-                            {% elseif mode is defined and mode == 'receivePart' %}
-                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Retour au BL</a>
+                            {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
+                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
                             {% else %}
                                 <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
                             {% endif %}
@@ -61,8 +63,4 @@
             </div>
         </article>
     </main>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('part') }}
 {% endblock %}

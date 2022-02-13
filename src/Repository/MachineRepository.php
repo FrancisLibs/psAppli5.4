@@ -36,9 +36,10 @@ class MachineRepository extends ServiceEntityRepository
         ;
 
         if (!empty($search->internalCode)) {
+            $internalCode = strtoupper($search->internalCode);
             $query = $query
                 ->andWhere('m.internalCode LIKE :internalCode')
-                ->setParameter('internalCode', "%{$search->internalCode}%");
+                ->setParameter('internalCode', "%{$internalCode}%");
         }
 
         if (!empty($search->designation)) {

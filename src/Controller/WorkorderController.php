@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,7 @@ use function PHPUnit\Framework\isEmpty;
  */
 class WorkorderController extends AbstractController
 {
+    private $requestStack;
     private $workorderRepository;
     private $manager;
     private $partRepository;
@@ -46,7 +48,8 @@ class WorkorderController extends AbstractController
         TemplateRepository $templateRepository,
         PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        RequestStack $requestStack
     ) {
         $this->workorderRepository = $workorderRepository;
         $this->partRepository = $partRepository;
@@ -55,6 +58,7 @@ class WorkorderController extends AbstractController
         $this->pdf = $pdf;
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->manager = $manager;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -94,6 +98,7 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request, Machine $machine = null): Response
     {
+        $session = $this->requestStack->getSession();
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
 
@@ -101,7 +106,10 @@ class WorkorderController extends AbstractController
         $workorder->setPreventive(false);
         $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
 
-        if ($machine) {
+        // Si une machine a été mise en session, elle est pour le BT
+        $machines = $session->get('machines', []);
+        if($machines){
+            $machine = $this->machineRepository->find($machines[0]);
             $workorder->addMachine($machine);
         }
 
@@ -117,6 +125,10 @@ class WorkorderController extends AbstractController
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
+            if($machine){
+                $workorder->addMachine($machine);
+            }
+            $session->remove('machines');
             if ($workorder->getMachines()->isEmpty()) {
                 $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
                 return $this->redirectToRoute('work_order_new');
@@ -193,6 +205,8 @@ class WorkorderController extends AbstractController
      */
     public function addPart(Request $request, int $id, ?string $mode = null): Response
     {
+        $session = $this->requestStack->getSession();
+        $session->remove('panier');
         return $this->redirectToRoute('part_index', [
             'mode' => $mode,
             'documentId' => $id,

@@ -46,11 +46,6 @@ class Machine
     private $workshop;
 
     /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $status;
-
-    /**
      * @ORM\Column(type="string", length=15)
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-zA-Z]{6}[0-9]{4}$/")
@@ -149,18 +144,6 @@ class Machine
     public function setWorkshop(?Workshop $workshop): self
     {
         $this->workshop = $workshop;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
 
         return $this;
     }

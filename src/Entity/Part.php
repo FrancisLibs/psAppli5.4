@@ -26,7 +26,7 @@ class Part
     /**
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
-     * @Assert\Regex("/^C[A-Z]{4}[0-9]{4}$/")
+     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")
      * message="Le code ne respecte pas le format !"
      */
     private $code;
@@ -313,10 +313,5 @@ class Part
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->designation;
     }
 }

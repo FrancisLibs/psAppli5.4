@@ -43,8 +43,10 @@ class ProviderController extends AbstractController
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
         $data->organisation = $this->getUser()->getOrganisation()->getId();
+
         $form = $this->createForm(SearchProviderForm::class, $data);
         $form->handleRequest($request);
+        
         $providers = $this->providerRepository->findSearch($data);
 
         if ($request->get('ajax') && ($mode == 'selectProvider')) {

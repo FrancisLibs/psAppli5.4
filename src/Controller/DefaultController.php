@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use DateInterval;
+use App\Entity\Connexion;
 use App\Entity\Workorder;
+use App\Repository\UserRepository;
 use App\Repository\ParamsRepository;
 use App\Repository\TemplateRepository;
-use App\Repository\UserRepository;
 use App\Repository\WorkorderRepository;
-use App\Repository\WorkorderStatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -48,9 +49,24 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
+        
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+
+        // Création d'un enregistrement de connexion
+        if ($user) {
+            $connexion = new Connexion();
+            $connexionDate = (new \DateTime());
+            $user = $this->getUser();
+            $connexion
+                ->setDate($connexionDate)
+                ->setUser($user);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($connexion);
+            $manager->flush();
+        }
+
         $organisationId = $user->getOrganisation()->getid();
         $workorders = $this->workorderRepository->findByOrganisation($organisationId);
 

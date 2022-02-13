@@ -4,30 +4,29 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-4 offset-2 d-flex justify-content-between align-items-center">
-            <h2>Saisie Bon de Livraison</h2>
-            <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
-        </div>
-    </div>
-    <div class="row mt-5 justify-content-start align-items-baseline">
-        <div class="col-5 offset-2">
-            <div class="row mt-4 p-2 justify-content-start align-items-center">
-                <div class="col-3">
-                    <h4 class="text-primary">Fournisseur : </h4>
+        <div class="col-6 offset-2">
+            <div class="row">
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <h2>Saisie Bon de Livraison</h2>
+                    <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
                 </div>
-                <div class="col-4">
+            </div>
+            <div class="row mt-4">
+                <div class="col-10 d-flex justify-content-start align-items-center">
+                    <h4 class="text-primary mr-5">Fournisseur : </h4>
                     {% if provider is defined %}
-                        {{ provider.name }}
+                        <div class="mr-5">{{ provider.name }}</div>
                     {% endif %}
-                </div>
-                <div class="col-2">
                     <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
                 </div>
             </div>
-            <div class="mt-5">
-                <h4 class="text-primary">Infos : </h4>
+            <div class="mt-2">
                 {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('editDeliveryNote')}}
 {% endblock %}

@@ -50,6 +50,9 @@ class MachineController extends AbstractController
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
+        if($mode == "newWorkorder"){
+            $session->remove('machines');
+        }
         // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
         if ($mode == "selectPreventive" || $mode == 'editPreventive') {
@@ -112,11 +115,11 @@ class MachineController extends AbstractController
         }
 
         return $this->render('machine/index.html.twig', [
-            'machines'      =>  $machines,
-            'form'          =>  $form->createView(),
-            'mode'          =>  $mode,
-            'documentId'    =>  $documentId,
-            'machinesWithData' =>  $machinesWithData,
+            'machines'          =>  $machines,
+            'form'              =>  $form->createView(),
+            'mode'              =>  $mode,
+            'documentId'        =>  $documentId,
+            'machinesWithData'  =>  $machinesWithData,
 
         ]);
     }

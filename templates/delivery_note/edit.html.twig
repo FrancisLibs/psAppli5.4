@@ -18,11 +18,11 @@
                 </div>
             </div>
             <div class="row align-items-center mt-5">
-                <div class="col-3">
+                <div class="col-2 text-primary">
                     <h4>Fournisseur : </h4>
                 </div>
-                <div class="col-4">
-                    {{ deliveryNote.provider.name }}
+                <div class="col-3">
+                    <h4>{{ deliveryNote.provider.name }}</h4>
                 </div>
                 <div class="col-2">
                     <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'deliveryNoteChangeProv', 'documentId': deliveryNote.id}) }}">Fournisseur</a>

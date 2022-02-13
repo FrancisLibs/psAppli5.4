@@ -39,7 +39,7 @@ class DeliveryNote
     private $date;
 
     /**
-     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="deliveryNote")
+     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="deliveryNote", cascade={"persist"})
      */
     private $deliveryNoteParts;
 

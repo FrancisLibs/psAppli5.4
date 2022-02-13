@@ -1,35 +1,51 @@
-{{ form_start(form) }}  
+{{ form_start(form) }}
     <div class="row">
-        <div class="col-6">
-            {{ form_errors(form.number) }}
-            {{ form_label(form.number) }}
-            {{ form_widget(form.number) }}
+        <h4 class="col-2 text-primary">Infos :</h4>
+    </div>
+    <div class="row mt-3">
+        <div class="col-5 d-flex justify-content-start align-items-center">
+            <div class="mr-3">
+                {{ form_errors(form.number) }}
+                {{ form_label(form.number) }}
+            </div>
+            <div class="col-7">
+                {{ form_widget(form.number) }}
+            </div>
         </div>
-        <div class="col-5 offset-1 d-flex align-items-center">
-            {{ form_errors(form.date) }}
-            {{ form_label(form.date) }} 
-            {{ form_widget(form.date) }}  
+        <div class="col-5 d-flex justify-content-start align-items-center">
+            <div class="mr-3">
+                {{ form_errors(form.date) }}
+                {{ form_label(form.date) }} 
+            </div>
+            <div class="col-6">
+                {{ form_widget(form.date) }}  
+            </div>
         </div>
     </div>
-    <div class="row justify-content-start align-items-end">
-        <div class="col-6 mt-5">
-            <h5 class="text-primary">{{ form_label(form.deliveryNoteParts) }}</h5>
+    <div class="row justify-content-start align-items-end mt-5">
+        <div class="col-8">
+            <div class="d-flex justify-content-start mb-4">
+                <h4 class="text-primary mr-5">Pièces détachées</h4>
+                {% if mode == "editDeliveryNote" %}
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('part_index', {'mode': mode, 'documentId': deliveryNote.id }) }}">Sélection pièces</a>
+                {% elseif mode == "newDeliveryNote" %}
+                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('part_index', {'mode': mode }) }}">Sélection pièces</a>
+                {% endif %}
+            </div>
             {{ form_errors(form.deliveryNoteParts) }}
-            <ul>
             {% for deliveryNotePartsField in form.deliveryNoteParts %}
-                <li>
-                    {{ form_errors(deliveryNotePartsField) }}
-                    <div class="row align-items-center">
-                         <div class="col-4">
-                            {{ form_row(deliveryNotePartsField.quantity) }}
-                        </div>
-                        <div class="col-8">
-                            {{ form_row(deliveryNotePartsField.part) }}
-                        </div>
+                {{ form_errors(deliveryNotePartsField) }}
+                <div class="row justify-content-start align-items-center">
+                    <div class="col-2">
+                        {{ form_row(deliveryNotePartsField.quantity) }}
                     </div>
-                </li>
+                    <div class="col-9">
+                        {{ form_row(deliveryNotePartsField.part) }}
+                    </div>
+                </div>
+            {% else %}
+                <p>Il n'y a pas de pièce détachée sélectionnée.</p>
             {% endfor %}
-            </ul>
         </div>
     </div>
     <div class="row mt-5">

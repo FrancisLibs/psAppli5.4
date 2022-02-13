@@ -1,15 +1,20 @@
-html,
-body,
-.header {
-  margin: 0px;
-  padding: 0px;
-}
-
-.header,
-body,
 html {
   height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  min-height: 100%;
   width: 100%;
+}
+
+footer {
+  background: linear-gradient(#b6e4b6bf, white);
 }
 
 /* Page login image de fond */

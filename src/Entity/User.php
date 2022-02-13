@@ -118,10 +118,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $templates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Connexion::class, mappedBy="user")
+     */
+    private $connexions;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->connexions = new ArrayCollection();
     }
 
     /**
@@ -411,6 +417,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             // set the owning side to null (unless already changed)
             if ($template->getUser() === $this) {
                 $template->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Connexion[]
+     */
+    public function getConnexions(): Collection
+    {
+        return $this->connexions;
+    }
+
+    public function addConnexion(Connexion $connexion): self
+    {
+        if (!$this->connexions->contains($connexion)) {
+            $this->connexions[] = $connexion;
+            $connexion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConnexion(Connexion $connexion): self
+    {
+        if ($this->connexions->removeElement($connexion)) {
+            // set the owning side to null (unless already changed)
+            if ($connexion->getUser() === $this) {
+                $connexion->setUser(null);
             }
         }
 

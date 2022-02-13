@@ -26,7 +26,7 @@ class DeliveryNoteType extends AbstractType
             ])
             ->add('deliveryNoteParts', CollectionType::class, [
                 'entry_type' => DeliveryNotePartType::class,
-                'label' => 'Pièces détachées',
+                'label' => false,
             ])
         ;
     }

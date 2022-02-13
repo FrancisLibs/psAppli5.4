@@ -16,15 +16,19 @@
     </head>
 
     <body>
-        {% if app.request.get('_route') != 'app_login' %}
-            {% include '_navbar.html.twig' %}
-        {% endif %}
-        {% if app.request.get('_route') == 'app_login' %}
-            <div class="container-fluid header">
-        {% else %}
-            <div class="container-fluid">
-        {% endif %}
-        <!-- Page Content -->
+        <div id="main">
+            <nav>
+                {% if app.request.get('_route') != 'app_login' %}
+                    {% include '_navbar.html.twig' %}
+                {% endif %}
+            </nav>
+
+            {% if app.request.get('_route') == 'app_login' %}
+                <div class="container-fluid header">
+            {% else %}
+                <div class="container-fluid">
+            {% endif %}
+            <!-- Page Content -->
             <div class="row">
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}
@@ -40,13 +44,32 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="row">
+            <section class="row">
                 <div class="col-md-12">
                     {% block body %}
                     {% endblock %}
                 </div>
-            </div>
+            </section>
         </div>
+          
+
+        {# <footer class="row mt-1 mb-1">
+            <div class="col-4 text-center d-flex flex-column align-self-center justify-content-center">
+                <p>Réalisation : </p>
+                <p>PULSIOS</p>
+                <p>6, rue Frédéric Copin</p>
+                <p>67116 Reichstett</p>
+            </div>
+            <div class="col-4 text-center d-flex flex-column align-self-center justify-content-center" style="font-size: 1.6em;">
+                <p>Gestion maintenance</p>
+                <p>Pierre Schmidt</p>
+            </div>
+            <div class="col-4 text-center d-flex flex-column align-self-center justify-content-center">
+                <p>Version : 2.0</p>
+                <p>Mod. : Saisie BL</p>
+            </div>
+        </footer> #}
+
         <!-- /.container -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

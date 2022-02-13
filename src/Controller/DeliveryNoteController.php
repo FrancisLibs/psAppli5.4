@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\DeliveryNote;
 use App\Form\DeliveryNoteType;
 use App\Data\SearchDeliveryNote;
+use App\Entity\DeliveryNotePart;
 use App\Repository\PartRepository;
 use App\Form\SearchDeliveryNoteForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
+use PhpParser\Node\Stmt\Foreach_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +28,7 @@ class DeliveryNoteController extends AbstractController
     private $requestStack;
     private $deliveryNoteRepository;
     private $providerRepository;
-    private $partRepositiory;
+    private $partRepository;
 
     public function __construct(
         EntityManagerInterface $entityManagerInterface,
@@ -50,9 +52,12 @@ class DeliveryNoteController extends AbstractController
     {
         $data = new SearchDeliveryNote();
 
-        // Effacement du fournisseur en session
+        // Effacement du fournisseur, des pièces détachées, de la date et fournisseur en session
         $session = $this->requestStack->getSession();
-        $session->set('providerId', "");
+        $session->remove('providerId');
+        $session->remove('panier');
+        $session->remove('deliveryNoteDate');
+        $session->remove('deliveryNoteNumber');
 
         $organisation = $this->getUser()->getOrganisation();
         $data->organisation = $organisation;
@@ -71,31 +76,77 @@ class DeliveryNoteController extends AbstractController
     /**
      * @Route("/new/{providerId?}", name="delivery_note_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ?int $providerId = null): Response
+    public function new(Request $request, int $providerId = null): Response
     {
         $user = $this->getUser();
+        $deliveryNote = new DeliveryNote();
+
         $organisation = $user->getOrganisation();
         $session = $this->requestStack->getSession();
 
-        // Gestion du fournisseur
+        // Gestion du numéro de BL en session 
+        $number = $session->get('deliveryNoteNumber', null);
+        if ($number) {
+            $deliveryNote->setNumber($number);
+        }
+
+        // Gestion de la date de BL en session
+        $date = $session->get('deliveryNoteDate', null);
+        if ($date) {
+            $newDate = new \DateTime($date);
+            $deliveryNote->setDate($newDate);
+        }
+
+        // Gestion du fournisseur du BL en session
         if ($providerId) {
             $session->set('providerId', $providerId);
+            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
         } else {
             $providerId = $session->get('providerId', null);
-        }
-        if ($providerId) {
             $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
         }
 
-        $deliveryNote = new DeliveryNote();
+
+        // Gestion des pièces en session
+        $panier = $session->get('panier', []);
+        if ($panier) {
+            foreach ($panier as $id => $quantity) {
+                $deliveryNotePart = new DeliveryNotePart();
+                $part = $this->partRepository->find($id);
+                $deliveryNotePart->setPart($part);
+                $deliveryNotePart->setQuantity($quantity);
+                $deliveryNote->addDeliveryNotePart($deliveryNotePart);
+            }
+            $this->manager->persist($deliveryNotePart);
+        }
+
         $form = $this->createForm(DeliveryNoteType::class, $deliveryNote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if (empty($provider)) {
+                $this->addFlash('error', 'Il n\'y a pas de fournisseur de sélectionné !');
+                return $this->redirectToRoute('delivery_note_new');
+            }
+
             $deliveryNote->setProvider($provider);
             $deliveryNote->setOrganisation($organisation);
+
+            $this->manager->persist($deliveryNote);
+
+            // Modification du stock de pièces détachées
+            $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
+            foreach ($deliveryNoteParts as $deliveryNotePart) {
+                $deliveryNotePartQte = $deliveryNotePart->getQuantity();
+                $partStockQte = $deliveryNotePart->getPart()->getStock()->getQteStock();
+                $deliveryNotePart->getPart()->getStock()->setQteStock($deliveryNotePartQte + $partStockQte);
+            }
             $this->manager->persist($deliveryNote);
             $this->manager->flush();
+
+            // Effacement du panier de pièces détachées
+            $session->remove('panier');
 
             return $this->redirectToRoute('delivery_note_show', [
                 'id' => $deliveryNote->getId(),
@@ -104,15 +155,16 @@ class DeliveryNoteController extends AbstractController
 
         if (isset($provider)) {
             return $this->renderForm('delivery_note/new.html.twig', [
-                'delivery_note' => $deliveryNote,
                 'form' => $form,
                 'provider' => $provider,
+                'mode' => 'newDeliveryNote',
             ]);
         }
 
         return $this->renderForm('delivery_note/new.html.twig', [
-            'delivery_note' => $deliveryNote,
+            'deliveryNote' => $deliveryNote,
             'form' => $form,
+            'mode' => 'newDeliveryNote',
         ]);
     }
 
@@ -121,7 +173,9 @@ class DeliveryNoteController extends AbstractController
      */
     public function show(DeliveryNote $deliveryNote): Response
     {
+        $user = $this->getUser();
         return $this->render('delivery_note/show.html.twig', [
+            'user' => $user,
             'delivery_note' => $deliveryNote,
         ]);
     }
@@ -131,21 +185,88 @@ class DeliveryNoteController extends AbstractController
      */
     public function edit(Request $request, DeliveryNote $deliveryNote, ?int $providerId = null): Response
     {
+        $user = $this->getUser();
+
+        $session = $this->requestStack->getSession();
+        $panier = $session->get('panier');
+
         if ($providerId) {
             $provider = $this->providerRepository->findOneById($providerId);
             $deliveryNote->setProvider($provider);
             $this->manager->flush();
         }
 
-        $user = $this->getUser();
+        // Traitement des pièces du panier
+        $parts = $deliveryNote->getDeliveryNoteParts();
+        if ($panier) {
+            foreach ($panier as $id => $qte) {
+                $flag = true;
+                foreach ($parts as $part) {
+                    if ($id == $part->getPart()->getId()) {
+                        $part->setQuantity($part->getQuantity() + $qte);
+                        $flag = false;
+                    }
+                }
+            }
+            if ($flag) {
+                $deliveryNotePart = new DeliveryNotePart();
+                $part = $this->partRepository->find($id);
+                $deliveryNotePart->setPart($part);
+                $deliveryNotePart->setQuantity($qte);
+                $deliveryNote->addDeliveryNotePart($deliveryNotePart);
+            }
+            $this->manager->flush();
+
+            // Après traitement -> suppression du panier
+            $session->remove('panier');
+        }
+
+        // Mise en mémoire des pièces du BL avant modification, pour le traitement des pièces détachées
+        $oldParts = $session->get('oldParts', null);
+        if (!$oldParts) {
+            $oldParts = $deliveryNote->getDeliveryNoteParts();
+            $session->set('oldParts', $oldParts);
+        }
 
         $form = $this->createForm(DeliveryNoteType::class, $deliveryNote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->getDoctrine()->getManager()->flush();
+            // 1) Lire les pièces contenues dans le formulaire
+            $parts = $deliveryNote->getDeliveryNoteParts();
 
+            // 2) Boucler sur les pièces de l'ancien BL et comparer avec les pièces du formulaire
+            foreach ($parts as $part) {
+                $flag = true;
+                $id = $part->getPart()->getId();
+                // Quantité actuelle en stock pour la pièce en cours
+                $qteStock = $part->getPart()->getStock()->getQteStock();
+
+                foreach ($oldParts as $oldPart) {
+                    $oldId = $oldPart->getPart()->getId();
+
+                    // Si c'est la même pièce
+                    if ($id == $oldId) {
+                        // $qte est la différence de quantité entre l'ancien BL et celui modifié
+                        $qte = $part->getQuantity() - $oldPart->getQuantity();
+                        $part->getPart()->getStock()->setQteStock($qteStock + $qte);
+                        if ($part->getQuantity() == 0) {
+                            $deliveryNote->removeDeliveryNotePart($part);
+                            $this->manager->remove($part);
+                        }
+                        $flag = false;
+                    }
+                }
+                // C'est une nouvelle pièce
+                if ($flag) {
+                    $qteStock = $part->getPart()->getStock()->getQteStock();
+                    $qte = $part->getQuantity();
+                    $part->getPart()->getStock()->setQteStock($qte + $qteStock);
+                }
+            }
+            $session->remove('oldParts');
+            $this->manager->flush();
 
 
             return $this->redirectToRoute('delivery_note_show', [
@@ -157,6 +278,7 @@ class DeliveryNoteController extends AbstractController
             'deliveryNote' => $deliveryNote,
             'form' => $form,
             'user' => $user,
+            'mode' => 'editDeliveryNote'
         ]);
     }
 
@@ -175,17 +297,62 @@ class DeliveryNoteController extends AbstractController
     }
 
     /**
-     * @Route("/removePart/{id}/{partId}", name="delivery_note_delete_part", methods={"GET"})
+     * @Route("/{id}/removePart/{partId}", name="delivery_note_delete_part", methods={"GET"})
      */
     public function removePart(Request $request, DeliveryNote $deliveryNote, int $partId): Response
     {
         $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
-        foreach ($deliveryNoteParts as $parts) {
-            $partsId = $parts->getPart()->getId();
-            if ($partsId == $partId) {
-                
+
+        foreach ($deliveryNoteParts as $part) {
+            $id = $part->getPart()->getId();
+            if ($id == $partId) {
+                if ($part->getQuantity() > 1) {
+                    $part->setQuantity($part->getQuantity() - 1);
+                } else {
+                    $deliveryNote->removeDeliveryNotePart($part);
+                }
+                $this->manager->persist($part);
             }
         }
-        return $this->redirectToRoute('delivery_note_index', [], Response::HTTP_SEE_OTHER);
+        $this->manager->persist($deliveryNote);
+        $this->manager->flush();
+
+        return $this->redirectToRoute('delivery_note_show', [
+            'id' => $deliveryNote->getId()
+        ], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Mise en session du numéro du BL
+     *
+     * @Route("/saveNumber/{deliveryNoteNumber?}", name="save_number_in_session", methods={"GET"})
+     * 
+     * @param string $deliveryNoteNumber
+     * @return void
+     */
+    public function deliveryNoteNumberSession(?string $deliveryNoteNumber)
+    {
+        $session = $this->requestStack->getSession();
+        if ($deliveryNoteNumber === null) {
+            $session->remove('deliveryNoteNumber');
+        } else {
+            $session->set('deliveryNoteNumber', $deliveryNoteNumber);
+        }
+        return $this->json(['code' => 200, 'message' => $deliveryNoteNumber], 200);
+    }
+
+    /**
+     * Mise en session de la date du BL
+     *
+     * @Route("/saveDate/{deliveryNoteDate?}", name="save_date_in_session", methods={"GET"})
+     * 
+     * @param string $deliveryNoteNumber
+     * @return void
+     */
+    public function deliveryNoteDateSession(?string $deliveryNoteDate)
+    {
+        $session = $this->requestStack->getSession();
+        $session->set('deliveryNoteDate', $deliveryNoteDate);
+        return $this->json(['code' => 200, 'message' => $deliveryNoteDate], 200);
     }
 }

@@ -4,13 +4,13 @@
 
 {% block body %}
     <header class="row mt-4">
-        <div class="col-3 offset-2">
+        <div class="col-2 offset-2">
             <h3>Bons de travail</h3>
         </div>
     </header>
     <main class="row workorder-js-filter">
         <aside class="col-2 mt-4">
-            <setion>
+            <section>
                 <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
                 {% include 'workorder/_filter.html.twig' %}
             </section>

@@ -40,13 +40,12 @@ class MachineCartController extends AbstractController
      * @Route("/add/{id}/{mode}/{documentId?}", name="add_machine_to_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request   $request
      * @param int       $id   // L'id de la machine à ajouter
      * @param string    $mode      
      * 
      * @return redirectToRoute
      */
-    public function addMachine(Request $request, int $id, $mode = null, ?int $documentId): Response
+    public function addMachine(int $id, $mode = null, ?int $documentId): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -55,7 +54,12 @@ class MachineCartController extends AbstractController
         }
 
         $session->set('machines', $machines);
-        
+        if($mode == "newWorkorder"){
+            return $this->redirectToRoute('work_order_new',[
+                'mode' => $mode,
+            ]);
+        }
+
         return $this->redirectToRoute('machine_index', [
             'mode' => $mode,
             'documentId'   => $documentId,

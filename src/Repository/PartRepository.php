@@ -44,9 +44,10 @@ class PartRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->code)) {
+            $code = strtoupper($search->code);
             $query = $query
                 ->andWhere('p.code LIKE :code')
-                ->setParameter('code', "%{$search->code}%")
+                ->setParameter('code', "%{$code}%")
             ;
         }
 
@@ -65,9 +66,10 @@ class PartRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->place)) {
+            $place = strtoupper($search->place);
             $query = $query
                 ->andWhere('s.place LIKE :place')
-                ->setParameter('place', "%{$search->place}%")
+                ->setParameter('place', "%{$place}%")
             ;
         }
 

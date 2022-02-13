@@ -89,11 +89,9 @@ export class ProviderIndex {
 
   async loadForm() {
     const data = new FormData(this.form);
-
     const url = new URL(
       this.form.getAttribute("action") || window.location.href
     );
-
     const params = new URLSearchParams();
     data.forEach((value, key) => {
       params.append(key, value);

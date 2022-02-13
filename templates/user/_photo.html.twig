@@ -1,5 +1,4 @@
-
-<div class="text-center mt-3 d-flex flex-column ">
+<section class="text-center mt-3 d-flex flex-column ">
     {% if app.user.imageName %}
         <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
     {% else %}
@@ -8,4 +7,4 @@
     <div class="mt-2 border borer-danger rounded">
         {{ app.user.firstName ~ " " ~ app.user.lastName }}
     </div>
-</div>
+</section>

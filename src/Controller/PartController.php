@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @Route("/part")
@@ -39,18 +40,18 @@ class PartController extends AbstractController
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
+     * @param int documentId
+     * @param string mode
      */
     public function index(Request $request, ?int $documentId = null, ?string $mode = null): Response
     {
-        // Utilisation de la session pour sauvegarder l'objet de recherche
         $session = $this->requestStack->getSession();
-
         $data = new SearchPart();
 
         if ($mode == "workorderAddPart") {
             $data = $session->get('data');
-        } 
-        
+        }
+
         $data->organisation = $this->getUser()->getOrganisation();
 
         $data->page = $request->get('page', 1);
@@ -59,9 +60,8 @@ class PartController extends AbstractController
         $form->handleRequest($request);
 
         $session->set('data', $data); // Sauvegarde de la recherche
-
         $parts = $this->partRepository->findSearch($data);
-
+        
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts, 'mode' => $mode, 'documentId' => $documentId]),
@@ -70,23 +70,30 @@ class PartController extends AbstractController
             ]);
         }
 
-        if ($mode == 'workorderAddPart' || $mode == 'receivedPart') {
-            
+        if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote'|| $mode == 'newDeliveryNote') {
             $panier = $session->get('panier', []);
-            $panierWithData = [];
-            foreach ($panier as $id => $quantity) {
-                $panierWithData[] = [
-                    'part' => $this->partRepository->find($id),
-                    'quantity' => $quantity,
-                ];
+            if ($panier) {
+                $panierWithData = [];
+                foreach ($panier as $id => $quantity) {
+                    $panierWithData[] = [
+                        'part' => $this->partRepository->find($id),
+                        'quantity' => $quantity,
+                    ];
+                }
+                
+                return $this->render('part/index.html.twig', [
+                    'parts' =>  $parts,
+                    'form'  =>  $form->createView(),
+                    'mode'  =>  $mode,
+                    'items' => $panierWithData,
+                    'documentId' => $documentId,
+                ]);
             }
-
             return $this->render('part/index.html.twig', [
                 'parts' =>  $parts,
                 'form'  =>  $form->createView(),
-                'mode'  =>  $mode,
                 'documentId' => $documentId,
-                'items' => $panierWithData,
+                'mode'  =>  $mode,
             ]);
         }
 
