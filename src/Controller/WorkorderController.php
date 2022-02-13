@@ -25,7 +25,6 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * @Route("/work/order")
@@ -162,7 +161,7 @@ class WorkorderController extends AbstractController
      * @Route("/edit/{id}/{machine?}", name="work_order_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Workorder $workorder, $machine = null, Request $request): Response
+    public function edit(Request $request, Workorder $workorder, $machine = null): Response
     {
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre

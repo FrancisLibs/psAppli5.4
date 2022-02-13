@@ -52,7 +52,7 @@
     <section class="row deliveryNote-js-filter">
         <aside class="col-2">
             <section>
-                {% if mode != 'selectPreventive' and mode != 'workorderSelect' %}
+                {% if mode != 'selectPreventive' and mode != 'workorderSelect' and mode != 'newWorkorder' %}
                     <a class="btn btn-primary btn-sm mt-2 mb-3" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
                 {% endif %}
                 {% include 'machine/_filter.html.twig' %}

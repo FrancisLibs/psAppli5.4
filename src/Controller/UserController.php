@@ -39,7 +39,6 @@ class UserController extends AbstractController
      * @Route("/admin/user/index", name="user_index")
      * @extraSecurity("is_granted('ROLE_ADMIN')")
      * @param Request $request
-     * @param EntityManagerInterface $manager
      * @return RedirectResponse|Response
      */
     public function userList(Request $request)
@@ -60,7 +59,7 @@ class UserController extends AbstractController
      * @param  EntityManagerInterface $manager
      * @return RedirectResponse|Response
      */
-    public function userEdit(User $user, Request $request): Response
+    public function userEdit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
@@ -89,7 +88,7 @@ class UserController extends AbstractController
      * @param                      User $user
      * @return                     RedirectResponse
      */
-    public function userDelete(User $user, Request $request)
+    public function userDelete(Request $request, User $user)
     {
         $token = $request->request->get('_token');
         $currentUser = $this->getUser();
@@ -120,7 +119,7 @@ class UserController extends AbstractController
      * @param                      User $user
      * @return                     RedirectResponse
      */
-    public function userProfil(User $user, Request $request)
+    public function userProfil(Request $request, User $user)
     {
         return $this->render('user/profil.html.twig', [
             'user' => $user

@@ -11,7 +11,6 @@ use App\Repository\PartRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -52,7 +51,6 @@ class CartController extends AbstractController
      * @Route("/add_part/{documentId?}/{mode?}", name="add_part", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * @param   Workorder   $workorder
-     * @param   Request     $request 
      * @param   string      $mode
      * @return  Response
      */

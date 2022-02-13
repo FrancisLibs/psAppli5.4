@@ -9,7 +9,6 @@ use App\Data\SearchTemplate;
 use App\Form\SearchTemplateForm;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
-use function PHPUnit\Framework\isNull;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +48,7 @@ class PreventiveController extends AbstractController
      * Liste des BT préventifs
      * 
      * @Route("/", name="template_index", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * 
      * @param Request 
      * @return Response 
@@ -222,7 +221,6 @@ class PreventiveController extends AbstractController
      * @Route("/machine/remove/{id}/{machine}", name="preventive_machine_remove", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request 
      * @return Response 
      */
     public function removeMachine(Template $template, Machine $machine)

@@ -33,7 +33,7 @@ class ProviderController extends AbstractController
      * Liste des fournisseurs
      * 
      * @Route("/{mode?}/{documentId?}", name="provider_index", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
      * @return Response 

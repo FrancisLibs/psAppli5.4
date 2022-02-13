@@ -8,7 +8,6 @@ use App\Data\SearchMachine;
 use App\Form\SearchMachineForm;
 use App\Repository\MachineRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use PhpParser\Node\Expr\Clone_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

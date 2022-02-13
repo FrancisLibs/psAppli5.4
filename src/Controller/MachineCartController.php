@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -45,7 +44,7 @@ class MachineCartController extends AbstractController
      * 
      * @return redirectToRoute
      */
-    public function addMachine(int $id, $mode = null, ?int $documentId): Response
+    public function addMachine(int $id, string $mode = null, ?int $documentId = null): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -54,8 +53,8 @@ class MachineCartController extends AbstractController
         }
 
         $session->set('machines', $machines);
-        if($mode == "newWorkorder"){
-            return $this->redirectToRoute('work_order_new',[
+        if ($mode == "newWorkorder") {
+            return $this->redirectToRoute('work_order_new', [
                 'mode' => $mode,
             ]);
         }
