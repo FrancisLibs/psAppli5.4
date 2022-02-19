@@ -24,10 +24,9 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
-                    {# <a class="dropdown-item" href="#">Another action</a> #}
-                    {# <div class="dropdown-divider"></div> #}
-                    {# <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Liste pièces</a>
-                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Liste BL</a> #}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Pièces en réappro</a>
+                    {# <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Liste BL</a> #}
                 </div>
             </li>
             {% if is_granted('ROLE_ADMIN') %}

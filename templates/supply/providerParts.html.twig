@@ -2,11 +2,14 @@
 
 {% block title %}Pièces en réappro{% endblock %}
 
-{% set varProvider = "" %}
 {% block body %}
-    <div class="row mt-4">
+    <div class="row mt-4 d-flex justify-content-start">
         <div class="col-3 offset-2">
                 <h3>Pièces en réappro</h3>
+        </div>
+        <div class="col-2 d-flex justify-content-between">
+            <h3>Fournisseur : </h3>
+            <h3>{{ provider.name }}</h3>
         </div>
     </div>
     <div class="row mt-4">
@@ -17,27 +20,25 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col" class="text-left">Forunisseur</th>
-                        <th scope="col" class="text-center">Code</th>
+                        <th scope="col">Code</th>
                         <th scope="col" class="text-center">Désignation</th>
                         <th scope="col" class="text-center">Référence</th>
                         <th scope="col" class="text-center">Qte stock</th>
-
+                        <th scope="col" class="text-center">Qte Mini</th>
+                        <th scope="col" class="text-center">Qte Maxi</th>
+                        <th scope="col" class="text-center">Qte en commande</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for part in parts %}
                         <tr>
-                            {% if part.provider.name != varProvider %}
-                                {% set varProvider = part.provider.name %}
-                                <td><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn btn-primary btn-sm">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
-                            <td class="text-center">{{ part.code }}</td>
+                            <td><a href="{{ path('part_show', {'id': part.id}) }}" class="btn btn-primary btn-sm w-75">{{ part.code }}</a></td>
                             <td class="text-center">{{ part.designation }}</td>
                             <td class="text-center">{{ part.reference }}</td>
                             <td class="text-center">{{ part.stock.qteStock }}</td>
+                            <td class="text-center">{{ part.stock.qteMin }}</td>
+                            <td class="text-center">{{ part.stock.qteMax }}</td>
+                            <td class="text-center">{{ part.stock.approQte }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

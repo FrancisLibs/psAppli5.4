@@ -44,12 +44,13 @@ class MachineController extends AbstractController
      * 
      * @return  Response
      */
-    public function index(Request $request, ?string $mode = null, ?int $documentId): Response
+    public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
     {
+        //dd($mode);
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
-        if($mode == "newWorkorder"){
+        if ($mode == "newWorkorder") {
             $session->remove('machines');
         }
         // En mode "selectPreventive" ou "editpreventive"
@@ -81,7 +82,7 @@ class MachineController extends AbstractController
             $session->set('dataMachinePreventive', $data);
         }
 
-        if ($request->get('ajax') && ($mode == 'select' || $mode == null)) {
+        if ($request->get('ajax') && ($mode == 'newWorkorder' || $mode == null)) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),

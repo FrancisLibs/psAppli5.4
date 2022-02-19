@@ -8,9 +8,9 @@
             <h3>Fournisseurs</h3>
         </div>
     </header>
-     <main class="row provider-js-filter">
+     <div class="row provider-js-filter">
         <aside class="col-2 mt-4">
-            <setion>
+            <section>
                 {% if mode != 'selectProvider' and mode != 'editProvider' and mode != 'deliveryNoteChangeProv' %}
                     <a class="btn btn-primary btn-sm mb-3" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
                 {% endif %}
@@ -27,5 +27,5 @@
                 {% include 'provider/_pagination.html.twig' %}
             </div>
         </article>
-    </main>
+    </div>
 {% endblock %}

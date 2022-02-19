@@ -8,13 +8,14 @@
             <h3>Bons de travail</h3>
         </div>
     </header>
-    <main class="row workorder-js-filter">
+    <div class="row workorder-js-filter">
         <aside class="col-2 mt-4">
             <section>
                 <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
                 {% include 'workorder/_filter.html.twig' %}
             </section>
             {% include 'user/_photo.html.twig' %}
+            test
         </aside>
         <article class="col-10">
             <div class="mt-4">
@@ -25,5 +26,5 @@
                 {% include 'workorder/_pagination.html.twig' %}
             </div>
         </article>
-    </main>
+    </div>
 {% endblock %}

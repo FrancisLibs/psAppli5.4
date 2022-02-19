@@ -1,13 +1,5 @@
 <table class="table table-striped table-sm">
-    {# <thead>
-        <tr>
-            <th>{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Machine', 'w.machine') }}</th>
-            <th>{{ knp_pagination_sortable(workorders, 'Travaux', 'w.implementation') }}</th>
-        </tr>
-    </thead> #}
     <tbody>
-        {# {{ dump(workorders.machines) }} #}
         {% for workorder in workorders %}
             {% if workorder.preventive and workorder.workorderStatus.name == "EN_PREP." %}
                 <tr style="background-color: #81c2fb;">
@@ -18,7 +10,7 @@
             {% else %}
                 <tr>
             {% endif %}
-                <td><a href="{{path('work_order_edit', {'id': workorder.id}) }}">{{ workorder.id }}</a></td>
+                <td><a href="{{path('work_order_show', {'id': workorder.id}) }}">{{ workorder.id }}</a></td>
                 <td>{{ workorder.createdAt ? workorder.createdAt|date('Y-m-d') : '' }}</td>
                 <td>
                     {% for machine in workorder.machines %}

@@ -4,14 +4,15 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-6 offset-1">
+        <div class="col-6 offset-2">
             <div class="row justify-content-between">
-                <div class="col-6">
+                <div class="col-4 d-flex justify-content-between">
                     {% if workorder.preventive %}
                         <h3>Bon de Travail préventif</h3>
                     {% else %}
                         <h3>Bon de Travail</h3>
                     {% endif %}
+                    <h3>{{ workorder.id }}</h3>
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
@@ -29,7 +30,10 @@
         </div>
     </div>
     <article class="row mt-4">
-        <div class="col-11 offset-1">
+         <aside class="col-2">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <div class="col-10">
             {% include 'workorder/_show.html.twig' %}
         </div>
     </article>

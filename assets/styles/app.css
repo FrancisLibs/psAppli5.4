@@ -1,26 +1,24 @@
-html {
-  height: 100%;
-}
-
+html,
 body {
   height: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
 }
 
-#main {
+main {
   min-height: 100%;
   width: 100%;
 }
 
 footer {
-  background: linear-gradient(#b6e4b6bf, white);
+  background: linear-gradient(#c2f0ea, white);
 }
 
 /* Page login image de fond */
-.header {
-  margin: 0px;
-  padding: 0px;
+.login {
+  min-height: 100%;
+  width: 100%;
   background: url("/public/images/conditionnement4.png") no-repeat center center
     fixed;
   background-size: cover;
@@ -95,11 +93,4 @@ footer {
   padding: 2px;
   padding-left: 4px;
   margin-left: 10px;
-}
-
-/* Footer */
-.footer {
-  background: linear-gradient(#bfc6c7, white);
-  height: 70px;
-  border-radius: 7px;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Provider;
 use App\Repository\PartRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,25 @@ class SupplyController extends AbstractController
         $parts = $this->partRepository->findPartsToBuy($organisation);
 
         return $this->render('supply/partsToBuy.html.twig', [
+            'parts' => $parts,
+        ]);
+    }
+
+    /**
+     * Return the "to buy" parts about a provider
+     * 
+     *@Route("/providerPart/{id}", name="parts_provider")
+     *
+     * @return Response
+     */
+    public function providerPart(Provider $provider): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+        $parts = $this->partRepository->findProviderParts($organisation, $provider);
+
+        return $this->render('supply/providerParts.html.twig', [
+            'provider' => $provider,
             'parts' => $parts,
         ]);
     }

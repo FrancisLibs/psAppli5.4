@@ -16,7 +16,7 @@
             {% endif %}
         </div>
     </header>
-    <main class="row mt-5">
+    <div class="row mt-5">
         <aside class="col-2 mt-4">
             <div class="text-center mt-3 d-flex flex-column ">
                 {% if app.user.imageName %}
@@ -86,4 +86,5 @@
                 {{ include('machine/_workorders.html.twig') }}
             {% endif %}
         </div>
+    </div>
 {% endblock %}

@@ -123,11 +123,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $connexions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="user")
+     */
+    private $deliveryNotes;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->connexions = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
     }
 
     /**
@@ -447,6 +453,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             // set the owning side to null (unless already changed)
             if ($connexion->getUser() === $this) {
                 $connexion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getUser() === $this) {
+                $deliveryNote->setUser(null);
             }
         }
 

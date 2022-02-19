@@ -3,19 +3,18 @@
 {% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
-    <main class="row mt-5">
-        <article class="col-10 mx-auto">
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <h3>Liste des Utilisateurs</h3>
-                </div>
-                <div class="col-2">
-                    <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
-                </div>
-            </div>
-            <div class="mt-5">
-                {% include 'user/_userList.html.twig' with {users: users} only %}
-            </div>
-        </article>
-    </main>
+    <article class="row mt-5">
+        <div class="col-10 offset-2">
+            <h3>Liste des Utilisateurs</h3>
+        </div>
+    </article>
+    <div class="row mt-5">
+        <aside class="col-2">
+            <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <div class="col-8">
+            {% include 'user/_userList.html.twig' with {users: users} only %}
+        </div>
+    </div>
 {% endblock %}

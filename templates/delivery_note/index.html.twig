@@ -8,7 +8,7 @@
             <h3>Bons de livraison</h3>
         </div>
     </header>
-    <main class="row deliveryNote-js-filter">
+    <div class="row deliveryNote-js-filter">
         <aside class="col-2 mt-4">
             <section>
                 <a class="btn btn-primary btn-sm mb-3" href="{{ path('delivery_note_new') }}" role="button">Nouveau bon de Livraison</a>
@@ -25,7 +25,7 @@
                 {% include 'delivery_note/_pagination.html.twig' %}
             </div>
         </article>
-    </main>
+    </div>
 {% endblock %}
 
 

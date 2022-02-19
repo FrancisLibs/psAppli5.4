@@ -1,15 +1,19 @@
 {% for provider in providers %}
     <tr>
         <td class="font_size_table">
-            {% if mode == 'selectProvider' %}
-                <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">{{ provider.id }}</a>
-            {% elseif mode == 'deliveryNoteChangeProv' %}
-                <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_edit', {'id': documentId, 'providerId': provider.id}) }}">{{ provider.id }}</a>
+            {% if mode is defined %}
+                {% if mode == 'selectProvider' %}
+                    <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">{{ provider.name }}</a>
+                {% elseif mode == 'deliveryNoteChangeProv' %}
+                    <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_edit', {'id': documentId, 'providerId': provider.id}) }}">{{ provider.name }}</a>
+                {% else %}
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.name }}</a>
+                {% endif %}
             {% else %}
-                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.id }}</a>
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.name }}</a>
             {% endif %}
         </td>
-        <td class="text-center font_size_table">{{ provider.name }}</td>
+        <td class="text-center font_size_table">{{ provider.code }}</td>
         <td class="text-center font_size_table">{{ provider.city }}</td>
         <td class="text-center font_size_table">{{ provider.email }}</td>
         <td class="text-center font_size_table">{{ provider.phone }}</td>

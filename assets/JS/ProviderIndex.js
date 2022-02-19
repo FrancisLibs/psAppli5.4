@@ -18,7 +18,11 @@ export class ProviderIndex {
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
-    
+
+    // console.log(this.form);
+    // console.log(this.content);
+    // console.log(this.sorting);
+    // console.log(this.pagination);
   }
 
   /**
@@ -112,6 +116,6 @@ export class ProviderIndex {
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
       history.replaceState({}, "", url);
-    } 
+    }
   }
 }

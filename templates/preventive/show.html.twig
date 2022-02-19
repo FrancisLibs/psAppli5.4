@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-6 offset-1">
+        <div class="col-6 offset-2">
             <div class="row justify-content-between">
                 <div class="col-5">
                     <h3>Bon de Travail préventif</h3>
@@ -22,7 +22,10 @@
         </div>
     </div>
     <article class="row mt-4">
-        <div class="col-11 offset-1">
+         <aside class="col-2">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <div class="col-10">
             {% include 'preventive/_show.html.twig' %}
         </div>
     </article>

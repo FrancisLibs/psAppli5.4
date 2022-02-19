@@ -49,6 +49,12 @@ class DeliveryNote
      */
     private $organisation;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="deliveryNotes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->deliveryNoteParts = new ArrayCollection();
@@ -133,6 +139,18 @@ class DeliveryNote
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

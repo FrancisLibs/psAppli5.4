@@ -45,14 +45,19 @@ class PartController extends AbstractController
      */
     public function index(Request $request, ?int $documentId = null, ?string $mode = null): Response
     {
+        $user = $this->getUser();
+        $organisation =  $user->getOrganisation();
         $session = $this->requestStack->getSession();
         $data = new SearchPart();
 
-        if ($mode == "workorderAddPart") {
-            $data = $session->get('data');
+        if ($mode == "workorderAddPart" || $mode == "newDeliveryNote" || $mode == "editDeliveryNote") {
+            $data = $session->get('data', null);
+            if(!$data){
+                $data = new SearchPart();
+            }
         }
-
-        $data->organisation = $this->getUser()->getOrganisation();
+        
+        $data->organisation = $organisation;
 
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchPartForm::class, $data);
@@ -61,7 +66,7 @@ class PartController extends AbstractController
 
         $session->set('data', $data); // Sauvegarde de la recherche
         $parts = $this->partRepository->findSearch($data);
-        
+
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts, 'mode' => $mode, 'documentId' => $documentId]),
@@ -70,7 +75,7 @@ class PartController extends AbstractController
             ]);
         }
 
-        if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote'|| $mode == 'newDeliveryNote') {
+        if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote' || $mode == 'newDeliveryNote') {
             $panier = $session->get('panier', []);
             if ($panier) {
                 $panierWithData = [];
@@ -80,7 +85,7 @@ class PartController extends AbstractController
                         'quantity' => $quantity,
                     ];
                 }
-                
+
                 return $this->render('part/index.html.twig', [
                     'parts' =>  $parts,
                     'form'  =>  $form->createView(),

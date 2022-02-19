@@ -64,6 +64,11 @@ class Provider
      */
     private $deliveryNotes;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activity;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
@@ -215,6 +220,18 @@ class Provider
                 $deliveryNote->setProvider(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getActivity(): ?string
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?string $activity): self
+    {
+        $this->activity = $activity;
 
         return $this;
     }

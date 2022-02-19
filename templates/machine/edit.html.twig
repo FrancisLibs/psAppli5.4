@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-6 mx-auto">
+        <div class="col-6 offset-2">
             <div class="row align-items-center">
                 <div class="col-3">
                     <h3>Edition machine</h3>
@@ -17,7 +17,10 @@
         </div>
     </div>
     <article class="row">
-        <div class="mt-4 col-6 mx-auto">
+         <aside class="col-2">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <div class="mt-4 col-6">
             {{ include('machine/_form.html.twig') }}
         </div>
     </article>

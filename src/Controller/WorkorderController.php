@@ -71,6 +71,11 @@ class WorkorderController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        // Reset session
+        $session = $this->requestStack->getSession();
+        $session->remove('machines');
+        $session->remove('panier');
+
         $data = new SearchWorkorder();
         $data->page = $request->get('page', 1);
         $data->organisation = $this->getUser()->getOrganisation()->getId();
@@ -121,17 +126,24 @@ class WorkorderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
             $workorder->setOrganisation($organisation);
+
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
+
             if($machine){
                 $workorder->addMachine($machine);
             }
+
             $session->remove('machines');
+
             if ($workorder->getMachines()->isEmpty()) {
-                $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
+                $this->addFlash('error', 'Hey mec, il n\'y a pas de machine dans le BT');
                 return $this->redirectToRoute('work_order_new');
             }
+
+            
+            
             $this->manager->persist($workorder);
             $this->manager->flush();
 
@@ -200,12 +212,15 @@ class WorkorderController extends AbstractController
      * Affichage de la liste des pièces pour selection
      *
      * @Route("/addPart/{id}/{mode?}", name="work_order_add_part", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function addPart(Request $request, int $id, ?string $mode = null): Response
     {
         $session = $this->requestStack->getSession();
+
         $session->remove('panier');
+        $session->remove('data');
+
         return $this->redirectToRoute('part_index', [
             'mode' => $mode,
             'documentId' => $id,
@@ -260,7 +275,7 @@ class WorkorderController extends AbstractController
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
             $workorder->setWorkorderStatus($status);
         } else {
-            $this->addFlash('error', 'Merci de compléter les infos de durée d\'intervention');
+            $this->addFlash('error', 'Merci mon lapin, de compléter les infos de durée d\'intervention !');
             return $this->redirectToRoute('work_order_edit', [
                 'id' => $workorder->getId(),
             ], Response::HTTP_SEE_OTHER);

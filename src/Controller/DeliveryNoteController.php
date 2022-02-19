@@ -131,6 +131,7 @@ class DeliveryNoteController extends AbstractController
 
             $deliveryNote->setProvider($provider);
             $deliveryNote->setOrganisation($organisation);
+            $deliveryNote->setUser($user);
 
             $this->manager->persist($deliveryNote);
 
@@ -184,6 +185,7 @@ class DeliveryNoteController extends AbstractController
      */
     public function edit(Request $request, DeliveryNote $deliveryNote, ?int $providerId = null): Response
     {
+        dd('ok');
         $user = $this->getUser();
 
         $session = $this->requestStack->getSession();

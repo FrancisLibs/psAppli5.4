@@ -8,15 +8,16 @@
             <h2>Nouveau BT</h2>
             {# <a class="btn btn-primary btn-sm" href="{{ path('work_order_index') }}" role="button">Listes des BT</a> #}
         </div>
-        <div class="col-3 offset-2 text-right">
+        <div class="col-2 offset-2 text-right">
             <h5>{{ workorder.createdAt|date('d-m-Y') }}</h5>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-8 offset-2 mb-4">
             <div class="row mt-2 mb-2">
-                <div class="col-7 d-flex justify-content-between">
-                    <h4 class="text-primary">Machine</h4>
+                <div class="col-7 d-flex justify-content-start">
+                    <h4 class="text-primary mr-5">Machine</h4>
+                    <a class="btn btn-primary btn-sm mr-5" href="{{ path('machine_index', {'mode': 'newWorkorder'}) }}" role="button">Choix de la Machine</a>
                     {% if workorder.machines is not empty %}
                         <div class="case_machine">
                             {% for machine in workorder.machines %}
@@ -24,7 +25,6 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'newWorkorder'}) }}" role="button">Choix de la Machine</a>
                 </div>
             </div>
             {{ include('workorder/_form.html.twig') }}

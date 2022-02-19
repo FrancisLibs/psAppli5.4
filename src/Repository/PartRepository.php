@@ -88,8 +88,7 @@ class PartRepository extends ServiceEntityRepository
     public function findPartsToBuy($organisation)
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.provider', 'ASC')
-            ->select('p', 's', 'o', 'f')
+            ->select('p', 's')
             ->join('p.stock', 's')
             ->join('p.organisation', 'o')
             ->join('p.provider', 'f')
@@ -98,11 +97,18 @@ class PartRepository extends ServiceEntityRepository
             ->andWhere('p.active = :disabled')
             ->setParameter('disabled', true)
             ->andWhere('s.qteStock < s.qteMin')
-            //->groupBy('f.name')
+            ->orderBy('p.provider', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
+        // SELECT p.code, p.reference, p.designation, pro.name
+        // FROM part p 
+        // INNER JOIN stock s ON p.id = s.part_id
+        // INNER JOIN provider pro ON pro.id = p.provider_id
+        // WHERE s.qte_stock <= s.qte_min
+        // ORDER BY pro.name
 
     /**
      * @return Part[]
@@ -110,15 +116,41 @@ class PartRepository extends ServiceEntityRepository
     public function findParts($organisation)
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.provider', 'ASC')
             ->select('p', 's', 'o', 'f')
             ->join('p.stock', 's')
             ->join('p.organisation', 'o')
             ->join('p.provider', 'f')
             ->where('p.organisation = :organisation')
             ->setParameter('organisation', $organisation)
+            ->orderBy('p.provider', 'ASC')
             //->setMaxResults(100)
             ->getQuery()
             ->getResult();
+    }
+    /**
+     * Undocumented function
+     *
+     * @param [type] $organisation
+     * @param [type] $provider
+     * @return void
+     */
+    public function findProviderParts($organisation, $provider)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p', 's')
+            ->join('p.stock', 's')
+            ->join('p.organisation', 'o')
+            ->join('p.provider', 'f')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
+            ->andWhere('p.provider = :provider')
+            ->setParameter('provider', $provider)
+            ->andWhere('s.qteStock < s.qteMin')
+            ->orderBy('p.provider', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }
