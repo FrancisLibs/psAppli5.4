@@ -15,6 +15,43 @@ footer {
   background: linear-gradient(#c2f0ea, white);
 }
 
+/* Page default */
+.default {
+  min-height: 100%;
+  width: 100%;
+  background-color: linear-gradient(#51e6b4, white);
+  /* background: url("/public/images/poussoirs.png") no-repeat center center fixed;
+  background-size: cover; */
+}
+
+.default-tiltle {
+  font-family: "Concert One", cursive;
+  font-size: 4em;
+  color: black;
+  text-align: center;
+  margin-top: 150px;
+}
+
+.default-right {
+  margin-top: 100px;
+}
+
+.default-logo {
+  text-align: center;
+}
+
+.btn-default {
+  color: white;
+  background-color: #4584e9;
+  border-color: #fed136;
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 20px;
+  font-size: 1em;
+  padding: 10px;
+}
+
 /* Page login image de fond */
 .login {
   min-height: 100%;

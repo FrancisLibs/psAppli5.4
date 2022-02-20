@@ -185,11 +185,10 @@ class DeliveryNoteController extends AbstractController
      */
     public function edit(Request $request, DeliveryNote $deliveryNote, ?int $providerId = null): Response
     {
-        dd('ok');
         $user = $this->getUser();
 
         $session = $this->requestStack->getSession();
-        $panier = $session->get('panier');
+        $panier = $session->get('panier', []);
 
         if ($providerId) {
             $provider = $this->providerRepository->findOneById($providerId);
@@ -255,6 +254,7 @@ class DeliveryNoteController extends AbstractController
                         if ($part->getQuantity() == 0) {
                             $deliveryNote->removeDeliveryNotePart($part);
                             $this->manager->remove($part);
+                            $this->manager->flush();
                         }
                         $flag = false;
                     }

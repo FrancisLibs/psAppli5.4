@@ -128,6 +128,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $deliveryNotes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $service;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
@@ -485,6 +491,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
                 $deliveryNote->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
 
         return $this;
     }

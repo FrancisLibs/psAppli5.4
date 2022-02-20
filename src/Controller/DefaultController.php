@@ -24,7 +24,7 @@ class DefaultController extends AbstractController
     private $workorderStatusRepository;
     private $userRepository;
     private $manager;
-    
+
 
     public function __construct(
         EntityManagerInterface $manager,
@@ -49,7 +49,10 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        
+        $organisation = $user->getOrganisation();
+        $organisationId = $organisation->getId();
+        $serviceId = $user->getService()->getId();
+
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
@@ -66,9 +69,6 @@ class DefaultController extends AbstractController
             $manager->persist($connexion);
             $manager->flush();
         }
-
-        $organisationId = $user->getOrganisation()->getid();
-        $workorders = $this->workorderRepository->findByOrganisation($organisationId);
 
         // Gestion des bons de travail préventifs-------------------------------------
         $today = (new \DateTime())->getTimestamp();
@@ -92,10 +92,15 @@ class DefaultController extends AbstractController
 
         // ------------------------------------------------------------------------------
         // Récupération des utilisateurs pour l'affichage des photos
-        $users = $this->userRepository->findAll();
+        // Par organisation ET service
+        $users = $this->userRepository->findBy(
+            [
+                'organisation' => $organisationId,
+                'service' => $serviceId,
+            ],
+        );
 
         return $this->render('default/index.html.twig', [
-            'workorders'    => $workorders,
             'users'         => $users,
         ]);
     }

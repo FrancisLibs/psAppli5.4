@@ -4,7 +4,7 @@
         {% if workorder.preventive %}
                 <div class="d-flex justify-content-start align-items-center">
                 <h5 class="text-primary">Date prévue : </h5>
-                <h5 class="champs_bt text-center">{{ workorder.preventiveDate|date('d-m-Y') }}</h5>
+                <h5 class="champs_bt text-center">{{ workorder.preventiveDate|date('d/m/Y') }}</h5>
             </div>
             <div class="d-flex justify-content-start align-items-center">
                 <h5 class="text-primary">Numéro de réventif : </h5>
@@ -70,7 +70,7 @@
             <h5 class="text-primary">Réalisation : </h5>
         </div>
         <div class="col-5">
-            <div>{{ workorder.implementation }}</div>
+            <div>{{ workorder.implementation | nl2br }}</div>
         </div>
     </div>  
 {% endif %}
@@ -81,7 +81,7 @@
             <h5 class="text-primary">Remarque : </h5>
         </div>
         <div class="col-5">
-            <div>{{ workorder.remark }}</div>
+            <div>{{ workorder.remark | nl2br }}</div>
         </div>
     </div>
 {% endif %}
