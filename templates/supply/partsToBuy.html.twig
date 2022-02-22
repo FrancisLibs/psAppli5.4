@@ -22,7 +22,7 @@
                         <th scope="col" class="text-center">Désignation</th>
                         <th scope="col" class="text-center">Référence</th>
                         <th scope="col" class="text-center">Qte stock</th>
-
+                        <th scope="col" class="text-center">Qte en com.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +38,7 @@
                             <td class="text-center">{{ part.designation }}</td>
                             <td class="text-center">{{ part.reference }}</td>
                             <td class="text-center">{{ part.stock.qteStock }}</td>
+                            <td class="text-center">{{ part.stock.approQte }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

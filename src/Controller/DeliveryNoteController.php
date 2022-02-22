@@ -78,11 +78,19 @@ class DeliveryNoteController extends AbstractController
     public function new(Request $request, int $providerId = null): Response
     {
         $user = $this->getUser();
+        $session = $this->requestStack->getSession();
+        $organisation = $user->getOrganisation();
         $deliveryNote = new DeliveryNote();
 
-        $organisation = $user->getOrganisation();
-        $session = $this->requestStack->getSession();
-
+        // Gestion du fournisseur du BL en session
+        if ($providerId) {
+            $session->set('providerId', $providerId);
+            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
+        } else {
+            $providerId = $session->get('providerId', null);
+            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
+        }
+        
         // Gestion du numéro de BL en session 
         $number = $session->get('deliveryNoteNumber', null);
         if ($number) {
@@ -96,14 +104,7 @@ class DeliveryNoteController extends AbstractController
             $deliveryNote->setDate($newDate);
         }
 
-        // Gestion du fournisseur du BL en session
-        if ($providerId) {
-            $session->set('providerId', $providerId);
-            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
-        } else {
-            $providerId = $session->get('providerId', null);
-            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
-        }
+        
 
 
         // Gestion des pièces en session

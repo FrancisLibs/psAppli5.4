@@ -1,14 +1,19 @@
 {{ form_start(registrationForm) }}   
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-4">
             {{ form_errors(registrationForm.username) }}
             {{ form_label(registrationForm.username) }}
             {{ form_widget(registrationForm.username) }}
         </div>
-        <div class="col-6">
+        <div class="col-4">
             {{ form_errors(registrationForm.organisation) }}
             {{ form_label(registrationForm.organisation) }}
             {{ form_widget(registrationForm.organisation) }}
+        </div> 
+         <div class="col-4">
+            {{ form_errors(registrationForm.service) }}
+            {{ form_label(registrationForm.service) }}
+            {{ form_widget(registrationForm.service) }}
         </div>        
     </div>
     <div class="row mb-3">

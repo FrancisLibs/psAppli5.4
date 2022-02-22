@@ -31,16 +31,17 @@
     </div>
 </div>
 <div class="row mt-3">
-    <div class="col-2">
-        <h5 class="text-primary">Machine(s) : </h5>
+    <div class="col-1">
+        <h5 class="text-primary">Machine(s) </h5>
     </div>
-    <div class="col-5">
+    <div class="col-8">
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
                     <th scope="col">Numéro</th>
                     <th class="text-center" scope="col">Désignation</th>
-                    <th></th>
+                    <th class="text-center" scope="col">Num. série</th>
+                    <th class="text-center" scope="col">Constructeur</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +49,8 @@
                     <tr>
                         <td>{{ machine.internalCode }}</td>
                         <td class="text-center">{{ machine.designation }}</td>
+                        <td class="text-center">{{ machine.serialNumber }}</td>
+                        <td class="text-center">{{ machine.constructor }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

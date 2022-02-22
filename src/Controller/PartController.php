@@ -43,7 +43,7 @@ class PartController extends AbstractController
      * @param int documentId
      * @param string mode
      */
-    public function index(Request $request, ?int $documentId = null, ?string $mode = null): Response
+    public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
     {
         $user = $this->getUser();
         $organisation =  $user->getOrganisation();

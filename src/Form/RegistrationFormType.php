@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Organisation;
+use App\Entity\Service;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -64,6 +65,12 @@ class RegistrationFormType extends AbstractType
             ->add('organisation', EntityType::class, [
                 'class' => Organisation::class,
                 'choice_label' => 'designation',
+                'multiple' => false,
+                'expanded' => true,
+            ])
+            ->add('service', EntityType::class, [
+                'class' => Service::class,
+                'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,
             ])

@@ -22,6 +22,18 @@
                 </div>
             </div>
             <div class="row mt-3">
+               <div class="col-4">
+                    {{ form_errors(form.organisation) }}
+                    {{ form_label(form.organisation) }}
+                    {{ form_widget(form.organisation) }}
+                </div> 
+                <div class="col-4">
+                    {{ form_errors(form.service) }}
+                    {{ form_label(form.service) }}
+                    {{ form_widget(form.service) }}
+                </div>
+            </div>
+            <div class="row mt-3">
                 <div class="col-4">
                     <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
                 </div>
