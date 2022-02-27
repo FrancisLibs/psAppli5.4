@@ -57,7 +57,7 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Création d'un enregistrement de connexion
+        // Création d'un enregistrement des connexions
         if ($user) {
             $connexion = new Connexion();
             $connexionDate = (new \DateTime());
@@ -72,14 +72,13 @@ class DefaultController extends AbstractController
 
         // Gestion des bons de travail préventifs-------------------------------------
         $today = (new \DateTime())->getTimestamp();
-
+       
         // Dernière date de vérification cherchée dans le fichiers des paramètres
         $params = $this->paramsRepository->find(1);
         $lastPreventiveDate = $params->getLastPreventiveDate()->getTimestamp();
-
-        // On vérifie tous les jours, rajout d'1 jour à la date enregistrée
+        
+        // On vérifie tous les jours puis rajout d'1 jour à la date enregistrée
         $lastPreventiveDate = $lastPreventiveDate + 24 * 60 * 60;
-
         if ($lastPreventiveDate <= $today) {
             // Définition de la prochaine date à celle d'aujourd'hui
             $params->setLastPreventiveDate(new \DateTime());
@@ -99,7 +98,6 @@ class DefaultController extends AbstractController
                 'service' => $serviceId,
             ],
         );
-
         return $this->render('default/index.html.twig', [
             'users'         => $users,
         ]);
@@ -117,9 +115,10 @@ class DefaultController extends AbstractController
             $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
             // Date finale à prende en compte
             $nextCalculateDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
+            
             // Test si template éligible
             if ($nextCalculateDate <= $today) {
-                // Contrôle si BT préventif est actif
+                // Contrôle si BT préventif n'est pas déjà actif
                 if (!$this->workorderRepository->countPreventiveWorkorder($template->getTemplateNumber())) {
                     // Création du BT préventif, en récupérant les infos sur le template préventif
                     $workorder = new Workorder();
@@ -143,6 +142,7 @@ class DefaultController extends AbstractController
                     foreach ($machines as $machine) {
                         $workorder->addMachine($machine);
                     }
+
                     $this->manager->persist($workorder);
                 }
                 $this->manager->flush();
@@ -151,7 +151,7 @@ class DefaultController extends AbstractController
         return;
     }
 
-    // Pour l'évolution du BT dans le temps et gérer son état, il faut modifier son statut...
+    // Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
     private function setpreventiveStatus($organisation, $today)
     {
         $preventiveWorkorders = $this->workorderRepository->findAllPreventiveWorkorders($organisation);

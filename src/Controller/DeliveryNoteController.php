@@ -88,24 +88,23 @@ class DeliveryNoteController extends AbstractController
             $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
         } else {
             $providerId = $session->get('providerId', null);
-            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
-        }
-        
-        // Gestion du numéro de BL en session 
-        $number = $session->get('deliveryNoteNumber', null);
-        if ($number) {
-            $deliveryNote->setNumber($number);
+            if ($providerId) {
+                $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
+            }
         }
 
-        // Gestion de la date de BL en session
-        $date = $session->get('deliveryNoteDate', null);
-        if ($date) {
-            $newDate = new \DateTime($date);
-            $deliveryNote->setDate($newDate);
+        // Gestion du numéro du BL en session
+        $deliveryNoteNumber = $session->get('deliveryNoteNumber', null);
+        if ($deliveryNoteNumber) {
+            $deliveryNote->setNumber($deliveryNoteNumber);
         }
 
-        
-
+        // Gestion de la date du BL en session
+        $deliveryNoteDate = $session->get('deliveryNoteDate', null);
+        if ($deliveryNoteDate) {
+            $deliveryNoteDate = new \DateTime($deliveryNoteDate);
+            $deliveryNote->setDate($deliveryNoteDate);
+        }
 
         // Gestion des pièces en session
         $panier = $session->get('panier', []);
@@ -126,7 +125,7 @@ class DeliveryNoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (empty($provider)) {
-                $this->addFlash('error', 'Il n\'y a pas de fournisseur de sélectionné !');
+                $this->addFlash('error', 'Tu n\'as pas sélectionné de fournisseur');
                 return $this->redirectToRoute('delivery_note_new');
             }
 

@@ -108,11 +108,11 @@ class WorkorderController extends AbstractController
 
         $workorder = new Workorder();
         $workorder->setPreventive(false);
-        $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+        $workorder->setCreatedAt(new \DateTime());
 
         // Si une machine a été mise en session, elle est pour le BT
         $machines = $session->get('machines', []);
-        if($machines){
+        if ($machines) {
             $machine = $this->machineRepository->find($machines[0]);
             $workorder->addMachine($machine);
         }
@@ -126,24 +126,33 @@ class WorkorderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
             $workorder->setOrganisation($organisation);
-
-            $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
-            $workorder->setWorkorderStatus($status);
             $workorder->setPreventive(false);
 
-            if($machine){
+            if ($machine) {
                 $workorder->addMachine($machine);
             }
-
             $session->remove('machines');
 
             if ($workorder->getMachines()->isEmpty()) {
-                $this->addFlash('error', 'Hey mec, il n\'y a pas de machine dans le BT');
+                $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
                 return $this->redirectToRoute('work_order_new');
             }
 
-            
-            
+            // Contrôle BT terminé 
+            $machine = $workorder->getMachines();
+            $minute = $workorder->getDurationMinute();
+            $hour = $workorder->getDurationHour();
+            $day = $workorder->getDurationDay();
+            $request = $workorder->getRequest();
+            $implementation = $workorder->getImplementation();
+
+            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request)  && !empty($implementation) && !empty($machine)) {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
+            } else {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+            }
+            $workorder->setWorkorderStatus($status);
+
             $this->manager->persist($workorder);
             $this->manager->flush();
 
@@ -190,6 +199,21 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Contrôle BT terminé 
+            $machine = $workorder->getMachines();
+            $minute = $workorder->getDurationMinute();
+            $hour = $workorder->getDurationHour();
+            $day = $workorder->getDurationDay();
+            $request = $workorder->getRequest();
+            $implementation = $workorder->getImplementation();
+
+            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request)  && !empty($implementation) && !empty($machine)) {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
+            } else {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+            }
+            $workorder->setWorkorderStatus($status);
 
             $this->getDoctrine()->getManager()->flush();
 

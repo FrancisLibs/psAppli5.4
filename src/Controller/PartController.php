@@ -48,6 +48,7 @@ class PartController extends AbstractController
         $user = $this->getUser();
         $organisation =  $user->getOrganisation();
         $session = $this->requestStack->getSession();
+       
         $data = new SearchPart();
 
         if ($mode == "workorderAddPart" || $mode == "newDeliveryNote" || $mode == "editDeliveryNote") {
@@ -85,7 +86,6 @@ class PartController extends AbstractController
                         'quantity' => $quantity,
                     ];
                 }
-
                 return $this->render('part/index.html.twig', [
                     'parts' =>  $parts,
                     'form'  =>  $form->createView(),
@@ -101,7 +101,6 @@ class PartController extends AbstractController
                 'mode'  =>  $mode,
             ]);
         }
-
         return $this->render('part/index.html.twig', [
             'parts' =>  $parts,
             'form'  =>  $form->createView(),

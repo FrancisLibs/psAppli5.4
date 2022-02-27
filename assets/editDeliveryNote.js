@@ -14,7 +14,6 @@ function saveNumber() {
 
 function saveDate() {
   let date = blDate.value;
- 
   const url = "https://127.0.0.1:8000/delivery/note/saveDate/" + date;
   const message = fetch(url)
     .then((resultat) => resultat.json())

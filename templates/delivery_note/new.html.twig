@@ -11,16 +11,15 @@
                     <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-10 d-flex justify-content-start align-items-center">
-                    <h4 class="text-primary mr-5">Fournisseur : </h4>
+            <div class="row mt-5">
+                <div class="col-5 d-flex justify-content-between align-items-center">
+                    <a class="btn btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
                     {% if provider is defined %}
                         <div class="mr-5">{{ provider.name }}</div>
                     {% endif %}
-                    <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
                 </div>
             </div>
-            <div class="mt-2">
+            <div class="mt-5">
                 {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}
             </div>
         </div>
