@@ -16,12 +16,12 @@
                     {% endif %}
                 </div>
                 {% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' %}
-                    <div class="col-5 border border-primary rounded mb-3 mr-5 p-2">
+                    <div class="col-5 border border-primary rounded mb-3 me-5 p-2">
                         <div class="d-flex justify-content-start">
                             <h4>Panier</h4>
                             {% if items is defined %}
-                                <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Valider</a>
-                                <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ml-4 btn btn-warning btn-sm btn_panier">vider</a>
+                                <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 me-4 btn btn-primary btn-sm btn_panier">Valider</a>
+                                <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="me-4 btn btn-warning btn-sm btn_panier">vider</a>
                             {% endif %}
                         </div>
                         {% if items is defined %}

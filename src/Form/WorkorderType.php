@@ -34,7 +34,7 @@ class WorkorderType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => 'Type',
+                'label' => false,
                 'choices'  => [
                     'Curatif' => 1,
                     'Préventif' => 2,
@@ -52,42 +52,41 @@ class WorkorderType extends AbstractType
                 'required' => false,
             ])
             ->add('startDate', DateType::class, [
-                'label' => false,
                 'input' => 'datetime',
+                'label' => 'Date début',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
-                'label' => false,
+                'label' => 'Heure début',
                 'widget' => 'single_text',
                 'input' => 'datetime',
             ])
             ->add('endDate', DateType::class, [
-                'label' => false,
                 'input' => 'datetime',
+                'label' => 'Date fin',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
-                'label' => false,
+                'label' => 'Heure fin',
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,
             ])
             ->add('durationDay', TextType::class, [
                 'label' =>  'jours',
-                // 'disabled' =>  true,
             ])
             ->add('durationHour', TextType::class, [
-                'label' =>  'Heures',
-                // 'disabled' =>  true,
+                'label' =>  'Heures'
             ])
             ->add('durationMinute', TextType::class, [
-                'label' =>  'Minutes',
-                // 'disabled' =>  true,
+                'label' =>  'Minutes'
             ])
             ->add('stopTimeHour', TextType::class, [
+                'label' => 'Heure',
                 'required' => false,
             ])
             ->add('stopTimeMinute', TextType::class, [
+                'label' => 'Minute',
                 'required' => false,
             ]);
 
@@ -106,25 +105,6 @@ class WorkorderType extends AbstractType
                 //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
             }
         );
-
-        // $formModifier = function (FormInterface $form, Workshop $workshop = null) {
-        //     $machines = null === $workshop ? [] : $workshop->getMachines();
-        //     $form->add('machine', EntityType::class, [
-        //         'class' => Machine::class,
-        //         'choices' => $machines,
-        //         'choice_label'  => 'designation',
-        //         'label' => 'Machine'
-        //     ]);
-        // };
-
-        // $builder->get('workshop')->addEventListener(
-        //     FormEvents::POST_SUBMIT,
-        //     function (FormEvent $event) use ($formModifier) {
-        //         $form = $event->getForm()->getParent();
-        //         $workshop = $event->getForm()->getData();
-        //         $formModifier($form, $workshop);
-        //     }
-        // );
     }
 
     public function configureOptions(OptionsResolver $resolver)

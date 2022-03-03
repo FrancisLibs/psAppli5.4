@@ -5,10 +5,10 @@
         </td>
         <td class="text-center font_size_table">{{ template.request }}</td>
         <td class="text-center font_size_table">{{ template.nextDate|date("d/m/Y") }}</td>
-        <td class="d-flex justify-content-start flex-wrap text-center font_size_table">
+        <td class="d-flex justify-content-center flex-wrap font_size_table">
             {% for machine in template.machines %}
-                <div class="d-inline justify-content-start">
-                    <span class="border-secondary rounded border mr-2 px-1">{{ machine.designation}}<span>
+                <div class="d-flex justify-content-center ">
+                    <span class="border-secondary rounded border me-2 px-1">{{ machine.designation}}<span>
                 </div>
             {% endfor %}    
         </td>

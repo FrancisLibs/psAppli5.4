@@ -14,7 +14,7 @@
             {% include ("user/_photo.html.twig") %}
         </aside>
         <div class="col-10">       
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
                 <thead>
                     <tr>
                         <th scope="col" class="text-left">Forunisseur</th>
@@ -27,7 +27,11 @@
                 </thead>
                 <tbody>
                     {% for part in parts %}
-                        <tr>
+                        {% if part.stock.approQte > 0 %}
+                            <tr style="background-color: #a7fb78;">
+                        {% else %}
+                            <tr>
+                        {% endif %}
                             {% if part.provider.name != varProvider %}
                                 {% set varProvider = part.provider.name %}
                                 <td><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn btn-primary btn-sm">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>

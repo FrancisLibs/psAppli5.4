@@ -32,7 +32,7 @@
                 <tbody>
                     {% for part in parts %}
                         <tr>
-                            <td><a href="{{ path('part_show', {'id': part.id}) }}" class="btn btn-primary btn-sm w-75">{{ part.code }}</a></td>
+                            <td><a href="{{ path('part_edit', {'id': part.id}) }}" class="btn btn-primary btn-sm w-75">{{ part.code }}</a></td>
                             <td class="text-center">{{ part.designation }}</td>
                             <td class="text-center">{{ part.reference }}</td>
                             <td class="text-center">{{ part.stock.qteStock }}</td>

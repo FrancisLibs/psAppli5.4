@@ -1,20 +1,18 @@
 {{ form_start(form) }} 
-    <div>
-        <div class="row">
-            <div class="col-5 mt-3  d-flex justify-content-start">
-                <h4 class="mr-5 text-primary">Type BT</h4>
-                {{ form_widget(form.type) }}  
-            </div>
+    <div class="row">
+        <div class="col-3 mt-5 d-flex">
+            <h4 class="me-5 text-primary">Type BT</h4>
+            {{ form_row(form.type) }}
         </div>
     </div>
-    <div class="mt-1 rounded p-3 interventions">
+    <div class="mt-4 interventions">
         <div class="row">
             <div class="text-primary">
                 <h4>Intervention</h4>
             </div>
         </div>
         <div class="row">
-            <div class="col-11">
+            <div class="col-9">
                 {{ form_label(form.request) }}  
                 {{ form_widget(form.request) }}
                 
@@ -26,71 +24,93 @@
             </div>
         </div>
     </div>
-    <div class="mt-1 rounded p-3 temps" id="time_management">
+    <div class="mt-5 temps" id="time_management">
         <div class="row">
-            <div class="text-primary">
-                <h4>Temps</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="ml-4">
-                <span>Date début</span>
-                {{ form_widget(form.startDate) }}
-            </div>
-            <div class="ml-4">
-                <span>Heure début</span>
-                {{ form_widget(form.startTime) }}
-            </div>
-            <div class="ml-4 w-50" id="duration_time">
-                <span>Durée :</span>
-                <div class="d-flex align-items-center">
-                    <div class="d-flex mr-2">
-                        <span>Jours</span>
-                        <span class="ml-1 caseTemps">
-                            {{ form_widget(form.durationDay) }}
-                        </span>
+            <div class="col-4">
+                <div class="text-primary">
+                    <h4>Date</h4>
+                </div>
+                <div class="col-12 d-flex justify-content-around me-3 border border-secondary rounded p-3 pb-5">
+                    <div class="row">
+                        <div>
+                            {{ form_label(form.startDate) }}
+                            <div class="caseTemps">
+                                {{ form_widget(form.startDate) }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form_label(form.startTime) }}
+                            <div class="caseTemps">
+                                {{ form_widget(form.startTime) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex mr-2">
-                        <span>Heures</span>
-                        <span class="ml-1 caseTemps">
-                            {{ form_widget(form.durationHour) }}
-                        </span>
-                    </div>
-                    <div class="d-flex mr-2">
-                        <span>Minutes</span>
-                        <span class="ml-1 caseTemps">
-                            {{ form_widget(form.durationMinute) }}
-                        </span>
+                    <div class="row">
+                        <div>
+                            {{ form_label(form.endDate) }}
+                            <div class="caseTemps">
+                                {{ form_widget(form.endDate) }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form_label(form.endTime) }}
+                            <div class="caseTemps">
+                                {{ form_widget(form.endTime) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row pt-4">
-            <div class="ml-4">
-                <span>Date fin</span>
-                {{ form_widget(form.endDate) }}
-            </div>
-            <div class="ml-4">
-                <span>Heure fin</span>
-                {{ form_widget(form.endTime) }}
-            </div>
-            <div class="ml-4">
-                <span>Arrêt machine</span>
-                <div class="d-flex justify-content-start">
-                    <span>Heures</span>
-                    <span class="ml-1 mr-3 caseTemps">
-                        {{ form_widget(form.stopTimeHour) }}
-                    </span>
-                    <span>Minutes</span>
-                    <span class="ml-1 caseTemps">
-                        {{ form_widget(form.stopTimeMinute) }}
-                    </span>
+            <div class="col-4">
+                <div class="text-primary">
+                    <h4>Durée</h4>
+                </div>
+                <div class="col-12 d-flex justify-content-around me-3 border border-secondary rounded p-3" id="duration_time">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            {{ form_label(form.durationDay) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.durationDay) }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form_label(form.durationHour) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.durationHour) }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form_label(form.durationMinute) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.durationMinute) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-primary mt-2">
+                    <h4>Arrêt machine</h4>
+                </div>
+                <div class="col-12 d-flex justify-content-around me-3 border border-secondary rounded p-3" id="duration_time">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            {{ form_label(form.stopTimeHour) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.stopTimeHour) }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form_label(form.stopTimeMinute) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.stopTimeMinute) }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-3 text-center ml-4">
+        <div class="col-3 text-center">
             <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
         </div>
     </div>

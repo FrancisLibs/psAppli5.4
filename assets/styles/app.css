@@ -78,7 +78,12 @@ footer {
 
 /* Formulaire nouveau BT  */
 .caseTemps {
-  width: 100px;
+  width: 150px;
+}
+
+.caseHeure {
+  width: 90px;
+  margin-right: 26px;
 }
 
 /* Affichage des pièces dans l'encart du panier */

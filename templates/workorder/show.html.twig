@@ -4,17 +4,17 @@
 
 {% block body %}
     <div class="row mt-5">
-        <div class="col-7 offset-2">
+        <div class="col-5 offset-2">
             <div class="row justify-content-between">
-                <div class="col-5 d-flex justify-content-between">
+                <div class="col-6 d-flex justify-content-start align-items-center">
                     {% if workorder.preventive %}
-                        <h3>Bon de Travail préventif</h3>
+                        <h2>Bon de Travail préventif</h2>
                     {% else %}
-                        <h3>Bon de Travail</h3>
+                        <h2>Bon de Travail</h2>
                     {% endif %}
-                    <h3>{{ workorder.id }}</h3>
+                    <h3 class="ms-3">{{ workorder.id }}</h3>
                 </div>
-                <div class="d-flex justify-content-start align-items-center">
+                <div class="col-6 d-flex justify-content-between align-items-center">
                     <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
                     {% if workorder.workorderStatus.name != "CLOTURE" %}
                         <a class="btn btn-warning btn-sm mr-2" href="{{ path('work_order_add_part', {'mode': 'workorderAddPart', 'id': workorder.id}) }}">Pièces détachées</a>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <article class="row mt-4">
+    <article class="row mt-5">
          <aside class="col-2">
             {% include 'user/_photo.html.twig' %}
         </aside>

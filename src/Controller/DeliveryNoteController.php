@@ -135,13 +135,17 @@ class DeliveryNoteController extends AbstractController
 
             $this->manager->persist($deliveryNote);
 
-            // Modification du stock de pièces détachées
+            // Modification du stock de pièces détachées et du nombre de pièces en commande
             $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
             foreach ($deliveryNoteParts as $deliveryNotePart) {
                 $deliveryNotePartQte = $deliveryNotePart->getQuantity();
                 $partStockQte = $deliveryNotePart->getPart()->getStock()->getQteStock();
                 $deliveryNotePart->getPart()->getStock()->setQteStock($deliveryNotePartQte + $partStockQte);
+
+                $partsInOrder = $deliveryNotePart->getPart()->getStock()->getApproQte();
+                $deliveryNotePart->getPart()->getStock()->setApproQte($partsInOrder - $deliveryNotePartQte);
             }
+
             $this->manager->persist($deliveryNote);
             $this->manager->flush();
 

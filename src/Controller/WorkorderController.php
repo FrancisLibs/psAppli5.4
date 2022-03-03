@@ -108,7 +108,6 @@ class WorkorderController extends AbstractController
 
         $workorder = new Workorder();
         $workorder->setPreventive(false);
-        $workorder->setCreatedAt(new \DateTime());
 
         // Si une machine a été mise en session, elle est pour le BT
         $machines = $session->get('machines', []);
@@ -126,6 +125,7 @@ class WorkorderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
             $workorder->setOrganisation($organisation);
+            $workorder->setCreatedAt(new \DateTime());
             $workorder->setPreventive(false);
 
             if ($machine) {
@@ -139,18 +139,19 @@ class WorkorderController extends AbstractController
             }
 
             // Contrôle BT terminé 
-            $machine = $workorder->getMachines();
             $minute = $workorder->getDurationMinute();
             $hour = $workorder->getDurationHour();
             $day = $workorder->getDurationDay();
             $request = $workorder->getRequest();
             $implementation = $workorder->getImplementation();
+            $machine = $workorder->getMachines();
 
-            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request)  && !empty($implementation) && !empty($machine)) {
+            $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+            dd($status);
+            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request) && !empty($implementation) && !empty($machine)) {
                 $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
-            } else {
-                $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             }
+
             $workorder->setWorkorderStatus($status);
 
             $this->manager->persist($workorder);

@@ -4,10 +4,8 @@
 
 {% block body %}
     <header class="row mt-5">
-        <div class="col-2 offset-2">
+        <div class="col-3 offset-2 d-flex justify-content-between align-items-center">
             <h3 class="text-primary">Machine</h3>
-        </div>
-        <div class="col-6 d-flex justify-content-start align-items-center">
             <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
             <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
             {% if is_granted('ROLE_ADMIN') %}
@@ -16,18 +14,9 @@
             {% endif %}
         </div>
     </header>
-    <div class="row mt-5">
+    <div class="row mt-4">
         <aside class="col-2 mt-4">
-            <div class="text-center mt-3 d-flex flex-column ">
-                {% if app.user.imageName %}
-                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                {% else %}
-                    <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                {% endif %}
-                <div class="mt-2 border borer-danger rounded">
-                    {{ app.user.firstName ~ " " ~ app.user.lastName }}
-                </div>
-            </div>
+            {% include 'user/_photo.html.twig' %}
         </aside>
         <div class="col-5">
             <div class="row mt-5">

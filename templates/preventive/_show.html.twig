@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-5 d-flex justify-content-between">
         <div class="d-flex justify-content-start align-items-center">
@@ -16,10 +15,12 @@
     </div>
 </div>
 <div class="row mt-4">
-    <div class="col-1">
+    <div class="col-2">
         <h4 class="text-primary">Machine(s) </h4>
     </div>
-    <div class="col-8">
+</div>
+<div class="row">
+    <div class="col-8 border border-info rounded">
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
@@ -42,50 +43,63 @@
         </table>
     </div>
 </div>
+
 {% if template.request %}
-    <div class="row justify-content-start align-items-baseline mt-2">
+    <div class="row mt-4">
         <div class="col-2">
             <h4 class="text-primary">Demande : </h4>
         </div>
-        <div class="col-5">
+    </row>
+    <div class="row">
+        <div class="col-8 border border-info rounded">
             <p>{{ template.request }}</p>
         </div>
     </div>
 {% endif %}
+
 {% if template.remark %}
-    <div class="row justify-content-start align-items-top mt-2">
+    <div class="row mt-4">
         <div class="col-2">
             <h4 class="text-primary">Remarque : </h4>
         </div>
-        <div class="col-5">
-            <p>{{ template.remark|nl2br}}</p>
+    </div>
+    <div class="row">
+        <div class="col-8 border border-info rounded">
+            <p>{{ template.remark|nl2br }}</p>
         </div>
-    </div
+    </div>
 {% endif %}
 
-<div class="row mt-3">
-    <table class="table col-7">
-        <thead>
-            <tr>
-                <th scope="col">Période</th>
-                <th scope="col" class="text-center">Glissant</th>
-                <th scope="col" class="text-center">Prochaine date</th>
-                <th scope="col" class="text-center">Préparation</th>
-                <th scope="col" class="text-center">Durée</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ template.period }}</td>
-                {% if template.sliding %}
-                    <td class="text-center">OUI</td>
-                {% else %}
-                    <td class="text-center">NON</td>
-                {% endif %}
-                <td class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
-                <td class="text-center">{{ template.daysBefore }}</td>
-                <td class="text-center">{{ template.duration }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="row mt-4">
+    <div class="col-2">
+        <h4 class="text-primary">Temps : </h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-8 border border-info rounded">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Période</th>
+                    <th scope="col" class="text-center">Glissant</th>
+                    <th scope="col" class="text-center">Prochaine date</th>
+                    <th scope="col" class="text-center">Préparation</th>
+                    <th scope="col" class="text-center">Durée</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ template.period }}</td>
+                    {% if template.sliding %}
+                        <td class="text-center">OUI</td>
+                    {% else %}
+                        <td class="text-center">NON</td>
+                    {% endif %}
+                    <td class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
+                    <td class="text-center">{{ template.daysBefore }}</td>
+                    <td class="text-center">{{ template.duration }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
