@@ -3,20 +3,6 @@
 {% block title %}Bon de travail préventif{% endblock %}
 
 {% block body %}
-<<<<<<< HEAD
-    <div class="row mt-5 justify-content-start">
-        <div class="col-4 offset-2 d-flex justify-content-start align-items-center">
-            <div class="me-4">
-                <h3>Bon de Travail préventif</h3>
-            </div>
-            <div class="d-flex justify-content-start align-items-center">
-                <a class="btn btn-primary btn-sm me-2" href="{{ path('template_index') }}" role="button">Liste des préventifs</a>
-                <a class="btn btn-primary btn-sm me-2" href="{{ path('template_edit', {'id': template.id}) }}">Edition</a>
-                {# <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': template.id}) }}">Pdf</a> #}
-                {% if is_granted('ROLE_ADMIN') %}
-                    {{ include('preventive/_delete_form.html.twig') }}
-                {% endif %}
-=======
     <div class="row mt-5">
         <div class="col-6 offset-2">
             <div class="row justify-content-between">
@@ -32,7 +18,6 @@
                         {{ include('preventive/_delete_form.html.twig') }}
                     {% endif %}
                 </div>
->>>>>>> message
             </div>
         </div>
     </div>

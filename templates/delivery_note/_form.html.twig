@@ -2,20 +2,6 @@
     <div class="row">
         <h4 class="col-2 text-primary">Infos :</h4>
     </div>
-<<<<<<< HEAD
-    <div class="row mt-3 align-items-center">
-        <div class="col-5 d-flex justify-content-start align-items-center">
-            <div class="me-3">
-                {{ form_errors(form.number) }}
-                {{ form_label(form.number) }}
-            </div>
-            <div class="col-6">
-                {{ form_widget(form.number) }}
-            </div>
-        </div>
-        <div class="col-5 d-flex justify-content-start align-items-center">
-            <div class="me-3">
-=======
     <div class="row mt-1">
         <div class="col-8 d-flex justify-content-start align-items-center border border-info rounded p-3">
             <div class="col-3 d-flex align-items-center">
@@ -26,7 +12,6 @@
                 {{ form_widget(form.number) }}
             </div>
             <div class="col-2 offset-1 d-flex align-items-center">
->>>>>>> message
                 {{ form_errors(form.date) }}
                 {{ form_label(form.date) }} 
             </div>
@@ -37,11 +22,7 @@
     </div>
     <div class="row justify-content-start align-items-end mt-5">
         <div class="col-8">
-<<<<<<< HEAD
-            <div class="d-flex justify-content-start mb-4">
-=======
             <div class="d-flex justify-content-start align-items-center mb-4">
->>>>>>> message
                 <h4 class="text-primary me-5">Pièces détachées</h4>
                 {% if mode == "editDeliveryNote" %}
                     <a class="btn btn-primary btn-sm me-2" href="{{ path('part_index', {'mode': mode, 'documentId': deliveryNote.id }) }}">Sélection pièces</a>
