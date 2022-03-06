@@ -81,6 +81,10 @@ footer {
   width: 100px;
 }
 
+.caseHeure {
+  width: 80px;
+}
+
 /* Affichage des pièces dans l'encart du panier */
 .items_display {
   font-size: 0.7em;

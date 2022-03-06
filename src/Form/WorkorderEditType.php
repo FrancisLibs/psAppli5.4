@@ -32,7 +32,7 @@ class WorkorderEditType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => 'Type',
+                'label' => false,
                 'choices'  => [
                     'Curatif' => 1,
                     'Préventif' => 2,

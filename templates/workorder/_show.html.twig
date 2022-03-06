@@ -12,15 +12,15 @@
     </div>
 {% endif %}
 <div class="row">
-    <div class="col-3 d-flex justify-content-start align-items-center">
+    <div class="col-2 d-flex justify-content-start align-items-center">
         <h5 class="text-primary">Créé le : </h5>
         <h5 class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d/m/Y', timezone="Europe/Paris") : '' }}</h5>
     </div>
-    <div class="col-3 d-flex justify-content-start align-items-center">
+    <div class="col-2 d-flex justify-content-start align-items-center">
         <H5 class="text-primary">Par : </H5>
         <h5 class="champs_bt">{{ workorder.user.firstName }}</h5>
     </div>
-    <div class="col-3 d-flex justify-content-start align-items-center">
+    <div class="col-2 d-flex justify-content-start align-items-center">
         <h5 class="text-primary">Statut : </h5>
         <h5 class="champs_bt">{{ workorder.workorderStatus.name }}</h5>
     </div>
@@ -29,7 +29,7 @@
     <div class="col-1">
         <h5 class="text-primary">Machine(s) </h5>
     </div>
-    <div class="col-8">
+    <div class="col-6">
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
@@ -53,34 +53,28 @@
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-2">
+<div class="row mt-3 justify-content-start">
+    <div class="col-1 me-5">
         <h5 class="text-primary">Demande : </h5>
     </div>
-    <div class="col-5">
-        <div>{{ workorder.request }}</div>
-    </div>
+    {{ workorder.request }}
 </div>
 
 {% if workorder.implementation %}
-    <div class="row mt-3">
-        <div class="col-2">
+    <div class="row mt-3 justify-content-start">
+        <div class="col-1 me-5">
             <h5 class="text-primary">Réalisation : </h5>
         </div>
-        <div class="col-5">
-            <div>{{ workorder.implementation | nl2br }}</div>
-        </div>
+        {{ workorder.implementation | nl2br }}
     </div>  
 {% endif %}
 
 {% if workorder.remark %}
-    <div class="row mt-3">
-        <div class="col-2">
+    <div class="row mt-3 justify-content-start">
+        <div class="col-1 me-5">
             <h5 class="text-primary">Remarque : </h5>
         </div>
-        <div class="col-5">
-            <div>{{ workorder.remark | nl2br }}</div>
-        </div>
+        {{ workorder.remark | nl2br }}
     </div>
 {% endif %}
 <div class="row mt-3">
@@ -114,7 +108,7 @@
         {% endif %}
     </div>
 </div>
-<div class="row mt-3">
+<div class="row mt-1">
     <div class="col-6">
         <table class="table">
             <thead>
@@ -137,28 +131,30 @@
     </div>
 </div>
 {% if workorder.workorderParts is not empty %}
-    <div class="col-6 mt-3 mb-3 border rounded border-primary pt-2">
-        <h5>Pièces détachées</h5>
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">Code</th>
-                    <th class="text-center">Qte</th>
-                    <th class="text-center" scope="col">Désignation</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for part in workorder.workorderParts %}
+    <div class="col-7 mt-3 mb-3">
+        <h5 class="text-primary">Pièces détachées</h5>
+        <div class="border rounded border-primary p-3">
+            <table class="table table-sm">
+                <thead>
                     <tr>
-                        <td>{{ part.part.code }}</td>
-                        <td class="text-center">{{ part.quantity }}</td>
-                        <td class="text-center">{{ part.part.designation }}</td>
-                        <td><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
+                        <th scope="col">Code</th>
+                        <th class="text-center">Qte</th>
+                        <th class="text-center" scope="col">Désignation</th>
+                        <th></th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for part in workorder.workorderParts %}
+                        <tr>
+                            <td>{{ part.part.code }}</td>
+                            <td class="text-center">{{ part.quantity }}</td>
+                            <td class="text-center">{{ part.part.designation }}</td>
+                            <td><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endif %}
 

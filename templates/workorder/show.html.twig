@@ -3,30 +3,26 @@
 {% block title %}Bon de Travail{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-7 offset-2">
-            <div class="row justify-content-between">
-                <div class="col-5 d-flex justify-content-between">
-                    {% if workorder.preventive %}
-                        <h3>Bon de Travail préventif</h3>
-                    {% else %}
-                        <h3>Bon de Travail</h3>
-                    {% endif %}
-                    <h3>{{ workorder.id }}</h3>
-                </div>
-                <div class="d-flex justify-content-start align-items-center">
-                    <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
-                    {% if workorder.workorderStatus.name != "CLOTURE" %}
-                        <a class="btn btn-warning btn-sm mr-2" href="{{ path('work_order_add_part', {'mode': 'workorderAddPart', 'id': workorder.id}) }}">Pièces détachées</a>
-                        <a class="btn btn-primary btn-sm mr-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a class="btn btn-danger btn-sm mr-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
-                        {% endif %}
-                    {% endif %}
-                    {# <a class="btn btn-warning btn-sm mr-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Pdf</a> #}
-                    {# {{ include('workorder/_delete_form.html.twig') }} #}
-                </div>
-            </div>
+    <div class="row mt-5 mb-5 justify-content-start">
+        <div class="col-3 offset-2 d-flex justify-content-start">
+            {% if workorder.preventive %}
+                <h3>Bon de Travail préventif</h3>
+            {% else %}
+                <h3>Bon de Travail</h3>
+            {% endif %}
+            <h3 class="ms-4">{{ workorder.id }}</h3>
+        </div>
+        <div class="col-3 d-flex justify-content-start align-items-center">
+            <a class="btn btn-primary btn-sm me-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
+            {% if workorder.workorderStatus.name != "CLOTURE" %}
+                <a class="btn btn-warning btn-sm me-2" href="{{ path('work_order_add_part', {'mode': 'workorderAddPart', 'id': workorder.id}) }}">Pièces détachées</a>
+                <a class="btn btn-primary btn-sm me-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-danger btn-sm me-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
+                {% endif %}
+            {% endif %}
+            {# <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Pdf</a> #}
+            {# {{ include('workorder/_delete_form.html.twig') }} #}
         </div>
     </div>
     <article class="row mt-4">
