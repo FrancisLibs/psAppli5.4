@@ -12,6 +12,7 @@
     </div>
 {% endif %}
 <div class="row">
+<<<<<<< HEAD
     <div class="d-flex col-12 justify-content-start">
         <div class="col-2 d-flex justify-content-start align-items-center">
             <h5 class="text-primary">Créé le : </h5>
@@ -32,6 +33,26 @@
 </div>
 <div class="row">
     <div class="col-7 border border-info rounded">
+=======
+    <div class="col-2 d-flex justify-content-start align-items-center">
+        <h5 class="text-primary">Créé le : </h5>
+        <h5 class="champs_bt text-center">{{ workorder.createdAt ? workorder.createdAt|date('d/m/Y', timezone="Europe/Paris") : '' }}</h5>
+    </div>
+    <div class="col-2 d-flex justify-content-start align-items-center">
+        <H5 class="text-primary">Par : </H5>
+        <h5 class="champs_bt">{{ workorder.user.firstName }}</h5>
+    </div>
+    <div class="col-2 d-flex justify-content-start align-items-center">
+        <h5 class="text-primary">Statut : </h5>
+        <h5 class="champs_bt">{{ workorder.workorderStatus.name }}</h5>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-1">
+        <h5 class="text-primary">Machine(s) </h5>
+    </div>
+    <div class="col-6">
+>>>>>>> message
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
@@ -54,6 +75,7 @@
         </table>
     </div>
 </div>
+<<<<<<< HEAD
 <div class="row mt-4">
     <h5 class="text-primary">Intervention</h5>
 </div>
@@ -77,6 +99,45 @@
                     <div>{{ workorder.implementation | nl2br }}</div>
                 </div>
             </div>  
+=======
+
+<div class="row mt-3 justify-content-start">
+    <div class="col-1 me-5">
+        <h5 class="text-primary">Demande : </h5>
+    </div>
+    {{ workorder.request }}
+</div>
+
+{% if workorder.implementation %}
+    <div class="row mt-3 justify-content-start">
+        <div class="col-1 me-5">
+            <h5 class="text-primary">Réalisation : </h5>
+        </div>
+        {{ workorder.implementation | nl2br }}
+    </div>  
+{% endif %}
+
+{% if workorder.remark %}
+    <div class="row mt-3 justify-content-start">
+        <div class="col-1 me-5">
+            <h5 class="text-primary">Remarque : </h5>
+        </div>
+        {{ workorder.remark | nl2br }}
+    </div>
+{% endif %}
+<div class="row mt-3">
+    <div class="col-2">
+        <h5 class="text-primary">Durée : </h5>
+    </div>
+    <div class="col-5">
+        {% if workorder.durationDay > 0 %}
+            {{ workorder.durationDay }} 
+            {% if workorder.durationDay > 1 %}
+                jours
+            {% else %}
+                jour
+            {% endif %}
+>>>>>>> message
         {% endif %}
 
         {% if workorder.remark %}
@@ -91,6 +152,7 @@
         {% endif %}
     </div>
 </div>
+<<<<<<< HEAD
 <div class="row mt-4">
     <h5 class="text-primary">Temps</h5>
 </div>
@@ -151,6 +213,34 @@
     </div>
     <div class="row mb-5">
         <div class="col-7 border border-info rounded">
+=======
+<div class="row mt-1">
+    <div class="col-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-primary">Date début</th>
+                    <th scope="col" class="text-center text-primary">Heure début</th>
+                    <th scope="col" class="text-center text-primary">Date fin</th>
+                    <th scope="col" class="text-center text-primary">Heure de fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ workorder.startDate ? workorder.startDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.startTime ? workorder.startTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.endDate ? workorder.endDate|date('d-m-Y', timezone="Europe/Paris") : '' }}</td>
+                    <td class="text-center">{{ workorder.endTime ? workorder.endTime|date('H:i:s', timezone="Europe/Paris") : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% if workorder.workorderParts is not empty %}
+    <div class="col-7 mt-3 mb-3">
+        <h5 class="text-primary">Pièces détachées</h5>
+        <div class="border rounded border-primary p-3">
+>>>>>>> message
             <table class="table table-sm">
                 <thead>
                     <tr>

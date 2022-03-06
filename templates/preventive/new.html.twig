@@ -24,9 +24,9 @@
                 {% if machinesWithData is defined %}
                     <div class="col-8">
                         <div>
-                            <div class="d-flex flex-wrap justify-content-start mr-2 p-2 mb-2 ">
+                            <div class="d-flex flex-wrap justify-content-start me-2 p-2 mb-2 ">
                                 {% for machine in machinesWithData %}
-                                    <div class="mr-3 border-dark border rounded p-1 mb-2">
+                                    <div class="me-3 border-dark border rounded p-1 mb-2">
                                         {{ machine.internalCode }} {{ machine.designation}}
                                         <a href="{{ path('remove_machine_from_cart', 
                                             {'id': machine.id, 'mode': 'newPreventive'}) }}" 

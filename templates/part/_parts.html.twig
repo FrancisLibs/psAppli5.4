@@ -12,7 +12,7 @@
             {% elseif  mode == 'editDeliveryNote' %}
                 <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
             {% else %}
-                <a class="btn btn-sm btn-primary w-75" href="{{ path('part_edit', {'id': part.id}) }}">{{ part.code }}</a>
+                <a class="btn btn-sm btn-primary w-75" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>
             {% endif %}
         </td>
         <td class="text-center font_size_table">{{ part.designation }}</td>

@@ -3,7 +3,7 @@
 {% block title %}Machines{% endblock %}
 
 {% block body %}
-    <div class="row mt-4 mb-3 mr-5 justify-content-between">
+    <div class="row mt-4 mb-3 me-5 justify-content-between">
         <div class="col-3 offset-2">
             {% if mode == "selectPreventive" %}
                 <h3>Machines -> BT préventif</h3>
@@ -24,7 +24,7 @@
                             <a href="{{ path('template_new') }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
                         {% endif %}
                     </h5>
-                    <div class="mr-2 p-2 mb-2 ">
+                    <div class="me-2 p-2 mb-2 ">
                         <div class="row mb-1">
                             <div class="col-2 text-uppercase font-weight-bold text-primary">Code</div>
                             <div class="col-5 text-uppercase font-weight-bold text-primary">Désignation</div>

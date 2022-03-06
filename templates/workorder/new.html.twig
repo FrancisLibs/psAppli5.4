@@ -28,7 +28,11 @@
                     {% endif %}
                 </div>
             </div>
-            {{ include('workorder/_form.html.twig') }}
+            <div class="row mt-1">
+                <div class="col-9">
+                    {{ include('workorder/_form.html.twig') }}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -36,5 +40,3 @@
     {{ parent() }}
     {{ encore_entry_script_tags('newWorkorder') }}
 {% endblock %}
-
-

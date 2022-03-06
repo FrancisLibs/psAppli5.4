@@ -20,8 +20,13 @@
                         <div class="d-flex justify-content-start">
                             <h4>Panier</h4>
                             {% if items is defined %}
+<<<<<<< HEAD
                                 <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 me-4 btn btn-primary btn-sm btn_panier">Valider</a>
                                 <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="me-4 btn btn-warning btn-sm btn_panier">vider</a>
+=======
+                                <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-primary btn-sm btn_panier">Valider</a>
+                                <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-warning btn-sm btn_panier">vider</a>
+>>>>>>> message
                             {% endif %}
                         </div>
                         {% if items is defined %}

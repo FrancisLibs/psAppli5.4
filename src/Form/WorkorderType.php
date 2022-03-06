@@ -52,28 +52,49 @@ class WorkorderType extends AbstractType
                 'required' => false,
             ])
             ->add('startDate', DateType::class, [
+<<<<<<< HEAD
+=======
+                'label' => "Date début",
+>>>>>>> message
                 'input' => 'datetime',
                 'label' => 'Date début',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
+<<<<<<< HEAD
                 'label' => 'Heure début',
+=======
+                'label' => "Heure début",
+>>>>>>> message
                 'widget' => 'single_text',
                 'input' => 'datetime',
             ])
             ->add('endDate', DateType::class, [
+<<<<<<< HEAD
+=======
+                'label' => "Date fin",
+>>>>>>> message
                 'input' => 'datetime',
                 'label' => 'Date fin',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
+<<<<<<< HEAD
                 'label' => 'Heure fin',
+=======
+                'label' => "Heure fin",
+>>>>>>> message
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,
             ])
             ->add('durationDay', TextType::class, [
+<<<<<<< HEAD
                 'label' =>  'jours',
+=======
+                'label' =>  'Jours',
+                // 'disabled' =>  true,
+>>>>>>> message
             ])
             ->add('durationHour', TextType::class, [
                 'label' =>  'Heures'
@@ -82,11 +103,19 @@ class WorkorderType extends AbstractType
                 'label' =>  'Minutes'
             ])
             ->add('stopTimeHour', TextType::class, [
+<<<<<<< HEAD
                 'label' => 'Heure',
                 'required' => false,
             ])
             ->add('stopTimeMinute', TextType::class, [
                 'label' => 'Minute',
+=======
+                'label' =>  'Heures',
+                'required' => false,
+            ])
+            ->add('stopTimeMinute', TextType::class, [
+                'label' =>  'Minutes',
+>>>>>>> message
                 'required' => false,
             ]);
 

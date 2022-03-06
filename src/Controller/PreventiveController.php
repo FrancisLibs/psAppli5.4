@@ -48,7 +48,7 @@ class PreventiveController extends AbstractController
      * Liste des BT préventifs
      * 
      * @Route("/", name="template_index", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request 
      * @return Response 
@@ -70,7 +70,7 @@ class PreventiveController extends AbstractController
         $form->handleRequest($request);
 
         $templates = $this->templateRepository->findTemplates($data);
-        
+
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
