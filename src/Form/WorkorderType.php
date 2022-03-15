@@ -2,34 +2,22 @@
 
 namespace App\Form;
 
-use App\Entity\Machine;
-use App\Entity\Workshop;
 use App\Entity\Workorder;
 use Symfony\Component\Form\FormEvent;
 use App\Repository\WorkshopRepository;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class WorkorderType extends AbstractType
 {
-    private $workshopRepository;
-
-    public function __construct(WorkshopRepository $workshopRepository)
-    {
-        $this->workshopRepository = $workshopRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -51,25 +39,26 @@ class WorkorderType extends AbstractType
                 'label' => 'Remarque',
                 'required' => false,
             ])
+            ->add('price', NumberType::class, [
+                'label' =>  'Prix sans pièces'
+            ])
             ->add('startDate', DateType::class, [
-                'label' => "Date début",
-                'input' => 'datetime',
                 'label' => 'Date début',
+                'input' => 'datetime',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
-                'label' => "Heure début",
-                'widget' => 'single_text',
+                'label' => 'Heure début',
                 'input' => 'datetime',
+                'widget' => 'single_text',
             ])
             ->add('endDate', DateType::class, [
-                'label' => "Date fin",
-                'input' => 'datetime',
                 'label' => 'Date fin',
+                'input' => 'datetime',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
-                'label' => "Heure fin",
+                'label' => 'Heure fin',
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,

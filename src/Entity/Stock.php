@@ -52,11 +52,6 @@ class Stock
      */
     private $approQte;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $steadyPrice;
-
     public function getPart(): ?Part
     {
         return $this->part;
@@ -125,18 +120,6 @@ class Stock
     public function setApproQte(?int $approQte): self
     {
         $this->approQte = $approQte;
-
-        return $this;
-    }
-
-    public function getSteadyPrice(): ?float
-    {
-        return $this->steadyPrice;
-    }
-
-    public function setSteadyPrice(?float $steadyPrice): self
-    {
-        $this->steadyPrice = $steadyPrice;
 
         return $this;
     }

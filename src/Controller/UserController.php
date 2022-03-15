@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
+use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -19,17 +20,20 @@ class UserController extends AbstractController
     private $hasher;
     private $security;
     private $userRepository;
+    private $workorderRepository;
     private $manager;
 
     public function __construct(
         EntityManagerInterface $manager,
         Security $security,
         UserRepository $userRepository,
+        WorkorderRepository $workorderRepository,
         UserPasswordHasherInterface $passwordHasher
     ) {
         $this->hasher = $passwordHasher;
         $this->security = $security;
         $this->userRepository = $userRepository;
+        $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
     }
 
@@ -93,7 +97,7 @@ class UserController extends AbstractController
         $token = $request->request->get('_token');
         $currentUser = $this->getUser();
 
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $token)) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $token)) {
             if ($user <> $currentUser) {
                 $this->manager->remove($user);
                 $this->manager->flush();
@@ -119,10 +123,15 @@ class UserController extends AbstractController
      * @param                      User $user
      * @return                     RedirectResponse
      */
-    public function userProfil(Request $request, User $user)
+    public function userProfil(User $user)
     {
+        // BT de l'utilisateur
+        $workorders = $this->workorderRepository->findBy(['user' => $user]);
+        
+
         return $this->render('user/profil.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'workorder' => $workorders
         ]);
     }
 }

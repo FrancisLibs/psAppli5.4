@@ -190,6 +190,11 @@ class Workorder
      */
     private $daysBeforeLate;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -504,6 +509,18 @@ class Workorder
     public function setDaysBeforeLate(?int $daysBeforeLate): self
     {
         $this->daysBeforeLate = $daysBeforeLate;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

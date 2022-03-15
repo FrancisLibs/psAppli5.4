@@ -269,4 +269,46 @@ class PreventiveController extends AbstractController
 
         return $this->redirectToRoute('template_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("copy_template/{id}", name="copy_template", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function copyTemplate(Request $request, Template $template): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+
+        $newTemplate = new Template();
+
+        $newTemplate->setCreatedAt(new \DateTime())
+            ->setDaysBefore($template->getDaysBefore())
+            ->setDaysBeforeLate($template->getDaysBeforeLate())
+            ->setDuration($template->getDuration())
+            ->setOrganisation($organisation)
+            ->setPeriod($template->getPeriod())
+            ->setRemark($template->getRemark())
+            ->setRequest($template->getRequest())
+            ->setSliding($template->getSliding())
+            ->setUser($user)
+            ->setActive(true)
+            ->setNextDate(new \DateTime());
+
+        // Numéro de template
+        $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
+        if ($lastTemplate) {
+            $lastNumber = $lastTemplate->getTemplateNumber();
+            $newTemplate->setTemplateNumber($lastNumber + 1);
+        } else {
+            $newTemplate->setTemplateNumber(1);
+        }
+
+        $this->manager->persist($newTemplate);
+        $this->manager->flush();
+
+
+        return $this->redirectToRoute('template_edit', [
+            'id'    =>  $newTemplate->getId(),
+        ]);
+    }
 }

@@ -48,16 +48,16 @@ class PartController extends AbstractController
         $user = $this->getUser();
         $organisation =  $user->getOrganisation();
         $session = $this->requestStack->getSession();
-       
+
         $data = new SearchPart();
 
         if ($mode == "workorderAddPart" || $mode == "newDeliveryNote" || $mode == "editDeliveryNote") {
             $data = $session->get('data', null);
-            if(!$data){
+            if (!$data) {
                 $data = new SearchPart();
             }
         }
-        
+
         $data->organisation = $organisation;
 
         $data->page = $request->get('page', 1);
@@ -225,4 +225,25 @@ class PartController extends AbstractController
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    // /**
+    //  * @Route("/money", name="money")
+    //  * @Security("is_granted('ROLE_ADMIN')")
+    //  */
+    // public function money(): Response
+    // {
+    //     $parts = $this->partRepository->findAll();
+
+    //     foreach ($parts as $part) {
+    //         $steadyPrice = $part->getStock()->getSteadyPrice();
+    //         if ($steadyPrice > 0) {
+    //             $part->setSteadyPrice($steadyPrice);
+    //         }
+    //         $this->manager->persist($part);
+    //     }
+
+    //     $this->manager->flush();
+
+    //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }

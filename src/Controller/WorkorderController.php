@@ -147,7 +147,6 @@ class WorkorderController extends AbstractController
             $machine = $workorder->getMachines();
 
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
-            dd($status);
             if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request) && !empty($implementation) && !empty($machine)) {
                 $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
             }

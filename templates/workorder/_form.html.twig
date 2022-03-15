@@ -28,7 +28,7 @@
     </div>
     <div class="mt-5 temps" id="time_management">
         <div class="row">
-            <div class="col-4">
+            <div class="col-5">
                 <div class="text-primary">
                     <h4>Date</h4>
                 </div>
@@ -42,7 +42,7 @@
                         </div>
                         <div>
                             {{ form_label(form.startTime) }}
-                            <div class="caseTemps">
+                            <div class="caseHeure">
                                 {{ form_widget(form.startTime) }}
                             </div>
                         </div>
@@ -56,14 +56,14 @@
                         </div>
                         <div>
                             {{ form_label(form.endTime) }}
-                            <div class="caseTemps">
+                            <div class="caseHeure">
                                 {{ form_widget(form.endTime) }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-6">
                 <div class="text-primary">
                     <h4>Durée</h4>
                 </div>
@@ -89,9 +89,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="text-primary">
+                <div class="text-primary mt-2">
                     <h4>Arrêt machine</h4>
                 </div>
                 <div class="col-12 d-flex justify-content-around me-3 border border-secondary rounded p-3" id="duration_time">

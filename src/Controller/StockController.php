@@ -82,19 +82,4 @@ class StockController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    /**
-     * @Route("/{id}", name="stock_delete", methods={"POST"})
-     * @Security("is_granted('ROLE_USER')")
-     */
-    public function delete(Request $request, Stock $stock): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($stock);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('stock_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

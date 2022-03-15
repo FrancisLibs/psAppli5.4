@@ -46,7 +46,7 @@
                     {% for user in users %}
                         <div class="d-flex flex-column">
                             {% if user.imageName %}
-                                <img src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}" />
+                                <a href="{{ path('user_profil', {'id': user.id}) }}"><img src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}" /></a>
                             {% else %}
                                 <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}" />
                             {% endif %}

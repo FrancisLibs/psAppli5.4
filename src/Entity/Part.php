@@ -89,6 +89,11 @@ class Part
      */
     private $deliveryNoteParts;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $steadyPrice;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -311,6 +316,18 @@ class Part
                 $deliveryNotePart->setPart(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSteadyPrice(): ?float
+    {
+        return $this->steadyPrice;
+    }
+
+    public function setSteadyPrice(?float $steadyPrice): self
+    {
+        $this->steadyPrice = $steadyPrice;
 
         return $this;
     }

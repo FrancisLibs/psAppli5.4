@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use DateInterval;
 use App\Entity\Connexion;
+use Symfony\Component\Mime\Address;
 use App\Entity\Workorder;
 use App\Repository\UserRepository;
 use App\Repository\ParamsRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\WorkorderStatusRepository;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -46,12 +49,21 @@ class DefaultController extends AbstractController
      * @Route("/", name="home")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function index(): Response
+    public function index(MailerInterface $mailer): Response
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('fr.libs@gmail.com', 'Gmao Pierre Schmidt'))
+            ->to($user->getEmail())
+            ->subject('Reset mot de passe')
+            ->htmlTemplate('testemail/email.html.twig')
+            ;
+
+        $mailer->send($email);
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
