@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="ms-3" style="font-size: 0.8em;">Ver. : 2.1</span>
+    <span class="ms-3" style="font-size: 0.8em;">Ver. : 2.2</span>
     <a class="navbar-brand px-5" href="{{ path('home') }}">
         <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    {{ render(path('isNotRead')) }}
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
@@ -38,9 +39,6 @@
                 <li class="nav-item mx-2">
                     <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
                 </li>            
-                {# <li class="nav-item mx-2">
-                    <a href="{{ path('money') }}" class="nav-link">money</a>
-                </li>       #}
             {% endif %}
         </ul>
         <div class="d-flex justify-content-center align-items-center me-5 navbar-nav">

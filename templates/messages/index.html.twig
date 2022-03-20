@@ -3,12 +3,15 @@
 {% block title %}Messagerie{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col">
-            <h1>Messagerie</h1>
-            <p>Résumé de la messagerie</p>
-            <p>Recus : {{ app.user.received|length }}</p>
-            <p>Envoyé : {{ app.user.sent|length }}</p>
+    <div class="row pt-5">
+        <div class="col-2">
+            {% include 'user/_photo.html.twig' %}
+        </div>
+        <div class="col-8">
+            <h2 class="pb-2">Messagerie</h2>
+            <h4 class="pb-5">Résumé de la messagerie</h4>
+            <p  class="pb-2 fw-bold">Recus : {{ app.user.received|length }}</p>
+            <p  class="pb-5 fw-bold">Envoyé : {{ app.user.sent|length }}</p>
             <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
             Voir mes dossiers
             </a>

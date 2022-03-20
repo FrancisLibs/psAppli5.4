@@ -163,6 +163,18 @@ class MachineController extends AbstractController
     }
 
     /**
+     * @Route("/show/Workorder/{id}", name="machine_workorders", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function machine_workorder(Machine $machine): Response
+    {
+
+        return $this->render('machine/workorders.html.twig', [
+            'machine' => $machine,
+        ]);
+    }
+
+    /**
      * @Route("/edit/{id}", name="machine_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */

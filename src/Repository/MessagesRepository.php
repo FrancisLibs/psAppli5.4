@@ -19,6 +19,23 @@ class MessagesRepository extends ServiceEntityRepository
         parent::__construct($registry, Messages::class);
     }
 
+    /**
+     * Compte les messages non lus pour un utilisteur
+     *
+     * @param int $user
+     */
+    public function countNoReadmessages($user)
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m.id)')
+            ->andWhere('m.recipient = :user')
+            ->setParameter('user', $user)
+            ->andWhere('m.is_read = :val')
+            ->setParameter('val', false)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Message[] Returns an array of Message objects
     //  */

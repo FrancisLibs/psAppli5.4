@@ -178,8 +178,10 @@ class CartController extends AbstractController
 
     /**
      * Enlève une pièce du panier
+     * 
      * @Route("/remove/{id}/{mode}/{documentId?}", name="cart_remove")
      * @Security("is_granted('ROLE_USER')")
+     * 
      * @param   id              id de la pièce à enlever
      * @param   workorderId     id du workorder
      * @return  RedirectResponse

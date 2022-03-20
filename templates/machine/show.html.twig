@@ -9,6 +9,7 @@
             <div class="d-flex justify-content-start align-items-center">
                 <a class="btn btn-primary btn-sm me-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
                 <a class="btn btn-primary btn-sm me-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
+                <a class="btn btn-primary btn-sm me-2" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
                 {% if is_granted('ROLE_ADMIN') %}
                     {{ include('machine/_delete_form.html.twig') }}
                     <a class="btn btn-primary btn-sm ms-2" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
@@ -29,13 +30,13 @@
                     <p><strong>Nom : </strong>{{ machine.designation }}</p>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-5 d-flex justify-content-start">
-                    {% if machine.buyDate %}
+            {% if machine.buyDate %}
+                <div class="row mt-4">
+                    <div class="col-5 d-flex justify-content-start">
                         <p><strong>Date achat : </strong>{{ machine.buyDate|date('d-m-Y') }}</p>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="row mt-4">
                 <div class="col-5">
                     <p><strong>Constructeur : </strong>{{ machine.constructor }}</p>
@@ -68,13 +69,6 @@
                         {{ include('machine/_parts.html.twig') }}
                     </div>
                 </div>
-            {% endif %}
-        </div>
-
-        <div class="col-5">
-            {% if machine.workorders|length > 0 %}
-                <h3 class="text-primary">Bons de travail</h3>
-                {{ include('machine/_workorders.html.twig') }}
             {% endif %}
         </div>
     </div>

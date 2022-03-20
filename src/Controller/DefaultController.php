@@ -56,14 +56,14 @@ class DefaultController extends AbstractController
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('fr.libs@gmail.com', 'Gmao Pierre Schmidt'))
-            ->to($user->getEmail())
-            ->subject('Reset mot de passe')
-            ->htmlTemplate('testemail/email.html.twig')
-            ;
+        // $email = (new TemplatedEmail())
+        //     ->from(new Address('fr.libs@gmail.com', 'Gmao Pierre Schmidt'))
+        //     ->to($user->getEmail())
+        //     ->subject('Reset mot de passe')
+        //     ->htmlTemplate('testemail/email.html.twig')
+        //     ;
 
-        $mailer->send($email);
+        // $mailer->send($email);
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
