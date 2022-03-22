@@ -1,9 +1,16 @@
+// Lors d'un nouveau bon de livraison, le numéro de BL
+// et de sa date sont mis en session par ajax
+
 function saveNumber() {
+  let routeClass = document.querySelector(".deliveryNoteRoute");
+  let numberRoute = routeClass.dataset.urlDeliverynotenumber;
+
   let number = blNumber.value;
   if (number == "") {
     number = null;
   }
-  const url = "https://127.0.0.1:8000/delivery/note/saveNumber/" + number;
+  const url = numberRoute + "/" + number;
+  console.log(url);
   const message = fetch(url)
     .then((resultat) => resultat.json())
     .then((json) => {
@@ -13,8 +20,12 @@ function saveNumber() {
 }
 
 function saveDate() {
+  let routeClass = document.querySelector(".deliveryNoteRoute");
+  let dateRoute = routeClass.dataset.urlDeliverynotedate;
+
   let date = blDate.value;
-  const url = "https://127.0.0.1:8000/delivery/note/saveDate/" + date;
+  const url = dateRoute + "/" + date;
+  console.log(url);
   const message = fetch(url)
     .then((resultat) => resultat.json())
     .then((json) => {

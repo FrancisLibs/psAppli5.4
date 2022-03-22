@@ -1,6 +1,4 @@
 function cligno() {
-  let divClignotante = document.querySelector("#divClignotante");
-
   if (divClignotante.style.visibility == "visible") {
     divClignotante.style.visibility = "hidden";
   } else {
@@ -8,4 +6,7 @@ function cligno() {
   }
 }
 
-setInterval(cligno, 800);
+let divClignotante = document.querySelector("#divClignotante");
+if (divClignotante) {
+  setInterval(cligno, 800);
+}

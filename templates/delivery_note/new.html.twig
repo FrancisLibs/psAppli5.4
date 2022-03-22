@@ -3,11 +3,15 @@
 {% block title %}Saisie Bon de Livraison{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
+    <div class="row mt-5 deliveryNoteRoute" 
+        data-url-deliveryNoteNumber = {{ url("save_number_in_session") }}
+        data-url-deliveryNoteDate = {{ url("save_date_in_session") }} 
+    >
         <div class="col-6 offset-2">
             <div class="row">
                 <div class="col-6 d-flex justify-content-between align-items-center">
                     <h2>Saisie Bon de Livraison</h2>
+                    
                     <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
                 </div>
             </div>
@@ -28,4 +32,5 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('editDeliveryNote')}}
+    
 {% endblock %}
