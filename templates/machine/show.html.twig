@@ -71,5 +71,10 @@
                 </div>
             {% endif %}
         </div>
+        <div class="col-5">
+            {% if machine.imageName %}
+                <img src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}" />
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

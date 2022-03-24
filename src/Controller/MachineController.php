@@ -186,7 +186,9 @@ class MachineController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('machine_show', [
+                'id' => $machine->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('machine/edit.html.twig', [
