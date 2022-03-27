@@ -1,28 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bons de travail{% endblock %}
+{% block title %}Liste des astreintes{% endblock %}
 
 {% block body %}
     <header class="row mt-4">
         <div class="col-2 offset-2">
-            <h3>Bons de travail</h3>
+            <h3>Astreintes</h3>
         </div>
     </header>
-    <div class="row workorder-js-filter">
+    <div class="row onCall-js-filter">
         <aside class="col-2 mt-4">
             <section>
-                <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
-                {% include 'workorder/_filter.html.twig' %}
+                <a class="btn btn-primary btn-sm mb-3" href="{{ path('onCall_new') }}" role="button">Nouveau Rapport</a>
+                {% include 'onCalls/_filter.html.twig' %}
             </section>
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article class="col-10">
             <div class="mt-4">
-                {% include 'workorder/_workorderList.html.twig' with {workorders: workorders} only %}
+                {% include 'onCalls/_onCallList.html.twig' with {onCalls: onCalls} only %}
             </div>
             {# display navigation #}
             <div class="navigation js-filter-pagination">
-                {% include 'workorder/_pagination.html.twig' %}
+                {% include 'onCalls/_pagination.html.twig' %}
             </div>
         </article>
     </div>

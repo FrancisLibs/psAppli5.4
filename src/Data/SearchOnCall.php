@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-class SearchUser
+class SearchOnCall
 {
     /**
      * Numéro de page pour knp_paginator

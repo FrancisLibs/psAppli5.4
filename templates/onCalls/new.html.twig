@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau rapport d'astreinte{% endblock %}
+
+{% block body %}
+    <header class="row">
+        <div class="col-4 offset-2 mt-4 mb-4 d-flex justify-content-between align-items-center">
+            <h2>Nouveau rapport d'astreinte</h2>
+            <a class="btn btn-primary btn-sm" href="{{ path('onCall_index') }}" role="button">Liste des astreintes</a>
+        </div>
+    </header>
+    <div class="row">
+        <div class="col-12 mb-4 d-flex justify-content-start">
+            <aside class="col-2">
+                {{ include('user/_photo.html.twig') }}
+            </aside>
+            <div class="col-10">
+                {{ include('onCalls/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+   
+
+{% endblock %}
+

@@ -144,6 +144,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $received;
 
+    /**
+     * @ORM\OneToMany(targetEntity=OnCall::class, mappedBy="user")
+     */
+    private $onCalls;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
@@ -152,6 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         $this->deliveryNotes = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
+        $this->oncalls = new ArrayCollection();
     }
 
     /**
@@ -573,6 +579,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             // set the owning side to null (unless already changed)
             if ($received->getRecipient() === $this) {
                 $received->setRecipient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Oncall[]
+     */
+    public function getOncalls(): Collection
+    {
+        return $this->oncalls;
+    }
+
+    public function addOncall(Oncall $oncall): self
+    {
+        if (!$this->oncalls->contains($oncall)) {
+            $this->oncalls[] = $oncall;
+            $oncall->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOncall(Oncall $oncall): self
+    {
+        if ($this->oncalls->removeElement($oncall)) {
+            // set the owning side to null (unless already changed)
+            if ($oncall->getUser() === $this) {
+                $oncall->setUser(null);
             }
         }
 

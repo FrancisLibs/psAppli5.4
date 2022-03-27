@@ -1,0 +1,16 @@
+{% for onCall in onCalls %}
+    <tr>
+        <td class="font_size_table">
+            <a class="btn btn-sm btn-primary" href="{{ path('onCall_show', {'id': onCall.id}) }}">{{ onCall.callDay|date('Y-m-d') }}</a>
+        </td>
+        <td class="text-center font_size_table">{{ onCall.callTime|date('H:i:s') }}</td>
+        <td class="text-center font_size_table">{{ onCall.reason }}</td>
+        <td class="text-center font_size_table">{{ onCall.task }}</td>
+        <td class="text-center font_size_table">{{ onCall.user.username }}</td>
+        <td class="text-center font_size_table">{{ onCall.status }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="14">Il n'y a pas d'astreinte non traitées</td>
+    </tr>
+{% endfor %}

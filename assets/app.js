@@ -30,3 +30,6 @@ new ProviderIndex(document.querySelector(".provider-js-filter"));
 
 import { DeliveryNoteIndex } from "./JS/DeliveryNoteIndex";
 new DeliveryNoteIndex(document.querySelector(".deliveryNote-js-filter"));
+
+import { OnCallIndex } from "./JS/OnCallIndex";
+new OnCallIndex(document.querySelector(".onCall-js-filter"));

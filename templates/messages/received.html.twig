@@ -13,11 +13,12 @@
             <p class="mb-5">Vous avez reçu {{ app.user.received|length }} messages</p>
        
             <div class="row">
-                <div class="col-2">De</div>
-                <div class="col-3">Sujet</div>
-                <div class="col-2">Date</div>
-                <div class="col-2 text-center">Actions</div>
+                <div class="col-2 fw-bold">De</div>
+                <div class="col-3 fw-bold">Sujet</div>
+                <div class="col-2 fw-bold">Date</div>
+                <div class="col-2 fw-bold text-center">Actions</div>
             </div>
+            
             <div class="row">
                 {% for message in app.user.received %}
                     {% set bold = "fw-bold" %}
@@ -25,9 +26,9 @@
                         {% set bold = "" %}               
                     {% endif %}
                     <div class="row">
-                        <div class="col-2 {{ bold }}">{{ message.sender.email }}"</div>
+                        <div class="col-2 {{ bold }}">{{ message.sender.username }}</div>
                         <div class="col-3 {{ bold }}"><a href="{{ path("read", {id: message.id}) }}">{{ message.title }}</a></div>
-                        <div class="col-2 {{ bold }}">{{ message.createdAt|date }}</div>
+                        <div class="col-2 {{ bold }}">{{ message.createdAt|date("m/d/Y") }}</div>
                         <div class="col-2 text-center {{ bold }}">
                             <a href="{{ path("delete", {id: message.id}) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-excel-fill text-danger" viewBox="0 0 16 16">

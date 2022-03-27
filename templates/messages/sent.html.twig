@@ -13,27 +13,28 @@
             <p class="mb-5">Vous avez envoyé {{ app.user.sent|length }} messages</p>
             
             <div class="row">
-                <div class="col-3">De</div>
-                <div class="col-3">Sujet</div>
-                <div class="col-3">Date</div>
-                <div class="col-3 text-center">Actions</div>
+                <div class="col-2 fw-bold">A</div>
+                <div class="col-3 fw-bold">Sujet</div>
+                <div class="col-2 fw-bold">Date</div>
+                <div class="col-2 fw-bold text-center">Actions</div>
             </div>
-
             <div class="row">
                 {% for message in app.user.sent %}
                     {% set bold = "fw-bold" %}
                     {% if message.isRead %}
                         {% set bold = "" %}               
                     {% endif %}
-                    <div class="col-3 {{ bold }}">{{ message.sender.email }}"</div>
-                    <div class="col-3 {{ bold }}"><a href="{{ path("read", {id: message.id}) }}">{{ message.title }}</a></div>
-                    <div class="col-3 {{ bold }}">{{ message.createdAt|date }}</div>
-                    <div class="col-3 text-center {{ bold }}">
-                        <a href="{{ path("delete", {id: message.id}) }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-excel-fill text-danger" viewBox="0 0 16 16">
-                                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5.884 4.68 8 7.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 8l2.233 2.68a.5.5 0 0 1-.768.64L8 8.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 8 5.116 5.32a.5.5 0 1 1 .768-.64z"/>
-                            </svg>
-                        </a>
+                    <div class="row align-items-start">
+                        <div class="col-2 {{ bold }}">{{ message.recipient.username }}</div>
+                        <div class="col-3 {{ bold }}"><a href="{{ path("read", {id: message.id}) }}">{{ message.title }}</a></div>
+                        <div class="col-2 {{ bold }}">{{ message.createdAt|date("m/d/Y") }}</div>
+                        <div class="col-2 text-center {{ bold }}">
+                            <a href="{{ path("delete", {id: message.id}) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-excel-fill text-danger" viewBox="0 0 16 16">
+                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5.884 4.68 8 7.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 8l2.233 2.68a.5.5 0 0 1-.768.64L8 8.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 8 5.116 5.32a.5.5 0 1 1 .768-.64z"/>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 {% endfor %}
 
