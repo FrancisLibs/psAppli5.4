@@ -13,28 +13,30 @@ class ProviderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Name', TextType::class,[
+            ->add('name', TextType::class, [
                 'label' => 'Nom'
             ])
             ->add('code', TextType::class, [
-            'label' => 'Code'
-        ])
+                'label' => 'Code'
+            ])
             ->add('address', TextType::class, [
-            'label' => 'Adresse'
-        ])
+                'label' => 'Adresse'
+            ])
             ->add('postalCode', TextType::class, [
-            'label' => 'Code postal'
-        ])
+                'label' => 'Code postal'
+            ])
             ->add('city', TextType::class, [
-            'label' => 'Ville'
-        ])
+                'label' => 'Ville'
+            ])
             ->add('email', TextType::class, [
-            'label' => 'Email'
-        ])
+                'label' => 'Email'
+            ])
             ->add('phone', TextType::class, [
-            'label' => 'Téléphone'
-        ])
-        ;
+                'label' => 'Téléphone'
+            ])
+            ->add('activity', TextType::class, [
+                'label' => 'Activité'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

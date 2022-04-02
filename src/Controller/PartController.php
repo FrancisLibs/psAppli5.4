@@ -227,18 +227,16 @@ class PartController extends AbstractController
     }
 
     // /**
-    //  * @Route("/money", name="money")
+    //  * @Route("/action", name="part_action")
     //  * @Security("is_granted('ROLE_ADMIN')")
     //  */
-    // public function money(): Response
+    // public function action(): Response
     // {
     //     $parts = $this->partRepository->findAll();
 
     //     foreach ($parts as $part) {
-    //         $steadyPrice = $part->getStock()->getSteadyPrice();
-    //         if ($steadyPrice > 0) {
-    //             $part->setSteadyPrice($steadyPrice);
-    //         }
+    //         $part->setDesignation(strtoupper($part->getDesignation()));
+    //         $part->setReference(strtoupper($part->getReference()));
     //         $this->manager->persist($part);
     //     }
 
@@ -246,4 +244,19 @@ class PartController extends AbstractController
 
     //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     // }
+
+    /**
+     * @Route("/infos", name="parts_infos", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function infos(): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+        $totalStock = $this->partRepository->findTotalStock($organisation);
+
+        return $this->render('part/infos_pieces.html.twig', [
+            'totalStock' => $totalStock,
+        ]);
+    }
 }

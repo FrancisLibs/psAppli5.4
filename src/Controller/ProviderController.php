@@ -49,6 +49,10 @@ class ProviderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $provider->setCode(strtoupper($provider->getCode()));
+            $provider->setName(strtoupper($provider->getName()));
+            $provider->setCity(strtoupper($provider->getCity()));
+            
             $this->manager->flush();
 
             return $this->redirectToRoute('provider_index', [], Response::HTTP_SEE_OTHER);
@@ -77,6 +81,8 @@ class ProviderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $provider->setCode(strtoupper($provider->getCode()));
+            $provider->setName(strtoupper($provider->getName()));
+            $provider->setCity(strtoupper($provider->getCity()));
             $this->manager->persist($provider);
             $this->manager->flush();
 
@@ -108,7 +114,7 @@ class ProviderController extends AbstractController
         $form->handleRequest($request);
 
         $providers = $this->providerRepository->findSearch($data);
-    
+
         if ($request->get('ajax') && ($mode == 'selectProvider')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('provider/_providers.html.twig', ['providers' => $providers, 'mode' => $mode]),
@@ -133,15 +139,12 @@ class ProviderController extends AbstractController
         ]);
     }
 
-    
-
     /**
      * @Route("/{id}", name="provider_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function delete(Request $request, Provider $provider): Response
     {
-        dd('ok');
         if ($this->isCsrfTokenValid('delete' . $provider->getId(), $request->request->get('_token'))) {
             $this->manager->remove($provider);
             $this->manager->flush();
@@ -149,4 +152,23 @@ class ProviderController extends AbstractController
 
         return $this->redirectToRoute('provider_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    // /**
+    //  * @Route("/action", name="provider_action", methods={"GET","POST"})
+    //  * @Security("is_granted('ROLE_ADMIN')")
+    //  */
+    // public function action(): Response
+    // {
+    //     // dd('ok');
+    //     $providers = $this->providerRepository->findAll();
+    //     foreach ($providers as $provider) {
+    //         $provider->setName(strtoupper($provider->getName()));
+    //         $provider->setCity(strtoupper($provider->getCity()));
+    //         $this->manager->persist($provider);
+    //     }
+
+    //     $this->manager->flush();
+
+    //     return $this->redirectToRoute('provider_index');
+    // }
 }

@@ -33,6 +33,12 @@
                             <th>Reference</th>
                             <td>{{ part.reference }}</td>
                         </tr>
+                        {% if part.provider %}
+                            <tr> 
+                                <th>Fournisseur</th>
+                                <td>{{ part.provider.name }}</td>
+                            </tr>
+                        {% endif %}
                         <tr>
                             <th>Qte Stock</th>
                             <td>{{ part.stock.qteStock }}</td>

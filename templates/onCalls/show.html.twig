@@ -9,7 +9,9 @@
             <div class="d-flex justify-content-start">
                 <a class="btn btn-primary btn-sm me-2" href="{{ path('onCall_index') }}" role="button">Liste des rapports</a>
                 <a class="btn btn-primary btn-sm me-2" href="{{ path('onCall_edit', {'id': onCall.id}) }}">Edition</a>
-                {{ include('onCalls/_delete_form.html.twig') }}
+                {% if is_granted('ROLE_ADMIN') %}
+                    {{ include('onCalls/_delete_form.html.twig') }}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -18,58 +20,90 @@
             <aside class="col-2">
                 {{ include('user/_photo.html.twig') }}
             </aside>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>Id</th>
-                        <td>{{ onCall.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Date</th>
-                        <td>{{ onCall.callDay ? onCall.callDay|date('Y-m-d') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Heure</th>
-                        <td>{{ onCall.callTime ? onCall.callTime|date('H:i:s') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Qui</th>
-                        <td>{{ onCall.whoCalls }}</td>
-                    </tr>
-                    <tr>
-                        <th>Heure d'arrivée</th>
-                        <td>{{ onCall.arrivalTime ? onCall.arrivalTime|date('H:i:s') : '' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Cause</th>
-                        <td>{{ onCall.reason }}</td>
-                    </tr>
-                    <tr>
-                        <th>Durée heure</th>
-                        <td>{{ onCall.durationHours }}</td>
-                    </tr>
-                    <tr>
-                        <th>Durée minutes</th>
-                        <td>{{ onCall.durationMinutes }}</td>
-                    </tr>
-                    <tr>
-                        <th>Trajet heure</th>
-                        <td>{{ onCall.travelhours }}</td>
-                    </tr>
-                    <tr>
-                        <th>Trajet minute</th>
-                        <td>{{ onCall.travelMinutes }}</td>
-                    </tr>
-                    <tr>
-                        <th>Action</th>
-                        <td>{{ onCall.task }}</td>
-                    </tr>
-                    <tr>
-                        <th>Statut</th>
-                        <td>{{ onCall.status }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-4">
+                <h4 class="text-primary">Appel</h4>
+                <div class="row">
+                    <div class="col-11 border border-warning rounded p-2">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <span class="fw-bold">Date : </span>
+                                {{ onCall.callDay ? onCall.callDay|date('d-m-Y') : '' }}  
+                            </div>
+                            <div class="col-4">
+                                <span class="fw-bold">Heure : </span>
+                                {{ onCall.callTime ? onCall.callTime|date('H:i:s') : '' }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-10">
+                                <span class="fw-bold">Qui : </span>
+                                {{ onCall.whoCalls }}  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="text-primary mt-4">Trajet</h4>
+                <div class="row">
+                    <div class="col-11 border border-warning rounded p-3">
+                        <div class="row">
+                            <div class="col-3">
+                                <span class="fw-bold">Durée h. : </span>
+                                {{ onCall.travelhours }}
+                            </div>
+                            <div class="col-3">
+                                <span class="fw-bold">Durée m. : </span>
+                                {{ onCall.travelMinutes }}  
+                            </div>
+                            <div class="col-6">
+                                <span class="fw-bold">Heure d'arrivée : </span>
+                                {{ onCall.arrivalTime ? onCall.arrivalTime|date('H:i:s') : '' }}  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="text-primary mt-4">Statut</h4>
+                <div class="row">
+                    <div class="col-11 border border-warning rounded p-3">
+                        <div class="row">
+                            <div class="col-5 d-flex justify-content-start">
+                                {% if onCall.status == 0 %}
+                                    <h4>En cours</h4>
+                                {% else %}
+                                    <h4 style="color: #7af27a;">Traité le {{onCall.transmitted|date('d-m-Y')}}</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-5">
+                <h4 class="text-primary">Intervention</h4>
+                <div class="row">
+                    <div class="col-12 border border-warning rounded p-3">
+                        <div class="col-12">
+                            <span class="fw-bold">Problème : </span>
+                            {{ onCall.reason |nl2br}}  
+                        </div>
+                        <div class="col-12 mt-2">
+                            <span class="fw-bold">Action : </span>
+                            {{ onCall.task |nl2br }}
+                        </div>
+                        <div class="col-12">
+                            <h5 class="mt-3">Durée</h5>
+                            <div class="row">
+                                <div class="col-2">
+                                    <span class="fw-bold">Heure : </span>
+                                    {{ onCall.durationHours }}
+                                </div>
+                                <div class="col-2">
+                                    <span class="fw-bold">Minutes : </span>
+                                    {{ onCall.durationMinutes }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </article>
+    </articla>
 {% endblock %}

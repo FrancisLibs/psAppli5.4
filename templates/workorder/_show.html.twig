@@ -136,8 +136,8 @@
                             <td class="text-center">{{ part.quantity }}</td>
                             <td class="text-center">{{ part.part.designation }}</td>
                             <td class="text-center">{{ part.part.stock.qteStock }}</td>
-                            {% if part.part.stock.steadyPrice > 0 %}
-                                <td class="text-center">{{ part.part.stock.steadyPrice }}</td>
+                            {% if part.part.steadyPrice > 0 %}
+                                <td class="text-center">{{ part.part.steadyPrice }}</td>
                             {% else %}
                                 <td class="text-center">-</td>
                             {% endif %}

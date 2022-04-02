@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\Id;
 
 class PartRepository extends ServiceEntityRepository
 {
@@ -34,9 +35,8 @@ class PartRepository extends ServiceEntityRepository
             ->join('p.stock', 's')
             ->join('p.organisation', 'o')
             ->andWhere('p.active = :disabled')
-            ->setParameter('disabled', true)
-        ;
-        
+            ->setParameter('disabled', true);
+
         if (!empty($search->organisation)) {
             $query = $query
                 ->andWhere('o.id = :organisation')
@@ -47,30 +47,26 @@ class PartRepository extends ServiceEntityRepository
             $code = strtoupper($search->code);
             $query = $query
                 ->andWhere('p.code LIKE :code')
-                ->setParameter('code', "%{$code}%")
-            ;
+                ->setParameter('code', "%{$code}%");
         }
 
         if (!empty($search->designation)) {
             $query = $query
                 ->andWhere('p.designation LIKE :designation')
-                ->setParameter('designation', "%{$search->designation}%")
-            ;
+                ->setParameter('designation', "%{$search->designation}%");
         }
 
         if (!empty($search->reference)) {
             $query = $query
                 ->andWhere('p.reference LIKE :reference')
-                ->setParameter('reference',"%{$search->reference}%")
-            ;
+                ->setParameter('reference', "%{$search->reference}%");
         }
 
         if (!empty($search->place)) {
             $place = strtoupper($search->place);
             $query = $query
                 ->andWhere('s.place LIKE :place')
-                ->setParameter('place', "%{$place}%")
-            ;
+                ->setParameter('place', "%{$place}%");
         }
 
         $query = $query->getQuery();
@@ -99,16 +95,15 @@ class PartRepository extends ServiceEntityRepository
             ->andWhere('s.qteStock < s.qteMin')
             ->orderBy('p.provider', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-        // SELECT p.code, p.reference, p.designation, pro.name
-        // FROM part p 
-        // INNER JOIN stock s ON p.id = s.part_id
-        // INNER JOIN provider pro ON pro.id = p.provider_id
-        // WHERE s.qte_stock <= s.qte_min
-        // ORDER BY pro.name
+    // SELECT p.code, p.reference, p.designation, pro.name
+    // FROM part p 
+    // INNER JOIN stock s ON p.id = s.part_id
+    // INNER JOIN provider pro ON pro.id = p.provider_id
+    // WHERE s.qte_stock <= s.qte_min
+    // ORDER BY pro.name
 
     /**
      * @return Part[]
@@ -150,7 +145,15 @@ class PartRepository extends ServiceEntityRepository
             ->andWhere('s.qteStock < s.qteMin')
             ->orderBy('p.provider', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    public function findTotalStock($organisation)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.stock', 's')
+            ->select('SUM(p.steadyPrice * s.qteStock) as totalStock')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

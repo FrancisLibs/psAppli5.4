@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\DeliveryNote;
 use App\Form\DeliveryNoteType;
 use App\Data\SearchDeliveryNote;
@@ -44,6 +46,7 @@ class DeliveryNoteController extends AbstractController
     }
 
     /**
+     * Liste des BL
      * @Route("/", name="delivery_note_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
@@ -139,11 +142,16 @@ class DeliveryNoteController extends AbstractController
             $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
             foreach ($deliveryNoteParts as $deliveryNotePart) {
                 $deliveryNotePartQte = $deliveryNotePart->getQuantity();
+
                 $partStockQte = $deliveryNotePart->getPart()->getStock()->getQteStock();
+
                 $deliveryNotePart->getPart()->getStock()->setQteStock($deliveryNotePartQte + $partStockQte);
 
                 $partsInOrder = $deliveryNotePart->getPart()->getStock()->getApproQte();
-                $deliveryNotePart->getPart()->getStock()->setApproQte($partsInOrder - $deliveryNotePartQte);
+
+                if ($partsInOrder >= $deliveryNotePartQte) {
+                    $deliveryNotePart->getPart()->getStock()->setApproQte($partsInOrder - $deliveryNotePartQte);
+                }
             }
 
             $this->manager->persist($deliveryNote);
@@ -177,9 +185,7 @@ class DeliveryNoteController extends AbstractController
      */
     public function show(DeliveryNote $deliveryNote): Response
     {
-        $user = $this->getUser();
         return $this->render('delivery_note/show.html.twig', [
-            'user' => $user,
             'delivery_note' => $deliveryNote,
         ]);
     }
@@ -189,8 +195,6 @@ class DeliveryNoteController extends AbstractController
      */
     public function edit(Request $request, DeliveryNote $deliveryNote, ?int $providerId = null): Response
     {
-        $user = $this->getUser();
-
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -282,7 +286,6 @@ class DeliveryNoteController extends AbstractController
         return $this->renderForm('delivery_note/edit.html.twig', [
             'deliveryNote' => $deliveryNote,
             'form' => $form,
-            'user' => $user,
             'mode' => 'editDeliveryNote'
         ]);
     }
@@ -359,5 +362,48 @@ class DeliveryNoteController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->set('deliveryNoteDate', $deliveryNoteDate);
         return $this->json(['code' => 200, 'message' => $deliveryNoteDate], 200);
+    }
+
+    /**
+     * Impression d'étiquettes de pièces à la réception
+     * 
+     * @Route("/label/{id}", name="label_print")
+     * @Security("is_granted('ROLE_USER')")
+     * 
+     */
+    public function pdfAction(DeliveryNote $deliveryNote)
+    {
+        $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
+        // Retrieve the HTML generated in our twig file
+
+        $html = $this->renderView('delivery_note/label_print.html.twig', [
+            'deliveryNoteParts' => $deliveryNoteParts
+        ]);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Courier');
+        $options->setDefaultMediaType('print');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($options);
+
+        $customPaper = array(0, 0, 200, 100);
+        $dompdf->setPaper($customPaper);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        //dd($dompdf);
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream();
+
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

@@ -21,12 +21,12 @@
                     <a class="btn btn-danger btn-sm me-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
                 {% endif %}
             {% endif %}
-            {# <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Pdf</a> #}
+            <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Impression BT</a>
             {# {{ include('workorder/_delete_form.html.twig') }} #}
         </div>
     </div>
     <article class="row mt-5">
-         <aside class="col-2">
+        <aside class="col-2">
             {% include 'user/_photo.html.twig' %}
         </aside>
         <div class="col-10">

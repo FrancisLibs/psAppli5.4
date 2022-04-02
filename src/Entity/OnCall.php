@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OnCall
 {
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -82,6 +83,11 @@ class OnCall
      * @ORM\Column(type="integer")
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $transmitted;
 
     public function getId(): ?int
     {
@@ -240,6 +246,18 @@ class OnCall
     public function setStatus(int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTransmitted(): ?\DateTimeInterface
+    {
+        return $this->transmitted;
+    }
+
+    public function setTransmitted(?\DateTimeInterface $transmitted): self
+    {
+        $this->transmitted = $transmitted;
 
         return $this;
     }

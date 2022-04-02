@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
-use Knp\Snappy\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
+use App\Entity\Workshop;
 use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
@@ -19,9 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -41,7 +42,7 @@ class WorkorderController extends AbstractController
     private $pdf;
 
     public function __construct(
-        Pdf $pdf,
+
         MachineRepository $machineRepository,
         WorkorderRepository $workorderRepository,
         TemplateRepository $templateRepository,
@@ -54,7 +55,6 @@ class WorkorderController extends AbstractController
         $this->partRepository = $partRepository;
         $this->machineRepository = $machineRepository;
         $this->templateRepository = $templateRepository;
-        $this->pdf = $pdf;
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
@@ -316,17 +316,33 @@ class WorkorderController extends AbstractController
      * @Security("is_granted('ROLE_USER')")
      * 
      */
-    public function pdfAction(\Knp\Snappy\Pdf $knpSnappyPdf, Workorder $workorder)
+    public function pdfAction(Workorder $workorder)
     {
-        $html = $this->renderView('workorder/show.html.twig', [
-            'workorder' => $workorder,
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('workorder/print.html.twig', [
+            'workorder' => $workorder
         ]);
 
-        $this->pdf->setOption('enable-local-file-access', true);
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Courier');
 
-        return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html),
-            'test.pdf'
-        );
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($options);
+        
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        //dd($dompdf);
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream();
+
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

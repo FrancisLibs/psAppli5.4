@@ -6,11 +6,14 @@
     <div class="row mt-5">
         <div class="col-6 offset-2">
             <div class="row">
-                <div class="col-7 d-flex justify-content-between align-items-center">
+                <div class="col-8 d-flex justify-content-between align-items-center">
                     <h3>Edition Rapport d'astreinte</h3>
                     <div class="d-flex justify-content-start">
                         <a class="btn btn-primary btn-sm me-3" href="{{ path('onCall_index') }}" role="button">Retour à la liste</a>
-                        {{ include('onCalls/_delete_form.html.twig') }}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {{ include('onCalls/_delete_form.html.twig') }}
+                        {% endif %}
+                        <a class="btn btn-primary btn-sm ms-3" href="{{ path('onCall_ok', {'id': onCall.id}) }}" role="button">Ok</a>
                     </div>
                 </div>
             </div>

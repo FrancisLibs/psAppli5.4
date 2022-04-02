@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Stock;
 use App\Form\Stock1Type;
+use App\Repository\PartRepository;
 use App\Repository\StockRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class StockController extends AbstractController
 {
+    private $partRepository;
+
+    public function __construct(PartRepository $partRepository)
+    {
+        $this->partRepository = $partRepository;
+    }
+
     /**
      * @Route("/", name="stock_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")

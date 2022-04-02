@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pièces détachées{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4 offset-2 mt-3">
+            <h4>La valeur du stock est actuellement de : {{ totalStock|format_number }}€</h4>
+        </div>
+    </div>
+{% endblock %}
