@@ -6,17 +6,15 @@ function saveNumber() {
   let numberRoute = routeClass.dataset.urlDeliverynotenumber;
 
   let number = blNumber.value;
-  if (number == "") {
+  if (number === "") {
     number = null;
   }
   const url = numberRoute + "/" + number;
-  console.log(url);
   const message = fetch(url)
     .then((resultat) => resultat.json())
     .then((json) => {
       json.message;
     });
-  console.log(message);
 }
 
 function saveDate() {
@@ -25,13 +23,11 @@ function saveDate() {
 
   let date = blDate.value;
   const url = dateRoute + "/" + date;
-  console.log(url);
   const message = fetch(url)
     .then((resultat) => resultat.json())
     .then((json) => {
       json.message;
     });
-  console.log(message);
 }
 
 let blForm = document.forms.delivery_note;

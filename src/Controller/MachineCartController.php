@@ -17,21 +17,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class MachineCartController extends AbstractController
 {
-    private $machineRepository;
-    private $templateRepository;
-    private $manager;
     private $requestStack;
 
-    public function __construct(
-        MachineRepository $machineRepository,
-        EntityManagerInterface $manager,
-        RequestStack $requestStack,
-        TemplateRepository $templateRepository
-    ) {
-        $this->machineRepository = $machineRepository;
-        $this->manager = $manager;
+    public function __construct(RequestStack $requestStack)
+    {
         $this->requestStack = $requestStack;
-        $this->TemplateRepository = $templateRepository;
     }
 
     /**

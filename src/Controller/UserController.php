@@ -45,7 +45,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function userList(Request $request)
+    public function userList()
     {
         $users = $this->userRepository->findAll();
 

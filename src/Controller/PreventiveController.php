@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -238,11 +237,11 @@ class PreventiveController extends AbstractController
         );
     }
 
-    public function emptyMachineCart(Request $request)
+    public function emptyMachineCart()
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
-        foreach ($machines as $cle => $value) {
+        foreach ($machines as $cle) {
             unset($machines[$cle]);
         }
         $session->set('machines', $machines);
@@ -274,7 +273,7 @@ class PreventiveController extends AbstractController
      * @Route("copy_template/{id}", name="copy_template", methods={"GET","POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function copyTemplate(Request $request, Template $template): Response
+    public function copyTemplate(Template $template): Response
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
