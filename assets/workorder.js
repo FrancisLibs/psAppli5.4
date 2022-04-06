@@ -18,8 +18,7 @@ window.onload = () => {
     params.endTime = workorderForm["workorder[endTime]"].value;
     params.durationDay = workorderForm["workorder[durationDay]"].value;
     params.durationHour = workorderForm["workorder[durationHour]"].value;
-    params.durationMinute =
-      workorderForm["workorder[durationMinute]"].value;
+    params.durationMinute = workorderForm["workorder[durationMinute]"].value;
     // Valeurs calculées
     params.heureD = params.startTime.substr(0, 2);
     params.minuteD = params.startTime.substr(3, 2);
@@ -28,7 +27,7 @@ window.onload = () => {
 
     params.dateD = new Date(params.startDate);
     params.dateF = new Date(params.endDate);
-  
+
     return params;
   }
 
@@ -41,12 +40,6 @@ window.onload = () => {
     params.dateD.setMinutes(params.minuteD);
     params.dateF.setHours(params.heureF);
     params.dateF.setMinutes(params.minuteF);
-
-    if (params.heureFin === "") {
-      params.durationDay.value = 0;
-      params.durationHour.value = 0;
-      params.durationMinute.value = 0;
-    }
 
     // Test si calcul possible il faut que l'heure de fin soit définie
     if (params.heureF && params.minuteF) {
@@ -110,9 +103,11 @@ window.onload = () => {
   // Calcul des temps au moment du chargement de la page
   calcTemps();
 
-  let endTime = document.querySelector("#workorder_endTime");
+  // Surveillance des modifications des dates
+  let endTime = document.querySelector("#workorder_time");
   endTime.addEventListener("change", calcTemps, false);
 
+  // Surveillance des modifications des temps de durée
   let durationForm = document.querySelector("#duration_time");
   durationForm.addEventListener("change", duration, false);
 };

@@ -14,6 +14,7 @@
             <p>{{message.createdAt|date}}</p>
             <div>Message : {{ message.message }}</div>
 
+            <a href="{{ path("respond", {'id': message.id}) }}" class="btn btn-primary mt-5">Répondre</a>
             <a class="btn btn-primary mt-5" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
             Voir mes dossiers
             </a>

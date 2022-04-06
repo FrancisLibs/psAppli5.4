@@ -115,7 +115,14 @@ class WorkorderController extends AbstractController
             $machine = $this->machineRepository->find($machines[0]);
             $workorder->addMachine($machine);
         }
+        // Initialisation of the workorder
+        $workorder->setDurationDay(0)
+            ->setDurationHour(0)
+            ->setDurationMinute(0)
+            ->setStopTimeHour(0)
+            ->setStopTimeMinute(0);
 
+        //Creation of the form
         $form = $this->createForm(WorkorderType::class, $workorder, [
             'organisation' => $organisation
         ]);
@@ -330,7 +337,7 @@ class WorkorderController extends AbstractController
 
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($options);
-        
+
         // Load HTML to Dompdf
         $dompdf->loadHtml($html);
 

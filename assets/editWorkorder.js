@@ -108,9 +108,11 @@ window.onload = () => {
   // Calcul des temps au moment du chargement de la page
   calcTemps();
 
-  let end_time = document.querySelector("#end_time");
-  end_time.addEventListener("change", calcTemps, false);
+  // Surveillance des modifications des dates
+  let endTime = document.querySelector("#workorder_time");
+  endTime.addEventListener("change", calcTemps, false);
 
-  let duration_form = document.querySelector("#duration");
-  duration_form.addEventListener("change", duration, false);
+  // Surveillance des modifications des temps de durée
+  let durationForm = document.querySelector("#duration_time");
+  durationForm.addEventListener("change", duration, false);
 };

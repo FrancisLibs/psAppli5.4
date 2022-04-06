@@ -15,7 +15,7 @@
 <body>
     <div>
         {% if workorder.preventive %}
-            <h1 style="color: red; font-family: serif;">Bon de Travail préventif {{ workorder.id }}</h1>
+            <h1 style="color: blue; font-family: serif;">Bon de Travail préventif {{ workorder.id }}</h1>
             <span>Date prévue : {{ workorder.preventiveDate|date('d/m/Y') }}</span>
             <span class="tabulation"></span>
             <span>Numéro de préventif : {{ workorder.templateNumber }}</span>
@@ -56,23 +56,53 @@
     </div>
 
     <div>
-        <h5>Demande : </h5>
+        <p style="font-size: 1.2em; font-weight: bold; text-align: left;">Demande : </p>
         {{ workorder.request|nl2br }}
     </div>
 
     <div>
-        <h5>Réalisation : </h5>
+        <p style="font-size: 1.2em; font-weight: bold; text-align: left;">Réalisation : </p>
         {{ workorder.implementation|nl2br }}
     </div>  
 
     <div>
-        <h5>Remarque : </h5>
+        <p style="font-size: 1.2em; font-weight: bold; text-align: left;">Remarque : </p>
         {{ workorder.remark|nl2br }}
+    </div>
+
+    <div>
+        <p style="font-size: 1.2em; font-weight: bold; text-align: left;">Temps : </p>
+        <span>Durée : </span>
+        <br>
+        {% if workorder.durationDay %}
+            <span>{{ workorder.durationDay }} jours, </span>
+        {% endif %}
+        {% if workorder.durationHour %}
+            <span>{{ workorder.durationHour }} heures, </span>
+        {% endif %}
+        {% if workorder.durationMinute %}
+            <span>{{ workorder.durationMinute }} minutes </span>
+        {% endif %}
+        <br>
+        <div>
+            <span>Date : </span>
+            {% if workorder.startDate == workorder.endDate %}
+                <span>{{ workorder.startDate|date("d/m/Y") }}</span>
+            {% else %}
+                <span>Du : {{ workorder.startDate|date("d/m/Y") }} au {{ workorder.endtDate|date("d/m/Y") }}
+            {% endif %}
+        </div>
+        <br>
+        <div>
+            <span>Heures : </span>
+            <span>De {{ workorder.startTime|date('H:i') }} à {{ workorder.endTime|date('H:i') }}</span>
+        </div>
+
     </div>
 
     {% if workorder.workorderParts is not empty %}
         <div>
-            <h5>Pièces détachées</h5>
+            <p style="font-size: 1.2em; font-weight: bold; text-align: left;">Pièces détachées</p>
             <div>
                 <table>
                     <tr>

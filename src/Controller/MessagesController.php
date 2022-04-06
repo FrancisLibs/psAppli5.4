@@ -67,7 +67,6 @@ class MessagesController extends AbstractController
                         $this->manager->persist($newMessage);
                     }
                 }
-
                 $this->addFlash('success', "Ton message a bien été envoyé à tout les membres du service");
             } else {
                 $this->manager->persist($message);
@@ -122,5 +121,29 @@ class MessagesController extends AbstractController
     public function sent(): Response
     {
         return $this->render('messages/sent.html.twig');
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/respond/{id}', name: 'respond')]
+    public function respond(Request $request, Messages $messages): Response
+    {
+        $messagesNew = new Messages;
+        $messagesNew->setRecipient($messages->getSender());
+        $form = $this->createForm(MessagesType::class, $messagesNew);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $messagesNew->setSender($user);
+
+            $this->manager->persist($messagesNew);
+            $this->addFlash('success', "Ta réponse a bien été envoyée.");
+            $this->manager->flush();
+            return $this->redirectToRoute("messages");
+        }
+
+        return $this->render("messages/send.html.twig", [
+            "form" => $form->createView()
+        ]);
     }
 }
