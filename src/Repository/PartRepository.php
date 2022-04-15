@@ -51,15 +51,17 @@ class PartRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->designation)) {
+            $designation = strtoupper($search->designation);
             $query = $query
                 ->andWhere('p.designation LIKE :designation')
-                ->setParameter('designation', "%{$search->designation}%");
+                ->setParameter('designation', "%{$designation}%");
         }
 
         if (!empty($search->reference)) {
+            $reference = strtoupper($search->reference);
             $query = $query
                 ->andWhere('p.reference LIKE :reference')
-                ->setParameter('reference', "%{$search->reference}%");
+                ->setParameter('reference', "%{$reference}%");
         }
 
         if (!empty($search->place)) {

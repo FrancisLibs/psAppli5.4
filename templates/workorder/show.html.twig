@@ -3,7 +3,7 @@
 {% block title %}Bon de Travail{% endblock %}
 
 {% block body %}
-    <div class="row mt-5 mb-5 justify-content-start">
+    <div class="row mt-5 justify-content-start">
         <div class="col-3 offset-2 d-flex justify-content-start">
             {% if workorder.preventive %}
                 <h3>Bon de Travail préventif</h3>
@@ -25,7 +25,7 @@
             {# {{ include('workorder/_delete_form.html.twig') }} #}
         </div>
     </div>
-    <article class="row mt-5">
+    <article class="row mt-4 mb-5">
         <aside class="col-2">
             {% include 'user/_photo.html.twig' %}
         </aside>

@@ -188,7 +188,12 @@ class Workorder
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $price;
+    private $operationPrice;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $partsPrice;
 
     public function __construct()
     {
@@ -508,14 +513,26 @@ class Workorder
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getOperationPrice(): ?float
     {
-        return $this->price;
+        return $this->operationPrice;
     }
 
-    public function setPrice(?float $price): self
+    public function setOperationPrice(?float $operationPrice): self
     {
-        $this->price = $price;
+        $this->operationPrice = $operationPrice;
+
+        return $this;
+    }
+
+    public function getPartsPrice(): ?float
+    {
+        return $this->partsPrice;
+    }
+
+    public function setPartsPrice(?float $partsPrice): self
+    {
+        $this->partsPrice = $partsPrice;
 
         return $this;
     }

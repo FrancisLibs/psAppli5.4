@@ -7,7 +7,7 @@ window.onload = () => {
 
   // Gestion du temps de l'intervention
   // Date et heure de début
-  // Calcul de la durée si on a date et heure de début et date et heure de fin
+  // Calcul de la durée si on a date et l'heure de début et date et l'heure de fin
   // Lecture des champs début intervention et création d'un dateTime
   function readParams() {
     let params = new Object();
@@ -31,9 +31,9 @@ window.onload = () => {
     return params;
   }
 
-  // // Gestion du temps de l'intervention
+  // Gestion du temps de l'intervention
   function calcTemps() {
-    // Lecture des champs début intervention et création d'un dateTime
+    //     // Lecture des champs début intervention et création d'un dateTime
     let params = readParams();
 
     params.dateD.setHours(params.heureD);
@@ -103,7 +103,7 @@ window.onload = () => {
   // Calcul des temps au moment du chargement de la page
   calcTemps();
 
-  // Surveillance des modifications des dates
+  //   // Surveillance des modifications des dates
   let endTime = document.querySelector("#workorder_time");
   endTime.addEventListener("change", calcTemps, false);
 

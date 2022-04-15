@@ -328,9 +328,6 @@
             "./config/packages/dev/debug.yaml"
         ]
     },
-    "symfony/debug-pack": {
-        "version": "v1.0.9"
-    },
     "symfony/dependency-injection": {
         "version": "v5.3.4"
     },
@@ -479,9 +476,6 @@
     "symfony/options-resolver": {
         "version": "v5.3.4"
     },
-    "symfony/orm-pack": {
-        "version": "v2.1.0"
-    },
     "symfony/password-hasher": {
         "version": "v5.3.4"
     },
@@ -526,9 +520,6 @@
     },
     "symfony/process": {
         "version": "v5.3.4"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.5"
     },
     "symfony/property-access": {
         "version": "v5.3.4"
@@ -582,9 +573,6 @@
     "symfony/serializer": {
         "version": "v5.3.4"
     },
-    "symfony/serializer-pack": {
-        "version": "v1.0.4"
-    },
     "symfony/service-contracts": {
         "version": "v2.4.0"
     },
@@ -593,9 +581,6 @@
     },
     "symfony/string": {
         "version": "v5.3.3"
-    },
-    "symfony/test-pack": {
-        "version": "v1.0.8"
     },
     "symfony/translation": {
         "version": "5.3",
@@ -704,6 +689,12 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.5.0"
+    },
+    "tecnickcom/tc-lib-barcode": {
+        "version": "1.15.0"
+    },
+    "tecnickcom/tc-lib-color": {
+        "version": "1.14.10"
     },
     "theseer/tokenizer": {
         "version": "1.2.1"

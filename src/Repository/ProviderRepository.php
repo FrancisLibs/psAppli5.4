@@ -32,21 +32,24 @@ class ProviderRepository extends ServiceEntityRepository
             ->orderBy('p.name', 'ASC');
 
         if (!empty($search->name)) {
+            $name = strtoupper($search->name);
             $query = $query
                 ->andWhere('p.name LIKE :name')
-                ->setParameter('name', "%{$search->name}%");
+                ->setParameter('name', "%{$name}%");
         }
 
         if (!empty($search->city)) {
+            $city = strtoupper($search->city);
             $query = $query
                 ->andWhere('p.city LIKE :city')
-                ->setParameter('city', "%{$search->city}%");
+                ->setParameter('city', "%{$city}%");
         }
 
         if (!empty($search->code)) {
+            $code = strtoupper($search->code);
             $query = $query
                 ->andWhere('p.code LIKE :code')
-                ->setParameter('code', "%{$search->code}%");
+                ->setParameter('code', "%{$code}%");
         }
 
         $query = $query->getQuery();

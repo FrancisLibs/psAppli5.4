@@ -385,11 +385,13 @@ class DeliveryNoteController extends AbstractController
         $options->set('isRemoteEnabled', true);
         $options->set('defaultFont', 'Courier');
         $options->setDefaultMediaType('print');
+        $options->setDefaultPaperOrientation('portrait');
 
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($options);
+        //dd($dompdf->getOptions());
 
-        $customPaper = array(0, 0, 200, 100);
+        $customPaper = array(0, 0,150, 100);
         $dompdf->setPaper($customPaper);
 
         // Load HTML to Dompdf

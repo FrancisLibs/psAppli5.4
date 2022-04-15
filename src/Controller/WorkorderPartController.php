@@ -43,20 +43,22 @@ class WorkorderPartController extends AbstractController
         foreach ($workorderParts as $workorderPart) {
             $workorderPartQte = $workorderPart->getQuantity();
             $part = $workorderPart->getPart();
-            $stock=$part->getStock();
+            $partPrice = $part->getSteadyPrice();
+            $stock = $part->getStock();
             $qteStock = $stock->getQteStock();
 
-            if ($workorderPart->getId() == $workorderPartId) {
+            if ($workorderPart->getId() === $workorderPartId) {
                 if ($workorderPartQte > 1) {
                     --$workorderPartQte;
                     $workorderPart->setQuantity($workorderPartQte);
                 } else {
                     $workorderParts->removeElement($workorderPart);
                 }
+                $workorder->setPartsPrice($workorder->getPartsPrice() - $partPrice);
                 ++$qteStock;
                 $stock->setQteStock($qteStock);
             }
-            
+
             $this->manager->flush();
         }
 

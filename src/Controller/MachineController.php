@@ -46,7 +46,6 @@ class MachineController extends AbstractController
      */
     public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
     {
-        //dd($mode);
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 

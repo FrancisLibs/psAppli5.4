@@ -3,9 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Workorder;
-use Symfony\Component\Form\FormEvent;
-use App\Repository\WorkshopRepository;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,22 +36,19 @@ class WorkorderType extends AbstractType
                 'label' => 'Remarque',
                 'required' => false,
             ])
-            ->add('price', NumberType::class, [
-                'label' =>  'Prix sans pièces'
-            ])
             ->add('startDate', DateType::class, [
-                'label' => 'Date début',
                 'input' => 'datetime',
+                'label' => 'Date début',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
                 'label' => 'Heure début',
-                'input' => 'datetime',
                 'widget' => 'single_text',
+                'input' => 'datetime',
             ])
             ->add('endDate', DateType::class, [
-                'label' => 'Date fin',
                 'input' => 'datetime',
+                'label' => 'Date fin',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
@@ -65,7 +59,6 @@ class WorkorderType extends AbstractType
             ])
             ->add('durationDay', TextType::class, [
                 'label' =>  'Jours',
-                // 'disabled' =>  true,
             ])
             ->add('durationHour', TextType::class, [
                 'label' =>  'Heures'
@@ -74,29 +67,16 @@ class WorkorderType extends AbstractType
                 'label' =>  'Minutes'
             ])
             ->add('stopTimeHour', TextType::class, [
-                'label' =>  'Heures',
+                'label' => 'Heures',
                 'required' => false,
             ])
             ->add('stopTimeMinute', TextType::class, [
-                'label' =>  'Minutes',
+                'label' => 'Minutes',
                 'required' => false,
+            ])
+            ->add('operationPrice', NumberType::class, [
+                'label' =>  'Cout opération'
             ]);
-
-        // Préselection des dates et temps du BT
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
-                $form = $event->getData();
-                // Preset de startTime
-                if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now'));
-                if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
-                if (is_null($form->getEndDate()))   $form->setEndDate(new \DateTime('now'));
-                if (is_null($form->getDurationDay()))   $form->setDurationDay(0);
-                if (is_null($form->getDurationHour()))   $form->setDurationHour(0);
-                if (is_null($form->getDurationMinute()))   $form->setDurationMinute(0);
-                //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
-            }
-        );
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -54,7 +54,7 @@ class CartController extends AbstractController
      * @param   string      $mode
      * @return  Response
      */
-    public function addPart(?int $documentId, ?string $mode):Response
+    public function addPart(?int $documentId, ?string $mode): Response
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
@@ -81,7 +81,7 @@ class CartController extends AbstractController
      * @param   workorderId
      * @return  response
      */
-    public function index($workorderId):Response
+    public function index($workorderId): Response
     {
         $session = $this->requestStack->getSession();
 
@@ -169,7 +169,7 @@ class CartController extends AbstractController
         }
 
         $session->set('panier', $panier);
-        
+
         return $this->redirectToRoute('part_index', [
             'mode' => $mode,
             'documentId' => $documentId,
@@ -186,7 +186,7 @@ class CartController extends AbstractController
      * @param   workorderId     id du workorder
      * @return  RedirectResponse
      */
-    public function remove(int $id, string $mode, ?int $documentId):RedirectResponse
+    public function remove(int $id, string $mode, ?int $documentId): RedirectResponse
     {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
@@ -239,50 +239,53 @@ class CartController extends AbstractController
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
-        // Affection des pièces du panier au BT ou redirection vers le controleur BL
+        // Affection des pièces du panier au BT
+        // Si le BT a déjà des pièces
         if ($mode == "workorderAddPart") {
+            // Récupération du BT dans la bdd
             $workorder = $this->workorderRepository->findOneBy(['id' => $documentId]);
+            // Puis des pièces de ce BT
             $workorderParts = $workorder->getWorkorderParts();
-            if (!$workorderParts->isEmpty()) {
-                foreach ($panier as $id => $qte) {
-                    // Vérification si la pièce n'est pas déjà dans le BT
-                    foreach ($workorderParts->toArray() as $workorderPart) {
-                        if ($workorderPart->getPart()->getId() == $id) {
+           
+            foreach ($panier as $id => $qte) {
+                $part = $this->partRepository->find($id);
 
-                            // Modification de la quantité sur le BT
-                            $workorderPart->setQuantity($workorderPart->getQuantity() + $qte);
+                foreach ($workorderParts->toArray() as $workorderPart) {
 
-                            // Modification de la quantité en stock
-                            $part = $this->partRepository->find($id);
-                            $this->decreaseStock($part, $qte);
+                    if ($workorderPart->getPart()->getId() === $id) {
 
-                            // Ecriture en bdd
-                            $this->manager->persist($workorderPart);
-                            $this->manager->persist($part);
+                        // Modification de la quantité sur le BT
+                        $workorderPart->setQuantity($workorderPart->getQuantity() + $qte);
 
-                            // Effacement de la pièce du panier
-                            unset($panier[$id]);
-                        }
+                        // Modification de la quantité en stock
+                        $this->decreaseStock($part, $qte);
+
+                        // Modification de la valeur de pièces sur le BT
+                        $workorder->setPartsPrice($workorder->getPartsPrice() + $part->getSteadyPrice() * $qte);
+
+                        // Ecriture en bdd
+                        $this->manager->persist($workorderPart);
+                        $this->manager->persist($part);
+
+                        // Effacement de la pièce du panier
+                        unset($panier[$id]);
                     }
-                }
-                foreach ($panier as $id => $qte) {
-
-                    // Ajout de la pièce au bt
-                    $this->addPartToWorkorder($id, $qte, $workorder);
-                    $part = $this->partRepository->find($id);
-
-                    // Ajout de la pièce à la machine si elle n'y existe pas encore
-                    $machines = $workorder->getMachines();
-                    $parts = $machines->first()->getParts();
-                    if (!$parts->contains($part)) {
-                        $machines->first()->addPart($part);
-                    }
-                }
-            } else {
-                foreach ($panier as $id => $qte) {
-                    $this->addPartToWorkorder($id, $qte, $workorder);
                 }
             }
+            // Traitement des pièces qui ne sont pas encore dans le BT
+            foreach ($panier as $id => $qte) {
+                // Ajout de la pièce au bt
+                $this->addPartToWorkorder($id, $qte, $workorder);
+                $part = $this->partRepository->find($id);
+
+                // Ajout de la pièce à la machine si elle n'y existe pas encore
+                $machines = $workorder->getMachines();
+                $parts = $machines->first()->getParts();
+                if (!$parts->contains($part)) {
+                    $machines->first()->addPart($part);
+                }
+            }
+
             $this->manager->persist($workorder);
         }
 
@@ -290,7 +293,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('delivery_note_new');
         }
 
-        if($mode == "editDeliveryNote"){
+        if ($mode == "editDeliveryNote") {
             return $this->redirectToRoute('delivery_note_edit', [
                 'id' => $documentId,
             ]);
@@ -320,11 +323,18 @@ class CartController extends AbstractController
         $part = $this->partRepository->find($id);
         $workorderPart->setPart($part);
         $workorderPart->setQuantity($qte);
+
         $workorder->addWorkorderPart($workorderPart);
+
+        // Ajout du prix de la pièces au BT
+        $partPrice = $part->getSteadyPrice();
+        $totalPartsPrice = $partPrice * $qte;
+        $workorder->setPartsPrice($workorder->getPartsPrice() + $totalPartsPrice);
 
         // Modification de la quantité de pièces en stock
         $this->decreaseStock($part, $qte);
 
+        $this->manager->persist($workorder);
         $this->manager->persist($workorderPart);
         $this->manager->persist($part);
     }

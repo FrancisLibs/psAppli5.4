@@ -60,9 +60,10 @@ class WorkorderRepository extends ServiceEntityRepository
         ;
 
         if (!empty($search->machine)) {
+            $machine = strtoupper($search->machine);
             $query = $query
                 ->andWhere('m.designation LIKE :machine')
-                ->setParameter('machine', "%{$search->machine}%");
+                ->setParameter('machine', "%{$machine}%");
         }
 
         if (!empty($search->user)) {

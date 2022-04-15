@@ -8,7 +8,6 @@ use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
-use App\Entity\Workshop;
 use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
@@ -35,7 +34,6 @@ class WorkorderController extends AbstractController
     private $requestStack;
     private $workorderRepository;
     private $manager;
-    private $partRepository;
     private $machineRepository;
     private $templateRepository;
     private $workorderStatusRepository;
@@ -116,11 +114,18 @@ class WorkorderController extends AbstractController
             $workorder->addMachine($machine);
         }
         // Initialisation of the workorder
-        $workorder->setDurationDay(0)
+        $workorder
+            ->setStartDate(new \Datetime())
+            ->setEndDate(new \Datetime())
+            ->setStartTime(new \Datetime())
+            ->setEndTime(new \Datetime())
+            ->setDurationDay(0)
             ->setDurationHour(0)
             ->setDurationMinute(0)
             ->setStopTimeHour(0)
-            ->setStopTimeMinute(0);
+            ->setStopTimeMinute(0)
+            ->setOperationPrice(0)
+            ->setPartsPrice(0);
 
         //Creation of the form
         $form = $this->createForm(WorkorderType::class, $workorder, [
@@ -202,7 +207,7 @@ class WorkorderController extends AbstractController
             $workorder->addMachine($this->machineRepository->find($id));
         }
 
-        $form = $this->createForm(WorkorderEditType::class, $workorder);
+        $form = $this->createForm(WorkorderType::class, $workorder);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
