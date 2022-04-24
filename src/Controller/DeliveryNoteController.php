@@ -13,6 +13,7 @@ use App\Form\SearchDeliveryNoteForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
+use App\Service\PdfService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -371,38 +372,15 @@ class DeliveryNoteController extends AbstractController
      * @Security("is_granted('ROLE_USER')")
      * 
      */
-    public function pdfAction(DeliveryNote $deliveryNote)
+    public function printLabel(DeliveryNote $deliveryNote, PdfService $pdfService): Response
     {
         $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
-        // Retrieve the HTML generated in our twig file
 
-        $html = $this->renderView('delivery_note/label_print.html.twig', [
+        $html = $this->renderView('prints/multi_label_print.html.twig', [
             'deliveryNoteParts' => $deliveryNoteParts
         ]);
 
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $options->set('defaultFont', 'Courier');
-        $options->setDefaultMediaType('print');
-        $options->setDefaultPaperOrientation('portrait');
-
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($options);
-        //dd($dompdf->getOptions());
-
-        $customPaper = array(0, 0,150, 100);
-        $dompdf->setPaper($customPaper);
-
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-
-        // Render the HTML as PDF
-        $dompdf->render();
-        //dd($dompdf);
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream();
+        $pdfService->printLabel($html);
 
         return new Response('', 200, [
             'Content-Type' => 'application/pdf',

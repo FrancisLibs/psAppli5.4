@@ -3,44 +3,30 @@
 {% block title %}Gmao PS bienvenue !{% endblock %}
 
 {% block body %}
-    <div class="row default">
-        <div class="col-6">
+    <div class="d-flex justify-content-around mt-5 mb-3">
+        <div class="default-column">
             <div class="row">
-                <div class="col-12">
-                    <div class="default-tiltle">
-                        <p>Gestion maintenance PS</p>
-                    </div>
-                </div>
+                <h1 class="default-tiltle">Gestion maintenance PS</h1>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="default-logo">
-                        <img src="{{ asset('images/logo.png') }}" width="400" height="200" alt="Charcuterie Pierre Schmidt">            
-                    </div>
-                </div>
+            <div class="row text-center">
+                <img class="default-logo" src="{{ asset('images/logo.png') }}" alt="Charcuterie Pierre Schmidt">            
             </div>
-            <div class="row mt-5">
-                <div class="col-11 mx-auto d-flex justify-content-around">
-                    <a class="btn-default" href="{{ path('part_index') }}">Pièces détachées</a>
-                    <a class="btn-default" href="{{ path('machine_index') }}">Machines</a>
-                    <a class="btn-default" href="{{ path('work_order_index') }}" >Bons de travail</a>
-                    <a class="btn-default" href="{{ path('delivery_note_index') }}" >Approvisionnement</a>
-                    <a class="btn-default" href="{{ path('template_index') }}">Préventif</a>
-                    <a class="btn-default" href="{{ path('onCall_index') }}">Astreintes</a>
-                </div>
+            <div class="row mt-5 ms-1 justify-content-around">
+                <a class="btn-default" href="{{ path('part_index') }}">Pièces détachées</a>
+                <a class="btn-default" href="{{ path('machine_index') }}">Machines</a>
+                <a class="btn-default" href="{{ path('work_order_index') }}">Bons de travail</a>
+                <a class="btn-default" href="{{ path('delivery_note_index') }}">Approvisionnement</a>
+                <a class="btn-default" href="{{ path('template_index') }}">Préventif</a>
+                <a class="btn-default" href="{{ path('onCall_index') }}">Astreintes</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn-default" href="{{ path('admin') }}">Administration</a>
+                    <a class="btn-default" href="{{ path('app_register') }}">Inscription</a>
+                {% endif %}
             </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="row mt-5">
-                    <div class="col-6 mx-auto d-flex justify-content-around">
-                        <a class="btn-default" href="{{ path('admin') }}">Administration</a>
-                        <a class="btn-default" href="{{ path('app_register') }}">Inscription</a>
-                    </div>
-                </div>
-            {% endif %}
         </div>
-        <div class="col-6 default-right">
-            <div class="text-center default-tiltle mt-3 mb-3">
-                <span>La Team</span>
+        <div style="width: 45%;" class="displayMd">
+            <div class="text-center default-tiltle mb-5">
+                <p>The Team</p>
             </div>
             <div class="row">
                 <div class="col-12 d-flex justify-content-around flex-wrap">

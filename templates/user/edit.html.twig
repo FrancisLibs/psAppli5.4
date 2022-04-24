@@ -4,20 +4,22 @@
 {% block header_img %}{% endblock %}
 
 {% block body %}
-    <div class="col-8 offset-2 mt-4 mb-4">
-        <div class="row align-items-center mb-4">
-            <div class="col-2">
-                <h1>Edition</h1>
+    <div class="edit-profil">
+        <div class="row justify-content-start align-items-start mt-5 mb-5">
+            <div class="col-3 col-md-2 col-lg-1 me-4">
+                <h2>Edition</h2>
             </div>
-            {% if is_granted('ROLE_ADMIN') %} 
-                <div class="col-4">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-3 col-md-5 col-xl-6">
                     <a class="btn btn-primary btn-sm" href="{{ path('user_index') }}" role="button">Listes des Utilisateurs</a>
                 </div>
             {% endif %}
         </div>
         <div class="row">
-    <div class="col-12 mb-4">
-        <h4 class="mb-3">Identifiant : {{ user.username }}</h4>
-        {% include('user/_userEditForm.html.twig') %}
+            <div class="col-10 mb-5">
+                <h5 class="mb-3">Identifiant : {{ user.username }}</h5>
+                {% include('user/_userEditForm.html.twig') %}
+            </div>
+        </div>
     </div>
 {% endblock %}

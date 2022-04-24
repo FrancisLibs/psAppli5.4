@@ -4,17 +4,15 @@
 
 {% block body %}
     <article class="row mt-5">
-        <div class="col-10 offset-2">
-            <h3>Liste des Utilisateurs</h3>
-        </div>
-    </article>
-    <div class="row mt-5">
-        <aside class="col-2">
-            <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
+        <aside class="col-2 mt-5 displayMd">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <div class="col-8">
+        <div class="col-10">
+            <div class="d-flex justify-content-start align-items-center mb-5">
+                <h3 class="me-5">Liste des Utilisateurs</h3>
+                <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
+            </div>
             {% include 'user/_userList.html.twig' with {users: users} only %}
         </div>
-    </div>
+    </article>
 {% endblock %}

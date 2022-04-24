@@ -1,17 +1,17 @@
 {% for machine in machines %}
     <tr>
         {% if mode == 'newWorkorder' or mode == 'selectPreventive' %}
-            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
+            <td data-label="Code"><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
         {% elseif mode == 'editPreventive' %}
-            <td><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
+            <td data-label="Code"><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
         {% elseif mode == 'modif' %}
-            <td><a href="{{ path('work_order_edit', {'id': documentId, 'machine': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
+            <td data-label="Code"><a href="{{ path('work_order_edit', {'id': documentId, 'machine': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
         {% else %}
             <td class="text-left font_size_table "><a href="{{ path('machine_show', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50">{{ machine.internalCode }}</a></td>
         {% endif %}
-        <td class="text-center font_size_table">{{ machine.constructor }}</a></td>
-        <td class="text-center font_size_table">{{ machine.designation }}</td>
-        <td class="text-center font_size_table">{{ machine.workshop.name }}</td>
+        <td data-label="Constructeur" class="text-center font_size_table">{{ machine.constructor }}</a></td>
+        <td data-label="Désignation" class="text-center font_size_table">{{ machine.designation }}</td>
+        <td data-label="Atelier" class="text-center font_size_table">{{ machine.workshop.name }}</td>
     </tr>
 {% else %}
     <tr>

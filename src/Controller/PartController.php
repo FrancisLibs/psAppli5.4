@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Part;
 use App\Form\PartType;
 use App\Data\SearchPart;
+use App\Service\PdfService;
 use App\Form\SearchPartForm;
 use App\Repository\PartRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -130,7 +131,9 @@ class PartController extends AbstractController
             $this->manager->persist($part);
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('part_show', [
+                'id' => $part->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('part/new.html.twig', [
@@ -257,6 +260,25 @@ class PartController extends AbstractController
 
         return $this->render('part/infos_pieces.html.twig', [
             'totalStock' => $totalStock,
+        ]);
+    }
+
+    /**
+     * Impession étiquette d'une pièce 
+     * 
+     * @Route("/partlabel/{id}", name="part_label")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function printLabel(Part $part, PdfService $pdfService): Response
+    {
+        $html = $this->renderView('prints/one_label_print.html.twig', [
+            'part' => $part,
+        ]);
+
+        $pdfService->printLabel($html);
+
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
         ]);
     }
 }

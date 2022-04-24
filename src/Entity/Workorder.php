@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Workorder
 {
+    const CURATIF = 1;
+    const PREVENTIF = 2;
+    const AMELIORATIF = 3;
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -7,13 +7,14 @@
     <div class="row mt-3">
         <div class="col-2">
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('user_index') }}" class=" w-100 btn btn-primary btn-sm">Utilisateurs</a>
-                <a href="{{ path('machine_index') }}" class=" w-100 btn btn-primary btn-sm mt-2">Machines</a>
-                <a href="{{ path('part_index') }}" class=" w-100 btn btn-primary btn-sm mt-2">Pièces détachées</a>
-                <a href="{{ path('workshop_index') }}" class=" w-100 btn btn-primary btn-sm mt-2">Ateliers</a>
-                <a href="{{ path('provider_index') }}" class=" w-100 btn btn-primary btn-sm mt-2">Fournisseurs</a>
-                <a href="{{ path('service_index') }}" class=" w-100 btn btn-primary btn-sm mt-2">Services</a>
-                <a href="{{ path('parts_infos') }}" class=" w-100 btn btn-primary btn-sm mt-2">Infos stock</a>
+                <a href="{{ path('user_index') }}" class="w-100 btn btn-primary btn-sm">Utilisateurs</a>
+                <a href="{{ path('machine_index') }}" class="w-100 btn btn-primary btn-sm mt-2">Machines</a>
+                <a href="{{ path('part_index') }}" class="w-100 btn btn-primary btn-sm mt-2">Pièces détachées</a>
+                <a href="{{ path('workshop_index') }}" class="w-100 btn btn-primary btn-sm mt-2">Ateliers</a>
+                <a href="{{ path('provider_index') }}" class="w-100 btn btn-primary btn-sm mt-2">Fournisseurs</a>
+                <a href="{{ path('service_index') }}" class="w-100 btn btn-primary btn-sm mt-2">Services</a>
+                <a href="{{ path('parts_infos') }}" class="w-100 btn btn-primary btn-sm mt-2">Infos stock</a>
+                <a href="{{ path('app_register') }}" class="w-100 btn btn-primary btn-sm mt-2">Inscription</a> 
             {% endif %}
         </div>
     </div>
