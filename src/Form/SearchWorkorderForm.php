@@ -11,7 +11,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
@@ -20,6 +22,17 @@ class SearchWorkorderForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('createdAt', DateType::class, [
+                'widget' => 'single_text',
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Date']
+            ])
+            ->add('id', NumberType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Num.']
+            ])
             ->add('machine', TextType::class, [
                 'label'     => false,
                 'required'  => false,
@@ -31,6 +44,11 @@ class SearchWorkorderForm extends AbstractType
                 'label'     => false,
                 'required'  => false,
                 'placeholder' => 'Technicien...',
+            ])
+            ->add('request', TextType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Travail...']
             ])
             ->add('status', EntityType::class, [
                 'class'     => WorkorderStatus::class,
@@ -46,8 +64,7 @@ class SearchWorkorderForm extends AbstractType
             ->add('closure', CheckboxType::class, [
                 'label'     => 'Cloturé',
                 'required'  => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

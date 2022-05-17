@@ -3,29 +3,31 @@
 {% block title %}Liste BL{% endblock %}
 
 {% block body %}
-    <header class="row mt-4">
-        <div class="col-3 offset-2">
-            <h3>Bons de livraison</h3>
-        </div>
-    </header>
-    <div class="row deliveryNote-js-filter">
-        <aside class="col-2 mt-4">
-            <section>
-                <a class="btn btn-primary btn-sm mb-3" href="{{ path('delivery_note_new') }}" role="button">Nouveau bon de Livraison</a>
-                {% include 'delivery_note/_filter.html.twig' %}
-            </section>
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="col-8">
-            <div class="mt-4">
-                {% include 'delivery_note/_delivery_note_list.html.twig' with {'delivery_notes': delivery_notes} only %}
-            </div>
-            {# display navigation #}
-            <div class="navigation js-filter-pagination">
-                {% include 'delivery_note/_pagination.html.twig' %}
-            </div>
+        <article class="col">
+            <section class="row justify-content-between">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <div class="d-flex justify-content-start align-items-base">
+                        <div class="me-5">
+                            <h3>Bons de livraison</h3>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-sm mb-3" href="{{ path('delivery_note_new') }}" role="button">Nouveau bon de Livraison</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="row part-js-filter">
+                <div class="col-11">
+                    {% include 'delivery_note/_delivery_note_list.html.twig' with {'delivery_notes': delivery_notes, 'form': form} only %}
+                     <div class="col-10 navigation js-filter-pagination mb-5">
+                        {% include 'delivery_note/_pagination.html.twig' %}
+                    </div>
+                </div>
+            </section>
         </article>
     </div>
 {% endblock %}
-
-

@@ -3,71 +3,81 @@
 {% block title %}Bon de livraison{% endblock %}
 
 {% block body %}
-    <header class="row mt-5">
-        <div class="col-2 offset-2">
-            <h3 class="text-primary">Bon de livraison</h3>
-        </div>
-        <div class="col-6 d-flex justify-content-start align-items-center">
-            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_index') }}" role="button">Liste BL</a>
-            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
-            <a class="btn btn-warning btn-sm me-2" href="{{ path('label_print', {'id': delivery_note.id}) }}">Etiquettes</a>
-            {# {% if is_granted('ROLE_ADMIN') %}
-                {{ include('delivery_note/_delete_form.html.twig') }}
-            {% endif %} #}
-        </div>
-    </header>
-    <div class="row mt-5">
-        <aside class="col-2 mt-4">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <div class="col-6">
-            <div class="row mt-4">
-                <div class="col-4">
-                    <p>
-                        <strong>Numéro de BL : </strong><br>
-                        {{ delivery_note.number }}
-                    </p>
+        <article class="col">
+            <section class="row justify-content-between">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <div class="d-flex justify-content-start align-items-base">
+                        <div class="me-5">
+                            <h3>Bons de livraison</h3>
+                        </div>
+                         <div class="col-6 d-flex justify-content-start align-items-center">
+                            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_index') }}" role="button">Liste BL</a>
+                            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
+                            <a class="btn btn-warning btn-sm me-2" href="{{ path('label_print', {'id': delivery_note.id}) }}">Etiquettes</a>
+                            {# {% if is_granted('ROLE_ADMIN') %}
+                                {{ include('delivery_note/_delete_form.html.twig') }}
+                            {% endif %} #}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-3">
-                    <p>
-                        <strong>Date : </strong><br>
-                        {{ delivery_note.date ? delivery_note.date|date('d-m-Y') : '' }}
-                    </p>
+            </section>
+            <section class="row part-js-filter">
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="row mt-4">
+                            <div class="col-4">
+                                <p>
+                                    <strong>Numéro de BL : </strong><br>
+                                    {{ delivery_note.number }}
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    <strong>Date : </strong><br>
+                                    {{ delivery_note.date ? delivery_note.date|date('d-m-Y') : '' }}
+                                </p>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    <strong>Fournisseur : </strong><br>
+                                    {{ delivery_note.provider.name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-9 d-flex justify-content-start align-items-center">
+                                <h3 class="text-primary me-5">Pièces détachées</h3>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <table class="table table-sm table-striped">
+                                <head>
+                                    <tr>
+                                        <th scope="row">Code</th>
+                                        <th scope="row" class="text-center">Désignation</th>
+                                        <th scope="row" class="text-center">Référence</th>
+                                        <th scope="row" class="text-center">Qte</th>
+                                    </tr>
+                                </head>
+                                <body>
+                                    {% for part in delivery_note.deliveryNoteParts %}
+                                        <tr>
+                                            <td>{{ part.part.code }}</td>
+                                            <td class="text-center">{{ part.part.designation }}</td>
+                                            <td class="text-center">{{ part.part.reference }}</td>
+                                            <td class="text-center">{{ part.quantity }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </body>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-5">
-                    <p>
-                        <strong>Fournisseur : </strong><br>
-                        {{ delivery_note.provider.name }}
-                    </p>
-                </div>
-            </div>
-            <div class="row mt-5">
-                <div class="col-9 d-flex justify-content-start align-items-center">
-                    <h3 class="text-primary me-5">Pièces détachées</h3>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <table class="table table-sm table-striped">
-                    <head>
-                        <tr>
-                            <th scope="row">Code</th>
-                            <th scope="row" class="text-center">Désignation</th>
-                            <th scope="row" class="text-center">Référence</th>
-                            <th scope="row" class="text-center">Qte</th>
-                        </tr>
-                    </head>
-                    <body>
-                        {% for part in delivery_note.deliveryNoteParts %}
-                            <tr>
-                                <td>{{ part.part.code }}</td>
-                                <td class="text-center">{{ part.part.designation }}</td>
-                                <td class="text-center">{{ part.part.reference }}</td>
-                                <td class="text-center">{{ part.quantity }}</td>
-                            </tr>
-                        {% endfor %}
-                    </body>
-                </table>
-            </div>
-        </div>
-    </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

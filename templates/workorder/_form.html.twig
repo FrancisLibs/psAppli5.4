@@ -1,15 +1,15 @@
 {{ form_start(form) }}
     <div class="row mt-4">
-        <div class="col-5 d-flex justify-content-start">
+        <div class="d-flex justify-content-start col-11 col-sm-8 col-lg-10 col-xl-5">
             <h4 class="me-5 text-primary">Type BT</h4>
             {{ form_row(form.type) }}
         </div>
     </div>
     <div class="row mt-4 interventions">
-        <div class="col-12">
+        <div class="col-11 col-xl-10">
             <h4 class="text-primary">Intervention</h4> 
             <div class="row border border-info rounded p-2">
-                <div class="col-12">
+                <div class="col-12 ">
                     <div class="mt-2">
                         {{ form_label(form.request) }}  
                         {{ form_widget(form.request) }}  
@@ -27,14 +27,14 @@
         </div>
     </div>
     <div class="mt-5 temps" id="time_management">
-        <div class="row">
-            <div class="col-5" id="workorder_time">
+        <div class="row justify-content-start">
+            <div class="mt-2 mt-2 col-11 col-md-9 col-sm-9 col-lg-8 col-xl-6" id="workorder_time">
                 <div class="text-primary">
                     <h4>Date</h4>
                 </div>
-                <div class="col-12 d-flex justify-content-around border border-secondary rounded me-3 p-3 pb-3">
+                <div class="d-flex justify-content-around border border-secondary rounded me-3 p-3 pb-3">
                     <div class="row">
-                        <div class="mb-3">
+                        <div class="mb-3 me-1">
                             {{ form_label(form.startDate) }}
                             <div class="caseTemps">
                                 {{ form_widget(form.startDate) }}
@@ -62,25 +62,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-primary mt-2">
-                    <h4>Coût</h4>
-                </div>
-                <div class="col-12 d-flex justify-content-start border border-secondary rounded p-3 pb-1">
-                    <div class="row">
-                        <div class="mb-3">
-                            {{ form_label(form.operationPrice) }}
-                            <div class="caseHeure">
-                                {{ form_widget(form.operationPrice) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <div class="col-6">
+            <div class="mt-2 mt-2 col-11 col-md-9 col-sm-9 col-lg-8 col-xl-6">
                 <div class="text-primary">
                     <h4>Durée</h4>
                 </div>
-                <div class="col-12 d-flex justify-content-around me-3 border border-secondary rounded p-3" id="duration_time">
+                <div class="d-flex justify-content-around border border-secondary rounded p-3" id="duration_time">
                     <div class="d-flex align-items-center">
                         <div class="me-3">
                             {{ form_label(form.durationDay) }}
@@ -102,6 +89,25 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mt-2 col-4 col-sm-4 col-md-4 col-lg-3">
+                <div class="text-primary mt-2">
+                    <h4>Coût</h4>
+                </div>
+                <div class="col-12 d-flex justify-content-start border border-secondary rounded p-3 pb-1">
+                    <div class="row">
+                        <div class="mb-3">
+                            {{ form_label(form.operationPrice) }}
+                            <div class="caseHeure">
+                                {{ form_widget(form.operationPrice) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 col-7 col-sm-7 col-md-5 col-lg-5 col-xl-4">
                 <div class="text-primary mt-2">
                     <h4>Arrêt machine</h4>
                 </div>
@@ -125,7 +131,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-2 mb-5 text-center">
+        <div class="col-8 col-sm-5 col-md-4 col-lg-4 col-xl-3 mt-5 mb-5 text-center">
             <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
         </div>
     </div>

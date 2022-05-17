@@ -3,15 +3,12 @@
 {% block title %}Machines{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-start mt-5">
+    <main class="d-flex justify-content-start mt-5">
         <aside class="col-2 displayMd mt-5">
-            <section>
-                {% include 'machine/_filter.html.twig' %}
-            </section>
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <div>
-            <div class="row mb-3 me-5 d-flex justify-content-start">
+        <article class="ms-4 col-9">
+            <header class="row mb-3 me-5 justify-content-start">
                 <div class="d-flex justify-content-start align-items-center">
                     {% if mode == "selectPreventive" %}
                         <h3>Machines -> BT préventif</h3>
@@ -24,8 +21,8 @@
                         <a class="btn btn-primary btn-sm mt-2 mb-3" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
                     {% endif %}
                 </div>
-                {% if machinesWithData is defined and machinesWithData is not empty %}
-                    <div class="col-5">
+                <div class="col-5">
+                    {% if machinesWithData is defined and machinesWithData is not empty %}
                         <div class="border border-primary rounded p-1">
                             <h5 class="text-primary mb-2">Machines du BT préventif : 
                                 {{ machinesWithData|length }}
@@ -56,19 +53,18 @@
                                 {% endfor %}
                             </div>
                         </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <section class="row deliveryNote-js-filter">
-            <article>
-                {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, documentId: documentId} only %}
-                {# display navigation #}
-                <div class="col-5 offset-2 navigation js-filter-pagination">
-                    {% include 'machine/_pagination.html.twig' %}
+                    {% endif %}
                 </div>
-            </article>
-        </section>
-    </div>
-   
+            </header>
+            <section class="row machine-js-filter">
+                <div>
+                    {% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, documentId: documentId, form: form} only %}
+                    {# Navigation #}
+                    <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+                        {% include 'machine/_pagination.html.twig' %}
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

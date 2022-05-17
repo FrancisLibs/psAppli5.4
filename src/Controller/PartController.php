@@ -165,13 +165,13 @@ class PartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $part->setCode(strtoupper($part->getCode()));
             $part->setReference(strtoupper($part->getReference()));
-            $part->setDesignation(ucfirst($part->getDesignation()));
+            $part->setDesignation(strtoupper($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
 
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_index', [
-                'edit' => true,
+            return $this->redirectToRoute('part_show', [
+                'id' => $part->getId(),
             ], Response::HTTP_SEE_OTHER);
         }
 

@@ -1,16 +1,23 @@
 {% for machine in machines %}
     <tr>
-        {% if mode == 'newWorkorder' or mode == 'selectPreventive' %}
-            <td data-label="Code"><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
-        {% elseif mode == 'editPreventive' %}
-            <td data-label="Code"><a href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
-        {% elseif mode == 'modif' %}
-            <td data-label="Code"><a href="{{ path('work_order_edit', {'id': documentId, 'machine': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50" role="button">{{ machine.internalCode }}</a></td>
-        {% else %}
-            <td class="text-left font_size_table "><a href="{{ path('machine_show', {'id': machine.id}) }}" class="btn btn-primary btn-sm py-1 w-50">{{ machine.internalCode }}</a></td>
-        {% endif %}
+        <td data-label="Code">
+            {% if mode == 'newWorkorder' or mode == 'selectPreventive' %}
+                <a class="btn btn-primary btn-sm py-1 machine-index-button" role="button" href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode}) }}">{{ machine.internalCode }}</a>
+            {% elseif mode == 'editPreventive' %}
+                <a class="btn btn-primary btn-sm py-1 machine-index-button" role="button" href="{{ path('add_machine_to_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}">{{ machine.internalCode }}</a>
+            {% elseif mode == 'modif' %}
+                <a class="btn btn-primary btn-sm py-1 machine-index-button" role="button" href="{{ path('work_order_edit', {'id': documentId, 'machine': machine.id}) }}">{{ machine.internalCode }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm py-1 machine-index-button" role="button" href="{{ path('machine_show', {'id': machine.id}) }}">{{ machine.internalCode }}</a>
+            {% endif %}
+        </td>
         <td data-label="Constructeur" class="text-center font_size_table">{{ machine.constructor }}</a></td>
         <td data-label="Désignation" class="text-center font_size_table">{{ machine.designation }}</td>
+        {% if machine.model %}
+            <td data-label="Modèle" class="text-center font_size_table">{{ machine.model }}</td>
+        {% else %}
+            <td data-label="Modèle" class="text-center font_size_table">-</td>
+        {% endif %}
         <td data-label="Atelier" class="text-center font_size_table">{{ machine.workshop.name }}</td>
     </tr>
 {% else %}

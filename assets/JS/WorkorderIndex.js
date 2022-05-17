@@ -70,6 +70,10 @@ export class WorkorderIndex {
     this.sorting.addEventListener("click", aClickListener);
     this.pagination.addEventListener("click", aClickListener);
 
+    console.log(this.form);
+    const inputs = this.form.querySelectorAll("input");
+    console.log(inputs.length);
+
     const inputForm = this.form.querySelectorAll("input");
     inputForm.forEach((input) => {
       input.addEventListener("keyup", this.loadForm.bind(this));
@@ -113,6 +117,6 @@ export class WorkorderIndex {
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
       history.replaceState({}, "", url);
-    } 
+    }
   }
 }

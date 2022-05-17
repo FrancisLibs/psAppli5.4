@@ -1,6 +1,6 @@
 <table class="table table-sm table-striped">
     <head>
-        <tr>
+        <tr class="sorting">
             <th>Code</th>
             <th class="text-center">Désignation</th>
             <th class="text-center">Qte stock</th>
@@ -9,9 +9,9 @@
     <tbody>
         {% for part in machine.parts %}
             <tr>
-                <td><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
-                <td class="text-center">{{ part.designation }}</td>
-                <td class="text-center">{{ part.stock.qteStock }}</td>
+                <td data-label="Code"><a href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a></td>
+                <td data-label="Désignation" class="text-center">{{ part.designation }}</td>
+                <td data-label="Qte stock" class="text-center">{{ part.stock.qteStock }}</td>
             </tr>
         {% endfor %}
     </tbody>

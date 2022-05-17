@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
@@ -21,7 +20,13 @@ class StockType extends AbstractType
             ])
             ->add('qteMin')
             ->add('qteMax')
-            ->add('qteStock')
+            ->add(
+                'qteStock',
+                NumberType::class,
+                [
+                    'disabled'   => true,
+                ]
+            )
             ->add('approQte', IntegerType::class, [
                 'label' => 'Qte en commande'
             ]);

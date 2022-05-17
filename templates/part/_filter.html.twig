@@ -1,44 +1,9 @@
-{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-    {% if form.organisation is defined %}
-        <div class="d-flex">
-            <div class="filterbtn">
-                {{ form_row(form.organisation)}}
-            </div>
-        </div>
-    {% endif %}
-    <div class="d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.code)}}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.designation)}}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.reference)}}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.place)}}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-    <div class="mt-2">
-        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-    </div>
-{{ form_end(form) }}
+<tr>
+    <td>{{ form_widget(form.organisation) }}</td>
+</tr>
+<tr>
+    <td>{{ form_widget(form.code) }}</td>
+    <td>{{ form_widget(form.designation) }}</td>
+    <td>{{ form_widget(form.reference) }}</td>
+    <td>{{ form_widget(form.place) }}</td>
+</tr>

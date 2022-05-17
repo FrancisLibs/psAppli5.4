@@ -8,7 +8,7 @@ body {
 
 /* Menu de navigation */
 .nav-link {
-  font-size: 1em!important;
+  font-size: 1em !important;
   text-align: center;
 }
 
@@ -23,7 +23,11 @@ footer {
 
 /* Traitement des tables responsives */
 @media (max-width: 800px) {
-  .table thead {
+  /* .table thead {
+    display: none;
+  } */
+
+  .table .sorting {
     display: none;
   }
 
@@ -41,6 +45,17 @@ footer {
     content: attr(data-label);
     float: left;
     font-weight: bold;
+  }
+
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    border-color: inherit;
+    border-style: none;
+    border-width: 0;
   }
 }
 
@@ -127,6 +142,17 @@ footer {
   margin-top: 50px;
 }
 
+/* Administration page */
+.admin-title {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.admin-button {
+  width: 150px;
+}
+
 /* Edit profil page */
 .edit-profil {
   width: 100%;
@@ -184,6 +210,22 @@ footer {
 /* Index pièces et machines */
 .font_size_table {
   font-size: 0.8em;
+}
+
+.part-index-button {
+  width: 93px;
+}
+
+.machine-index-button {
+  width: 108px;
+}
+
+.workorder-index-button {
+  width: 64px;
+}
+
+.delivery-note-index-button {
+  width: 100px;
 }
 
 /* Index machines largeur champ formulaire */

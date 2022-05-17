@@ -3,64 +3,63 @@
 {% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
-    <div class="row mt-4 part-js-filter" >
-        <div class="col-12">
-            <div class="row justify-content-between">
-                <div class="col-3 offset-2">
-                    {% if mode == "workorderAddPart" %}
-                        <h3>Pièces détachées -> BT</h3>
-                    {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
-                        <h3>Pièces détachées -> BL</h3>
-                    {% else %}
-                        <h3>Pièces détachées</h3>
-                    {% endif %}
-                </div>
-                {% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' %}
-                    <div class="col-5 border border-primary rounded mb-3 me-5 p-2">
-                        <div class="d-flex justify-content-start">
-                            <h4>Panier</h4>
-                            {% if items is defined %}
-                                <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-primary btn-sm btn_panier">Valider</a>
-                                <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-warning btn-sm btn_panier">vider</a>
-                            {% endif %}
-                        </div>
-                        {% if items is defined %}
-                            {% for item in items %}
-                                <span><a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId, 'mode': mode}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
-                                <span class="items_display"><strong>{{ item.quantity }}x {{ item.part.code }}</strong> : {{ item.part.designation }}</span><br>
-                            {% endfor %}
-                        {% else %}
-                            <p>Il n'y a aucune pièce sélectionnée</p>
-                        {% endif %}
-                    </div>
-                {% endif %}            
-            </div>
-            <div class="row mt-4">
-                <aside class="col-2">
-                    <section>
-                        <div class="d-flex flex-column mb-3">
-                            {% if mode == 'workorderAddPart' %}
-                                <a class="btn btn-primary btn-sm w-50" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
+    <div class="row part-js-filter justify-content-start mt-5" >
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col">
+            <section class="row justify-content-between">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <div class="d-flex justify-content-start align-items-base">
+                        <div class="me-5">
+                            {% if mode == "workorderAddPart" %}
+                                <h3>Pièces détachées -> BT</h3>
                             {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
-                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
+                                <h3>Pièces détachées -> BL</h3>
                             {% else %}
-                                <a class="btn btn-primary btn-sm mb-3 px-4 w-50" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                                <h3>Pièces détachées</h3>
                             {% endif %}
                         </div>
-                        {% include 'part/_filter.html.twig' %}
-                    </section>
-                    {% include 'user/_photo.html.twig' %}
-                </aside>
-                <section class="col-10">
-                    {% include 'part/_partList.html.twig' with {parts: parts, documentId: documentId, mode: mode} only %}
-                </section>
-            </div>
-            {# display navigation #}
-            <div class="row mt-4">
-                <div class="col-4 offset-2 navigation js-filter-pagination">
-                    {% include 'part/_pagination.html.twig' %}
+                        <div>
+                            {% if mode == 'workorderAddPart' %}
+                                <a class="btn btn-primary btn-sm" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
+                            {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
+                                <a class="btn btn-primary btn-sm mb-3 px-4" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
+                            {% else %}
+                                <a class="btn btn-primary btn-sm mb-3 px-4" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' %}
+                        <div class="border border-primary rounded mb-3 p-2 mx-auto">
+                            <div class="d-flex justify-content-start">
+                                <h4>Panier</h4>
+                                {% if items is defined %}
+                                    <a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-primary btn-sm btn_panier">Valider</a>
+                                    <a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ms-4 btn btn-warning btn-sm btn_panier">vider</a>
+                                {% endif %}
+                            </div>
+                            {% if items is defined %}
+                                {% for item in items %}
+                                    <span><a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId, 'mode': mode}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a></span>
+                                    <span class="items_display"><strong>{{ item.quantity }}x {{ item.part.code }}</strong> : {{ item.part.designation }}</span><br>
+                                {% endfor %}
+                            {% else %}
+                                <p>Il n'y a aucune pièce sélectionnée</p>
+                            {% endif %}
+                        </div>
+                    {% endif %} 
+                </div>           
+            </section>
+            <section class="row part-js-filter">
+                <div class="col-11">
+                     {% include 'part/_partList.html.twig' with {parts: parts, documentId: documentId, mode: mode, form: form} only %}
+                    {# Navigation #}
+                    <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+                        {% include 'part/_pagination.html.twig' %}
+                    </div>
                 </div>
-            </div>
+            </section>
         </article>
     </div>
 {% endblock %}

@@ -1,29 +1,32 @@
 {% for part in parts %}
     <tr>
-        <td class="font_size_table">
+        <td data-label="Code" class="font_size_table">
             {% if mode == 'workorderAddPart' %}
-                {% if part.stock.qteStock > 0 %}
-                    <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add_workorder', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
+                {% if part.stock.qteStock > 0 and part.organisation == app.user.organisation %}
+                    <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_workorder', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
                 {% else %}
                     {{ part.code }}
                 {% endif %}
             {% elseif mode == 'newDeliveryNote' %}
-                <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode}) }}">{{ part.code }}</a>
+                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode}) }}">{{ part.code }}</a>
             {% elseif  mode == 'editDeliveryNote' %}
-                <a class="btn btn-sm btn-primary w-75" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
+                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
             {% else %}
-                <a class="btn btn-sm btn-primary w-75" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>
+                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>
             {% endif %}
         </td>
-        <td class="text-center font_size_table">{{ part.designation }}</td>
-        <td class="text-center font_size_table">{{ part.reference }}</td>
-        {% if part.stock.qteStock < part.stock.qteMin %}
-            <td class="text-center text-danger font_size_table">{{ part.stock.qteStock }}</td>
-        {% else %}
-            <td class="text-center font_size_table">{{ part.stock.qteStock }}</td>
-        {% endif %}
-        <td class="text-center font_size_table">{{ part.stock.place }}</td>
-        <td class="text-center font_size_table">{{ part.stock.approQte }}</td>
+        <td data-label="Designation" class="text-center font_size_table">{{ part.designation }}</td>
+        <td data-label="Référence" class="text-center font_size_table">{{ part.reference }}</td>
+        <td data-label="Emplacement" class="text-center font_size_table">{{ part.stock.place }}</td>
+        <td data-label="Qte stock"
+            {% if part.stock.qteStock < part.stock.qteMin %}
+                class="text-center font_size_table text-danger">
+            {% else %}
+                class="text-center font_size_table">
+            {% endif %}
+            {{ part.stock.qteStock }}
+        </td>
+        <td  data-label="Qte en commande"class="text-center font_size_table">{{ part.stock.approQte }}</td>
     </tr>
 {% else %}
     <tr>

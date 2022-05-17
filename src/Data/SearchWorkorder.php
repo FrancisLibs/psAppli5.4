@@ -11,12 +11,19 @@ class SearchWorkorder
      */
     public $page = 1;
 
-    // /**
-    //  * Date de création
-    //  *
-    //  * @var dateTime
-    //  */
-    // public $createdAt;
+    /**
+     * Date de création
+     *
+     * @var dateTime
+     */
+    public $createdAt;
+
+    /**
+     * Id
+     *
+     * @var int
+     */
+    public $id;
 
     /**
      * Machine
@@ -59,4 +66,11 @@ class SearchWorkorder
      * @var string
      */
     public $organisation;
+
+    /**
+     * Demande de travail
+     *
+     * @var string
+     */
+    public $request;
 }

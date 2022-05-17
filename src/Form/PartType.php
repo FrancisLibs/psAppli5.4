@@ -35,7 +35,7 @@ class PartType extends AbstractType
                 },
                 'choice_label'   =>  'name',
                 'required'  => false,
-                'placeholder' => 'Fournisseur...',
+                'label' =>  'Fournisseur'
             ])
             ->add('steadyPrice', NumberType::class, [
                 'label' => 'Prix',

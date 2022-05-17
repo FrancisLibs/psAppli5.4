@@ -3,22 +3,24 @@
 {% block title %}Nouveau bon de travail{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-6 offset-2 d-flex justify-content-between align-items-center">
-            <h2>Nouveau BT</h2>
-            <h5>{{ workorder.createdAt|date('d/m/Y') }}</h5>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-2 mb-4">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
-        </div>
-        <div class="col-8 mb-4">
-            <div class="row mt-2 d-flex justify-content-start align-items-center">
-                <div class="col-2">
-                    <a class="btn btn-primary btn-sm w-75" href="{{ path('machine_index', {'mode': 'newWorkorder'}) }}" role="button"><h5>Machine</h5></a>
+        </aside>
+        <article class="ms-4 col-12 col-sm-12 col-md-11 col-lg-10">
+            <header class="row mb-3 me-5">
+                <div class="d-flex justify-content-between align-items-center col-12 col-sm-11 col-md-12 col-lg-10 col-xl-9 mb-3">
+                    <h2 class="text-primary">Nouveau BT</h2>
+                    <h5 class="fw-bold">{{ workorder.createdAt|date('d/m/Y') }}</h5>
                 </div>
-                <div class="col-4">
+            </header>
+            <section>
+                <div class="row mt-2">
+                    <div class="col-5 col-sm-5 col-md-4 col-lg-3 col-xl-2">
+                        <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'newWorkorder'}) }}" role="button">Machine</a>
+                    </div>
+                </div>
+                <div class="col-11 col-sm-5 col-md-4 col-lg-3 col-xl-8">
                    {% if workorder.machines is not empty %}
                         <div class="case_machine">
                             {% for machine in workorder.machines %}
@@ -27,14 +29,14 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-9">
-                    {{ include('workorder/_form.html.twig') }}
+                <div class="row mt-3">
+                    <div class="col-12 col-sm-11 col-xl-10">
+                        {{ include('workorder/_form.html.twig') }}
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
