@@ -8,42 +8,37 @@
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article class="col">
-            <section class="row justify-content-between">
-                <div class="d-flex justify-content-between flex-wrap mb-4">
-                    <div class="d-flex justify-content-start align-items-base">
-                        <div class="me-5">
-                            <h3>Bons de livraison</h3>
-                        </div>
-                         <div class="col-6 d-flex justify-content-start align-items-center">
-                            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_index') }}" role="button">Liste BL</a>
-                            <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
-                            <a class="btn btn-warning btn-sm me-2" href="{{ path('label_print', {'id': delivery_note.id}) }}">Etiquettes</a>
-                            {# {% if is_granted('ROLE_ADMIN') %}
-                                {{ include('delivery_note/_delete_form.html.twig') }}
-                            {% endif %} #}
-                        </div>
+            <section class="row justify-content-start align-items-base">
+                    <div class="col-5 col-sm-4 col-lg-3 col-xl-2">
+                        <h3>Bon de livraison</h3>
                     </div>
-                </div>
+                    <div class="col-6 d-flex justify-content-start align-items-center">
+                        <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_index') }}" role="button">Liste BL</a>
+                        <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
+                        <a class="btn btn-warning btn-sm me-2" href="{{ path('label_print', {'id': delivery_note.id}) }}">Etiquettes</a>
+                        {# {% if is_granted('ROLE_ADMIN') %}
+                            {{ include('delivery_note/_delete_form.html.twig') }}
+                        {% endif %} #}
+                    </div>
             </section>
             <section class="row part-js-filter">
                 <div class="row mt-5">
-                    <div class="col-6">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-3 col-xl-8">
                         <div class="row mt-4">
-                            <div class="col-4">
-                                <p>
-                                    <strong>Numéro de BL : </strong><br>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-3 col-xl-4">
+                                <span><strong>Numéro de BL : </strong></span>
                                     {{ delivery_note.number }}
                                 </p>
                             </div>
-                            <div class="col-3">
+                            <div class="col-3 col-sm-4 col-md-4 col-lg-3 col-xl-4">
                                 <p>
-                                    <strong>Date : </strong><br>
+                                    <strong>Date : </strong>
                                     {{ delivery_note.date ? delivery_note.date|date('d-m-Y') : '' }}
                                 </p>
                             </div>
-                            <div class="col-5">
+                            <div class="col-5 col-sm-4 col-md-4 col-lg-3 col-xl-4">
                                 <p>
-                                    <strong>Fournisseur : </strong><br>
+                                    <strong>Fournisseur : </strong>
                                     {{ delivery_note.provider.name }}
                                 </p>
                             </div>
