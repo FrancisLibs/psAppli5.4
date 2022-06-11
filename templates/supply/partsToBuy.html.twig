@@ -4,49 +4,21 @@
 
 {% set varProvider = "" %}
 {% block body %}
-    <div class="row mt-4">
-        <div class="col-3 offset-2">
-                <h3>Pièces en réappro</h3>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <aside class="col-2">
-            {% include ("user/_photo.html.twig") %}
+    <div class="row part-js-filter justify-content-start mt-5" >
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
         </aside>
-        <div class="col-10">       
-            <table class="table table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-left">Forunisseur</th>
-                        <th scope="col" class="text-center">Code</th>
-                        <th scope="col" class="text-center">Désignation</th>
-                        <th scope="col" class="text-center">Référence</th>
-                        <th scope="col" class="text-center">Qte stock</th>
-                        <th scope="col" class="text-center">Qte en com.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for part in parts %}
-                        {% if part.stock.approQte > 0 %}
-                            <tr style="background-color: #a7fb78;">
-                        {% else %}
-                            <tr>
-                        {% endif %}
-                            {% if part.provider.name != varProvider %}
-                                {% set varProvider = part.provider.name %}
-                                <td><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn btn-primary btn-sm">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
-                            <td class="text-center">{{ part.code }}</td>
-                            <td class="text-center">{{ part.designation }}</td>
-                            <td class="text-center">{{ part.reference }}</td>
-                            <td class="text-center">{{ part.stock.qteStock }}</td>
-                            <td class="text-center">{{ part.stock.approQte }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table> 
-        </div> 
+        <article class="col">
+            <section class="row">
+                <div class="col">
+                    <h3 class="text-primary">Pièces en réappro</h3>
+                </div>
+            </section>
+            <section class="row part-js-filter">
+                <div class="col">
+                     {% include 'supply/_partToBuyList.html.twig' with {parts: parts, varProvider: varProvider} only %}
+                </div>
+            </section>
+        </article>
     </div>            
 {% endblock %}

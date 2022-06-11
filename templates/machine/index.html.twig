@@ -7,42 +7,42 @@
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="ms-4 col-9">
-            <header class="row mb-3 me-5 justify-content-start">
+        <article class="col-12 col-lg-9">
+            <header class="row mb-3 justify-content-start">
                 <div class="d-flex justify-content-start align-items-center">
                     {% if mode == "selectPreventive" %}
-                        <h3>Machines -> BT préventif</h3>
+                        <h3 class="text-primary">Machines -> BT préventif</h3>
                     {% elseif mode == "newWorkorder" %}
                         <h3>Machine -> BT</h3>
                     {% else %}
-                        <h3 class="me-5">Machines</h3>
+                        <h3 class="me-5 text-primary">Machines</h3>
                     {% endif %}
                     {% if mode != 'selectPreventive' and mode != 'workorderSelect' and mode != 'newWorkorder' %}
                         <a class="btn btn-primary btn-sm mt-2 mb-3" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
                     {% endif %}
                 </div>
-                <div class="col-5">
+                <div class="col-12 col-sm-9 col-md-8 col-xl-7">
                     {% if machinesWithData is defined and machinesWithData is not empty %}
                         <div class="border border-primary rounded p-1">
-                            <h5 class="text-primary mb-2">Machines du BT préventif : 
+                            <h5 class="text-primary mb-2 d-flex align-items-center">Machines du BT préventif : 
                                 {{ machinesWithData|length }}
                                 {% if mode == 'editPreventive' %}
                                     <a href="{{ path('template_edit', {'id': documentId, 'mode': mode}) }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
                                 {% else %}
-                                    <a href="{{ path('template_new') }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
+                                    <a href="{{ path('template_new') }}" class="btn btn-sm btn-primary ms-4" role="button">Valider</a>
                                 {% endif %}
                             </h5>
                             <div class="me-2 p-2 mb-2 ">
                                 <div class="row mb-1">
-                                    <div class="col-2 text-uppercase font-weight-bold text-primary">Code</div>
-                                    <div class="col-5 text-uppercase font-weight-bold text-primary">Désignation</div>
-                                    <div class="col-2"></div>
+                                    <div class="col-4 text-uppercase font-weight-bold text-primary">Code</div>
+                                    <div class="col-4 text-center text-uppercase font-weight-bold text-primary">Désignation</div>
+                                    <div class="col-4 text-center"></div>
                                 </div>
                                 {% for machine in machinesWithData %}
                                     <div class="row mb-1">
-                                        <div class="col-2">{{ machine.internalCode }}</div>
-                                        <div class="col-8">{{ machine.designation}}</div>
-                                        <div class="col-2">
+                                        <div class="col-4">{{ machine.internalCode }}</div>
+                                        <div class="col-4 text-center">{{ machine.designation}}</div>
+                                        <div class="col-4 text-center">
                                             {% if( mode == 'editPreventive') %}
                                                 <a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': mode, 'documentId': documentId}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm" role="button">Supp</a>
                                             {% else %}

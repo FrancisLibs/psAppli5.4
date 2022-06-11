@@ -3,7 +3,7 @@
 {% block title %}Pièces détachées{% endblock %}
 
 {% block body %}
-    <div class="row part-js-filter justify-content-start mt-5" >
+    <main class="row part-js-filter justify-content-start mt-5" >
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
@@ -13,11 +13,11 @@
                     <div class="d-flex justify-content-start align-items-base">
                         <div class="me-5">
                             {% if mode == "workorderAddPart" %}
-                                <h3>Pièces détachées -> BT</h3>
+                                <h3 class="text-primary">Pièces détachées -> BT</h3>
                             {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
-                                <h3>Pièces détachées -> BL</h3>
+                                <h3 class="text-primary">Pièces détachées -> BL</h3>
                             {% else %}
-                                <h3>Pièces détachées</h3>
+                                <h3 class="text-primary">Pièces détachées</h3>
                             {% endif %}
                         </div>
                         <div>
@@ -52,7 +52,7 @@
                 </div>           
             </section>
             <section class="row part-js-filter">
-                <div class="col-11">
+                <div class="col-12">
                      {% include 'part/_partList.html.twig' with {parts: parts, documentId: documentId, mode: mode, form: form} only %}
                     {# Navigation #}
                     <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
@@ -61,5 +61,5 @@
                 </div>
             </section>
         </article>
-    </div>
+    </main>
 {% endblock %}

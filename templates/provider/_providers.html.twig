@@ -1,6 +1,6 @@
 {% for provider in providers %}
     <tr>
-        <td class="font_size_table">
+        <td data-label="Nom" class="font_size_table">
             {% if mode is defined %}
                 {% if mode == 'selectProvider' %}
                     <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">{{ provider.name }}</a>
@@ -13,10 +13,10 @@
                 <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.name }}</a>
             {% endif %}
         </td>
-        <td class="text-center font_size_table">{{ provider.code }}</td>
-        <td class="text-center font_size_table">{{ provider.city }}</td>
-        <td class="text-center font_size_table">{{ provider.email }}</td>
-        <td class="text-center font_size_table">{{ provider.phone }}</td>
+        <td data-label="Code" class="text-center font_size_table">{{ provider.code ? provider.code : "-" }}</td>
+        <td data-label="Ville" class="text-center font_size_table">{{ provider.city ? provider.city : "-" }}</td>
+        <td data-label="Email" class="text-center font_size_table">{{ provider.email ? provider.email : "-" }}</td>
+        <td data-label="Téléphone" class="text-center font_size_table">{{ provider.phone ? provider.phone : "-" }}</td>
     </tr>
 {% else %}
     <tr>

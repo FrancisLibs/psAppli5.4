@@ -1,17 +1,15 @@
 <div class="row">
-    <div class="col-5 d-flex justify-content-between">
-        <div class="d-flex justify-content-start align-items-center">
-            <h4 class="text-primary">Numéro : </h4>
-            <h5 class="champs_bt text-center">{{ template.templateNumber }}</h5>
-        </div>
-        <div class="d-flex justify-content-start">
-            <h4 class="text-primary">Créé le : </h4>
-            <h5 class="champs_bt text-center">{{ template.createdAt ? template.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</h5>
-        </div>
-        <div class="d-flex justify-content-start">
-            <h4 class="text-primary">Par : </h4>
-            <h5 class="champs_bt text-center">{{ template.user.firstName }}</h5>
-        </div>
+    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-start align-items-center">
+        <h4 class="text-primary">Numéro : </h4>
+        <h5 class="champs_bt text-center">{{ template.templateNumber }}</h5>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-start">
+        <h4 class="text-primary">Créé le : </h4>
+        <h5 class="champs_bt text-center">{{ template.createdAt ? template.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</h5>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-start">
+        <h4 class="text-primary">Par : </h4>
+        <h5 class="champs_bt text-center">{{ template.user.firstName }}</h5>
     </div>
 </div>
 <div class="row mt-4">
@@ -20,10 +18,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-8 border border-info rounded">
+    <div class="col-12">
         <table class="table table-sm table-striped">
             <thead>
-                <tr>
+                <tr class="sorting">
                     <th scope="col">Numéro</th>
                     <th class="text-center" scope="col">Désignation</th>
                     <th class="text-center" scope="col">Num. série</th>
@@ -33,10 +31,11 @@
             <tbody>
                 {% for machine in template.machines %}
                     <tr>
-                        <td>{{ machine.internalCode }}</td>
-                        <td class="text-center">{{ machine.designation }}</td>
-                        <td class="text-center">{{ machine.serialNumber }}</td>
-                        <td class="text-center">{{ machine.constructor }}</td>
+                        <td data-label="Code">{{ machine.internalCode }}</td>
+                        
+                        <td data-label="Désignation" class="text-center">{{ machine.designation ? machine.designation : '-' }}</td>
+                        <td data-label="Numéro de série" class="text-center">{{  machine.serialNumber ?  machine.serialNumber : '-' }}</td>
+                        <td data-label="Constructeur" class="text-center">{{  machine.constructor ?  machine.constructor : '-' }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -46,40 +45,40 @@
 
 {% if template.request %}
     <div class="row mt-4">
-        <div class="col-2">
+        <div class="col-8">
             <h4 class="text-primary">Demande : </h4>
         </div>
     </row>
     <div class="row">
-        <div class="col-8 border border-info rounded">
+        <div class="col-12 border border-info rounded">
             <p>{{ template.request }}</p>
         </div>
     </div>
 {% endif %}
 
 {% if template.remark %}
-    <div class="row mt-4">
-        <div class="col-2">
+    <div class="row">
+        <div class="col-8">
             <h4 class="text-primary">Remarque : </h4>
         </div>
     </div>
     <div class="row">
-        <div class="col-8 border border-info rounded">
+        <div class="col-12 border border-info rounded">
             <p>{{ template.remark|nl2br }}</p>
         </div>
     </div>
 {% endif %}
 
 <div class="row mt-4">
-    <div class="col-2">
+    <div class="col-8">
         <h4 class="text-primary">Temps : </h4>
     </div>
 </div>
 <div class="row mb-5">
-    <div class="col-8 border border-info rounded">
+    <div class="col-12 border border-info rounded">
         <table class="table">
             <thead>
-                <tr>
+                <tr class="sorting">
                     <th scope="col">Période</th>
                     <th scope="col" class="text-center">Glissant</th>
                     <th scope="col" class="text-center">Prochaine date</th>
@@ -89,15 +88,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ template.period }}</td>
-                    {% if template.sliding %}
-                        <td class="text-center">OUI</td>
-                    {% else %}
-                        <td class="text-center">NON</td>
-                    {% endif %}
-                    <td class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
-                    <td class="text-center">{{ template.daysBefore }}</td>
-                    <td class="text-center">{{ template.duration }}</td>
+                    <td data-label="Période">{{ template.period }}</td>
+                    <td data-label="Glissant" class="text-center">{{ template.sliding ? "OUI" : "NON" }}</td>
+                    <td data-label="Prochaine date" class="text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</td>
+                    <td data-label="Préparation" class="text-center">{{ template.daysBefore }}</td>
+                    <td data-label="Durée" class="text-center">{{ template.duration ? template.duration : "-"}}</td>
                 </tr>
             </tbody>
         </table>

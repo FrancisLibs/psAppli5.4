@@ -7,7 +7,7 @@
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="ms-4 col-12 col-sm-12 col-md-11 col-lg-10">
+        <article class="col-12 col-md-11 col-lg-10 ms-1">
             <header class="row mb-3 me-5">
                 <div class="d-flex justify-content-between align-items-center col-12 col-sm-11 col-md-12 col-lg-10 col-xl-9 mb-3">
                     <h2 class="text-primary">Nouveau BT</h2>
@@ -15,19 +15,17 @@
                 </div>
             </header>
             <section>
-                <div class="row mt-2">
-                    <div class="col-5 col-sm-5 col-md-4 col-lg-3 col-xl-2">
+                <div class="row mt-2 justify-content-start">
+                    <div class="col-4 col-md-3 col-xl-2">
                         <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'newWorkorder'}) }}" role="button">Machine</a>
                     </div>
-                </div>
-                <div class="col-11 col-sm-5 col-md-4 col-lg-3 col-xl-8">
-                   {% if workorder.machines is not empty %}
-                        <div class="case_machine">
+                    <div class="col-7 col-sm-5 col-md-4 col-lg-3 col-xl-5">
+                    {% if workorder.machines is not empty %}
                             {% for machine in workorder.machines %}
-                                <span>{{ machine.designation }}</span>
+                                {{ machine.designation }}
                             {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-12 col-sm-11 col-xl-10">

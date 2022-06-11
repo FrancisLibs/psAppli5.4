@@ -23,9 +23,10 @@ footer {
 
 /* Traitement des tables responsives */
 @media (max-width: 800px) {
-  /* .table thead {
-    display: none;
-  } */
+  /* Centrage d'un champ */
+  .table-center {
+    text-align: center;
+  }
 
   .table .sorting {
     display: none;
@@ -38,7 +39,7 @@ footer {
 
   .table td {
     display: block;
-    text-align: right;
+    text-align: center;
   }
 
   .table td:before {
@@ -84,6 +85,10 @@ footer {
 }
 
 /* Page default */
+.default-top-margin {
+  padding-top: 100px;
+}
+
 .default-column {
   margin-top: 2em;
   width: 69%;
@@ -167,12 +172,28 @@ footer {
 /* Users picture */
 
 /* Formulaire nouveau BT  */
+.bloc_date {
+  width: 400px;
+}
+
+.bloc_duree {
+  width: 320px;
+}
+
+.bloc_cout {
+  width: 177px;
+}
+
+.bloc_arret_machine {
+  width: 270px;
+}
+
 .caseTemps {
-  width: 150px;
+  width: 140px;
 }
 
 .caseHeure {
-  width: 90px;
+  width: 67px;
   margin-right: 26px;
 }
 
@@ -241,6 +262,11 @@ footer {
   padding: 2px;
   padding-left: 4px;
   margin-left: 10px;
+}
+
+/* Page parts to buy */
+.part-code {
+  width: 100px;
 }
 
 /* X-Small devices (portrait phones, less than 576px)

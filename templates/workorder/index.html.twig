@@ -3,14 +3,14 @@
 {% block title %}Bons de travail{% endblock %}
 
 {% block body %}
-     <main class="d-flex justify-content-start mt-5">
+    <main class="d-flex justify-content-start mt-5">
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="ms-4 col-9">
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
             <header class="row mb-3 me-5 justify-content-start">
                 <div class="d-flex justify-content-start">
-                    <h3>Bons de travail</h3>
+                    <h3 class="text-primary">Bons de travail</h3>
                     <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
                 </div>
             </header>

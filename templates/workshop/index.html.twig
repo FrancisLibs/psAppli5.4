@@ -3,23 +3,24 @@
 {% block title %}Liste ateliers{% endblock %}  
 
 {% block body %}
-    <div class="row mt-5">
-        <aside class="col-2">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="col-10 mx-auto">
-            <div class="row align-items-start">
-                <div class="col-3">
-                    <h3>Ateliers</h3>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <header class="row mb-3 justify-content-start">
+                <div class="d-flex justify-content-start">
+                    <h3 class="text-primary">Ateliers</h3>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('workshop_new') }}" role="button">Nouvel atelier</a>
                 </div>
-                <div class="col-3">
-                    <a class="btn btn-primary btn-sm" href="{{ path('workshop_new') }}" role="button">Nouvel atelier</a>
+            </header>
+            <section>
+                <div class="row mt-4">
+                    <div class="col-12 col-md-8">
+                        {% include 'workshop/_workshopList.html.twig' with {workshops: workshops} only %}
+                    </div>
                 </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-12">
-                    {% include 'workshop/_workshopList.html.twig' with {workshops: workshops} only %}
-                </div>
-            </div>
+            </section>
         </article>
-    </div>
+    </main>
 {% endblock %}

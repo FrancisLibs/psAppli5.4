@@ -3,40 +3,41 @@
 {% block title %}Messagerie{% endblock %}
 
 {% block body %}
-    <div class="row pt-5">
-        <div class="col-2">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
-        </div>
-        <div class="col-8">
-            <h2 class="pb-2">Messagerie</h2>
-            <h4 class="pb-5">Résumé de la messagerie</h4>
-            <p  class="pb-2 fw-bold">Recus : {{ app.user.received|length }}</p>
-            <p  class="pb-5 fw-bold">Envoyé : {{ app.user.sent|length }}</p>
-            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-            Voir mes dossiers
-            </a>
-            <a class="btn btn-primary" href="{{ path("send") }}">Envoyer un message</a>
-        </div>
-    </div>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="list-group">
-                <a href="{{ path("messages") }}" class="list-group-item 
-                list-group-item-action active">Accueil</a>
-            </div>
-            <div class="list-group">
-                <a href="{{ path("received") }}" class="list-group-item 
-                list-group-item-action">Boite de réception</a>
-            </div>
-            <div class="list-group">
-                <a href="{{ path("sent") }}" class="list-group-item 
-                list-group-item-action">Eléments envoyés</a>
-            </div>
-        </div>
-    </div>
-
+        </aside>
+        <article class="col-12 col-lg-9">
+            <section class="col-12">
+                <h2 class="pb-2 text-primary">Messagerie</h2>
+                <h4 class="pb-5">Résumé de la messagerie</h4>
+                <p  class="pb-2 fw-bold">Recus : {{ app.user.received|length }}</p>
+                <p  class="pb-5 fw-bold">Envoyé : {{ app.user.sent|length }}</p>
+                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    Voir mes dossiers
+                </a>
+                <a class="btn btn-primary" href="{{ path("send") }}">Envoyer un message</a>
+            </section>
+            <section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="list-group">
+                        <a href="{{ path("messages") }}" class="list-group-item 
+                        list-group-item-action active">Accueil</a>
+                    </div>
+                    <div class="list-group">
+                        <a href="{{ path("received") }}" class="list-group-item 
+                        list-group-item-action">Boite de réception</a>
+                    </div>
+                    <div class="list-group">
+                        <a href="{{ path("sent") }}" class="list-group-item 
+                        list-group-item-action">Eléments envoyés</a>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

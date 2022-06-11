@@ -3,15 +3,22 @@
 {% block title %}Inscriptions{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="register-form">
-            {% for flashError in app.flashes('verify_email_error') %}
-                <div class="alert ale -danger" role="alert">{{ flashError }}</div>
-            {% endfor %}
-            <h1>Inscription</h1>
-            <div class="mt-5 mb-4">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-lg-9">
+            <header class="row mb-3 justify-content-start">
+                {% for flashError in app.flashes('verify_email_error') %}
+                    <div class="alert ale -danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
+                <div class="d-flex justify-content-start align-items-center">
+                    <h2 class="text-primary">Inscription</h2>
+                </div>
+            </header>
+            <section class="row machine-js-filter">
                 {% include('registration/_userInscriptionForm.html.twig') %}
-            </div>
-        </div>
-    </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

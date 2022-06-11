@@ -11,7 +11,7 @@
             <header class="row mb-3 me-5 justify-content-start align-items-top flex-wrap">
                 <div class="d-flex justify-content-start align-items-center col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3">
                     {% if workorder.preventive %}
-                        <h3>Bon de Travail préventif</h3>
+                        <h3 class="text-primary">Bon de Travail préventif</h3>
                     {% else %}
                         <h3>Bon de Travail</h3>
                     {% endif %}
@@ -31,7 +31,7 @@
                 </div>
             </header>
             <section>
-                <div class="col-12">
+                <div class="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-12">
                     {% include 'workorder/_show.html.twig' %}
                 </div>
             </section>

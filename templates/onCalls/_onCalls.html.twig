@@ -4,14 +4,14 @@
          style="background: #7af27a;"
     {% endif %}
     >
-        <td class="font_size_table">
+        <td data-label="Date" class="font_size_table">
             <a class="btn btn-sm btn-primary" href="{{ path('onCall_show', {'id': onCall.id}) }}">{{ onCall.callDay|date('Y-m-d') }}</a>
         </td>
-        <td class="text-center font_size_table">{{ onCall.callTime|date('H:i:s') }}</td>
-        <td class="text-center font_size_table">{{ onCall.reason }}</td>
-        <td class="text-center font_size_table">{{ onCall.task }}</td>
-        <td class="text-center font_size_table">{{ onCall.user.username }}</td>
-        <td class="text-center font_size_table">
+        <td data-label="Heure" class="text-center font_size_table">{{ onCall.callTime|date('H:i:s') }}</td>
+        <td data-label="Problème" class="text-center font_size_table">{{ onCall.reason }}</td>
+        <td data-label="travail" class="text-center font_size_table">{{ onCall.task }}</td>
+        <td data-label="technicien" class="text-center font_size_table">{{ onCall.user.username }}</td>
+        <td data-label="Status" class="text-center font_size_table">
         {% if onCall.status == 0 %}
             En cours
         {% else %}
@@ -21,6 +21,6 @@
     </tr>
 {% else %}
     <tr>
-        <td colspan="14">Il n'y a pas de rapport d'astreinte</td>
+        <td colspan="14">Il n'y a aucun rapport d'astreinte</td>
     </tr>
 {% endfor %}

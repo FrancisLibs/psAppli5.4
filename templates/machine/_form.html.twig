@@ -2,12 +2,12 @@
     <div class="row justify-content-start flex-wrap">
         <div class="col-12 col-lg-9 col-xl-5">
             <div class="row mb-4 justify-content-start align-items-top flex-wrap">
-                <div class="col-5 col-sm-4 col-md-5 col-lg-4 col-xl-4 mb-3">
+                <div class="col-5 col-sm-4 col-md-5 col-lg-4 mb-3">
                     {{ form_errors(form.internalCode) }}
                     {{ form_label(form.internalCode) }}
                     {{ form_widget(form.internalCode) }}
                 </div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-7 col-xl-6 ms-3 border border-info rounded">
+                <div class="col-10 col-sm-6 col-lg-7 col-xl-6 ms-3 border border-info rounded">
                     <span>Le code machine est composé de 6 caractères pour le type de machine + 1 chiffre de l'année (ex. : 0 pour 2020) + 3 chiffres d'ordre</span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="row d-flex align-items-center mb-4">
-                <div class="col-4">
+                <div class="col-5 col-sm-4 col-md-3 col-lg-4 col-xl-5">
                     {{ form_label(form.buyDate) }}
                     {{ form_widget(form.buyDate) }}
                 </div>

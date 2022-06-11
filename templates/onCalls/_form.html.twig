@@ -1,80 +1,70 @@
 {{ form_start(form) }}
     <div class="row">
-        <div class="col-5">
+        <div class="col-12 ms-2">
             <h4 class="text-primary">Appel</h4>
-            <div class="row">
-                <div class="col-11 border border-warning rounded p-2">
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            {{ form_errors(form.callDay) }} 
-                            {{ form_label(form.callDay) }}  
-                            {{ form_widget(form.callDay) }}  
-                        </div>
-                        <div class="col-5">
-                            {{ form_errors(form.callTime) }}
-                            {{ form_label(form.callTime) }}
-                            {{ form_widget(form.callTime) }}
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-11">
-                            {{ form_errors(form.whoCalls) }} 
-                            {{ form_label(form.whoCalls) }}  
-                            {{ form_widget(form.whoCalls) }}  
-                        </div>
-                    </div>
+            <div class="row border border-warning rounded p-2">
+                <div class="col-11 col-sm-6">
+                    {{ form_errors(form.callDay) }} 
+                    {{ form_label(form.callDay) }}  
+                    {{ form_widget(form.callDay) }}  
                 </div>
-            </div>
-            <h4 class="text-primary mt-4">Trajet</h4>
-            <div class="row">
-                <div class="col-11 border border-warning rounded p-3">
-                    <div class="row mb-3">
-                        <div class="col-2 mt-1">
-                            {{ form_errors(form.travelhours) }}
-                            {{ form_label(form.travelhours) }}
-                            {{ form_widget(form.travelhours) }}
-                        </div>
-                        <div class="col-2 mt-1">
-                            {{ form_errors(form.travelMinutes) }} 
-                            {{ form_label(form.travelMinutes) }}  
-                            {{ form_widget(form.travelMinutes) }}  
-                        </div>
-                        <div class="col-5">
-                            {{ form_errors(form.arrivalTime) }} 
-                            {{ form_label(form.arrivalTime) }}  
-                            {{ form_widget(form.arrivalTime) }}  
-                        </div>
-                    </div>
+                <div class="col-7 col-sm-5">
+                    {{ form_errors(form.callTime) }}
+                    {{ form_label(form.callTime) }}
+                    {{ form_widget(form.callTime) }}
+                </div>
+                <div class="col-12 col-sm-6 col-md-5">
+                    {{ form_errors(form.whoCalls) }} 
+                    {{ form_label(form.whoCalls) }}  
+                    {{ form_widget(form.whoCalls) }}  
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-12 ms-2">
+            <h4 class="text-primary mt-4">Trajet</h4>
+            <div class="row border border-warning rounded p-3">
+                <div class="col-4 col-sm-3 col-md-2 mt-1">
+                    {{ form_errors(form.travelhours) }}
+                    {{ form_label(form.travelhours) }}
+                    {{ form_widget(form.travelhours) }}
+                </div>
+                <div class="col-4 col-sm-3 col-md-2 mt-1">
+                    {{ form_errors(form.travelMinutes) }} 
+                    {{ form_label(form.travelMinutes) }}  
+                    {{ form_widget(form.travelMinutes) }}  
+                </div>
+                <div class="col-8 col-sm-5 col-md-4">
+                    {{ form_errors(form.arrivalTime) }} 
+                    {{ form_label(form.arrivalTime) }}  
+                    {{ form_widget(form.arrivalTime) }}  
+                </div>
+            </div>
+        </div>
+        <div class="col-12 ms-2">
             <h4 class="text-primary">Intervention</h4>
-            <div class="row">
-                <div class="col-12 border border-warning rounded p-3">
-                    <div class="col-12">
-                        {{ form_errors(form.reason) }} 
-                        {{ form_label(form.reason) }}  
-                        {{ form_widget(form.reason) }}  
-                    </div>
-                    <div class="col-12 mt-2">
-                        {{ form_errors(form.task) }} 
-                        {{ form_label(form.task) }}  
-                        {{ form_widget(form.task) }}  
-                    </div>
-                    <div class="col-12">
-                        <h5 class="mt-3">Durée</h5>
-                        <div class="row">
-                            <div class="col-3">
-                                {{ form_errors(form.durationHours) }} 
-                                {{ form_label(form.durationHours) }}  
-                                {{ form_widget(form.durationHours) }}  
-                            </div>
-                            <div class="col-3">
-                                {{ form_errors(form.durationMinutes) }} 
-                                {{ form_label(form.durationMinutes) }}  
-                                {{ form_widget(form.durationMinutes) }}  
-                            </div>
+            <div class="row border border-warning rounded p-3">
+                <div class="col-12">
+                    {{ form_errors(form.reason) }} 
+                    {{ form_label(form.reason) }}  
+                    {{ form_widget(form.reason) }}  
+                </div>
+                <div class="col-12">
+                    {{ form_errors(form.task) }} 
+                    {{ form_label(form.task) }}  
+                    {{ form_widget(form.task) }}  
+                </div>
+                <div class="col-12">
+                    <h5 class="mt-3">Durée</h5>
+                    <div class="row">
+                        <div class="col-4 col-sm-3 col-md-2">
+                            {{ form_errors(form.durationHours) }} 
+                            {{ form_label(form.durationHours) }}  
+                            {{ form_widget(form.durationHours) }}  
+                        </div>
+                        <div class="col-4 col-sm-3 col-md-2">
+                            {{ form_errors(form.durationMinutes) }} 
+                            {{ form_label(form.durationMinutes) }}  
+                            {{ form_widget(form.durationMinutes) }}  
                         </div>
                     </div>
                 </div>

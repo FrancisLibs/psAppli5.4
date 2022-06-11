@@ -1,7 +1,7 @@
-<tr>
-    <th>{{ knp_pagination_sortable(providers, 'Nom', 'p.name') }}</th>
-    <th class="text-center">{{ knp_pagination_sortable(providers, 'Code', 'p.code') }}</th>
-    <th class="text-center">{{ knp_pagination_sortable(providers, 'Ville', 'p.city') }}</th>
-    <th class="text-center">{{ knp_pagination_sortable(providers, 'Email', 'p.email') }}</th>
-    <th class="text-center">{{ knp_pagination_sortable(providers, 'Téléphone', 'p.phone') }}</th>
+<tr class="js-filter-sorting sorting">
+    <th scope="col">{{ knp_pagination_sortable(providers, 'Nom', 'p.name') }}</th>
+    <th scope="col" class="text-center">{{ knp_pagination_sortable(providers, 'Code', 'p.code') }}</th>
+    <th scope="col" class="text-center">{{ knp_pagination_sortable(providers, 'Ville', 'p.city') }}</th>
+    <th scope="col" class="text-center">{{ knp_pagination_sortable(providers, 'Email', 'p.email') }}</th>
+    <th scope="col" class="text-center">{{ knp_pagination_sortable(providers, 'Téléphone', 'p.phone') }}</th>
 </tr>

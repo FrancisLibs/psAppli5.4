@@ -3,50 +3,58 @@
 {% block title %}Pièces en réappro{% endblock %}
 
 {% block body %}
-    <div class="row mt-4 d-flex justify-content-start">
-        <div class="col-3 offset-2">
-                <h3>Pièces en réappro</h3>
-        </div>
-        <div class="col-4 d-flex justify-content-start">
-            <h3 class="me-4">Fournisseur : </h3>
-            <h3>{{ provider.name }}</h3>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <aside class="col-2">
-            {% include ("user/_photo.html.twig") %}
+    <main class="row part-js-filter justify-content-start mt-5" >
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
         </aside>
-        <div class="col-10">       
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Code</th>
-                        <th scope="col" class="text-center">Désignation</th>
-                        <th scope="col" class="text-center">Référence</th>
-                        <th scope="col" class="text-center">Qte stock</th>
-                        <th scope="col" class="text-center">Qte Mini</th>
-                        <th scope="col" class="text-center">Qte Maxi</th>
-                        <th scope="col" class="text-center">Qte en commande</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for part in parts %}
-                        {% if part.stock.approQte > 0 %}
-                            <tr style="background-color: #a7fb78;">
-                        {% else %}
-                            <tr>
-                        {% endif %}
-                            <td><a href="{{ path('part_edit', {'id': part.id}) }}" class="btn btn-primary btn-sm w-100">{{ part.code }}</a></td>
-                            <td class="text-center">{{ part.designation }}</td>
-                            <td class="text-center">{{ part.reference }}</td>
-                            <td class="text-center">{{ part.stock.qteStock }}</td>
-                            <td class="text-center">{{ part.stock.qteMin }}</td>
-                            <td class="text-center">{{ part.stock.qteMax }}</td>
-                            <td class="text-center">{{ part.stock.approQte }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table> 
-        </div> 
-    </div>            
+        <article class="col">
+            <section class="row justify-content-start">
+                <div class="col-7 col-sm-5 col-md-4 col-lg-4 col-xl-3">
+                    <h3 class="text-primary">Pièces en réappro</h3>
+                </div>
+                <div class="col-6 ">
+                    <a class="btn btn-primary btn-sm" href="{{ path('parts_to_buy') }}" role="button">Pièces en réappro</a>
+                </div>
+            </section>
+            <section class="row mt-5">
+                <div class="col-12 d-flex justify-content-start">
+                    <h4 class="me-4">Fournisseur : {{ provider.name }}</h3>
+                </div>
+            </section>
+            <section class="row mt-5">
+                <div class="col-12">       
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="sorting">
+                                <th scope="col">Code</th>
+                                <th scope="col" class="text-center">Désignation</th>
+                                <th scope="col" class="text-center">Référence</th>
+                                <th scope="col" class="text-center">Qte stock</th>
+                                <th scope="col" class="text-center">Qte Mini</th>
+                                <th scope="col" class="text-center">Qte Maxi</th>
+                                <th scope="col" class="text-center">Qte en commande</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for part in parts %}
+                                {% if part.stock.approQte > 0 %}
+                                    <tr style="background-color: #a7fb78;">
+                                {% else %}
+                                    <tr>
+                                {% endif %}
+                                    <td data-label="Code"><a href="{{ path('part_edit', {'id': part.id}) }}" class="btn btn-primary btn-sm part-code text-center">{{ part.code }}</a></td>
+                                    <td data-label="Désignation" class="text-center">{{ part.designation }}</td>
+                                    <td data-label="Référence" class="text-center">{{ part.reference }}</td>
+                                    <td data-label="Qte Stock" class="text-center">{{ part.stock.qteStock }}</td>
+                                    <td data-label="Qte min" class="text-center">{{ part.stock.qteMin }}</td>
+                                    <td data-label="Qte max" class="text-center">{{ part.stock.qteMax }}</td>
+                                    <td data-label="Qte en commande" class="text-center">{{ part.stock.approQte }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </section>
+        </article>
+    </main>        
 {% endblock %}

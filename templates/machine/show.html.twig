@@ -7,9 +7,9 @@
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="ms-4">
-            <header class="row mb-3 me-5 justify-content-start align-items-top flex-wrap">
-                <div class="col-5 col-sm-3 col-md-3">
+        <article>
+            <header class="row mb-3">
+                <div class="col-5 col-sm-3">
                     <h3 class="text-primary me-5">Machine</h3>
                 </div>
                 <div class="col-7 col-md-9 d-flex justify-content-start align-items-base flex-wrap">
@@ -22,13 +22,13 @@
                     {% endif %}
                 </div>
             </header>
-            <section class="row mt-4">
-                <div class="col-11">
-                    <div class="row mt-5">
-                        <div class="col-6">
+            <section class="row mt-5">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-7">
                             <p><strong>Nom : </strong>{{ machine.designation }}</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col-5">
                             <p><strong>Code : </strong>{{ machine.internalCode }}</p>
                         </div>
                     </div>
