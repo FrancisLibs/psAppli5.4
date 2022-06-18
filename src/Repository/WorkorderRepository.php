@@ -48,6 +48,7 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
+        //dd($search->status->getId());
         $query = $this->createQueryBuilder('w')
             ->select('w', 'm', 'u', 'o', 's')
             ->join('w.machines', 'm')
@@ -58,6 +59,12 @@ class WorkorderRepository extends ServiceEntityRepository
             ->setParameter('val', $search->organisation)
             ->orderBy('w.id', 'DESC')
         ;
+
+        if (!empty($search->id)) {            
+            $query = $query
+                ->andWhere('w.id = :id')
+                ->setParameter('id', $search->id);
+        }
 
         if (!empty($search->machine)) {
             $machine = strtoupper($search->machine);
@@ -73,21 +80,28 @@ class WorkorderRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->status)) {
+            $status = $search->status->getId();
             $query = $query
-                ->andWhere('s.id = :status')
-                ->setParameter('status', $search->status);
+                ->andWhere('w.workorderStatus <> 5')
+                ->andWhere('w.workorderStatus = :status')
+                ->setParameter('status', $status);
+        }
+
+        if (empty($search->closed)) {
+            $query = $query
+                ->andWhere('w.workorderStatus <> 5');
+        }
+
+        if (!empty($search->closed)) {
+            $query = $query
+                ->andWhere('w.workorderStatus = :cloture')
+                ->setParameter('cloture', 5 );
         }
 
         if (!empty($search->preventive)) {
             $query = $query
                 ->andWhere('w.preventive = :disabled')
                 ->setParameter('disabled', $search->preventive);
-        }
-
-        if (empty($search->closure)) {
-            $query = $query
-                ->andWhere('w.workorderStatus <> :status')
-                ->setParameter('status', 5);
         }
 
         $query = $query->getQuery();

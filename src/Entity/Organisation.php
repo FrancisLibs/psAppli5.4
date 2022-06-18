@@ -56,6 +56,11 @@ class Organisation
      */
     private $deliveryNotes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockValue::class, mappedBy="organisation", orphanRemoval=true)
+     */
+    private $stockValues;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -65,6 +70,7 @@ class Organisation
         $this->templates = new ArrayCollection();
         $this->delivryNotes = new ArrayCollection();
         $this->deliveryNotes = new ArrayCollection();
+        $this->stockValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +264,36 @@ class Organisation
             // set the owning side to null (unless already changed)
             if ($deliveryNote->getOrganisation() === $this) {
                 $deliveryNote->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StockValue>
+     */
+    public function getStockValues(): Collection
+    {
+        return $this->stockValues;
+    }
+
+    public function addStockValue(StockValue $stockValue): self
+    {
+        if (!$this->stockValues->contains($stockValue)) {
+            $this->stockValues[] = $stockValue;
+            $stockValue->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockValue(StockValue $stockValue): self
+    {
+        if ($this->stockValues->removeElement($stockValue)) {
+            // set the owning side to null (unless already changed)
+            if ($stockValue->getOrganisation() === $this) {
+                $stockValue->setOrganisation(null);
             }
         }
 

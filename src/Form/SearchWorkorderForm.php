@@ -61,7 +61,7 @@ class SearchWorkorderForm extends AbstractType
                 'label'     => 'Préventif',
                 'required'  => false,
             ])
-            ->add('closure', CheckboxType::class, [
+            ->add('closed', CheckboxType::class, [
                 'label'     => 'Cloturé',
                 'required'  => false,
             ]);

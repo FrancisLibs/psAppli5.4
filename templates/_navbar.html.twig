@@ -12,9 +12,20 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto align-items-center">
-            <li class="nav-item mx-2">
-                <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Pièces détachées
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('part_index') }}">Liste pièces</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
+                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Pièces en réappro</a>
+                </div>
             </li>
+             {# <li class="nav-item mx-2">
+                <a class="nav-link" href="{{ path('send_mail') }}">mail</a>
+            </li> #}
             <li class="nav-item mx-2">
                 <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
             </li>
@@ -23,13 +34,9 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Divers
+                    Divers
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Pièces en réappro</a>
-                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ path('onCall_index') }}" >Astreintes</a>
                 </div>
             </li>

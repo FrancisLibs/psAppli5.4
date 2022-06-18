@@ -12,10 +12,10 @@ export class DeliveryNoteIndex {
     if (element === null) {
       return;
     }
-
-    this.form =       element.querySelector(".js-filter-form");
-    this.content =    element.querySelector(".js-filter-content");
-    this.sorting =    element.querySelector(".js-filter-sorting");
+    
+    this.form = element.querySelector(".js-filter-form");
+    this.content = element.querySelector(".js-filter-content");
+    this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
   }

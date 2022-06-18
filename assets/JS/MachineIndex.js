@@ -13,11 +13,13 @@ export class MachineIndex {
       return;
     }
 
+    console.log("ok");
     this.form = element.querySelector(".js-filter-form");
     this.content = element.querySelector(".js-filter-content");
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
+    console.log("ok");
   }
 
   /**
@@ -48,10 +50,9 @@ export class MachineIndex {
     this.sorting.addEventListener("click", aClickListener);
     this.pagination.addEventListener("click", aClickListener);
 
-    console.log(this.form);
     const inputs = this.form.querySelectorAll("input");
     console.log(inputs.length);
-    
+
     const inputForm = this.form.querySelectorAll("input");
     inputForm.forEach((input) => {
       input.addEventListener("keyup", this.loadForm.bind(this));

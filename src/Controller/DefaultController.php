@@ -2,16 +2,15 @@
 
 namespace App\Controller;
 
-use DateInterval;
 use App\Entity\Connexion;
-use Symfony\Component\Mime\Address;
 use App\Entity\Workorder;
+use App\Entity\StockValue;
+use App\Repository\PartRepository;
 use App\Repository\UserRepository;
 use App\Repository\ParamsRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +26,7 @@ class DefaultController extends AbstractController
     private $workorderStatusRepository;
     private $userRepository;
     private $manager;
+    private $partRepository;
 
 
     public function __construct(
@@ -35,7 +35,8 @@ class DefaultController extends AbstractController
         WorkorderRepository $workorderRepository,
         ParamsRepository $paramsRepository,
         WorkorderStatusRepository $workorderStatusRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        PartRepository $partRepository
     ) {
         $this->paramsRepository = $paramsRepository;
         $this->workorderRepository = $workorderRepository;
@@ -43,6 +44,7 @@ class DefaultController extends AbstractController
         $this->manager = $manager;
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->userRepository = $userRepository;
+        $this->partRepository = $partRepository;
     }
 
     /**
@@ -56,15 +58,6 @@ class DefaultController extends AbstractController
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
 
-        // $email = (new TemplatedEmail())
-        //     ->from(new Address('fr.libs@gmail.com', 'Gmao Pierre Schmidt'))
-        //     ->to($user->getEmail())
-        //     ->subject('Reset mot de passe')
-        //     ->htmlTemplate('testemail/email.html.twig')
-        //     ;
-
-        // $mailer->send($email);
-
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
@@ -72,24 +65,22 @@ class DefaultController extends AbstractController
         // Création d'un enregistrement des connexions
         if ($user) {
             $connexion = new Connexion();
-            $connexionDate = (new \DateTime());
-            $user = $this->getUser();
             $connexion
-                ->setDate($connexionDate)
+                ->setDate(new \DateTime())
                 ->setUser($user);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($connexion);
-            $manager->flush();
+
+            $this->manager->persist($connexion);
+            $this->manager->flush();
         }
 
-        // Gestion des bons de travail préventifs-------------------------------------
-        $today = (new \DateTime())->getTimestamp();
-       
-        // Dernière date de vérification cherchée dans le fichiers des paramètres
+        // Lecture des dates de vérification cherchées dans le fichier des paramètres
         $params = $this->paramsRepository->find(1);
         $lastPreventiveDate = $params->getLastPreventiveDate()->getTimestamp();
-        
-        // On vérifie tous les jours puis rajout d'1 jour à la date enregistrée
+        $lastStockValueDate = $params->getLastPreventiveDate()->getTimestamp();
+        $today = (new \DateTime())->getTimestamp();
+
+        // Gestion des bons de travail préventifs
+        // On vérifie à chaque connexion  puis rajout d'1 jour à la date enregistrée
         $lastPreventiveDate = $lastPreventiveDate + 24 * 60 * 60;
         if ($lastPreventiveDate <= $today) {
             // Définition de la prochaine date à celle d'aujourd'hui
@@ -99,6 +90,26 @@ class DefaultController extends AbstractController
             $this->preventiveProcessing($organisationId, $today);
 
             $this->setpreventiveStatus($organisationId, $today);
+        }
+
+        // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
+        $lastStockValueDate = $lastStockValueDate + 60 * 60 * 24 * 7;
+        if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
+
+            // Calcul du montant du stock
+            $totalStock = $this->partRepository->findTotalStock($organisation);
+
+            // Création de l'enregistrement
+            $stockValue = new StockValue();
+            $stockValue->setValue($totalStock)
+                ->setDate(new \Datetime())
+                ->setOrganisation($organisation);
+            $this->manager->persist($stockValue);
+
+            // Calcul nouvelle date dans le fichier params
+            $params->setLastStockValueDate(new \DateTime());
+
+            $this->manager->flush();
         }
 
         // ------------------------------------------------------------------------------
@@ -127,7 +138,7 @@ class DefaultController extends AbstractController
             $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
             // Date finale à prende en compte
             $nextCalculateDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
-            
+
             // Test si template éligible
             if ($nextCalculateDate <= $today) {
                 // Contrôle si BT préventif n'est pas déjà actif

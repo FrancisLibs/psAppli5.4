@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Service\PdfService;
 use App\Entity\DeliveryNote;
 use App\Form\DeliveryNoteType;
 use App\Data\SearchDeliveryNote;
@@ -13,10 +14,10 @@ use App\Form\SearchDeliveryNoteForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
-use App\Service\PdfService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,12 +49,20 @@ class DeliveryNoteController extends AbstractController
 
     /**
      * Liste des BL
+     * 
      * @Route("/", name="delivery_note_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
+     * 
+     * @param Request $request
      */
-    public function index(Request $request, DeliveryNoteRepository $deliveryNoteRepository): Response
+    public function index(Request $request): Response
     {
+        $user = $this->getUser();
+        $organisation =  $user->getOrganisation();
+
         $data = new SearchDeliveryNote();
+        $data->organisation = $organisation;
+        $data->page = $request->get('page', 1);
 
         // Effacement du fournisseur, des pièces détachées, de la date et fournisseur en session
         $session = $this->requestStack->getSession();
@@ -62,13 +71,19 @@ class DeliveryNoteController extends AbstractController
         $session->remove('deliveryNoteDate');
         $session->remove('deliveryNoteNumber');
 
-        $organisation = $this->getUser()->getOrganisation();
-        $data->organisation = $organisation;
-
-        $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchDeliveryNoteForm::class, $data);
+
         $form->handleRequest($request);
+
         $deliveryNotes = $this->deliveryNoteRepository->findSearch($data);
+        
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('delivery_note/_delivery_notes.html.twig', ['delivery_notes' => $deliveryNotes]),
+                'sorting'       =>  $this->renderView('delivery_note/_sorting.html.twig', ['delivery_notes' => $deliveryNotes]),
+                'pagination'    =>  $this->renderView('delivery_note/_pagination.html.twig', ['delivery_notes' => $deliveryNotes]),
+            ]);
+        }
 
         return $this->render('delivery_note/index.html.twig', [
             'delivery_notes' => $deliveryNotes,

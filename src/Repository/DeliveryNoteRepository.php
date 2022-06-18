@@ -36,19 +36,20 @@ class DeliveryNoteRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('d')
             ->orderBy('d.id', 'DESC')
             ->select('d')
+            ->join('d.provider', 'p')
             ->andWhere('d.organisation = :val')
             ->setParameter('val', $search->organisation);
 
         if (!empty($search->number)) {
             $query = $query
-                ->andWhere('d.number = :number')
+                ->andWhere('d.number LIKE :number')
                 ->setParameter('number', "%{$search->number}%");
         }
 
-        if (!empty($search->user)) {
+        if (!empty($search->provider)) {
             $query = $query
-                ->andWhere('d.provider = :provider')
-                ->setParameter('provider', $search->provider);
+                ->andWhere('p.name LIKE :provider')
+                ->setParameter('provider', "%{$search->provider}%");
         }
 
         $query = $query->getQuery();

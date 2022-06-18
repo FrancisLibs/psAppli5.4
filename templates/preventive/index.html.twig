@@ -3,7 +3,7 @@
 {% block title %}Préventif{% endblock %}
 
 {% block body %}
-    <main class="row part-js-filter justify-content-start mt-5" >
+    <main class="row justify-content-start mt-5" >
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
@@ -20,9 +20,9 @@
                     </div>
                 </div>           
             </section>
-            <section class="row preventive-js-filter">
+            <section class="row js-filter">
                 <div class="col-12">
-                    {% include 'preventive/_templateList.html.twig' with {templates: templates} only %}
+                    {% include 'preventive/_templateList.html.twig' with {templates: templates, form: form} only %}
                     {# Navigation #}
                     <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
                         {% include 'preventive/_pagination.html.twig' %}

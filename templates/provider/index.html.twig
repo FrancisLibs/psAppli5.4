@@ -14,7 +14,7 @@
                     <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
                 </div>
             </header>
-            <section class="row machine-js-filter">
+            <section class="row js-filter">
                 <div>
                     {% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode, documentId: documentId, form: form} only %}
                     {# Navigation #}

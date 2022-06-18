@@ -13,23 +13,23 @@ import "./bootstrap";
 
 import "./tools";
 
-import { PartIndex } from "./JS/PartIndex";
-new PartIndex(document.querySelector(".part-js-filter"));
-
-import { MachineIndex } from "./JS/MachineIndex";
-new MachineIndex(document.querySelector(".machine-js-filter"));
-
 import { WorkorderIndex } from "./JS/WorkorderIndex";
-new WorkorderIndex(document.querySelector(".workorder-js-filter"));
+new WorkorderIndex(document.querySelector(".js-filter"));
 
-import { PreventiveIndex } from "./JS/PreventiveIndex";
-new PreventiveIndex(document.querySelector(".preventive-js-filter"));
+// import { PartIndex } from "./JS/PartIndex";
+// new PartIndex(document.querySelector(".js-filter"));
 
-import { ProviderIndex } from "./JS/ProviderIndex";
-new ProviderIndex(document.querySelector(".provider-js-filter"));
+// import { MachineIndex } from "./JS/MachineIndex";
+// new MachineIndex(document.querySelector(".machine-js-filter"));
 
-import { DeliveryNoteIndex } from "./JS/DeliveryNoteIndex";
-new DeliveryNoteIndex(document.querySelector(".deliveryNote-js-filter"));
+// import { PreventiveIndex } from "./JS/PreventiveIndex";
+// new PreventiveIndex(document.querySelector(".preventive-js-filter"));
 
-import { OnCallIndex } from "./JS/OnCallIndex";
-new OnCallIndex(document.querySelector(".onCall-js-filter"));
+// import { ProviderIndex } from "./JS/ProviderIndex";
+// new ProviderIndex(document.querySelector(".provider-js-filter"));
+
+// import { DeliveryNoteIndex } from "./JS/DeliveryNoteIndex";
+// new DeliveryNoteIndex(document.querySelector(".deliveryNote-js-filter"));
+
+// import { OnCallIndex } from "./JS/OnCallIndex";
+// new OnCallIndex(document.querySelector(".onCall-js-filter"));

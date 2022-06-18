@@ -12,18 +12,18 @@ class SearchWorkorder
     public $page = 1;
 
     /**
-     * Date de création
-     *
-     * @var dateTime
-     */
-    public $createdAt;
-
-    /**
      * Id
      *
      * @var int
      */
     public $id;
+    
+    /**
+     * Date de création
+     *
+     * @var dateTime
+     */
+    public $createdAt;
 
     /**
      * Machine
@@ -47,11 +47,11 @@ class SearchWorkorder
     public $preventive;
 
     /**
-     * Préventif
+     * Cloturé
      *
-     * @var closure
+     * @var boolean
      */
-    public $closure;
+    public $closed;
 
     /**
      * Status

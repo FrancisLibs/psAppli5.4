@@ -35,8 +35,7 @@ class OnCallRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('o')
             ->select('o')
-            
-            ;
+            ->orderBy('o.id', 'DESC');
 
         // if (!empty($search->user)) {
         //     $query = $query
@@ -53,4 +52,3 @@ class OnCallRepository extends ServiceEntityRepository
         );
     }
 }
-

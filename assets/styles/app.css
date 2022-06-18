@@ -193,8 +193,12 @@ footer {
 }
 
 .caseHeure {
-  width: 67px;
-  margin-right: 26px;
+  width: 82px;
+  margin-right: 10px;
+}
+
+.caseHeure2{
+  width: 100px;
 }
 
 /* Affichage des pièces dans l'encart du panier */
