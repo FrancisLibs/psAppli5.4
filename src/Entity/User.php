@@ -149,6 +149,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $onCalls;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
@@ -234,7 +239,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_VISITOR';
 
         return array_unique($roles);
     }
@@ -611,6 +616,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
                 $oncall->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

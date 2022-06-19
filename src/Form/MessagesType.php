@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Messages;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -33,6 +34,9 @@ class MessagesType extends AbstractType
             ->add('recipient', EntityType::class, [
                 "label" => "Destinataire",
                 "class" => User::class,
+                'query_builder' => function (UserRepository $repo) {
+                    return $repo->findAllActiveUsers();
+                },
                 "choice_label" => "username",
                 "attr" => [
                     "class" => "form-control"

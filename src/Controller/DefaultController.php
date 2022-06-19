@@ -49,7 +49,7 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted('ROLE_VISITOR')")
      */
     public function index(MailerInterface $mailer): Response
     {
@@ -89,7 +89,7 @@ class DefaultController extends AbstractController
 
             $this->preventiveProcessing($organisationId, $today);
 
-            $this->setpreventiveStatus($organisationId, $today);
+            $this->setPreventiveStatus($organisationId, $today);
         }
 
         // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
@@ -119,6 +119,7 @@ class DefaultController extends AbstractController
             [
                 'organisation' => $organisationId,
                 'service' => $serviceId,
+                'active' => true,
             ],
         );
         return $this->render('default/index.html.twig', [
@@ -175,7 +176,7 @@ class DefaultController extends AbstractController
     }
 
     // Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
-    private function setpreventiveStatus($organisation, $today)
+    private function setPreventiveStatus($organisation, $today)
     {
         $preventiveWorkorders = $this->workorderRepository->findAllPreventiveWorkorders($organisation);
         if ($preventiveWorkorders) {

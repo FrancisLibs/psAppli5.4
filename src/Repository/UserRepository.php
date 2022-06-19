@@ -36,6 +36,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    /**
+     * Récupère tous les utilisateurs d'une organisation
+     * @param int $organisation
+     * @return Users[] Returns an array of users
+     */
+
+    public function findAllActive()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->andWhere('u.active = :disabled')
+            ->setParameter('disabled', true)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllActiveUsers()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->andWhere('u.active = :disabled')
+            ->setParameter('disabled', true);
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

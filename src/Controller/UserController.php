@@ -47,7 +47,9 @@ class UserController extends AbstractController
      */
     public function userList()
     {
-        $users = $this->userRepository->findAll();
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+        $users = $this->userRepository->findAllActive();
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
@@ -99,19 +101,20 @@ class UserController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $token)) {
             if ($user <> $currentUser) {
-                $this->manager->remove($user);
+                $user->setActive(false);
+                $user->setRoles([]);
                 $this->manager->flush();
-                $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
+                $this->addFlash('success', 'L\'utilisateur a bien été désactivé.');
                 return $this->redirectToRoute('user_index');
             }
 
             if ($user == $currentUser) {
-                $this->addFlash('error', 'Vous ne pouvez pas vous supprimer vous-même');
+                $this->addFlash('error', 'Vous ne pouvez pas vous désactivé vous-même');
                 return $this->redirectToRoute('user_index');
             }
         }
 
-        $this->addFlash('error', 'L\'utilisateur n\'a pas été supprimé.');
+        $this->addFlash('error', 'L\'utilisateur n\'a pas été désactivé.');
         return $this->redirectToRoute('user_index');
     }
 
