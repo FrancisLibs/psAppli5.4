@@ -49,7 +49,7 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Security("is_granted('ROLE_VISITOR')")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function index(MailerInterface $mailer): Response
     {
@@ -76,7 +76,7 @@ class DefaultController extends AbstractController
         // Lecture des dates de vérification cherchées dans le fichier des paramètres
         $params = $this->paramsRepository->find(1);
         $lastPreventiveDate = $params->getLastPreventiveDate()->getTimestamp();
-        $lastStockValueDate = $params->getLastPreventiveDate()->getTimestamp();
+        $lastStockValueDate = $params->getLastStockValueDate()->getTimestamp();
         $today = (new \DateTime())->getTimestamp();
 
         // Gestion des bons de travail préventifs
@@ -93,9 +93,9 @@ class DefaultController extends AbstractController
         }
 
         // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
-        $lastStockValueDate = $lastStockValueDate + 60 * 60 * 24 * 7;
-        if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
 
+        $lastStockValueDate = $lastStockValueDate + (60 * 60 * 24 * 7);
+        if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
             // Calcul du montant du stock
             $totalStock = $this->partRepository->findTotalStock($organisation);
 

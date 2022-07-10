@@ -17,7 +17,7 @@ main {
   width: 100%;
 }
 
-footer {
+.footer {
   background: linear-gradient(#c2f0ea, white);
 }
 
@@ -197,7 +197,7 @@ footer {
   margin-right: 10px;
 }
 
-.caseHeure2{
+.caseHeure2 {
   width: 100px;
 }
 

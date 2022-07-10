@@ -9,15 +9,14 @@
         </aside>
         <article>
             <header class="row mb-3 justify-content-start align-items-center flex-wrap">
-                <div class="col-8 col-sm-6 col-md-5 col-xl-4">
+                <div class="col-8 col-sm-6 col-md-6 col-xl-5">
                     {% if workorder.preventive %}
                         <h3 class="text-primary">Edition bon de travail préventif</h3>
                     {% else %}
                         <h3 class="text-primary">Edition bon de travail</h3>
                     {% endif %}
                 </div>
-                <div class="col-10 col-sm-10 col-md-9 d-flex justify-content-start align-items-center flex-wrap">
-                    <div class="d-flex justify-content-start">
+                <div class="col-10 col-sm-10 col-md-9 col-xl-4 d-flex justify-content-start align-items-center flex-wrap">
                     <a class="btn btn-primary btn-sm me-1" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
                     <a class="btn btn-primary btn-sm me-1" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -26,12 +25,6 @@
                 </div>
             </header>
             <div class="mt-4 col-12">
-                <div class="row mt-5">
-                    <div class="col-8 col-sm-6 col-md-5 col-xl-4 d-flex justify-content-start align-items-center">
-                        <h4 class="text-primary me-4">Technicien</h4>
-                        <h4>{{ workorder.user.firstName ~ "  " ~ workorder.user.lastName }}</h4>
-                    </div>
-                </div>
                 <div class="row mt-4">
                     <div class="col-10 d-flex justify-content-start align-items-center">
                         <h4 class="text-primary me-5">Machine(s)</h4>

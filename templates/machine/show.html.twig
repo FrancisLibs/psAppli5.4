@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('showMachine') }}
+{% endblock %}
+
 {% block title %}Machine{% endblock %}
 
 {% block body %}
@@ -78,9 +83,9 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="col-5">
+                <div class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                     {% if machine.imageName %}
-                        <img src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}" />
+                        <img style="width: 100%" src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}" />
                     {% endif %}
                 </div>
             </section>

@@ -45,32 +45,17 @@ class StockValueRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return StockValue[] Returns an array of StockValue objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param int $organisation
+     * @return StockValue by organisation
+     */
+    public function findStockValues($organisation)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('s.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?StockValue
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

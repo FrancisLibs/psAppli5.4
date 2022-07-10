@@ -8,6 +8,7 @@ use App\Data\SearchPart;
 use App\Service\PdfService;
 use App\Form\SearchPartForm;
 use App\Repository\PartRepository;
+use App\Repository\StockValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,12 +24,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PartController extends AbstractController
 {
     private $partRepository;
+    private $stockValueRepository;
     private $manager;
     private $requestStack;
 
-    public function __construct(PartRepository $partRepository, EntityManagerInterface $manager, RequestStack $requestStack)
+    public function __construct(PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->partRepository = $partRepository;
+        $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
     }
@@ -127,7 +130,7 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
-            
+
             $this->manager->persist($part);
             $this->manager->flush();
 
@@ -229,37 +232,32 @@ class PartController extends AbstractController
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // /**
-    //  * @Route("/action", name="part_action")
-    //  * @Security("is_granted('ROLE_ADMIN')")
-    //  */
-    // public function action(): Response
-    // {
-    //     $parts = $this->partRepository->findAll();
-
-    //     foreach ($parts as $part) {
-    //         $part->setDesignation(strtoupper($part->getDesignation()));
-    //         $part->setReference(strtoupper($part->getReference()));
-    //         $this->manager->persist($part);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
-    // }
-
     /**
-     * @Route("/infos", name="parts_infos", methods={"GET","POST"})
+     * @Route("/infos", name="parts_value", methods={"GET","POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function infos(): Response
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
+
         $totalStock = $this->partRepository->findTotalStock($organisation);
+        $stockValues = $this->stockValueRepository->findStockValues($organisation);
+
+        $amounts=[];
+        $dates=[];
+
+        foreach ($stockValues as $value) {
+            $amount = $value->getValue();
+            $amounts[] = $amount;
+            $date =  $value->getDate()->format('d/m/Y');
+            $dates[] = $date;
+        }
 
         return $this->render('part/infos_pieces.html.twig', [
             'totalStock' => $totalStock,
+            'dates' =>  json_encode($dates),
+            'amounts' => json_encode($amounts),
         ]);
     }
 
@@ -281,4 +279,23 @@ class PartController extends AbstractController
             'Content-Type' => 'application/pdf',
         ]);
     }
+
+    // /**
+    //  * @Route("/action", name="part_action")
+    //  * @Security("is_granted('ROLE_ADMIN')")
+    //  */
+    // public function action(): Response
+    // {
+    //     $parts = $this->partRepository->findAll();
+
+    //     foreach ($parts as $part) {
+    //         $part->setDesignation(strtoupper($part->getDesignation()));
+    //         $part->setReference(strtoupper($part->getReference()));
+    //         $this->manager->persist($part);
+    //     }
+
+    //     $this->manager->flush();
+
+    //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }

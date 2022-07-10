@@ -134,7 +134,9 @@
                                 {% else %}
                                     <td data-label="Prix" class="text-center">-</td>
                                 {% endif %}
-                                <td data-label=""><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
+                                {% if workorder.workorderStatus.name != "CLOTURE" %}
+                                    <td data-label=""><a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>

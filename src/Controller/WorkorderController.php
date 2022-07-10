@@ -196,6 +196,11 @@ class WorkorderController extends AbstractController
      */
     public function edit(Request $request, Workorder $workorder, $machine = null): Response
     {
+        $userParams=[];
+        $user = $this->getUser();
+        $userParams[] = $user->getOrganisation();
+        $userParams[] = $user->getService();
+
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
         if ($machine) {
@@ -207,7 +212,11 @@ class WorkorderController extends AbstractController
             $workorder->addMachine($this->machineRepository->find($id));
         }
 
-        $form = $this->createForm(WorkorderType::class, $workorder);
+        $form = $this->createForm(WorkorderType::class, $workorder, [
+            'userParams' => $userParams,
+            
+        ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -27,9 +27,5 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->getActive()) {
-            // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('Ton compte a été inactivé.');
-        }
     }
 }

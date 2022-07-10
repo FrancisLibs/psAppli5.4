@@ -4,7 +4,7 @@
  * @property {HTMLElement} sorting
  * @property {HTMLFormElement} form
  */
-export class MachineIndex {
+export class FilterIndex {
   /**
    * @param {HTMLElement|null} element
    */
@@ -13,13 +13,11 @@ export class MachineIndex {
       return;
     }
 
-    console.log("ok");
     this.form = element.querySelector(".js-filter-form");
     this.content = element.querySelector(".js-filter-content");
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
-    console.log("ok");
   }
 
   /**
@@ -38,6 +36,23 @@ export class MachineIndex {
       const typeChamp =
         e.target.parentNode.parentNode.childNodes[1].children[0].firstChild
           .nodeName;
+      let champAReseter = e.target.parentNode.parentNode;
+      let nomDuChampAReseter = "";
+
+      switch (typeChamp) {
+        case "SELECT":
+          // reset du champ de recherche SELECT
+          champAReseter = champAReseter.querySelector("select");
+          nomDuChampAReseter = champAReseter.getAttribute("name");
+          champAReseter.selectedIndex = 0;
+          break;
+        case "INPUT":
+          // reset du champ de recherche INPUT
+          champAReseter = champAReseter.querySelector("input");
+          nomDuChampAReseter = champAReseter.getAttribute("name");
+          champAReseter.value = "";
+          break;
+      }
 
       // Appel de la fonction de mise à jour de l'écran
       let newUrl = new URL(window.location);
@@ -47,11 +62,15 @@ export class MachineIndex {
       this.loadUrl(newUrl);
     };
 
+    const resetButton = this.form.querySelectorAll(".resetBtn");
+    resetButton.forEach((button) => {
+      button.addEventListener("click", resetField);
+    });
+
     this.sorting.addEventListener("click", aClickListener);
     this.pagination.addEventListener("click", aClickListener);
 
     const inputs = this.form.querySelectorAll("input");
-    console.log(inputs.length);
 
     const inputForm = this.form.querySelectorAll("input");
     inputForm.forEach((input) => {
@@ -62,10 +81,16 @@ export class MachineIndex {
     selectForm.forEach((select) => {
       select.addEventListener("change", this.loadForm.bind(this));
     });
+
+    const checkbox = this.form.querySelectorAll("input");
+    checkbox.forEach((checkbox) => {
+      checkbox.addEventListener("change", this.loadForm.bind(this));
+    });
   }
 
   async loadForm() {
     const data = new FormData(this.form);
+
     const url = new URL(
       this.form.getAttribute("action") || window.location.href
     );

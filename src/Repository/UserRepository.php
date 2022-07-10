@@ -60,6 +60,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('disabled', true);
     }
 
+    public function findAllActiveUserByOrganisationAndService($userParams)
+    {
+        $organisation = $userParams[0];
+        $service = $userParams[1];
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->andWhere('u.active = :disabled')
+            ->setParameter('disabled', true)
+            ->andWhere('u.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            ->andWhere('u.service = :service')
+            ->setParameter('service', $service)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
