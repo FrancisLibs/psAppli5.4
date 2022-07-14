@@ -53,7 +53,7 @@ const config = {
             return value + " €";
           },
         },
-        beginAtZero: true,
+        beginAtZero: false,
       },
     },
     plugins: {

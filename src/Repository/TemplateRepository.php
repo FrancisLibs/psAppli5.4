@@ -38,9 +38,11 @@ class TemplateRepository extends ServiceEntityRepository
         ;
 
         if (!empty($search->machine)) {
+            $machine = strtoupper($search->machine);
+            // dd($machine);
             $query = $query
                 ->andWhere('m.designation LIKE :machine')
-                ->setParameter('machine', "%{$search->machine}%");
+                ->setParameter('machine', "%{$machine}%");
         }
 
         $query = $query->getQuery();

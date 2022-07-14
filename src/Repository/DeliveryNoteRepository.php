@@ -47,6 +47,7 @@ class DeliveryNoteRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->provider)) {
+            $search->provider = strtoupper($search->provider);
             $query = $query
                 ->andWhere('p.name LIKE :provider')
                 ->setParameter('provider', "%{$search->provider}%");

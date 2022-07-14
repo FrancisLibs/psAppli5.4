@@ -5,16 +5,24 @@ namespace App\Controller;
 use App\Entity\Workshop;
 use App\Form\WorkshopType;
 use App\Repository\WorkshopRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/workshop")
  */
 class WorkshopController extends AbstractController
 {
+    private $workshopRepository;
+
+    public function __construct(WorkshopRepository $workshopRepository)
+    {
+        $this->workshopRepository = $workshopRepository;
+    }
+
     /**
      * @Route("/", name="workshop_index", methods={"GET"})
      */
@@ -90,5 +98,24 @@ class WorkshopController extends AbstractController
         }
 
         return $this->redirectToRoute('workshop_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/upper", name="workshop_action", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function action(): Response
+    {
+        $workshops = $this->workshopRepository->findAll();
+        foreach ($workshops as $workshop) {
+            $workshop->setName(
+                strtoupper($workshop->getName())
+            );
+
+            $this->manager->persist($workshop);
+        }
+        $this->manager->flush();
+
+        return $this->redirectToRoute('workshop_index');
     }
 }
