@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use Knp\Snappy\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
@@ -19,42 +20,42 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * @Route("/work/order")
  */
 class WorkorderController extends AbstractController
 {
+    private $requestStack;
     private $workorderRepository;
     private $manager;
-    private $partRepository;
     private $machineRepository;
     private $templateRepository;
     private $workorderStatusRepository;
     private $pdf;
 
     public function __construct(
-        Pdf $pdf,
+
         MachineRepository $machineRepository,
         WorkorderRepository $workorderRepository,
         TemplateRepository $templateRepository,
         PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        RequestStack $requestStack
     ) {
         $this->workorderRepository = $workorderRepository;
         $this->partRepository = $partRepository;
         $this->machineRepository = $machineRepository;
         $this->templateRepository = $templateRepository;
-        $this->pdf = $pdf;
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->manager = $manager;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -68,6 +69,11 @@ class WorkorderController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        // Reset session
+        $session = $this->requestStack->getSession();
+        $session->remove('machines');
+        $session->remove('panier');
+
         $data = new SearchWorkorder();
         $data->page = $request->get('page', 1);
         $data->organisation = $this->getUser()->getOrganisation()->getId();
@@ -94,33 +100,74 @@ class WorkorderController extends AbstractController
      */
     public function new(Request $request, Machine $machine = null): Response
     {
+        $session = $this->requestStack->getSession();
+        $userParams = [];
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation= $user->getOrganisation();
+        $userParams[] = $organisation;
+        $userParams[] = $user->getService();
 
         $workorder = new Workorder();
         $workorder->setPreventive(false);
-        $workorder->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-        $workorder->setOrganisation($organisation);
 
-        if ($machine) {
+        // Si une machine a été mise en session, elle est pour le BT
+        $machines = $session->get('machines', []);
+        if ($machines) {
+            $machine = $this->machineRepository->find($machines[0]);
             $workorder->addMachine($machine);
         }
+        // Initialisation of the workorder
+        $workorder
+            ->setStartDate(new \Datetime())
+            ->setEndDate(new \Datetime())
+            ->setStartTime(new \Datetime())
+            ->setEndTime(new \Datetime())
+            ->setDurationDay(0)
+            ->setDurationHour(0)
+            ->setDurationMinute(0)
+            ->setStopTimeHour(0)
+            ->setStopTimeMinute(0)
+            ->setOperationPrice(0)
+            ->setPartsPrice(0);
 
+        //Creation of the form
         $form = $this->createForm(WorkorderType::class, $workorder, [
-            'organisation' => $organisation
+            'userParams' => $userParams
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $workorder->setUser($user);
-            $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
-            $workorder->setWorkorderStatus($status);
+            $workorder->setOrganisation($organisation);
+            $workorder->setCreatedAt(new \DateTime());
             $workorder->setPreventive(false);
+
+            if ($machine) {
+                $workorder->addMachine($machine);
+            }
+            $session->remove('machines');
+
             if ($workorder->getMachines()->isEmpty()) {
                 $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
                 return $this->redirectToRoute('work_order_new');
             }
+
+            // Contrôle BT terminé 
+            $minute = $workorder->getDurationMinute();
+            $hour = $workorder->getDurationHour();
+            $day = $workorder->getDurationDay();
+            $request = $workorder->getRequest();
+            $implementation = $workorder->getImplementation();
+            $machine = $workorder->getMachines();
+
+            $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request) && !empty($implementation) && !empty($machine)) {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
+            }
+
+            $workorder->setWorkorderStatus($status);
+
             $this->manager->persist($workorder);
             $this->manager->flush();
 
@@ -150,8 +197,13 @@ class WorkorderController extends AbstractController
      * @Route("/edit/{id}/{machine?}", name="work_order_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function edit(Workorder $workorder, $machine = null, Request $request): Response
+    public function edit(Request $request, Workorder $workorder, $machine = null): Response
     {
+        $userParams=[];
+        $user = $this->getUser();
+        $userParams[] = $user->getOrganisation();
+        $userParams[] = $user->getService();
+
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT
         // et on veut remplacer la machine on efface donc l'actuelle et on la remplace par celle en paramètre
         if ($machine) {
@@ -163,10 +215,29 @@ class WorkorderController extends AbstractController
             $workorder->addMachine($this->machineRepository->find($id));
         }
 
-        $form = $this->createForm(WorkorderEditType::class, $workorder);
+        $form = $this->createForm(WorkorderType::class, $workorder, [
+            'userParams' => $userParams,
+            
+        ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Contrôle BT terminé 
+            $machine = $workorder->getMachines();
+            $minute = $workorder->getDurationMinute();
+            $hour = $workorder->getDurationHour();
+            $day = $workorder->getDurationDay();
+            $request = $workorder->getRequest();
+            $implementation = $workorder->getImplementation();
+
+            if (($minute > 0 || $hour > 0 || $day > 0) && !empty($request)  && !empty($implementation) && !empty($machine)) {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'TERMINE']);
+            } else {
+                $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
+            }
+            $workorder->setWorkorderStatus($status);
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -186,6 +257,26 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Affichage de la liste des pièces pour selection
+     *
+     * @Route("/addPart/{id}/{mode?}", name="work_order_add_part", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function addPart(Request $request, int $id, ?string $mode = null): Response
+    {
+        $session = $this->requestStack->getSession();
+
+        $session->remove('panier');
+        $session->remove('data');
+
+        return $this->redirectToRoute('part_index', [
+            'mode' => $mode,
+            'documentId' => $id,
+        ]);
+    }
+
+
+    /**
      * @Route("/{id}", name="work_order_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -200,13 +291,16 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Cloture des BT. Et calcul de la prochaine date pour les BT préventifs.
+     * 
      * @Route("/closing/{id}", name="work_order_closing")
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function closing(Workorder $workorder): RedirectResponse
     {
-        // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
+
         if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
+            // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
             if ($workorder->getPreventive()) {
                 // récupération du template
                 $templateNumber = $workorder->getTemplateNumber();
@@ -229,7 +323,7 @@ class WorkorderController extends AbstractController
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
             $workorder->setWorkorderStatus($status);
         } else {
-            $this->addFlash('error', 'Il manque des infos de durée d\'intervention');
+            $this->addFlash('error', 'Merci mon lapin, de compléter les infos de durée d\'intervention !');
             return $this->redirectToRoute('work_order_edit', [
                 'id' => $workorder->getId(),
             ], Response::HTTP_SEE_OTHER);
@@ -246,17 +340,33 @@ class WorkorderController extends AbstractController
      * @Security("is_granted('ROLE_USER')")
      * 
      */
-    public function pdfAction(\Knp\Snappy\Pdf $knpSnappyPdf, Workorder $workorder)
+    public function pdfAction(Workorder $workorder)
     {
-        $html = $this->renderView('workorder/show.html.twig', [
-            'workorder' => $workorder,
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('workorder/print.html.twig', [
+            'workorder' => $workorder
         ]);
 
-        $this->pdf->setOption('enable-local-file-access', true);
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Courier');
 
-        return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html),
-            'test.pdf'
-        );
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($options);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        //dd($dompdf);
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream();
+
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

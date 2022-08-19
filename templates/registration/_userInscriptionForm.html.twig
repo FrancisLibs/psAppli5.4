@@ -1,48 +1,58 @@
 {{ form_start(registrationForm) }}   
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-8 col-md-5">
+            {{ form_errors(registrationForm.username) }}
             {{ form_label(registrationForm.username) }}
             {{ form_widget(registrationForm.username) }}
         </div>
-        <div class="col-6">
+        <div class="col-6 col-sm-5 col-md-3">
+            {{ form_errors(registrationForm.organisation) }}
             {{ form_label(registrationForm.organisation) }}
             {{ form_widget(registrationForm.organisation) }}
+        </div> 
+         <div class="col-6 col-sm-5 col-md-3">
+            {{ form_errors(registrationForm.service) }}
+            {{ form_label(registrationForm.service) }}
+            {{ form_widget(registrationForm.service) }}
         </div>        
     </div>
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
             {{ form_label(registrationForm.firstName) }}
             {{ form_widget(registrationForm.firstName) }}
         </div>
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
             {{ form_label(registrationForm.lastName) }}  
             {{ form_widget(registrationForm.lastName) }}  
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
+            {{ form_errors(registrationForm.plainPassword) }}
             {{ form_label(registrationForm.plainPassword) }}
             {{ form_widget(registrationForm.plainPassword) }}
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
+            {{ form_errors(registrationForm.email) }}
             {{ form_label(registrationForm.email) }}
             {{ form_widget(registrationForm.email) }}
         </div>
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
+            {{ form_errors(registrationForm.phoneNumber) }}
             {{ form_label(registrationForm.phoneNumber) }}
             {{ form_widget(registrationForm.phoneNumber) }}        
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-7 col-md-6 col-lg-5 col-xl-4">
             {{ form_label(registrationForm.imageFile) }}
             {{ form_widget(registrationForm.imageFile) }}        
         </div>                 
     </div>
-    <div class="row">
-        <div class="col-4 text-center">
+    <div class="row mb-5">
+        <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3 text-center">
             <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
         </div>
     </div>

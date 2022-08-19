@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\OrganisationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrganisationRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=OrganisationRepository::class)
+ * @UniqueEntity(fields={"designation"}, message="Il y a déjà une organisation avec ce nom")
  */
 class Organisation
 {
@@ -51,6 +53,16 @@ class Organisation
      */
     private $templates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="organisation")
+     */
+    private $deliveryNotes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StockValue::class, mappedBy="organisation", orphanRemoval=true)
+     */
+    private $stockValues;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -58,6 +70,9 @@ class Organisation
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->delivryNotes = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
+        $this->stockValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,5 +241,64 @@ class Organisation
 
         return $this;
     }
-   
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getOrganisation() === $this) {
+                $deliveryNote->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StockValue>
+     */
+    public function getStockValues(): Collection
+    {
+        return $this->stockValues;
+    }
+
+    public function addStockValue(StockValue $stockValue): self
+    {
+        if (!$this->stockValues->contains($stockValue)) {
+            $this->stockValues[] = $stockValue;
+            $stockValue->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockValue(StockValue $stockValue): self
+    {
+        if ($this->stockValues->removeElement($stockValue)) {
+            // set the owning side to null (unless already changed)
+            if ($stockValue->getOrganisation() === $this) {
+                $stockValue->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }   
 }

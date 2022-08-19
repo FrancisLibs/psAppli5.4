@@ -14,11 +14,10 @@ use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-use function PHPUnit\Framework\isNull;
 
 /**
  * @Route("/preventive")
@@ -57,6 +56,8 @@ class PreventiveController extends AbstractController
     {
         // Vidange de la session s'il reste ds machines dedans
         $this->emptyMachineCart($request);
+        $this->emptySearchMachine($request);
+
 
         $data = new SearchTemplate();
 
@@ -68,13 +69,14 @@ class PreventiveController extends AbstractController
         $form->handleRequest($request);
 
         $templates = $this->templateRepository->findTemplates($data);
-        // if ($request->get('ajax')) {
-        //     return new JsonResponse([
-        //         'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
-        //         'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
-        //         'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
-        //     ]);
-        // }
+
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
+                'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
+                'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
+            ]);
+        }
         return $this->render('preventive/index.html.twig', [
             'templates' =>  $templates,
             'form'  =>  $form->createView(),
@@ -113,7 +115,6 @@ class PreventiveController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Contrôle si machine en session
             $machines = $session->get('machines', []);
             if (!empty($machines)) {
@@ -123,7 +124,9 @@ class PreventiveController extends AbstractController
                 }
 
                 // Suppression des machines en session
-                $session->remove('machines');
+                $this->emptyMachineCart($request);
+                // Suppression de la classe de recherche en session
+                $this->emptySearchMachine($request);
 
                 // Numéro de template
                 $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
@@ -138,7 +141,7 @@ class PreventiveController extends AbstractController
 
                 $this->manager->persist($template);
                 $this->manager->flush();
-                
+
                 return $this->render('preventive/show.html.twig', [
                     'template' => $template
                 ]);
@@ -217,7 +220,6 @@ class PreventiveController extends AbstractController
      * @Route("/machine/remove/{id}/{machine}", name="preventive_machine_remove", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request 
      * @return Response 
      */
     public function removeMachine(Template $template, Machine $machine)
@@ -226,22 +228,31 @@ class PreventiveController extends AbstractController
         $template->removeMachine($machine);
         $this->manager->flush();
 
-        return $this->redirectToRoute('template_edit', [
+        return $this->redirectToRoute(
+            'template_edit',
+            [
                 'id' => $template->getId()
             ],
             Response::HTTP_SEE_OTHER
         );
     }
 
-    public function emptyMachineCart(Request $request): Response
+    public function emptyMachineCart()
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
-        foreach ($machines as $cle => $value) {
+        foreach ($machines as $cle) {
             unset($machines[$cle]);
         }
         $session->set('machines', $machines);
-        return $this->redirectToRoute('template_index');
+        return;
+    }
+
+    public function emptySearchMachine(Request $request)
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove('dataMachinePreventive');
+        return;
     }
 
     /**
@@ -256,5 +267,47 @@ class PreventiveController extends AbstractController
         }
 
         return $this->redirectToRoute('template_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("copy_template/{id}", name="copy_template", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function copyTemplate(Template $template): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+
+        $newTemplate = new Template();
+
+        $newTemplate->setCreatedAt(new \DateTime())
+            ->setDaysBefore($template->getDaysBefore())
+            ->setDaysBeforeLate($template->getDaysBeforeLate())
+            ->setDuration($template->getDuration())
+            ->setOrganisation($organisation)
+            ->setPeriod($template->getPeriod())
+            ->setRemark($template->getRemark())
+            ->setRequest($template->getRequest())
+            ->setSliding($template->getSliding())
+            ->setUser($user)
+            ->setActive(true)
+            ->setNextDate(new \DateTime());
+
+        // Numéro de template
+        $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
+        if ($lastTemplate) {
+            $lastNumber = $lastTemplate->getTemplateNumber();
+            $newTemplate->setTemplateNumber($lastNumber + 1);
+        } else {
+            $newTemplate->setTemplateNumber(1);
+        }
+
+        $this->manager->persist($newTemplate);
+        $this->manager->flush();
+
+
+        return $this->redirectToRoute('template_edit', [
+            'id'    =>  $newTemplate->getId(),
+        ]);
     }
 }

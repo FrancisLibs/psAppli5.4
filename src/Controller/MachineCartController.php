@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,21 +17,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class MachineCartController extends AbstractController
 {
-    private $machineRepository;
-    private $templateRepository;
-    private $manager;
     private $requestStack;
 
-    public function __construct(
-        MachineRepository $machineRepository,
-        EntityManagerInterface $manager,
-        RequestStack $requestStack,
-        TemplateRepository $templateRepository
-    ) {
-        $this->machineRepository = $machineRepository;
-        $this->manager = $manager;
+    public function __construct(RequestStack $requestStack)
+    {
         $this->requestStack = $requestStack;
-        $this->TemplateRepository = $templateRepository;
     }
 
     /**
@@ -40,13 +29,12 @@ class MachineCartController extends AbstractController
      * @Route("/add/{id}/{mode}/{documentId?}", name="add_machine_to_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request   $request
      * @param int       $id   // L'id de la machine à ajouter
      * @param string    $mode      
      * 
      * @return redirectToRoute
      */
-    public function addMachine(Request $request, int $id, $mode = null, ?int $documentId): Response
+    public function addMachine(int $id, string $mode = null, ?int $documentId = null): Response
     {
         $session = $this->requestStack->getSession();
         $machines = $session->get('machines', []);
@@ -55,6 +43,11 @@ class MachineCartController extends AbstractController
         }
 
         $session->set('machines', $machines);
+        if ($mode == "newWorkorder") {
+            return $this->redirectToRoute('work_order_new', [
+                'mode' => $mode,
+            ]);
+        }
 
         return $this->redirectToRoute('machine_index', [
             'mode' => $mode,
@@ -80,14 +73,14 @@ class MachineCartController extends AbstractController
         if ($mode == 'newPreventive') {
             return $this->redirectToRoute('template_new');
         }
-        if ($mode == 'editPreventive') {
+        if ($mode == 'selectPreventive') {
             return $this->redirectToRoute('machine_index', [
                 'documentId' => $documentId,
                 'mode' => $mode,
             ]);
         }
         return $this->redirectToRoute('machine_index', [
-            'mode'  =>  "editPreventive",
+            'mode'  =>  $mode,
             'templateId'   =>  $documentId,
         ]);
     }

@@ -12,10 +12,10 @@ class SearchUser
     public $page = 1;
 
     /**
-     * Le nom de l'utilisateur
+     * Utilisateur
      *
      * @var string
      */
-    public $username;
+    public $user;
 
 }

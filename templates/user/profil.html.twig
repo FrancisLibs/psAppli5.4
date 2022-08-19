@@ -15,16 +15,16 @@
         <div class="col-8 offset-2">
             <div class="row align-items-center">
                 <div class="col-5">
-                    
                     <p class="profil-font-size">Organisation : {{ user.organisation.designation}}</p>
                     <p class="profil-font-size">Nom : {{ user.firstName ~ " " ~ user.lastName}}</p>
                     <p class="profil-font-size">Email : {{ user.email }}</p>
                     <p class="profil-font-size">Téléphone : {{ user.phoneNumber }}</p>
-                    <p class="profil-font-size">Roles :<br>
+                    <p class="profil-font-size">Roles :
                     {% for role in user.roles %}
                         {{ role }}<br>
                     {% endfor %}
                     </p>
+                    <p class="profil-font-size">BT : {{ workorder|length }}<br>
                 </div>
                 <div class="col-4">
                     {% if user.imageName %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-lg-9">
+            <section class="col-12">
+                <h2 class="mb-5 text-primary">Messagerie</h2>
+                <h4 class="mb-5">Titre : {{message.title}}</h4>
+                <p class="mb-5">Message de {{ message.sender.username}}</p>
+                <p>{{message.createdAt|date}}</p>
+                <div>Message : {{ message.message }}</div>
+
+                <a href="{{ path("respond", {'id': message.id}) }}" class="btn btn-primary mt-5">Répondre</a>
+                <a class="btn btn-primary mt-5" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                Voir mes dossiers
+                </a>
+                <a href="{{ path("received") }}" class="btn btn-primary mt-5">Retour à la boite de réception</a>
+            </section>
+
+            <section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="list-group">
+                        <a href="{{ path("messages") }}" class="list-group-item 
+                        list-group-item-action">Accueil</a>
+                    </div>
+                    <div class="list-group">
+                        <a href="{{ path("received") }}" class="list-group-item 
+                        list-group-item-action">Boite de réception</a>
+                    </div>
+                    <div class="list-group">
+                        <a href="{{ path("sent") }}" class="list-group-item 
+                        list-group-item-action">Eléments envoyés</a>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}

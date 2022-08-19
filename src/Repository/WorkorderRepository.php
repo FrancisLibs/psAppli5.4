@@ -48,8 +48,8 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
+        //dd($search->status->getId());
         $query = $this->createQueryBuilder('w')
-            ->orderBy('w.id', 'DESC')
             ->select('w', 'm', 'u', 'o', 's')
             ->join('w.machines', 'm')
             ->join('w.user', 'u')
@@ -57,12 +57,20 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $search->organisation)
+            ->orderBy('w.id', 'DESC')
         ;
 
+        if (!empty($search->id)) {            
+            $query = $query
+                ->andWhere('w.id = :id')
+                ->setParameter('id', $search->id);
+        }
+
         if (!empty($search->machine)) {
+            $machine = strtoupper($search->machine);
             $query = $query
                 ->andWhere('m.designation LIKE :machine')
-                ->setParameter('machine', "%{$search->machine}%");
+                ->setParameter('machine', "%{$machine}%");
         }
 
         if (!empty($search->user)) {
@@ -72,9 +80,22 @@ class WorkorderRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->status)) {
+            $status = $search->status->getId();
             $query = $query
-                ->andWhere('s.id = :status')
-                ->setParameter('status', $search->status);
+                ->andWhere('w.workorderStatus <> 5')
+                ->andWhere('w.workorderStatus = :status')
+                ->setParameter('status', $status);
+        }
+
+        if (empty($search->closed)) {
+            $query = $query
+                ->andWhere('w.workorderStatus <> 5');
+        }
+
+        if (!empty($search->closed)) {
+            $query = $query
+                ->andWhere('w.workorderStatus = :cloture')
+                ->setParameter('cloture', 5 );
         }
 
         if (!empty($search->preventive)) {
@@ -100,8 +121,11 @@ class WorkorderRepository extends ServiceEntityRepository
     public function countPreventiveWorkorder($templateNumber){
         return $this->createQueryBuilder('w')
         ->select('count(w.id)')
+        ->join('w.workorderStatus', 's')
         ->andWhere('w.templateNumber = :val')
         ->setParameter('val', $templateNumber)
+        ->andWhere('s.name <> :status')
+        ->setParameter('status', 'CLOTURE')
         ->getQuery()
         ->getSingleScalarResult();
     }
@@ -114,10 +138,13 @@ class WorkorderRepository extends ServiceEntityRepository
     public function findAllPreventiveWorkorders($organisationId)
     {
         return $this->createQueryBuilder('w')
+            ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisationId)
             ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true)
+            ->andWhere('s.name <> :status')
+            ->setParameter('status', 'CLOTURE')
             ->getQuery()
             ->getResult();
     }

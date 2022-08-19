@@ -29,7 +29,7 @@ class TemplateRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('t')
             ->select('t', 'm')
-            ->join('t.machines', 'm')
+            ->leftJoin('t.machines', 'm')
             ->orderBy('t.createdAt', 'ASC')
             ->andWhere('t.organisation = :val')
             ->setParameter('val', $search->organisation)
@@ -38,9 +38,11 @@ class TemplateRepository extends ServiceEntityRepository
         ;
 
         if (!empty($search->machine)) {
+            $machine = strtoupper($search->machine);
+            // dd($machine);
             $query = $query
                 ->andWhere('m.designation LIKE :machine')
-                ->setParameter('machine', "%{$search->machine}%");
+                ->setParameter('machine', "%{$machine}%");
         }
 
         $query = $query->getQuery();

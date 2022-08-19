@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Organisation;
+use App\Entity\Service;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -23,13 +24,17 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Identifiant',
+                'attr' => ['placeholder' => 'Identifiant...'],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe',
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'placeholder' => 'Mot de passe...'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',
@@ -67,11 +72,16 @@ class RegistrationFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
             ])
+            ->add('service', EntityType::class, [
+                'class' => Service::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => true,
+            ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'label' => 'Photo',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

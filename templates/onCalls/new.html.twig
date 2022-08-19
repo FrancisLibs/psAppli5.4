@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau rapport d'astreinte{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-lg-8 col-xl-7">
+            <header class="row mb-3 justify-content-start align-items-top flex-wrap">
+                <div class="col-7 col-md-6 col-lg-7">
+                    <h3 class="text-primary">Nouveau rapport d'astreinte</h3>
+                </div>
+                <div class="col-4 d-flex justify-content-start align-items-center flex-wrap">
+                    <a class="btn btn-primary btn-sm" href="{{ path('onCall_index') }}" role="button">Liste des astreintes</a>
+                </div>
+            </header>
+            <section class="row align-items-start">
+                <div class="col-12 mb-4 d-flex justify-content-start">
+                    <div class="col-11">
+                        {{ include('onCalls/_form.html.twig') }}
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}
+

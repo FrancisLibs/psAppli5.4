@@ -1,25 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gmao PS bienvenue !{% endblock %}
+{% block title %}Gmao PS Welcom ! !{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <section class="col-8 offset-2">
-            <div class="row mb-3">
-                <div class="col-3">
-                    <h3>BT en cours</h3>
-                </div>
-                <div class="col-2">
-                    <a href="{{ path('work_order_new') }}" class="btn btn-primary btn-sm">Nouveau BT</a>
+    <div class="d-flex justify-content-around mt-5 mb-3 default-top-margin">
+        <div class="default-column">
+            <div class="row">
+                <h1 class="default-tiltle d-flex justify-content-center">Gestion maintenance PS</h1>
+            </div>
+            <div class="row text-center">
+                <img class="default-logo" src="{{ asset('images/logo.png') }}" alt="Charcuterie Pierre Schmidt">            
+            </div>
+            <div class="row mt-5 ms-1 justify-content-around">
+                <a class="btn-default" href="{{ path('part_index') }}">Pièces détachées</a>
+                <a class="btn-default" href="{{ path('machine_index') }}">Machines</a>
+                <a class="btn-default" href="{{ path('work_order_index') }}">Bons de travail</a>
+                <a class="btn-default" href="{{ path('template_index') }}">Préventif</a>
+                <a class="btn-default" href="{{ path('onCall_index') }}">Astreintes</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn-default" href="{{ path('admin') }}">Administration</a>
+                    <a class="btn-default" href="{{ path('app_register') }}">Inscription</a>
+                {% endif %}
+            </div>
+        </div>
+        <div style="width: 45%;" class="displayMd">
+            <div class="text-center default-tiltle mb-5">
+                <p>The Team</p>
+            </div>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-around flex-wrap">
+                    {% for user in users %}
+                        <div class="d-flex flex-column">
+                            {% if user.imageName %}
+                                <a href="{{ path('user_profil', {'id': user.id}) }}"><img src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}" /></a>
+                            {% else %}
+                                <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}" />
+                            {% endif %}
+                            <p class="text-center font-weight-bold">{{ user.firstName ~ " " ~ user.lastName }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% include('default/_inProgressWorkorder.html.twig') %}
-            {# display navigation #}
-            {# <div class="navigation">
-                {{ knp_pagination_render(workorders) }}
-            </div> #}
-        </section>
-        <aside class="col-2">
-        </aside>
+        </div>
     </div>
+    
 {% endblock %}
+

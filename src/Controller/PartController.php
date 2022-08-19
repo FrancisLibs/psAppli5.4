@@ -3,72 +3,130 @@
 namespace App\Controller;
 
 use App\Entity\Part;
+use App\Entity\Stock;
 use App\Form\PartType;
 use App\Data\SearchPart;
+use App\Service\PdfService;
 use App\Form\SearchPartForm;
+use App\Service\QrCodeService;
 use App\Repository\PartRepository;
+use App\Repository\StockValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DeliveryNoteRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/part")
  */
 class PartController extends AbstractController
 {
-    private $partRepository;
-    private $manager;
-    private $requestStack;
+    protected $partRepository;
+    protected $stockValueRepository;
+    protected $manager;
+    protected $requestStack;
+    protected $qrCodeService;
+    protected $deliveryNoteRepository;
+    protected $parameterBag;
 
-    public function __construct(PartRepository $partRepository, EntityManagerInterface $manager, RequestStack $requestStack)
-    {
+
+    public function __construct(
+        PartRepository $partRepository,
+        StockValueRepository $stockValueRepository,
+        EntityManagerInterface $manager,
+        RequestStack $requestStack,
+        QrCodeService $qrCodeService,
+        DeliveryNoteRepository $deliveryNoteRepository,
+        ParameterBagInterface $parameterBag
+    ) {
         $this->partRepository = $partRepository;
+        $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
+        $this->qrCodeService = $qrCodeService;
+        $this->deliveryNoteRepository = $deliveryNoteRepository;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
      * @ Liste des pièces détachées
      * 
-     * @Route("/list/{edit?}", name="part_index", methods={"GET"})
+     * @Route("/list/{mode?}/{documentId?}", name="part_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
      * @param Request $request
+     * @param int documentId
+     * @param string mode
      */
-    public function index(Request $request, $edit = null): Response
+    public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
     {
-        // Utilisation de la session pour sauvegarder l'objet de recherche
+        $user = $this->getUser();
+        $organisation =  $user->getOrganisation();
         $session = $this->requestStack->getSession();
 
-        if ($edit) {
-            $data = $session->get('data');
-        } else {
-            $data = new SearchPart();
+        $data = new SearchPart();
+
+        if ($mode == "workorderAddPart" || $mode == "newDeliveryNote" || $mode == "editDeliveryNote") {
+            $data = $session->get('data', null);
+            if (!$data) {
+                $data = new SearchPart();
+            }
         }
-        $organisation = $this->getUser()->getOrganisation();
+
         $data->organisation = $organisation;
+
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchPartForm::class, $data);
 
         $form->handleRequest($request);
-        $session->set('data', $data); // Sauvegarde de la recherche
 
+        $session->set('data', $data); // Sauvegarde de la recherche
         $parts = $this->partRepository->findSearch($data);
+
         if ($request->get('ajax')) {
             return new JsonResponse([
-                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts]),
+                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts, 'mode' => $mode, 'documentId' => $documentId]),
                 'sorting'       =>  $this->renderView('part/_sorting.html.twig', ['parts' => $parts]),
                 'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
+            ]);
+        }
+
+        if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote' || $mode == 'newDeliveryNote') {
+            $panier = $session->get('panier', []);
+            if ($panier) {
+                $panierWithData = [];
+                foreach ($panier as $id => $quantity) {
+                    $panierWithData[] = [
+                        'part' => $this->partRepository->find($id),
+                        'quantity' => $quantity,
+                    ];
+                }
+                return $this->render('part/index.html.twig', [
+                    'parts' =>  $parts,
+                    'form'  =>  $form->createView(),
+                    'mode'  =>  $mode,
+                    'items' => $panierWithData,
+                    'documentId' => $documentId,
+                ]);
+            }
+            return $this->render('part/index.html.twig', [
+                'parts' =>  $parts,
+                'form'  =>  $form->createView(),
+                'documentId' => $documentId,
+                'mode'  =>  $mode,
             ]);
         }
         return $this->render('part/index.html.twig', [
             'parts' =>  $parts,
             'form'  =>  $form->createView(),
+            'documentId' => $documentId,
+            'mode'  =>  "index",
         ]);
     }
 
@@ -80,6 +138,10 @@ class PartController extends AbstractController
     {
         $organisation = $this->getUser()->getOrganisation();
         $part = new Part();
+        $stock = new Stock();
+        $stock->setApproQte(0);
+        $part->setStock($stock);
+
         $form = $this->createForm(PartType::class, $part);
         $form->handleRequest($request);
 
@@ -90,10 +152,17 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
+
+
+            $qrCode = $this->qrCodeService->qrcode($part->getCode());
+
             $this->manager->persist($part);
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('part_show', [
+                'id' => $part->getId(),
+                'qrCode' => $qrCode,
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('part/new.html.twig', [
@@ -108,6 +177,12 @@ class PartController extends AbstractController
      */
     public function show(Part $part): Response
     {
+        if (!$part->getQrCode()) {
+            $qrCode = $this->qrCodeService->qrcode($part->getCode());
+            $part->setQrCode($qrCode);
+            $this->manager->flush();
+        }
+
         return $this->render('part/show.html.twig', [
             'part' => $part,
         ]);
@@ -125,13 +200,13 @@ class PartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $part->setCode(strtoupper($part->getCode()));
             $part->setReference(strtoupper($part->getReference()));
-            $part->setDesignation(ucfirst($part->getDesignation()));
+            $part->setDesignation(strtoupper($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
 
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_index', [
-                'edit' => true,
+            return $this->redirectToRoute('part_show', [
+                'id' => $part->getId(),
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -169,7 +244,7 @@ class PartController extends AbstractController
                 $part->getStock()->setApproQte(0);
                 $this->manager->persist($part);
             }
-            if($part->getActive() == false){
+            if ($part->getActive() == false) {
                 $part->setActive(true);
             }
         }
@@ -177,4 +252,106 @@ class PartController extends AbstractController
 
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("/reception", name="reception_part")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function reception(): Response
+    {
+        return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @ Valeur du stock de pièces détachées
+     * 
+     * @Route("/infos", name="parts_value", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function infos(): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+
+        $totalStock = $this->partRepository->findTotalStock($organisation);
+        $stockValues = $this->stockValueRepository->findStockValues($organisation);
+
+        $amounts = [];
+        $dates = [];
+
+        foreach ($stockValues as $value) {
+            $amount = $value->getValue();
+            $amounts[] = $amount;
+            $date =  $value->getDate()->format('d/m/Y');
+            $dates[] = $date;
+        }
+
+        return $this->render('part/infos_pieces.html.twig', [
+            'totalStock' => $totalStock,
+            'dates' =>  json_encode($dates),
+            'amounts' => json_encode($amounts),
+        ]);
+    }
+
+    /**
+     * @Route("/appro/{id}", name="show_appro")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function appro(Part $part)
+    {
+        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNotesAppro($part->getId());
+
+        return $this->render('part/showAppro.html.twig', [
+            'deliveryNotes' => $deliveryNotes,
+            'part' => $part,
+        ]);
+    }
+
+    /**
+     * Impession étiquette d'une pièce 
+     * 
+     * @Route("/partlabel/{id}", name="part_label")
+     * 
+     * @Security("is_granted('ROLE_USER')")
+     * 
+     * @param PdfService $pdfService
+     */
+    public function printLabel(Part $part, PdfService $pdfService): Response
+    {
+        $html = $this->renderView('prints/one_label_print.html.twig', [
+            'part' => $part,
+        ]);
+
+        $pdfService->printLabel($html);
+
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    // /**
+    //  * @Route("/action", name="part_action")
+    //  * @Security("is_granted('ROLE_ADMIN')")
+    //  */
+    // public function action(): Response
+    // {
+    //     $parts = $this->partRepository->findAll();
+    //     $partsTab = [];
+    //     foreach ($parts as $partA) {
+    //         foreach ($parts as $partB) {
+    //             $codeA = $partA->getCode();
+    //             $idA = $partA->getId();
+    //             $codeB = $partB->getCode();
+    //             $idB = $partB->getId();
+    //             if ($codeA == $codeB && $idA <> $idB) {
+    //                 $partsTab[] = $partA->getId() . " " . $partB->getId();
+    //             }
+    //         }
+    //     }
+    //     dd($partsTab);
+
+    //     $this->manager->flush();
+
+    //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }

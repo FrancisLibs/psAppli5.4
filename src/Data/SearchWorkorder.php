@@ -11,40 +11,47 @@ class SearchWorkorder
      */
     public $page = 1;
 
-    // /**
-    //  * Date de création
-    //  *
-    //  * @var dateTime
-    //  */
-    // public $createdAt;
+    /**
+     * Id
+     *
+     * @var int
+     */
+    public $id;
+    
+    /**
+     * Date de création
+     *
+     * @var dateTime
+     */
+    public $createdAt;
 
     /**
      * Machine
      *
-     * @var machine
+     * @var string
      */
     public $machine;
 
     /**
      * Utilisateur
      *
-     * @var user
+     * @var string
      */
     public $user;
 
     /**
      * Préventif
      *
-     * @var preventive
+     * @var boolean
      */
     public $preventive;
 
     /**
-     * Préventif
+     * Cloturé
      *
-     * @var closure
+     * @var boolean
      */
-    public $closure;
+    public $closed;
 
     /**
      * Status
@@ -59,4 +66,11 @@ class SearchWorkorder
      * @var string
      */
     public $organisation;
+
+    /**
+     * Demande de travail
+     *
+     * @var string
+     */
+    public $request;
 }

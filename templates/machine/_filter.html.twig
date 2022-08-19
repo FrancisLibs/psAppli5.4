@@ -1,47 +1,8 @@
-{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-    <div class="mt-1 d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.internalCode) }}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
+    <tr style="background-color: #60dd28">
+        <td>{{ form_widget(form.internalCode) }}</td>
+        <td>{{ form_widget(form.constructor) }}</td>
+        <td>{{ form_widget(form.designation) }}</td>
+        <td>{{ form_widget(form.model) }}</td>
+        <td>{{ form_widget(form.workshop) }}</td>
+    </tr>
 
-    <div class="mt-1 d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.designation) }}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-
-    <div class="mt-1 d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.constructor) }}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-    
-    <div class="mt-1 d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.model) }}
-        </div>
-        <div>
-            <button class="resetBtn btn btn-primary">Reset</button>
-        </div>
-    </div>
-
-    <div class="mt-1 d-flex">
-        <div class="filterbtn">
-            {{ form_row(form.workshop) }}
-        </div>
-    </div>
-
-    <div class="mt-2">
-        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-    </div> 
-{{ form_end(form) }}

@@ -1,0 +1,25 @@
+{% for provider in providers %}
+    <tr>
+        <td data-label="Nom" class="font_size_table">
+            {% if mode is defined %}
+                {% if mode == 'selectProvider' %}
+                    <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">{{ provider.name }}</a>
+                {% elseif mode == 'deliveryNoteChangeProv' %}
+                    <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_edit', {'id': documentId, 'providerId': provider.id}) }}">{{ provider.name }}</a>
+                {% else %}
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.name }}</a>
+                {% endif %}
+            {% else %}
+                <a class="btn btn-sm btn-primary w-50" href="{{ path('provider_show', {'id': provider.id}) }}">{{ provider.name }}</a>
+            {% endif %}
+        </td>
+        <td data-label="Code" class="text-center font_size_table">{{ provider.code ? provider.code : "-" }}</td>
+        <td data-label="Ville" class="text-center font_size_table">{{ provider.city ? provider.city : "-" }}</td>
+        <td data-label="Email" class="text-center font_size_table">{{ provider.email ? provider.email : "-" }}</td>
+        <td data-label="Téléphone" class="text-center font_size_table">{{ provider.phone ? provider.phone : "-" }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Il n'y a pas de fournisseur enregistré</td>
+    </tr>
+{% endfor %}

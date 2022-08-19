@@ -3,24 +3,26 @@
 {% block title %}Bons de travail{% endblock %}
 
 {% block body %}
-    <header class="row mt-5">
-        <div class="col-3 offset-2">
-            <h2>Bons de travail</h2>
-        </div>
-    </header>
-    <main class="row workorder-js-filter">
-        <aside class="col-2 mt-4">
-            <a class="btn btn-primary btn-sm mb-3" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
-            {% include 'workorder/_filter.html.twig' %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="col-10">
-            <div class="mt-4">
-                {% include 'workorder/_workorderList.html.twig' with {workorders: workorders} only %}
-            </div>
-            {# display navigation #}
-            <div class="navigation js-filter-pagination">
-                {% include 'workorder/_pagination.html.twig' %}
-            </div>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <header class="row mb-3 me-5 justify-content-start">
+                <div class="d-flex justify-content-start">
+                    <h3 class="text-primary">Bons de travail</h3>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
+                </div>
+            </header>
+            <section class="row js-filter">
+                <div>
+                    {% include 'workorder/_workorderList.html.twig' with {workorders: workorders, form: form} only %}
+                    {# Navigation #}
+                    <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+                        {% include 'workorder/_pagination.html.twig' %}
+                    </div>
+                </div>
+            </section>
         </article>
     </main>
 {% endblock %}

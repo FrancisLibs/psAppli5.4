@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bon de livraison{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col">
+            <section class="row justify-content-start align-items-base">
+                    <div class="col-8 col-sm-5 col-lg-4 col-xl-3">
+                        <h3 class="text-primary">Bon de livraison</h3>
+                    </div>
+                    <div class="col-10 col-sm-6 d-flex justify-content-start align-items-center">
+                        <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_index') }}" role="button">Liste BL</a>
+                        <a class="btn btn-primary btn-sm me-2" href="{{ path('delivery_note_edit', {'id': delivery_note.id}) }}">Edition</a>
+                        <a class="btn btn-warning btn-sm me-2" href="{{ path('label_print', {'id': delivery_note.id}) }}">Etiquettes</a>
+                        {# {% if is_granted('ROLE_ADMIN') %}
+                            {{ include('delivery_note/_delete_form.html.twig') }}
+                        {% endif %} #}
+                    </div>
+            </section>
+            <section class="row part-js-filter mt-5">
+                {% include "delivery_note/_show.html.twig" %}
+            </section>
+        </article>
+    </main>
+{% endblock %}

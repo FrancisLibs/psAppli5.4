@@ -3,9 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Service;
+use App\Entity\Organisation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -38,6 +41,18 @@ class UserEditType extends AbstractType
                 'label' => 'Nom',
                 'attr' => ['placeholder' => 'Nom...'],
                 'required' => true,
+            ])
+            ->add('organisation', EntityType::class, [
+                'class' => Organisation::class,
+                'choice_label' => 'designation',
+                'multiple' => false,
+                'expanded' => true,
+            ])
+            ->add('service', EntityType::class, [
+                'class' => Service::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => true,
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,

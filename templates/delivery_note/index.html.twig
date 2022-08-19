@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste BL{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col">
+            <section class="row justify-content-between">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <div class="d-flex justify-content-start align-items-base">
+                        <div class="me-5">
+                            <h3 class="text-primary">Bons de livraison</h3>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-sm mb-3" href="{{ path('delivery_note_new') }}" role="button">Nouveau bon de Livraison</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="row js-filter">
+                <div class="col-11">
+                    {% include 'delivery_note/_deliveryNoteList.html.twig' with {'delivery_notes': delivery_notes, 'form': form} only %}
+                     <div class="col-10 navigation js-filter-pagination mb-5">
+                        {% include 'delivery_note/_pagination.html.twig' %}
+                    </div>
+                </div>
+            </section>
+        </article>
+    </div>
+{% endblock %}

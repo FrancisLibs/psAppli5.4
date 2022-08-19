@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -43,19 +43,10 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setActive(true);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // // generate a signed url and email it to the user
-            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-            //     (new TemplatedEmail())
-            //         ->from(new Address('fr.libs@gmail.com', 'Gmao-Pierre-Schmidt'))
-            //         ->to($user->getEmail())
-            //         ->subject('Merci de confirmer votre inscription')
-            //         ->htmlTemplate('registration/confirmation_email.html.twig')
-            // );
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_login');
         }

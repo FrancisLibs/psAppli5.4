@@ -1,57 +1,94 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('showMachine') }}
+{% endblock %}
+
 {% block title %}Machine{% endblock %}
 
 {% block body %}
-    <div class="row mt-5 mb-2">
-        <div class="col-6 d-flex justify-content-between align-items-center">
-            <h3 class="text-primary">Machine</h3>
-            <div class="d-flex justify-content-start">
-                <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
-                <a class="btn btn-primary btn-sm mr-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
-                {% if is_granted('ROLE_ADMIN') %}
-                    {{ include('machine/_delete_form.html.twig') }}
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-6">
-            <h3 class="text-primary">Bons de travail</h3>
-        </div>
-    </div>
-
-    <article class="row">
-        <section class="col-6">
-            <div class="border border-info rounded p-2">
-                <p><strong>Code : </strong>{{ machine.internalCode }}</p>
-                <p><strong>Nom : </strong>{{ machine.designation }}</p>
-                <p><strong>Constructeur : </strong>{{ machine.constructor }}</p>
-                {% if machine.model %}
-                    <p><strong>Modèle : </strong>{{ machine.model }}</p>
-                {% endif %}
-                <p><strong>Numéro de série : </strong>{{ machine.serialNumber }}</p>
-                <p><strong>Atelier : </strong>{{ machine.workshop.name }}</p>
-            </div>
-        </section>
-        <section class="col-6">
-            <div>
-                {% if machine.workorders|length > 0 %}
-                    {{ include('machine/_workorders.html.twig') }}
-                {% else %}
-                    <span>Il n'y a aucun BT enregistré</span>
-                {% endif %}
-            </div>
-        </section>
-    </article>
-    {% if machine.parts is not empty %}
-        <div class="row">  
-            <div class="col-6 mt-3">
-                <h3 class="text-primary">Pièces détachées</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6 mt-2">
-                {{ include('machine/_parts.html.twig') }}
-            </div>
-        </div>
-    {% endif %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article>
+            <header class="row mb-3">
+                <div class="col-5 col-sm-3">
+                    <h3 class="text-primary me-5">Machine</h3>
+                </div>
+                <div class="col-7 col-md-9 d-flex justify-content-start align-items-base flex-wrap">
+                    <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
+                    <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
+                    <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
+                        {{ include('machine/_delete_form.html.twig') }}
+                    {% endif %}
+                </div>
+            </header>
+            <section class="row mt-5">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-7">
+                            <p><strong>Nom : </strong>{{ machine.designation }}</p>
+                        </div>
+                        <div class="col-5">
+                            <p><strong>Code : </strong>{{ machine.internalCode }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        {% if machine.model %}
+                            <div class="col-6">
+                                {% if machine.model %}
+                                    <p><strong>Modèle : </strong>{{ machine.model }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if machine.buyDate %}
+                            <div class="col-6">
+                                <p><strong>Date achat : </strong>{{ machine.buyDate|date('d-m-Y') }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="row mt-4">
+                        {% if machine.serialNumber %}
+                            <div class="col-6 d-flex justify-content-start">
+                                <p><strong>Numéro de série : </strong>{{ machine.serialNumber }}</p>
+                            </div>
+                        {% endif %}
+                        <div class="col-6">
+                            <p><strong>Constructeur : </strong>{{ machine.constructor }}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-7">
+                            <p><strong>Atelier : </strong>{{ machine.workshop.name }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    {# Pièces détachées liées à la machine #}
+                    {% if machine.parts is not empty %}
+                        <div class="row mt-4">  
+                            <div class="col-6 mt-3">
+                                <h3 class="text-primary">Pièces détachées</h3>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 mt-2">
+                                {{ include('machine/_parts.html.twig') }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    {% if machine.imageName %}
+                        <img style="width: 100%" src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}" />
+                    {% endif %}
+                </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

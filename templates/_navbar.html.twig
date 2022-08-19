@@ -1,15 +1,27 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand px-5" href="{{ path('home') }}">
-        <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <div class="navbar-brand d-flex justify-content-start align-items-center">
+        <a class="px-5 me-3" href="{{ path('home') }}">
+            <img src="{{ asset('images/logo.png') }}" width="100" height="60" alt="Charcuterie Pierre Schmidt">
+        </a>
+        {{ render(path('isNotRead')) }}
+    </div>
+
+    <button class="navbar-toggler me-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto">
-            <li class="nav-item mx-2">
-                <a class="nav-link" href="{{ path('part_index') }}">Pièces détachées</a>
+        <ul class="navbar-nav mx-auto align-items-center">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Pièces détachées
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('part_index') }}">Liste pièces</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
+                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Pièces en réappro</a>
+                </div>
             </li>
             <li class="nav-item mx-2">
                 <a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
@@ -17,49 +29,49 @@
             <li class="nav-item mx-2">
                 <a class="nav-link" href="{{ path('work_order_index') }}" >Bons de travail</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Divers
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('onCall_index') }}" >Astreintes</a>
+                </div>
+            </li>
             <li class="nav-item mx-2">
                 <a href="{{ path('template_index') }}" class="nav-link">Préventif</a>
             </li>
             {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item mx-2">
+                <li class="nav-item nav-item dropdown mx-2">
                     <a href="{{ path('admin') }}" class="nav-link">Administration</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ path('app_register') }}" class="nav-link">Inscription</a>
-                </li>
+                {# <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ path('part_action') }}">action</a>
+                </li> #}
             {% endif %}
+            
         </ul>
-        <div class="d-flex justify-content-center align-items-center mr-5 navbar-nav">
-            <div class="mr-3">
-                {% if app.user %}
-                    <li class="nav-item">
-                        <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
-                    </li>
-                {% endif %}
-            </div>
-            {% if app.user %}
-                <li class="navbar-nav dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if app.user.imageName %}
-                            <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                        {% else %}
-                            <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
-                        {% endif %}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
-                        </li>
-                        {# <li>
-                            <a class="dropdown-item" href="{{ path('user_password_modification', { 'id': app.user.id }) }}">Changer mot de passe</a>
-                        </li> #}
-                    </ul>
-                </li>
-            {% endif %}
-        </div>
+        <ul class="navbar-nav align-items-center">
+            <li class="nav-item me-5">
+                <a href="{{ path('app_logout') }}" class="nav-link">
+                    <img src="{{ asset('images/out.png') }}" width="30" height="30" alt="Deconnexion">
+                </a>
+            </li>
+            <li class="nav-item me-5">
+                <a href="{{ path('send_mail') }}" class="nav-link">mail</a>
+            </li>
+            <li class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% if app.user.imageName is not null %}
+                        <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
+                    {% else %}
+                        <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter')  }}" alt="Photo d'identité de {{ app.user.username }}" />
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-left" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
+                    <a class="dropdown-item text-left" href="{{ path('app_forgot_password_request') }}">Changer mot de passe</a>
+                </div>
+            </li>
+        </ul>
     </div>
 </nav>

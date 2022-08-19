@@ -14,14 +14,14 @@ class SearchTemplate
     /**
      * Machine
      *
-     * @var machine
+     * @var string
      */
     public $machine;
 
     /**
      * Organisation
      *
-     * @var organisation
+     * @var string
      */
     public $organisation;
 }

@@ -13,11 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Workorder
 {
-    // Type
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
-
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -189,6 +188,16 @@ class Workorder
      * @ORM\Column(type="integer", nullable=true)
      */
     private $daysBeforeLate;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $operationPrice;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $partsPrice;
 
     public function __construct()
     {
@@ -504,6 +513,30 @@ class Workorder
     public function setDaysBeforeLate(?int $daysBeforeLate): self
     {
         $this->daysBeforeLate = $daysBeforeLate;
+
+        return $this;
+    }
+
+    public function getOperationPrice(): ?float
+    {
+        return $this->operationPrice;
+    }
+
+    public function setOperationPrice(?float $operationPrice): self
+    {
+        $this->operationPrice = $operationPrice;
+
+        return $this;
+    }
+
+    public function getPartsPrice(): ?float
+    {
+        return $this->partsPrice;
+    }
+
+    public function setPartsPrice(?float $partsPrice): self
+    {
+        $this->partsPrice = $partsPrice;
 
         return $this;
     }

@@ -1,62 +1,71 @@
 {{ form_start(form) }}   
     <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-xl-2 mb-2">
             {{ form_errors(form.code) }} 
             {{ form_label(form.code) }}  
             {{ form_widget(form.code) }}  
         </div>
-        <div class="col-8">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-6 flex-wrap">
             {{ form_label(form.designation) }}
             {{ form_widget(form.designation) }}
         </div>
     </div>
-    <div class="col-11 border border-info rounded">
-        <p>Le code, en majuscule, est composé d'un "C" majuscule (Charcuterie), 
-        de quatre caractères du nom de la pièce et d'un numéro d'ordre de 4 chiffres. Ex : CAIMA0048, pour aimant.</p>
-    </div>
     <div class="row mb-3">
-        <div class="col-6">
+        <div class="col-10 col-sm-11 col-md-9 col-lg-8 col-xl-8 border border-info rounded ms-2">
+            <p>
+                Le code : "C" majuscule (Charcuterie), 
+                + 4 caractères du nom de la piècec + un numéro d'ordre de 4 chiffres.
+                Ex : CAIMA0048, pour aimant.
+            </p>
+        </div>
+    </div>
+    <div class="row mb-3 align-items center">
+        <div class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3">
             {{ form_label(form.reference) }}
             {{ form_widget(form.reference) }}
         </div>
+        <div class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3">
+            {{ form_label(form.provider) }}
+            {{ form_widget(form.provider) }}
+        </div>
     </div>
      <div class="row mb-3">
-        <div class="col-12">
+        <div class="col-11 col-sm-11 col-md-9 col-lg-8 col-xl-8">
             {{ form_label(form.remark) }}
             {{ form_widget(form.remark) }}
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-md-2 col-lg-2 col-xl-2">
             {{ form_errors(form.stock.place) }}
             {{ form_label(form.stock.place) }}
             {{ form_widget(form.stock.place) }}
         </div>
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-md-2 col-lg-2 col-xl-2">
             {{ form_label(form.stock.qteStock) }}
             {{ form_widget(form.stock.qteStock) }}      
         </div>
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-md-2 col-lg-2 col-xl-2">
             {{ form_label(form.stock.qteMax) }}
             {{ form_widget(form.stock.qteMax) }}
         </div>
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-md-2 col-lg-2 col-xl-2">
             {{ form_label(form.stock.qteMin) }}
             {{ form_widget(form.stock.qteMin) }}
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-5 col-sm-3 col-md-3 col-lg-2 col-xl-2">
             {{ form_label(form.stock.approQte) }}
             {{ form_widget(form.stock.approQte) }}
         </div>
-        <div class="col-3">
-            {{ form_label(form.stock.steadyPrice) }}
-            {{ form_widget(form.stock.steadyPrice) }}
+        <div class="col-5 col-sm-3 col-md-2 col-lg-2 col-xl-2">
+            {{ form_label(form.steadyPrice) }}
+            {{ form_widget(form.steadyPrice) }}
         </div>
     </div>
     <div class="row">
-        <div class="col-3 text-center">
+        <div class="col-3 col-xl-2 text-center">
             <button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
         </div>
     </div>

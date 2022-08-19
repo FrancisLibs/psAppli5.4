@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saisie Bon de Livraison{% endblock %}
+
+{% block body %}
+    <main class="row d-flex justify-content-start mt-5 mb-5 deliveryNoteRoute" 
+        data-url-deliveryNoteNumber = {{ url("save_number_in_session") }}
+        data-url-deliveryNoteDate = {{ url("save_date_in_session") }}
+    >
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-7">
+            <header class="row justify-content-start align-items-center">
+                <div class="col-7 col-sm-6 col-md-5 col-lg-6">
+                    <h3 class="text-primary">Saisie Bon de Livraison</h3>
+                </div>
+                <div class="col-4 col-sm-5 col-md-4">
+                    <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_index') }}" role="button">Listes des BL</a>
+                </div>
+            </header>
+            <section class="mt-5">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-start align-items-baseline">
+                        <h4 class="me-4 text-primary">Fournisseur : </h4>
+                        {% if provider is defined %}
+                            <div class="me-4">{{ provider.name }}</div>
+                        {% endif %}
+                        <a class="btn btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('editDeliveryNote')}}
+    
+{% endblock %}

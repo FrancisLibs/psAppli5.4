@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service index{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <header class="row mb-3 justify-content-start">
+                <div class="d-flex justify-content-start">
+                    <h3 class="text-primary">Service</h3>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('service_new') }}" role="button">Nouveau service</a>
+                </div>
+            </header>
+            <section class="col-10">
+                <div class="mt-4">
+                    {% include 'service/_serviceList.html.twig' with {services: services} only %}
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}

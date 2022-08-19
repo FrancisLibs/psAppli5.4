@@ -1,12 +1,13 @@
 <div class="row">
-    <div class="col-12">
+    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
         <table class="table table-sm table-striped">
-            <thead class="js-filter-sorting">
+            <thead>
+                {% include 'machine/_filter.html.twig' %}
                 {% include 'machine/_sorting.html.twig' %}
             </thead>
-            <tbody class="js-filter-content">
+            <tbody class="js-filter-content essai">
                 {% include 'machine/_machines.html.twig' %}
             </tbody>
         </table>
-    </div>
+    {{ form_end(form) }}
 </div>

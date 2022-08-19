@@ -1,47 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Provider index{% endblock %}
+{% block title %}Fournisseurs{% endblock %}
 
 {% block body %}
-    <h1>Fournisseurs</h1>
-
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>PostalCode</th>
-                <th>City</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for provider in providers %}
-            <tr>
-                <td>{{ provider.id }}</td>
-                <td>{{ provider.code }}</td>
-                <td>{{ provider.Name }}</td>
-                <td>{{ provider.address }}</td>
-                <td>{{ provider.postalCode }}</td>
-                <td>{{ provider.city }}</td>
-                <td>{{ provider.email }}</td>
-                <td>{{ provider.phone }}</td>
-                <td>
-                    <a href="{{ path('provider_show', {'id': provider.id}) }}">show</a>
-                    <a href="{{ path('provider_edit', {'id': provider.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('provider_new') }}">Create new</a>
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <header class="row mb-3 justify-content-start">
+                <div class="d-flex justify-content-start">
+                    <h3 class="text-primary">Fournisseurs</h3>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
+                </div>
+            </header>
+            <section class="row js-filter">
+                <div>
+                    {% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode, documentId: documentId, form: form} only %}
+                    {# Navigation #}
+                    <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+                        {% include 'provider/_pagination.html.twig' %}
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}

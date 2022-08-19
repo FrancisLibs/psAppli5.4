@@ -22,7 +22,7 @@ class Provider
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -59,9 +59,20 @@ class Provider
      */
     private $code;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="provider")
+     */
+    private $deliveryNotes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activity;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,12 +82,12 @@ class Provider
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
@@ -179,6 +190,48 @@ class Provider
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getProvider() === $this) {
+                $deliveryNote->setProvider(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getActivity(): ?string
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?string $activity): self
+    {
+        $this->activity = $activity;
 
         return $this;
     }

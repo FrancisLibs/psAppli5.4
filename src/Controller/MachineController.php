@@ -44,11 +44,14 @@ class MachineController extends AbstractController
      * 
      * @return  Response
      */
-    public function index(Request $request, string $mode = null, ?int $documentId): Response
-    { 
+    public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
+    {
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
+        if ($mode == "newWorkorder") {
+            $session->remove('machines');
+        }
         // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
         if ($mode == "selectPreventive" || $mode == 'editPreventive') {
@@ -60,13 +63,25 @@ class MachineController extends AbstractController
                 }
             }
         }
+        // Reprise de l'ancienne recherche lors de la selection des machines pour un préventif
+        $dataMachinePreventive = $session->get('dataMachinePreventive');
 
         $data = new SearchMachine();
+
+        if ($mode == "selectPreventive" && $dataMachinePreventive) {
+            $data = $dataMachinePreventive;
+        }
+
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
-        if ($request->get('ajax') && $mode == 'select') {
+
+        if ($mode == "selectPreventive") { // Sauvegarde de la classe de tri des machines
+            $session->set('dataMachinePreventive', $data);
+        }
+
+        if ($request->get('ajax') && ($mode == 'newWorkorder' || $mode == null)) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('machine/_machines.html.twig', ['machines' => $machines, 'mode' => $mode]),
                 'sorting'       =>  $this->renderView('machine/_sorting.html.twig', ['machines' => $machines]),
@@ -97,11 +112,12 @@ class MachineController extends AbstractController
                 'pagination'    =>  $this->renderView('machine/_pagination.html.twig', ['machines' => $machines]),
             ]);
         }
+
         return $this->render('machine/index.html.twig', [
-            'machines'      =>  $machines,
-            'form'          =>  $form->createView(),
-            'mode'          =>  $mode,
-            'documentId'    =>  $documentId,
+            'machines'          =>  $machines,
+            'form'              =>  $form->createView(),
+            'mode'              =>  $mode,
+            'documentId'        =>  $documentId,
             'machinesWithData'  =>  $machinesWithData,
 
         ]);
@@ -118,8 +134,11 @@ class MachineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $machine->setCreatedAt((new \Datetime()));
             $machine->setStatus(true);
             $machine->setInternalCode(strtoupper($machine->getInternalCode()));
+            $machine->setConstructor(strtoupper($machine->getConstructor()));
+            $machine->setDesignation(mb_strtoupper($machine->getDesignation()));
             $machine->setActive(true);
             $this->manager->persist($machine);
             $this->manager->flush();
@@ -145,6 +164,18 @@ class MachineController extends AbstractController
     }
 
     /**
+     * @Route("/show/Workorder/{id}", name="machine_workorders", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function machine_workorder(Machine $machine): Response
+    {
+
+        return $this->render('machine/workorders.html.twig', [
+            'machine' => $machine,
+        ]);
+    }
+
+    /**
      * @Route("/edit/{id}", name="machine_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
@@ -154,9 +185,14 @@ class MachineController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $machine->setInternalCode(strtoupper($machine->getInternalCode()));
+            $machine->setConstructor(strtoupper($machine->getConstructor()));
+            $machine->setDesignation(mb_strtoupper($machine->getDesignation()));
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('machine_show', [
+                'id' => $machine->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('machine/edit.html.twig', [
@@ -178,5 +214,65 @@ class MachineController extends AbstractController
         }
 
         return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/copy/{id}", name="machine_copy", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function COPY(Request $request, Machine $machine): Response
+    {
+        $newMachine = new Machine();
+
+        $newMachine = clone $machine;
+
+        $form = $this->createForm(MachineType::class, $newMachine);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $newMachine->setCreatedAt(new \Datetime());
+
+            $manager = $this->getDoctrine()->getManager();
+
+            $manager->persist($newMachine);
+            $manager->flush();
+
+            return $this->redirectToRoute(
+                'machine_show',
+                [
+                    'id' => $newMachine->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
+            );
+        }
+
+        return $this->renderForm('machine/edit.html.twig', [
+            'machine' => $machine,
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/action", name="machine_action", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function action(): Response
+    {
+        $machines = $this->machineRepository->findAll();
+        foreach ($machines as $machine) {
+            $machine->setConstructor(
+                strtoupper($machine->getConstructor())
+            );
+            $machine->setDesignation(
+                mb_strtoupper($machine->getDesignation())
+            );
+
+            $this->manager->persist($machine);
+        }
+        $this->manager->flush();
+
+        return $this->redirectToRoute('machine_index');
     }
 }

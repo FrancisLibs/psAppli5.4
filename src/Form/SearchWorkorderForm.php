@@ -11,7 +11,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
@@ -20,6 +22,17 @@ class SearchWorkorderForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('createdAt', DateType::class, [
+                'widget' => 'single_text',
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Date']
+            ])
+            ->add('id', NumberType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Num.']
+            ])
             ->add('machine', TextType::class, [
                 'label'     => false,
                 'required'  => false,
@@ -32,6 +45,11 @@ class SearchWorkorderForm extends AbstractType
                 'required'  => false,
                 'placeholder' => 'Technicien...',
             ])
+            ->add('request', TextType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Travail...']
+            ])
             ->add('status', EntityType::class, [
                 'class'     => WorkorderStatus::class,
                 'choice_label'   =>  'name',
@@ -43,28 +61,10 @@ class SearchWorkorderForm extends AbstractType
                 'label'     => 'Préventif',
                 'required'  => false,
             ])
-            ->add('closure', CheckboxType::class, [
+            ->add('closed', CheckboxType::class, [
                 'label'     => 'Cloturé',
                 'required'  => false,
-            ])
-        ;
-
-    // Préselection des dates et temps du BT
-        // $builder->addEventListener(
-        //     FormEvents::PRE_SET_DATA,
-        //     function (FormEvent $event) {
-        //         $form = $event->getData();
-        //         // Preset de startTime
-        //         if (is_null($form->getStartDate())) $form->setStartDate(new \DateTime('now'));
-        //         if (is_null($form->getStartTime())) $form->setStartTime(new \DateTime('now'));
-        //         if (is_null($form->getEndDate()))   $form->setEndDate(new \DateTime('now'));
-        //         if (is_null($form->getDurationDay()))   $form->setDurationDay(0);
-        //         if (is_null($form->getDurationHour()))   $form->setDurationHour(0);
-        //         if (is_null($form->getDurationMinute()))   $form->setDurationMinute(0);
-        //         //if (is_null($form->getEndTime())) $form->setEndDate(new \DateTime('21-01-01'));
-
-        //     }
-        // );
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

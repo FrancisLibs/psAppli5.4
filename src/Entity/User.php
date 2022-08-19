@@ -42,7 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank
      */
     private $password;
 
@@ -101,14 +100,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     private $imageFile;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
      */
     private $imageName;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTimeInterface|null
      */
@@ -119,10 +118,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private $templates;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Connexion::class, mappedBy="user")
+     */
+    private $connexions;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNote::class, mappedBy="user")
+     */
+    private $deliveryNotes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $service;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
+     */
+    private $sent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="recipient", orphanRemoval=true)
+     */
+    private $received;
+
+    /**
+     * @ORM\OneToMany(targetEntity=OnCall::class, mappedBy="user")
+     */
+    private $onCalls;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->connexions = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
+        $this->sent = new ArrayCollection();
+        $this->received = new ArrayCollection();
+        $this->oncalls = new ArrayCollection();
     }
 
     /**
@@ -414,6 +454,180 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
                 $template->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Connexion[]
+     */
+    public function getConnexions(): Collection
+    {
+        return $this->connexions;
+    }
+
+    public function addConnexion(Connexion $connexion): self
+    {
+        if (!$this->connexions->contains($connexion)) {
+            $this->connexions[] = $connexion;
+            $connexion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConnexion(Connexion $connexion): self
+    {
+        if ($this->connexions->removeElement($connexion)) {
+            // set the owning side to null (unless already changed)
+            if ($connexion->getUser() === $this) {
+                $connexion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNote[]
+     */
+    public function getDeliveryNotes(): Collection
+    {
+        return $this->deliveryNotes;
+    }
+
+    public function addDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if (!$this->deliveryNotes->contains($deliveryNote)) {
+            $this->deliveryNotes[] = $deliveryNote;
+            $deliveryNote->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
+    {
+        if ($this->deliveryNotes->removeElement($deliveryNote)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNote->getUser() === $this) {
+                $deliveryNote->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Messages[]
+     */
+    public function getSent(): Collection
+    {
+        return $this->sent;
+    }
+
+    public function addSent(Messages $sent): self
+    {
+        if (!$this->sent->contains($sent)) {
+            $this->sent[] = $sent;
+            $sent->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSent(Messages $sent): self
+    {
+        if ($this->sent->removeElement($sent)) {
+            // set the owning side to null (unless already changed)
+            if ($sent->getSender() === $this) {
+                $sent->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Messages[]
+     */
+    public function getReceived(): Collection
+    {
+        return $this->received;
+    }
+
+    public function addReceived(Messages $received): self
+    {
+        if (!$this->received->contains($received)) {
+            $this->received[] = $received;
+            $received->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceived(Messages $received): self
+    {
+        if ($this->received->removeElement($received)) {
+            // set the owning side to null (unless already changed)
+            if ($received->getRecipient() === $this) {
+                $received->setRecipient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Oncall[]
+     */
+    public function getOncalls(): Collection
+    {
+        return $this->oncalls;
+    }
+
+    public function addOncall(Oncall $oncall): self
+    {
+        if (!$this->oncalls->contains($oncall)) {
+            $this->oncalls[] = $oncall;
+            $oncall->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOncall(Oncall $oncall): self
+    {
+        if ($this->oncalls->removeElement($oncall)) {
+            // set the owning side to null (unless already changed)
+            if ($oncall->getUser() === $this) {
+                $oncall->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

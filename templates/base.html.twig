@@ -7,52 +7,73 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet"> 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-        
+        <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet"> 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <meta name="viewport" content="initial-scale=1" />
+
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous" defer></script>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
 
     <body>
-        {% if app.request.get('_route') != 'app_login' %}
-            {% include '_navbar.html.twig' %}
+        {% if app.request.get('_route') != 'app_login' 
+            and app.request.get('_route') != 'home' 
+            and app.request.get('_route') != 'app_forgot_password_request'
+            and app.request.get('_route') != 'app_check_email'
+            and app.request.get('_route') != 'app_reset_password'
+        %}
+            <nav>
+                {% include '_navbar.html.twig' %}
+            </nav>
         {% endif %}
         {% if app.request.get('_route') == 'app_login' %}
-            <div class="container-fluid header">
+            <main class="login">
+        {% elseif app.request.get('_route') == 'home' %}
+            <main class="default">
         {% else %}
-            <div class="container-fluid">
+            <main>
         {% endif %}
-        <!-- Page Content -->
-        
-            <div class="row">
-                <div class="col-md-12">
-                    {% for flash_message in app.session.flashBag.get('success') %}
-                        <div class="alert alert-success" role="alert">
-                            <strong>Good job !</strong> {{ flash_message }}
-                        </div>
-                    {% endfor %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for flash_message in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success" role="alert">
+                                <strong>Good job !</strong> {{ flash_message }}
+                            </div>
+                        {% endfor %}
 
-                    {% for flash_message in app.session.flashBag.get('error') %}
-                        <div class="alert alert-danger" role="alert">
-                            <strong>Oops !</strong> {{ flash_message }}
-                        </div>
-                    {% endfor %}
+                        {% for flash_message in app.session.flashBag.get('error') %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Oops !</strong> {{ flash_message }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
+                <section class="row">
+                    <div class="col-md-12">
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </section>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% block body %}
-                    {% endblock %}
-                </div>
-            </div>
-        </div>
-        <!-- /.container -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+        </main>
+          
+        <footer>
+            {% include '_footer.html.twig' %}
+        </footer>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </body>
-    </html>
+</html>

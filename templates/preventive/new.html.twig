@@ -3,50 +3,69 @@
 {% block title %}Nouveau bon de travail{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-3 offset-2 d-flex justify-content-between align-items-center">
-            <h2>Nouveau BT préventif</h2>
-            {# <a class="btn btn-primary btn-sm" href="{{ path('work_order_index') }}" role="button">Listes des BT</a> #}
-        </div>
-        <div class="col-3 offset-2 text-right">
-            <h5>{{ template.createdAt|date('d-m-Y') }}</h5>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-8 offset-2 mb-4">
-            <div class="row mt-2 d-flex align-items-baseline">
-                <div class="col-2 text-primary">
-                    <h4>Machine</h4>
+    <main class="d-flex justify-content-start mt-5 mb-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12">
+            <header class="d-flex justify-content-start align-items-center">
+                <div>
+                    <h3 class="text-primary me-5">Nouveau BT préventif</h3>
                 </div>
-                <div class="col-2">
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button">Choix Machine(s)</a>
+                <div>
+                    <a class="btn btn-primary btn-sm" href="{{ path('work_order_index') }}" role="button">Listes des BT</a>
                 </div>
-                {% if machinesWithData is defined %}
-                    <div class="col-8">
-                        <div>
-                            <div class="d-flex flex-wrap justify-content-start mr-2 p-2 mb-2 ">
+            </header>
+            <section class="row mt-5">
+                <div class="col-12 col-lg-10 col-xl-7">
+                    <div class="row">
+                        <div class="col-5 col-sm-4 col-lg-3 text-primary">
+                            <h4>Machine(s)</h4>
+                        </div>
+                        <div class="col-7 col-sm-4 col-lg-3">
+                            <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button">Choix Machine(s)</a>
+                        </div>
+                        {% if machinesWithData is not empty and machinesWithData is defined %}
+                            <div style="background: #e3fafd;" class="rounded p-2">
+                                <div class="row mb-3">
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                        <span class="fw-bold">Code</span>
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
+                                        <span class="fw-bold">Désignation</span>
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
+                                        <span class="fw-bold">Action</span>
+                                    </div>
+                                </div>
                                 {% for machine in machinesWithData %}
-                                    <div class="mr-3 border-dark border rounded p-1 mb-2">
-                                        {{ machine.internalCode }} {{ machine.designation}}
-                                        <a href="{{ path('remove_machine_from_cart', 
-                                            {'id': machine.id, 'mode': 'newPreventive'}) }}" 
-                                            style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
-                                            Supp
-                                        </a>
+                                    <div class="row mb-1">
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                            <span>{{ machine.internalCode }}</span>
+                                        </div>
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
+                                            <span>{{ machine.designation}}</span>
+                                        </div>
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
+                                            <span><a href="{{ path('remove_machine_from_cart', 
+                                                {'id': machine.id, 'mode': 'newPreventive'}) }}" 
+                                                style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
+                                                Supp
+                                            </a></span>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
-                {% endif %}
-            </div>
-            {{ include('preventive/_form.html.twig') }}
-        </div>
-    </div>
+                    {{ include('preventive/_form.html.twig') }}
+                </div>
+            </section>
+        </article>
+    </main>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('newWorkorder') }}
 {% endblock %}
 
 

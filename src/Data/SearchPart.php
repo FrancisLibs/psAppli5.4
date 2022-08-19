@@ -45,4 +45,13 @@ class SearchPart
      * @var string
      */
     public $place;
+
+    /**
+     * Quantité en stock
+     * 
+     * @var int
+     */
+    public $qteStock;
+
+
 }

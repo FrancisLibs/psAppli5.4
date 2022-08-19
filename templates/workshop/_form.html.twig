@@ -1,6 +1,7 @@
 {{ form_start(form) }}   
     <div class="row mb-4">
         <div class="col-5">
+            {{ form_errors(form.name) }}
             {{ form_label(form.name) }}  
             {{ form_widget(form.name) }}  
         </div>

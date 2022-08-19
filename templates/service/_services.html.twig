@@ -1,0 +1,25 @@
+<table class="table">
+    <thead>
+        <tr class="sorting">
+            <th>Id</th>
+            <th>Name</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for service in services %}
+        <tr>
+            <td data-label="Numéro">{{ service.id }}</td>
+            <td data-label="Nom">{{ service.Name }}</td>
+            <td data-label="Action">
+                <a href="{{ path('service_show', {'id': service.id}) }}">show</a>
+                <a href="{{ path('service_edit', {'id': service.id}) }}">edit</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">Aucun service</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

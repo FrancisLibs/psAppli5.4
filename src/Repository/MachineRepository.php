@@ -36,28 +36,32 @@ class MachineRepository extends ServiceEntityRepository
         ;
 
         if (!empty($search->internalCode)) {
+            $internalCode = strtoupper($search->internalCode);
             $query = $query
                 ->andWhere('m.internalCode LIKE :internalCode')
-                ->setParameter('internalCode', "%{$search->internalCode}%");
+                ->setParameter('internalCode', "%{$internalCode}%");
         }
 
         if (!empty($search->designation)) {
+            $designation = strtoupper($search->designation);
             $query = $query
                 ->andWhere('m.designation LIKE :designation')
-                ->setParameter('designation', "%{$search->designation}%");
+                ->setParameter('designation', "%{$designation}%");
         }
 
         if (!empty($search->constructor)) {
+            $constructor = strtoupper($search->constructor);
             $query = $query
                 ->andWhere('m.constructor LIKE :constructor')
-                ->setParameter('constructor', "%{$search->constructor}%")
+                ->setParameter('constructor', "%{$constructor}%")
             ;
         }
 
         if (!empty($search->model)) {
+            $model = strtoupper($search->model);
             $query = $query
                 ->andWhere('m.model LIKE :model')
-                ->setParameter('model', "%{$search->model}%")
+                ->setParameter('model', "%{$model}%")
             ;
         }
 

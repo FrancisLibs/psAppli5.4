@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Machine{% endblock %}
+
+{% block body %}
+    <header class="row mt-5">
+        <div class="col-4 offset-2 d-flex justify-content-between">
+            <h3 class="text-primary">Machine</h3>
+            <div class="d-flex justify-content-start align-items-center">
+                <a class="btn btn-primary btn-sm me-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
+                <a class="btn btn-primary btn-sm me-2" href="{{ path('machine_show', {'id': machine.id}) }}">Retour à la machine</a>
+            </div>
+        </div>
+    </header>
+    <div class="row mt-4">
+        <aside class="col-2 mt-4">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <div class="col-5">
+            <div class="row mt-5">
+                <div class="col-5">
+                    <p><strong>Code : </strong>{{ machine.internalCode }}</p>
+                </div>
+                <div class="col-7">
+                    <p><strong>Nom : </strong>{{ machine.designation }}</p>
+                </div>
+            </div>
+           
+            <h3 class="text-primary">Bons de travail</h3>
+            {% if machine.workorders|length > 0 %}
+                {{ include('machine/_workorders.html.twig') }}
+            {% else %}
+                <p>Il n'y a pas de Bons de travail pour cette machine</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

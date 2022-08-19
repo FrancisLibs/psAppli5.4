@@ -1,0 +1,13 @@
+<div class="row">
+    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+        <table class="table table-sm table-striped">
+            <thead>
+                {% include 'delivery_note/_filter.html.twig' %}
+                {% include 'delivery_note/_sorting.html.twig' %}
+            </thead>
+            <tbody class="js-filter-content essai">
+                {% include 'delivery_note/_delivery_notes.html.twig' %}
+            </tbody>
+        </table>
+    {{ form_end(form) }}
+</div>

@@ -1,8 +1,13 @@
-<table class="table table-sm part_table table-striped">
-    <thead class="js-filter-sorting">
-        {% include 'part/_sorting.html.twig' %}
-    </thead>
-    <tbody class="js-filter-content">
-        {% include 'part/_parts.html.twig' %}
-    </tbody>
-</table>
+<div class="row">
+    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+        <table class="table table-sm table-striped">
+            <thead>
+                {% include 'part/_filter.html.twig' %}
+                {% include 'part/_sorting.html.twig' %}
+            </thead>
+            <tbody class="js-filter-content essai">
+                {% include 'part/_parts.html.twig' %}
+            </tbody>
+        </table>
+    {{ form_end(form) }}
+</div>

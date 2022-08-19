@@ -6,13 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PartRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PartRepository::class)
  * @UniqueEntity(fields={"code"}, message="Il y a déjà une pièce avec ce code")
+ * @Vich\Uploadable
  */
 class Part
 {
@@ -26,7 +27,7 @@ class Part
     /**
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
-     * @Assert\Regex("/^C[A-Z]{4}[0-9]{4}$/")
+     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")
      * message="Le code ne respecte pas le format !"
      */
     private $code;
@@ -84,11 +85,27 @@ class Part
      */
     private $template;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="part")
+     */
+    private $deliveryNoteParts;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $steadyPrice;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $qrCode;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
         $this->template = new ArrayCollection();
+        $this->deliveryNoteParts = new ArrayCollection();
     }
 
     
@@ -275,6 +292,60 @@ class Part
     public function removeTemplate(Template $template): self
     {
         $this->template->removeElement($template);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryNotePart[]
+     */
+    public function getDeliveryNoteParts(): Collection
+    {
+        return $this->deliveryNoteParts;
+    }
+
+    public function addDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
+    {
+        if (!$this->deliveryNoteParts->contains($deliveryNotePart)) {
+            $this->deliveryNoteParts[] = $deliveryNotePart;
+            $deliveryNotePart->setPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
+    {
+        if ($this->deliveryNoteParts->removeElement($deliveryNotePart)) {
+            // set the owning side to null (unless already changed)
+            if ($deliveryNotePart->getPart() === $this) {
+                $deliveryNotePart->setPart(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSteadyPrice(): ?float
+    {
+        return $this->steadyPrice;
+    }
+
+    public function setSteadyPrice(?float $steadyPrice): self
+    {
+        $this->steadyPrice = $steadyPrice;
+
+        return $this;
+    }
+
+    public function getQrCode(): ?string
+    {
+        return $this->qrCode;
+    }
+
+    public function setQrCode(?string $qrCode): self
+    {
+        $this->qrCode = $qrCode;
 
         return $this;
     }

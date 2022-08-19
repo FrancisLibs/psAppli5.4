@@ -32,7 +32,7 @@ class WorkorderEditType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label' => 'Type',
+                'label' => false,
                 'choices'  => [
                     'Curatif' => 1,
                     'Préventif' => 2,
@@ -51,22 +51,21 @@ class WorkorderEditType extends AbstractType
             ])
             ->add('startDate', DateType::class, [
                 'input' => 'datetime',
-                'label' => false,
+                'label' => 'Date début',
                 'widget' => 'single_text',
             ])
             ->add('startTime', TimeType::class, [
-                'label' => false,
+                'label' => 'Heure début',
                 'widget' => 'single_text',
                 'input' => 'datetime',
-                // 'format' => 'HHmm'
             ])
             ->add('endDate', DateType::class, [
                 'input' => 'datetime',
-                'label' => false,
+                'label' => 'Date fin',
                 'widget' => 'single_text',
             ])
             ->add('endTime', TimeType::class, [
-                'label' => false,
+                'label' => 'Heure fin',
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'required'  => false,
@@ -81,13 +80,13 @@ class WorkorderEditType extends AbstractType
                 'label' =>  'Minutes'
             ])
             ->add('stopTimeHour', TextType::class, [
+                'label' => 'Heure',
                 'required' => false,
             ])
             ->add('stopTimeMinute', TextType::class, [
+                'label' => 'Minute',
                 'required' => false,
-            ])
-        ;
-    
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

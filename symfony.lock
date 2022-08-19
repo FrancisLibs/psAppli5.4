@@ -97,14 +97,17 @@
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
+    "dompdf/dompdf": {
+        "version": "v1.2.1"
+    },
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "endroid/qr-code-bundle": {
+        "version": "4.1.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
-    },
-    "fzaninotto/faker": {
-        "version": "v1.9.2"
     },
     "imagine/imagine": {
         "version": "1.2.4"
@@ -164,6 +167,12 @@
     "phar-io/version": {
         "version": "3.1.0"
     },
+    "phenx/php-font-lib": {
+        "version": "0.5.4"
+    },
+    "phenx/php-svg-lib": {
+        "version": "0.4.1"
+    },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
     },
@@ -219,6 +228,9 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "sabberworm/php-css-parser": {
+        "version": "8.4.0"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
@@ -321,18 +333,6 @@
     },
     "symfony/css-selector": {
         "version": "v5.3.4"
-    },
-    "symfony/debug-bundle": {
-        "version": "4.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.1",
-            "ref": "0ce7a032d344fb7b661cd25d31914cd703ad445b"
-        },
-        "files": [
-            "./config/packages/dev/debug.yaml"
-        ]
     },
     "symfony/debug-pack": {
         "version": "v1.0.9"
@@ -661,17 +661,16 @@
         "version": "v5.3.4"
     },
     "symfony/web-profiler-bundle": {
-        "version": "3.3",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "6bdfa1a95f6b2e677ab985cd1af2eae35d62e0f6"
+            "branch": "main",
+            "version": "5.3",
+            "ref": "24bbc3d84ef2f427f82104f766014e799eefcc3e"
         },
         "files": [
-            "./config/packages/dev/web_profiler.yaml",
-            "./config/packages/test/web_profiler.yaml",
-            "./config/routes/dev/web_profiler.yaml"
+            "./config/packages/web_profiler.yaml",
+            "./config/routes/web_profiler.yaml"
         ]
     },
     "symfony/webpack-encore-bundle": {

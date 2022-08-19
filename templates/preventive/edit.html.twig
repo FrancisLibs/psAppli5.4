@@ -3,44 +3,46 @@
 {% block title %}Edition bon de travail{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-8 mx-auto">
-            <div class="row align-items-center">
-                <div class="col-6">
-                    <h2>Edition bon de travail préventif</h2>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <a class="btn btn-primary btn-sm mr-3" href="{{ path('template_index') }}" role="button">Liste des BT</a>
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col">
+            <header class="row mb-3 me-5 justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
+                    <h3 class="text-primary">Edition bon de travail préventif</h3>
+                    <a class="btn btn-primary btn-sm ms-3 me-3" href="{{ path('template_index') }}" role="button">Liste des préventifs</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         {{ include('preventive/_delete_form.html.twig') }}
                     {% endif %}
                 </div>
-            </div>
-        </div>
-    </div>
+            </header>
+            <section class="row js-filter">
+    
     <article class="row">
-        <div class="col-8 offset-2 mt-4">
+        <div class="col-8 mt-4">
             <div class="row mt-3">
-                <div class="col-2 text-primary">
-                    <h4>Machine(s)</h4>
+                <div class="col-2 mb-2">
+                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'documentId': template.id, 'mode': mode}) }}" role="button"><h5>Machine(s)</h5></a>
                 </div>
-                <div class="col-2">
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'documentId': template.id, 'mode': mode}) }}" role="button">Ajouter machine</a>
-                </div>
-                 <div class="inline-flex justify-content-start">
-                    {% for machine in template.machines %}
-                        <div class="d-flex justify-content-start align-items-center border border-dark rounded mb-1 p-1">
-                            <span>{{ machine.designation }}</span>
-                            <a href="{{ path('preventive_machine_remove', {'id': template.id, 'machine': machine.id })}}" class="ml-2  btn btn-warning btn-sm">Supp</a>
-                        </div>
-                    {% endfor %}
-                </div>
+                
+                {% if template.machines %}
+                    <div class="col-8 inline-flex justify-content-start">
+                        {% for machine in template.machines %}
+                            <div class="d-flex justify-content-start align-items-center mb-1 border border-info rounded p-2">
+                                <div class="border border-info rounded me-1 p-1">
+                                    <span>{{ machine.designation }}</span>
+                                    <a href="{{ path('preventive_machine_remove', {'id': template.id, 'machine': machine.id })}}" class="ms-2  btn btn-warning btn-sm">Supp</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
-            {{ include('preventive/_formModif.html.twig') }}
+            {{ include('preventive/_form.html.twig') }}
         </div>
     </article>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('editWorkorder') }}
 {% endblock %}
