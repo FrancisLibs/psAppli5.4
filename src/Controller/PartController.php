@@ -31,27 +31,17 @@ class PartController extends AbstractController
     protected $stockValueRepository;
     protected $manager;
     protected $requestStack;
-    protected $qrCodeService;
+    //protected $qrCodeService;
     protected $deliveryNoteRepository;
-    protected $parameterBag;
 
-
-    public function __construct(
-        PartRepository $partRepository,
-        StockValueRepository $stockValueRepository,
-        EntityManagerInterface $manager,
-        RequestStack $requestStack,
-        QrCodeService $qrCodeService,
-        DeliveryNoteRepository $deliveryNoteRepository,
-        ParameterBagInterface $parameterBag
-    ) {
+    public function __construct(DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
+    {
         $this->partRepository = $partRepository;
         $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
-        $this->qrCodeService = $qrCodeService;
+        //$this->qrCodeService = $qrCodeService;
         $this->deliveryNoteRepository = $deliveryNoteRepository;
-        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -153,15 +143,12 @@ class PartController extends AbstractController
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
 
-
-            $qrCode = $this->qrCodeService->qrcode($part->getCode());
-
             $this->manager->persist($part);
             $this->manager->flush();
 
             return $this->redirectToRoute('part_show', [
                 'id' => $part->getId(),
-                'qrCode' => $qrCode,
+
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -177,11 +164,11 @@ class PartController extends AbstractController
      */
     public function show(Part $part): Response
     {
-        if (!$part->getQrCode()) {
-            $qrCode = $this->qrCodeService->qrcode($part->getCode());
-            $part->setQrCode($qrCode);
-            $this->manager->flush();
-        }
+        // if (!$part->getQrCode()) {
+        //     $qrCode = $this->qrCodeService->qrcode($part->getCode());
+        //     $part->setQrCode($qrCode);
+        //     $this->manager->flush();
+        // }
 
         return $this->render('part/show.html.twig', [
             'part' => $part,
@@ -276,8 +263,8 @@ class PartController extends AbstractController
         $totalStock = $this->partRepository->findTotalStock($organisation);
         $stockValues = $this->stockValueRepository->findStockValues($organisation);
 
-        $amounts = [];
-        $dates = [];
+        $amounts=[];
+        $dates=[];
 
         foreach ($stockValues as $value) {
             $amount = $value->getValue();
@@ -308,13 +295,13 @@ class PartController extends AbstractController
     }
 
     /**
+     * 
+     * @param PdfService $pdfService
      * Impession étiquette d'une pièce 
      * 
      * @Route("/partlabel/{id}", name="part_label")
-     * 
      * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param PdfService $pdfService
+
      */
     public function printLabel(Part $part, PdfService $pdfService): Response
     {
@@ -336,19 +323,12 @@ class PartController extends AbstractController
     // public function action(): Response
     // {
     //     $parts = $this->partRepository->findAll();
-    //     $partsTab = [];
-    //     foreach ($parts as $partA) {
-    //         foreach ($parts as $partB) {
-    //             $codeA = $partA->getCode();
-    //             $idA = $partA->getId();
-    //             $codeB = $partB->getCode();
-    //             $idB = $partB->getId();
-    //             if ($codeA == $codeB && $idA <> $idB) {
-    //                 $partsTab[] = $partA->getId() . " " . $partB->getId();
-    //             }
-    //         }
+
+    //     foreach ($parts as $part) {
+    //         $part->setDesignation(strtoupper($part->getDesignation()));
+    //         $part->setReference(strtoupper($part->getReference()));
+    //         $this->manager->persist($part);
     //     }
-    //     dd($partsTab);
 
     //     $this->manager->flush();
 

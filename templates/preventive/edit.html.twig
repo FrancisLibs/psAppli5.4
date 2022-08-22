@@ -18,14 +18,11 @@
                 </div>
             </header>
             <section class="row js-filter">
-    
-    <article class="row">
         <div class="col-8 mt-4">
             <div class="row mt-3">
                 <div class="col-2 mb-2">
                     <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'documentId': template.id, 'mode': mode}) }}" role="button"><h5>Machine(s)</h5></a>
                 </div>
-                
                 {% if template.machines %}
                     <div class="col-8 inline-flex justify-content-start">
                         {% for machine in template.machines %}

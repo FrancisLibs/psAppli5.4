@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('machine_delete', {'id': machine.id}) }}" onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette machine ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ machine.id) }}">
-    <button class="btn btn-danger btn-sm">Supprimer</button>
+    <button class="btn btn-danger btn-sm">Desactiver</button>
 </form>

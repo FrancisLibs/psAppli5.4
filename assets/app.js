@@ -11,6 +11,7 @@ import "./styles/app.css";
 // start the Stimulus application
 import "./bootstrap";
 
+<<<<<<< HEAD
 import "./tools";
 
 import { WorkorderIndex } from "./JS/WorkorderIndex";
@@ -33,3 +34,9 @@ new WorkorderIndex(document.querySelector(".js-filter"));
 
 // import { OnCallIndex } from "./JS/OnCallIndex";
 // new OnCallIndex(document.querySelector(".onCall-js-filter"));
+=======
+import "./JS/tools";
+
+import { FilterIndex } from "./JS/FilterIndex";
+new FilterIndex(document.querySelector(".js-filter"));
+>>>>>>> 4635cd4d01d95f2175a7d28ba1f76b935e5c9a80

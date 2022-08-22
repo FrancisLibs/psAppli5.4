@@ -120,6 +120,7 @@ class PartRepository extends ServiceEntityRepository
             ->where('p.organisation = :organisation')
             ->setParameter('organisation', $organisation)
             ->orderBy('p.provider', 'ASC')
+            //->setMaxResults(100)
             ->getQuery()
             ->getResult();
     }

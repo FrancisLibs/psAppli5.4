@@ -29,4 +29,4 @@ liip_imagine:
     my_machines_filter:
       quality: 75
       filters:
-        thumbnail: { size: [800, 450], mode: outbound }
+
