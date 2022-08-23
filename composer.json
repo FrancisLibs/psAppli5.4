@@ -44,6 +44,7 @@
         "symfony/twig-bundle": "^5.3",
         "symfony/validator": "5.3.*",
         "symfony/web-link": "5.3.*",
+        "symfony/web-profiler-bundle": "5.3.*",
         "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.3.*",
         "symfonycasts/reset-password-bundle": "^1.9",
@@ -62,8 +63,7 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/stopwatch": "^5.3",
-        "symfony/var-dumper": "^5.3",
-        "symfony/web-profiler-bundle": "5.3.*"
+        "symfony/var-dumper": "^5.3"
     },
     "config": {
         "optimize-autoloader": true,

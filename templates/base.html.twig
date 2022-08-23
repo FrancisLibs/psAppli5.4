@@ -32,9 +32,7 @@
             and app.request.get('_route') != 'app_check_email'
             and app.request.get('_route') != 'app_reset_password'
         %}
-            <nav>
-                {% include '_navbar.html.twig' %}
-            </nav>
+            {% include '_navbar.html.twig' %}
         {% endif %}
         {% if app.request.get('_route') == 'app_login' %}
             <main class="login">
