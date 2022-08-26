@@ -26,6 +26,7 @@ Encore
   .addEntry("jschart", "./assets/JS/jschart.js")
   .addEntry("showMachine", "./assets/styles/showMachine.css")
 
+
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")
 

@@ -1,0 +1,14 @@
+{% for deliveryNote in deliveryNotes %}
+    <tr>
+        <td data-label="Code" class="font_size_table">
+            <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('delivery_note_show', {'id': deliveryNote.id}) }}">{{ deliveryNote.id }}</a>
+        </td>
+        <td data-label="Fournisseur" class="text-center font_size_table">{{ deliveryNote.provider.name }}</td>
+        <td data-label="Numéro" class="text-center font_size_table">{{ deliveryNote.number }}</td>
+        <td data-label="Date" class="text-center font_size_table">{{ deliveryNote.date|date("d/m/Y") }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6">Il n'y a pas de BL enregistré</td>
+    </tr>
+{% endfor %}

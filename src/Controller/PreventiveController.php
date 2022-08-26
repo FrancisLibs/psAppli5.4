@@ -107,9 +107,15 @@ class PreventiveController extends AbstractController
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
         $template = new Template();
-        $template->setCreatedAt(new \DateTime());
-        $template->setOrganisation($organisation);
-        $template->setUser($user);
+        $template
+            ->setCreatedAt(new \DateTime())
+            ->setOrganisation($organisation)
+            ->setUser($user)
+            ->setDaysBefore(0)
+            ->setDaysBeforeLate(0)
+            ->setDuration(0)
+            ->setPeriod(0)
+            ->setActive(true);
 
         $form = $this->createForm(TemplateType::class, $template);
 
@@ -136,8 +142,6 @@ class PreventiveController extends AbstractController
                 } else {
                     $template->setTemplateNumber(1);
                 }
-                // Activation du template
-                $template->setActive(true);
 
                 $this->manager->persist($template);
                 $this->manager->flush();

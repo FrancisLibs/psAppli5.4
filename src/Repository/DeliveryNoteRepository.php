@@ -47,6 +47,7 @@ class DeliveryNoteRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->provider)) {
+            $search->provider = strtoupper($search->provider);
             $query = $query
                 ->andWhere('p.name LIKE :provider')
                 ->setParameter('provider', "%{$search->provider}%");
@@ -59,5 +60,17 @@ class DeliveryNoteRepository extends ServiceEntityRepository
             $search->page,
             15
         );
+    }
+
+    public function findDeliveryNotesAppro($part)
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'DESC')
+            ->select('d')
+            ->join('d.deliveryNoteParts', 'p')
+            ->andWhere('p.part = :val')
+            ->setParameter('val', $part)
+            ->getQuery()
+            ->getResult();
     }
 }

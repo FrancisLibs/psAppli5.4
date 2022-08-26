@@ -3,25 +3,20 @@
 {% block title %}Préventif{% endblock %}
 
 {% block body %}
-    <main class="row justify-content-start mt-5" >
+
+    <main class="d-flex justify-content-start mt-5">
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article class="col">
-            <section class="row justify-content-between">
-                <div class="d-flex justify-content-between flex-wrap mb-4">
-                    <div class="d-flex justify-content-start align-items-base">
-                        <div class="me-5">
-                            <h3 class="text-primary">Bons de travail préventifs</h3>
-                        </div>
-                        <div>
-                           <a class="btn btn-primary btn-sm" href="{{ path('template_new') }}" role="button">Nouveau bon de travail préventif</a>
-                        </div>
-                    </div>
-                </div>           
-            </section>
+            <header class="row mb-3 me-5 justify-content-start">
+                <div class="d-flex justify-content-start">
+                    <h3 class="text-primary">Bons de travail préventifs</h3>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('template_new') }}" role="button">Nouveau bon de travail préventif</a>
+                </div>
+            </header>
             <section class="row js-filter">
-                <div class="col-12">
+                <div>
                     {% include 'preventive/_templateList.html.twig' with {templates: templates, form: form} only %}
                     {# Navigation #}
                     <div class="col-10 offset-2 navigation js-filter-pagination mb-5">

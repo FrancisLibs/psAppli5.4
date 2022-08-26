@@ -1,5 +1,6 @@
 <section class="text-center mt-3 me-4 d-flex flex-column ">
-    {% if app.user.imageName %}
+
+    {% if app.user.imageName is not null %}
         <img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />
     {% else %}
         <img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}" />

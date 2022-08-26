@@ -19,6 +19,7 @@
                             <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('part_edit', {'id': part.id}) }}">Edition</a>
                             <a class="btn btn-warning btn-sm me-2 mb-2" href="{{ path('part_label', {'id': part.id}) }}">Etiquette</a>
                             {{ include('part/_delete_form.html.twig') }}
+                            <a class="btn btn-info btn-sm ms-2 mb-2" href="{{ path('show_appro', {'id': part.id}) }}">Appro</a>
                         </div>
                     </div>
                 </div>
@@ -98,14 +99,25 @@
                         <p>{{ part.steadyPrice }}</p>
                     </div>
                 </div>
-                <div class="col-4 col-sm-3 col-md-2">
-                    <div class="col-2">
+                <div class="row">
+                    <div class="col-4 col-sm-3 col-md-2">
                         <p class="fw-bold">Remarque</p>
                     </div>
                     <div class="col-8">
                         <p>{{ part.remark }}</p>
                     </div>
                 </div>
+                {% if part.qrCode %}
+                    <div class="row">
+                        <div class="col-4 col-sm-3 col-md-2">
+                            <p class="fw-bold">QrCode</p>
+                        </div>
+                        <div class="col-8">
+                            <img src="{{ asset('images/qr-codes/' ~ part.qrCode) | imagine_filter('my_little_filter') }}" />
+                        </div>
+                    </div>
+                {% endif %}
             </section>
         </article>
+    </div>
 {% endblock %}

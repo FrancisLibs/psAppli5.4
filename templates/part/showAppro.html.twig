@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bons de livraison{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5" >
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col">
+            <section class="row justify-content-between">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <div class="d-flex justify-content-start align-items-base">
+                        <div class="me-5">
+                            <h3 class="text-primary">Bons de livraison</h3>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="{{ path('part_show', {'id': part.id}) }}" role="button">Retour à la pièce</a>
+                        </div>
+                    </div>
+                </div>           
+            </section>
+            <section class="row js-filter">
+                <div class="col-12">
+                     {% include 'part/_partApproList.html.twig' with {deliveryNotes: deliveryNotes} only %}
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}

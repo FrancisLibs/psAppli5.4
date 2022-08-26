@@ -3,8 +3,8 @@
 {% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
-    <article class="row mt-5">
-        <aside class="col-2 mt-5 displayMd">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
         <div class="col-11 col-md-9 ms-1">
@@ -14,5 +14,5 @@
             </div>
             {% include 'user/_userList.html.twig' with {users: users} only %}
         </div>
-    </article>
+    </main>
 {% endblock %}

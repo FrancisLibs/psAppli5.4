@@ -27,7 +27,7 @@
                             <h5 class="text-primary mb-2 d-flex align-items-center">Machines du BT préventif : 
                                 {{ machinesWithData|length }}
                                 {% if mode == 'editPreventive' %}
-                                    <a href="{{ path('template_edit', {'id': documentId, 'mode': mode}) }}" class="btn btn-sm btn-primary ml-4" role="button">Valider</a>
+                                    <a href="{{ path('template_edit', {'id': documentId, 'mode': mode}) }}" class="btn btn-sm btn-primary ms-4" role="button">Valider</a>
                                 {% else %}
                                     <a href="{{ path('template_new') }}" class="btn btn-sm btn-primary ms-4" role="button">Valider</a>
                                 {% endif %}

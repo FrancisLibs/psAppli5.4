@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Part;
+use App\Entity\Stock;
 use App\Form\PartType;
 use App\Data\SearchPart;
 use App\Service\PdfService;
 use App\Form\SearchPartForm;
+use App\Service\QrCodeService;
 use App\Repository\PartRepository;
 use App\Repository\StockValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DeliveryNoteRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,23 +20,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/part")
  */
 class PartController extends AbstractController
 {
-    private $partRepository;
-    private $stockValueRepository;
-    private $manager;
-    private $requestStack;
+    protected $partRepository;
+    protected $stockValueRepository;
+    protected $manager;
+    protected $requestStack;
+    //protected $qrCodeService;
+    protected $deliveryNoteRepository;
 
-    public function __construct(PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
+    public function __construct(DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->partRepository = $partRepository;
         $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
+        //$this->qrCodeService = $qrCodeService;
+        $this->deliveryNoteRepository = $deliveryNoteRepository;
     }
 
     /**
@@ -120,6 +128,10 @@ class PartController extends AbstractController
     {
         $organisation = $this->getUser()->getOrganisation();
         $part = new Part();
+        $stock = new Stock();
+        $stock->setApproQte(0);
+        $part->setStock($stock);
+
         $form = $this->createForm(PartType::class, $part);
         $form->handleRequest($request);
 
@@ -136,6 +148,7 @@ class PartController extends AbstractController
 
             return $this->redirectToRoute('part_show', [
                 'id' => $part->getId(),
+
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -151,6 +164,12 @@ class PartController extends AbstractController
      */
     public function show(Part $part): Response
     {
+        // if (!$part->getQrCode()) {
+        //     $qrCode = $this->qrCodeService->qrcode($part->getCode());
+        //     $part->setQrCode($qrCode);
+        //     $this->manager->flush();
+        // }
+
         return $this->render('part/show.html.twig', [
             'part' => $part,
         ]);
@@ -227,12 +246,12 @@ class PartController extends AbstractController
      */
     public function reception(): Response
     {
-
-
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
     /**
+     * @ Valeur du stock de pièces détachées
+     * 
      * @Route("/infos", name="parts_value", methods={"GET","POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -262,10 +281,27 @@ class PartController extends AbstractController
     }
 
     /**
+     * @Route("/appro/{id}", name="show_appro")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function appro(Part $part)
+    {
+        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNotesAppro($part->getId());
+
+        return $this->render('part/showAppro.html.twig', [
+            'deliveryNotes' => $deliveryNotes,
+            'part' => $part,
+        ]);
+    }
+
+    /**
+     * 
+     * @param PdfService $pdfService
      * Impession étiquette d'une pièce 
      * 
      * @Route("/partlabel/{id}", name="part_label")
      * @Security("is_granted('ROLE_USER')")
+
      */
     public function printLabel(Part $part, PdfService $pdfService): Response
     {

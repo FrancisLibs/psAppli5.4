@@ -101,8 +101,11 @@ class WorkorderController extends AbstractController
     public function new(Request $request, Machine $machine = null): Response
     {
         $session = $this->requestStack->getSession();
+        $userParams = [];
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation= $user->getOrganisation();
+        $userParams[] = $organisation;
+        $userParams[] = $user->getService();
 
         $workorder = new Workorder();
         $workorder->setPreventive(false);
@@ -129,7 +132,7 @@ class WorkorderController extends AbstractController
 
         //Creation of the form
         $form = $this->createForm(WorkorderType::class, $workorder, [
-            'organisation' => $organisation
+            'userParams' => $userParams
         ]);
 
         $form->handleRequest($request);

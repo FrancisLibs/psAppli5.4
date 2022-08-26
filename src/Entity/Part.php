@@ -6,13 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PartRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PartRepository::class)
  * @UniqueEntity(fields={"code"}, message="Il y a déjà une pièce avec ce code")
+ * @Vich\Uploadable
  */
 class Part
 {
@@ -93,6 +94,11 @@ class Part
      * @ORM\Column(type="float", nullable=true)
      */
     private $steadyPrice;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $qrCode;
 
     public function __construct()
     {
@@ -328,6 +334,18 @@ class Part
     public function setSteadyPrice(?float $steadyPrice): self
     {
         $this->steadyPrice = $steadyPrice;
+
+        return $this;
+    }
+
+    public function getQrCode(): ?string
+    {
+        return $this->qrCode;
+    }
+
+    public function setQrCode(?string $qrCode): self
+    {
+        $this->qrCode = $qrCode;
 
         return $this;
     }
