@@ -8,20 +8,22 @@
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article class="col">
-            <section class="row justify-content-start align-items-base">
-                <div class="col-10 col-sm-6 col-lg-5 col-xl-4">
-                    <h3 class="text-primary">Edition Bon de livraison</h3>
-                </div>
-                <div class="col-10 col-sm-6 d-flex justify-content-start align-items-center">
-                    <a class="btn btn-primary btn-sm me-3" href="{{ path('delivery_note_index') }}" role="button">Liste des BL</a>
-                    {{ include('delivery_note/_delete_form.html.twig') }}
-                </div>
-                <div class="row align-items-center mt-5">
-                    <div class="col-12 col-sm-7 col-md-5 col-lg-5 col-xl-4 text-primary d-flex justify-content-start">
-                        <h4>Fournisseur : {{ deliveryNote.provider.name }}</h4>
+            <section>
+                <div class="row justify-content-start align-items-base">
+                    <div class="col-10 col-sm-6 col-lg-5 col-xl-4">
+                        <h3 class="text-primary">Edition Bon de livraison</h3>
                     </div>
-                    <div class="col-2">
-                        <a class="btn btn-sm btn-primary" href="{{ path('provider_index', {'mode': 'deliveryNoteChangeProv', 'documentId': deliveryNote.id}) }}">Fournisseur</a>
+                    <div class="col-10 col-sm-6 d-flex justify-content-start align-items-center">
+                        <a class="btn btn-primary btn-sm me-3" href="{{ path('delivery_note_index') }}" role="button">Liste des BL</a>
+                        {{ include('delivery_note/_delete_form.html.twig') }}
+                    </div>
+                </div>
+                <div class="row justify-content-start align-items-center mt-5 ms-2 p-2 border rounded col-11 col-sm-7 col-md-5 col-xl-4">
+                    <div class="col-7 col-sm-6 col-md-7 col-xl-6">
+                        <a class="btn btn-primary new-btn" href="{{ path('provider_index', {'mode': 'deliveryNoteChangeProv', 'documentId': deliveryNote.id}) }}">Fournisseur</a>
+                    </div>
+                    <div class="text-primary text-af-btn col-5">
+                        {{ deliveryNote.provider.name }}
                     </div>
                 </div>
                 <div class="row align-items-center mt-5">

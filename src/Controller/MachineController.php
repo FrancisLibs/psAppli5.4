@@ -49,9 +49,6 @@ class MachineController extends AbstractController
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
-        if ($mode == "newWorkorder") {
-            $session->remove('machines');
-        }
         // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
         if ($mode == "selectPreventive" || $mode == 'editPreventive') {
@@ -65,21 +62,20 @@ class MachineController extends AbstractController
         }
         // Reprise de l'ancienne recherche lors de la selection des machines pour un préventif
         $dataMachinePreventive = $session->get('dataMachinePreventive');
-
         $data = new SearchMachine();
 
-        if ($mode == "selectPreventive" && $dataMachinePreventive) {
-            $data = $dataMachinePreventive;
-        }
+        // if ($mode == "selectPreventive" && $dataMachinePreventive) {
+        //     $data = $dataMachinePreventive;
+        // }
 
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
 
-        if ($mode == "selectPreventive") { // Sauvegarde de la classe de tri des machines
-            $session->set('dataMachinePreventive', $data);
-        }
+        // if ($mode == "selectPreventive") { // Sauvegarde de la classe de tri des machines
+        //     $session->set('dataMachinePreventive', $data);
+        // }
 
         if ($request->get('ajax') && ($mode == 'newWorkorder' || $mode == null)) {
             return new JsonResponse([

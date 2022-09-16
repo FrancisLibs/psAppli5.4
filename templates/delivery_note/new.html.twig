@@ -20,14 +20,15 @@
                 </div>
             </header>
             <section class="mt-5">
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-start align-items-baseline">
-                        <h4 class="me-4 text-primary">Fournisseur : </h4>
-                        {% if provider is defined %}
-                            <div class="me-4">{{ provider.name }}</div>
-                        {% endif %}
-                        <a class="btn btn-primary" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
+                <div class="row justify-content-start align-items-center mt-5 col-12 col-sm-7">
+                    <div class="col-6 col-sm-6">
+                        <a class="btn btn-primary new-btn" href="{{ path('provider_index', {'mode': 'selectProvider'}) }}">Fournisseur</a>
                     </div>
+                    {% if provider is defined %}
+                        <div class="text-primary text-af-btn col-6 col-xl-6 border rounded p-2 text-center">
+                            {{ provider.name }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="row mt-5">
                     {{ include('delivery_note/_form.html.twig', {'button_label': 'Valider'}) }}

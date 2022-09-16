@@ -8,11 +8,11 @@
         <aside class="col-2 displayMd mt-5">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="col">
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
             <header class="row mb-3 me-5 justify-content-start">
                 <div class="d-flex justify-content-start">
                     <h3 class="text-primary">Bons de travail préventifs</h3>
-                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('template_new') }}" role="button">Nouveau bon de travail préventif</a>
+                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('preventive_new', {'mode': 'preventive'}) }}" role="button">Nouveau préventif</a>
                 </div>
             </header>
             <section class="row js-filter">

@@ -273,6 +273,19 @@ main {
   width: 100px;
 }
 
+/* Bouton Nouveau... ou autre en deux mots */
+.new-btn {
+  width: 140px;
+  text-align: center;
+  font-size: 1em;
+}
+
+/* Texte après bouton */
+.text-af-btn {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
 /* X-Small devices (portrait phones, less than 576px)
 No media query for `xs` since this is the default in Bootstrap */
 

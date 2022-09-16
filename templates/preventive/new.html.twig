@@ -3,62 +3,58 @@
 {% block title %}Nouveau bon de travail{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5 mb-5">
-        <aside class="col-2 displayMd mt-5">
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd">
             {% include 'user/_photo.html.twig' %}
         </aside>
-        <article class="col-12">
-            <header class="d-flex justify-content-start align-items-center">
-                <div>
-                    <h3 class="text-primary me-5">Nouveau BT préventif</h3>
+        <article class="col-12 col-md-11 col-lg-10">
+            <header class="row justify-content-start align-items-center">
+                <div class="col-7 col-sm7 col-md-5 col-xl-4">
+                    <h2 class="text-primary">Nouveau BT préventif</h2>
                 </div>
-                <div>
+                <div class="col-5 col-lg-4 col-xl-3">
                     <a class="btn btn-primary btn-sm" href="{{ path('template_index') }}" role="button">Listes des BT préventifs</a>
                 </div>
             </header>
-            <section class="row mt-5">
-                <div class="col-12 col-lg-10 col-xl-7">
-                    <div class="row">
-                        <div class="col-5 col-sm-4 col-lg-3 text-primary">
-                            <h4>Machine(s)</h4>
-                        </div>
-                        <div class="col-7 col-sm-4 col-lg-3">
-                            <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button">Choix Machine(s)</a>
+            <section>
+                <div class="row mt-5">
+                    <div class="col-12 d-flex justify-content-start align-items-start flex-wrap">
+                        <div class="col-3 col-md-2 col-xl-2">
+                            <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button"><h5>Machine(s)</h5></a>
                         </div>
                         {% if machinesWithData is not empty and machinesWithData is defined %}
-                            <div style="background: #e3fafd;" class="rounded p-2">
-                                <div class="row mb-3">
-                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                        <span class="fw-bold">Code</span>
-                                    </div>
-                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
-                                        <span class="fw-bold">Désignation</span>
-                                    </div>
-                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
-                                        <span class="fw-bold">Action</span>
-                                    </div>
-                                </div>
-                                {% for machine in machinesWithData %}
-                                    <div class="row mb-1">
-                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                            <span>{{ machine.internalCode }}</span>
-                                        </div>
-                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
-                                            <span>{{ machine.designation}}</span>
-                                        </div>
-                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center">
-                                            <span><a href="{{ path('remove_machine_from_cart', 
-                                                {'id': machine.id, 'mode': 'newPreventive'}) }}" 
-                                                style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
-                                                Supp
-                                            </a></span>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                            <div class="col-12 col-sm-8 col-md-11 col-lg-8 col-xl-6">
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr class="sorting">
+                                            <th>Code</th>
+                                            <th>Désignation </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for machine in machinesWithData %}
+                                            <tr>
+                                                <td data-label="Code" class="font_size_table">{{ machine.internalCode }}</td>
+                                                <td data-label="Désignation" class="font_size_table">{{ machine.designation}}</td>
+                                                <td data-label="Action" class="font_size_table">
+                                                    <a href="{{ path('remove_machine_from_cart', 
+                                                        {'id': machine.id, 'mode': 'newPreventive'}) }}" 
+                                                        style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
+                                                        Supp
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         {% endif %}
                     </div>
-                    {{ include('preventive/_form.html.twig') }}
+                    <div class="col-12 col-md-11 col-lg-10">
+                        {{ include('preventive/_form.html.twig') }}
+                    </div>
+                    
                 </div>
             </section>
         </article>

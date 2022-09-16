@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +25,6 @@ class MachineCartController extends AbstractController
     }
 
     /**
-     * 
      * @Route("/add/{id}/{mode}/{documentId?}", name="add_machine_to_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
@@ -56,7 +55,6 @@ class MachineCartController extends AbstractController
     }
 
     /**
-     * 
      * @Route("/remove/{id}/{mode}/{documentId?}", name="remove_machine_from_cart", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
@@ -82,6 +80,37 @@ class MachineCartController extends AbstractController
         return $this->redirectToRoute('machine_index', [
             'mode'  =>  $mode,
             'templateId'   =>  $documentId,
+        ]);
+    }
+
+    /**
+     * @Route("/machineChoice/{mode}/{documentId?}", name="machine_choice", methods={"GET"})
+     * @Route("/preventiveNew/{mode}/{documentId?}", name="preventive_new", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
+     * 
+     * @return RedirectResponse
+     */
+    public function machineChoice(string $mode, ?int $documentId)
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove('machines');
+
+        switch ($mode) {
+            case "preventive":
+                return $this->redirectToRoute('template_new', [
+                    'mode'  =>  $mode,
+                ]);
+                break;
+            case "newWorkorder":
+                return $this->redirectToRoute('machine_index', [
+                    'mode'  =>  $mode,
+                ]);
+                break;
+        }
+
+        return $this->redirectToRoute('machine_index', [
+            'mode'  =>  $mode,
+            'documentId'   =>  $documentId,
         ]);
     }
 }

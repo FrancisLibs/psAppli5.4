@@ -7,6 +7,7 @@ use App\Data\SearchMachine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -43,9 +44,10 @@ class SearchMachineForm extends AbstractType
                 'choice_label' => 'name',
                 'label'     => false,
                 'required'  => false,
-                'placeholder' => 'Atelier'
+                'placeholder' => 'Atelier',
+                
             ])
-        ;
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

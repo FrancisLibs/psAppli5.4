@@ -19,8 +19,8 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ path('part_index') }}">Liste pièces</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Réception pièces</a>
-                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Pièces en réappro</a>
+                    <a class="dropdown-item" href="{{ path('delivery_note_index') }}">Bon de livraison</a>
+                    <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Réappro</a>
                 </div>
             </li>
             <li class="nav-item mx-2">
@@ -56,9 +56,9 @@
                     <img src="{{ asset('images/out.png') }}" width="30" height="30" alt="Deconnexion">
                 </a>
             </li>
-            <li class="nav-item me-5">
+            {# <li class="nav-item me-5">
                 <a href="{{ path('send_mail') }}" class="nav-link">mail</a>
-            </li>
+            </li> #}
             <li class="dropdown">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if app.user.imageName is not null %}

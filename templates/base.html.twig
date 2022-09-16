@@ -34,6 +34,7 @@
         %}
             {% include '_navbar.html.twig' %}
         {% endif %}
+
         {% if app.request.get('_route') == 'app_login' %}
             <main class="login">
         {% elseif app.request.get('_route') == 'home' %}

@@ -213,8 +213,8 @@ class PreventiveController extends AbstractController
         }
         return $this->renderForm('preventive/edit.html.twig', [
             'template' => $template,
-            'form' => $form,
             'mode' => 'editPreventive',
+            'form' => $form,
         ]);
     }
 

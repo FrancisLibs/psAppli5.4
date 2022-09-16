@@ -13,17 +13,18 @@
     </div>
     <div class="row justify-content-start align-items-end mt-5">
         <div class="d-flex justify-content-start align-items-center mb-4">
-            <div class="col-7 col-sm-5 col-md-4">
+            {# <div class="col-7 col-sm-5 col-md-4">
                 <h4 class="text-primary">Pièces détachées</h4>
-            </div>
+            </div> #}
             <div class="col-10 col-md-8 col-lg-6 col-xl-5">
-                <a class="btn btn-primary btn-sm me-2"
-                {% if mode == "editDeliveryNote" %}
-                    href="{{ path('part_index', {'mode': mode, 'documentId': deliveryNote.id }) }}">
-                {% elseif mode == "newDeliveryNote" %}
-                    href="{{ path('part_index', {'mode': mode }) }}">
-                {% endif %}
-                Sélection pièces</a>
+                <a class="btn btn-primary btn-sm me-2 new-btn"
+                    {% if mode == "editDeliveryNote" %}
+                        href="{{ path('part_index', {'mode': mode, 'documentId': deliveryNote.id }) }}">
+                    {% elseif mode == "newDeliveryNote" %}
+                        href="{{ path('part_index', {'mode': mode }) }}">
+                    {% endif %}
+                    Pièces détachées
+                </a>
             </div>
         </div>
     </div>
@@ -44,8 +45,8 @@
         {% endfor %}
     </div>
     <div class="row mt-3 mb-5">
-        <div class="col-3 text-center">
-            <button type="submit" class="btn btn-primary pull-right w-100 mt-3">{{ button_label }}</button>
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary new-btn mt-3">{{ button_label }}</button>
         </div>
     </div>
 {{ form_end(form) }}
