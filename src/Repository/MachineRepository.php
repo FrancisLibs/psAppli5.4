@@ -33,8 +33,7 @@ class MachineRepository extends ServiceEntityRepository
             ->select('m', 'w')
             ->join('m.workshop', 'w')
             ->andWhere('m.active = :disabled')
-            ->setParameter('disabled', true)
-        ;
+            ->setParameter('disabled', true);
 
         if (!empty($search->internalCode)) {
             $internalCode = strtoupper($search->internalCode);
@@ -54,23 +53,27 @@ class MachineRepository extends ServiceEntityRepository
             $constructor = strtoupper($search->constructor);
             $query = $query
                 ->andWhere('m.constructor LIKE :constructor')
-                ->setParameter('constructor', "%{$constructor}%")
-            ;
+                ->setParameter('constructor', "%{$constructor}%");
         }
 
         if (!empty($search->model)) {
             $model = strtoupper($search->model);
             $query = $query
                 ->andWhere('m.model LIKE :model')
-                ->setParameter('model', "%{$model}%")
-            ;
+                ->setParameter('model', "%{$model}%");
+        }
+
+        if (!empty($search->serialNumber)) {
+            $serialNumber = strtoupper($search->serialNumber);
+            $query = $query
+                ->andWhere('m.serialNumber LIKE :serialNumber')
+                ->setParameter('serialNumber', "%{$serialNumber}%");
         }
 
         if (!empty($search->workshop)) {
             $query = $query
                 ->andWhere('w.id = :workshop')
-                ->setParameter('workshop', $search->workshop)
-            ;
+                ->setParameter('workshop', $search->workshop);
         }
 
         $query = $query->getQuery();

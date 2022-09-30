@@ -18,9 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security as Secu;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/part")
@@ -31,17 +32,17 @@ class PartController extends AbstractController
     protected $stockValueRepository;
     protected $manager;
     protected $requestStack;
-    //protected $qrCodeService;
     protected $deliveryNoteRepository;
+    protected $security;
 
-    public function __construct(DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
+    public function __construct(Secu $security, DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->partRepository = $partRepository;
         $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
-        //$this->qrCodeService = $qrCodeService;
         $this->deliveryNoteRepository = $deliveryNoteRepository;
+        $this->security = $security;
     }
 
     /**
@@ -88,7 +89,7 @@ class PartController extends AbstractController
         }
 
         if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote' || $mode == 'newDeliveryNote') {
-            $panier = $session->get('panier', []);
+            $panier = $session->get('panier', null);
             if ($panier) {
                 $panierWithData = [];
                 foreach ($panier as $id => $quantity) {
@@ -164,12 +165,6 @@ class PartController extends AbstractController
      */
     public function show(Part $part): Response
     {
-        // if (!$part->getQrCode()) {
-        //     $qrCode = $this->qrCodeService->qrcode($part->getCode());
-        //     $part->setQrCode($qrCode);
-        //     $this->manager->flush();
-        // }
-
         return $this->render('part/show.html.twig', [
             'part' => $part,
         ]);
@@ -263,8 +258,8 @@ class PartController extends AbstractController
         $totalStock = $this->partRepository->findTotalStock($organisation);
         $stockValues = $this->stockValueRepository->findStockValues($organisation);
 
-        $amounts=[];
-        $dates=[];
+        $amounts = [];
+        $dates = [];
 
         foreach ($stockValues as $value) {
             $amount = $value->getValue();

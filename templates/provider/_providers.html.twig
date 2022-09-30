@@ -3,7 +3,7 @@
         <td data-label="Nom" class="font_size_table">
             {% if mode is defined %}
                 {% if mode == 'selectProvider' %}
-                    <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_new', {'providerId': provider.id}) }}">{{ provider.name }}</a>
+                    <a class="btn btn-sm btn-primary w-50" href="{{ path('session_save_provider', {'providerId': provider.id}) }}">{{ provider.name }}</a>
                 {% elseif mode == 'deliveryNoteChangeProv' %}
                     <a class="btn btn-sm btn-primary w-50" href="{{ path('delivery_note_edit', {'id': documentId, 'providerId': provider.id}) }}">{{ provider.name }}</a>
                 {% else %}

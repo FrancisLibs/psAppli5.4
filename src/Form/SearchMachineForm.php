@@ -39,15 +39,20 @@ class SearchMachineForm extends AbstractType
                 'attr'      => ['placeholder' => 'Modèle...']
             ])
 
+            ->add('serialNumber', TextType::class, [
+                'label'     => false,
+                'required'  => false,
+                'attr'      => ['placeholder' => 'Num. série...']
+            ])
+
             ->add('workshop', EntityType::class, [
                 'class'     => Workshop::class,
                 'choice_label' => 'name',
                 'label'     => false,
                 'required'  => false,
                 'placeholder' => 'Atelier',
-                
-            ])
-            ->add('save', SubmitType::class);
+
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

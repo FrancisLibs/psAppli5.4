@@ -8,18 +8,18 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Il y a déjà un utilisateur avec cet identifiant")
  * @Vich\Uploadable
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -420,6 +420,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     }
 
     public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->username,
+            $this->password
+        ) = unserialize($serialized, ['allowed classes' => false]);
+    }
+
+    public function _serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+        ]);
+    }
+
+    public function _unserialize($serialized)
     {
         list(
             $this->id,

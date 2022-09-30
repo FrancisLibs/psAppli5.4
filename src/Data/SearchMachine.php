@@ -39,6 +39,13 @@ class SearchMachine
      */
     public $model;
 
+     /**
+     * Le numéro de série de la machine
+     *
+     * @var string
+     */
+    public $serialNumber;
+
     /**
      * L'atelier de la machine
      *

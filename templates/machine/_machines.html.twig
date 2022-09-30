@@ -18,6 +18,11 @@
         {% else %}
             <td data-label="Modèle" class="text-center font_size_table">-</td>
         {% endif %}
+        {% if machine.serialNumber %}
+            <td data-label="Modèle" class="text-center font_size_table">{{ machine.serialNumber }}</td>
+        {% else %}
+            <td data-label="Modèle" class="text-center font_size_table">-</td>
+        {% endif %}
         <td data-label="Atelier" class="text-center font_size_table">{{ machine.workshop.name }}</td>
     </tr>
 {% else %}

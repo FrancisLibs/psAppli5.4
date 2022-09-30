@@ -76,7 +76,7 @@ class DeliveryNoteController extends AbstractController
         $form->handleRequest($request);
 
         $deliveryNotes = $this->deliveryNoteRepository->findSearch($data);
-        
+
         if ($request->get('ajax')) {
             return new JsonResponse([
                 'content'       =>  $this->renderView('delivery_note/_delivery_notes.html.twig', ['delivery_notes' => $deliveryNotes]),
@@ -92,24 +92,19 @@ class DeliveryNoteController extends AbstractController
     }
 
     /**
-     * @Route("/new/{providerId?}", name="delivery_note_new", methods={"GET","POST"})
+     * @Route("/new", name="delivery_note_new", methods={"GET","POST"})
      */
-    public function new(Request $request, int $providerId = null): Response
+    public function new(Request $request): Response
     {
         $user = $this->getUser();
         $session = $this->requestStack->getSession();
         $organisation = $user->getOrganisation();
         $deliveryNote = new DeliveryNote();
 
-        // Gestion du fournisseur du BL en session
+        // Vérification si fournisseur du BL en session
+        $providerId = $session->get('providerId', null);
         if ($providerId) {
-            $session->set('providerId', $providerId);
             $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
-        } else {
-            $providerId = $session->get('providerId', null);
-            if ($providerId) {
-                $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
-            }
         }
 
         // Gestion du numéro du BL en session
@@ -121,8 +116,7 @@ class DeliveryNoteController extends AbstractController
         // Gestion de la date du BL en session
         $deliveryNoteDate = $session->get('deliveryNoteDate', null);
         if ($deliveryNoteDate) {
-            $deliveryNoteDate = new \DateTime($deliveryNoteDate);
-            $deliveryNote->setDate($deliveryNoteDate);
+            $deliveryNote->setDate(new \DateTime($deliveryNoteDate));
         }
 
         // Gestion des pièces en session
@@ -158,13 +152,9 @@ class DeliveryNoteController extends AbstractController
             $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
             foreach ($deliveryNoteParts as $deliveryNotePart) {
                 $deliveryNotePartQte = $deliveryNotePart->getQuantity();
-
                 $partStockQte = $deliveryNotePart->getPart()->getStock()->getQteStock();
-
                 $deliveryNotePart->getPart()->getStock()->setQteStock($deliveryNotePartQte + $partStockQte);
-
                 $partsInOrder = $deliveryNotePart->getPart()->getStock()->getApproQte();
-
                 if ($partsInOrder >= $deliveryNotePartQte) {
                     $deliveryNotePart->getPart()->getStock()->setApproQte($partsInOrder - $deliveryNotePartQte);
                 }

@@ -1,4 +1,6 @@
 liip_imagine:
+  twig:
+    mode: lazy
   filter_sets:
     my_thumb_filter:
       filters:
