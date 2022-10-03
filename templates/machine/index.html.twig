@@ -8,19 +8,20 @@
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article class="col-12 col-lg-9">
-            <header class="row mb-3 justify-content-start">
-                <div class="d-flex justify-content-start align-items-center mb-5">
+            <header class="d-flex justify-content-start align-items-center flex-wrap">
+                <div class="d-flex justify-content-start align-items-center flex-wrap mb-5">
                     {% if mode == "selectPreventive" %}
-                        <h3 class="text-primary">Machines -> BT préventif</h3>
+                        <h1 class="page-title me-5">Machines -> BT préventif</h1>
                     {% elseif mode == "newWorkorder" %}
-                        <h3>Machine -> BT</h3>
+                        <h1 class="page-title me-5">Machine -> BT</h1>
                     {% else %}
-                        <h3 class="me-5 text-primary">Machines</h3>
+                        <h1 class="page-title me-5">Machines</h1>
                     {% endif %}
                     {% if mode != 'selectPreventive' and mode != 'workorderSelect' and mode != 'newWorkorder' %}
                         <a class="btn btn-primary btn-sm mt-2 mb-3" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
                     {% endif %}
                 </div>
+                {# Encart des mahines en haut à droite #}
                 <div class="col-12 col-sm-9 col-md-8 col-xl-7">
                     {% if machinesWithData is defined and machinesWithData is not empty %}
                         <div class="border border-primary rounded p-1">

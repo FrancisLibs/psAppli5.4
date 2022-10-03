@@ -13,11 +13,11 @@
             {% include 'user/_photo.html.twig' %}
         </aside>
         <article>
-            <header class="row mb-3">
-                <div class="col-5 col-sm-3">
-                    <h3 class="text-primary me-5">Machine</h3>
+            <header class="d-flex justify-content-start align-items-sm-baseline align-items-md-center flex-wrap">
+                <div class="d-flex">
+                    <h1 class="page-title me-5">Machine</h1>
                 </div>
-                <div class="col-7 col-md-9 d-flex justify-content-start align-items-base flex-wrap">
+                <div class="d-flex justify-content-start align-items-baseline flex-wrap">
                     <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_index') }}" role="button">Liste machines</a>
                     <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
                     <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
