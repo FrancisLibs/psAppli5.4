@@ -1,6 +1,9 @@
+let blForm = document.forms.delivery_note;
+let blNumber = blForm["delivery_note[number]"];
+let blDate = blForm["delivery_note[date]"];
+
 // Lors d'un nouveau bon de livraison, le numéro de BL
 // et de sa date sont mis en session par ajax
-
 function saveNumber() {
   let routeClass = document.querySelector(".deliveryNoteRoute");
   let numberRoute = routeClass.dataset.urlDeliverynotenumber;
@@ -29,10 +32,6 @@ function saveDate() {
       json.message;
     });
 }
-
-let blForm = document.forms.delivery_note;
-let blNumber = blForm["delivery_note[number]"];
-let blDate = blForm["delivery_note[date]"];
 
 blNumber.addEventListener("change", saveNumber, false);
 blDate.addEventListener("change", saveDate, false);

@@ -49,7 +49,6 @@ export class MachineIndex {
     this.pagination.addEventListener("click", aClickListener);
 
     const inputs = this.form.querySelectorAll("input");
-    console.log(inputs.length);
 
     const inputForm = this.form.querySelectorAll("input");
     inputForm.forEach((input) => {
