@@ -25,6 +25,7 @@ Encore
   .addEntry("editDeliveryNote", "./assets/JS/editDeliveryNote.js")
   .addEntry("jschart", "./assets/JS/jschart.js")
   .addEntry("showMachine", "./assets/styles/showMachine.css")
+  .addEntry("register", "./assets/styles/register.css")
 
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

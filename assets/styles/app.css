@@ -111,6 +111,11 @@ main {
   text-align: center;
 }
 
+.page-title {
+  font-family: georgia;
+  color: blue;
+}
+
 .margin-top-resp {
   margin-top: 100px;
 }
@@ -138,13 +143,6 @@ main {
   -o-transition: all 0.5s;
   transition: all 0.5s;
   text-decoration: none;
-}
-
-/* Register page */
-.register-form {
-  width: 100%;
-  margin: auto;
-  margin-top: 50px;
 }
 
 /* Administration page */
