@@ -11,14 +11,14 @@
             <header class="d-flex justify-content-between flex-wrap mb-4">
                 <div class="d-flex justify-content-start align-items-center flex-wrap">
                     {% if mode == "workorderAddPart" %}
-                        <h3 class="page-title me-5">Pièces détachées -> BT</h3>
+                        <h1 class="page-title me-5">Pièces détachées -> BT</h1>
                         <a class="btn btn-primary btn-sm" href="{{ path('work_order_show', {'id': documentId}) }}" role="button">Retour au BT</a>
                     {% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
-                        <h3 class="page-title me-5">Pièces détachées -> BL</h3>
-                        <a class="btn btn-primary btn-sm mb-3 px-4" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
+                        <h1 class="page-title me-5">Pièces détachées -> BL</h1>
+                        <a class="btn btn-primary btn-sm" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
                     {% else %}
-                        <h3 class="page-title me-5">Pièces détachées</h3>
-                        <a class="btn btn-primary btn-sm mb-3 px-4" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
+                        <h1 class="page-title me-5">Pièces détachées</h1>
+                        <a class="btn btn-primary btn-sm" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
                     {% endif %}
                 </div>
                 {# Panier de mahines #}

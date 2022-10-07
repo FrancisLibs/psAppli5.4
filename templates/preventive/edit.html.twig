@@ -10,7 +10,7 @@
         <article class="col">
             <header class="row mb-3 me-5 justify-content-start">
                 <div class="d-flex justify-content-start align-items-center">
-                    <h3 class="text-primary">Edition bon de travail préventif</h3>
+                    <h1 class="page-title">Edition bon de travail préventif</h1>
                     <a class="btn btn-primary btn-sm ms-3 me-3" href="{{ path('template_index') }}" role="button">Liste des préventifs</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         {{ include('preventive/_delete_form.html.twig') }}

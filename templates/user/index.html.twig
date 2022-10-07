@@ -9,7 +9,7 @@
         </aside>
         <div class="col-11 col-md-9 ms-1">
             <div class="d-flex justify-content-start align-items-center mb-5">
-                <h3 class="me-5 text-primary">Liste des Utilisateurs</h3>
+                <h1 class="me-5 page-title">Liste des Utilisateurs</h1>
                 <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
             </div>
             {% include 'user/_userList.html.twig' with {users: users} only %}
