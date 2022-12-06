@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Data\SearchPreventive;
 use App\Entity\Workorder;
 use App\Data\SearchWorkorder;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -57,10 +58,9 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $search->organisation)
-            ->orderBy('w.id', 'DESC')
-        ;
+            ->orderBy('w.id', 'DESC');
 
-        if (!empty($search->id)) {            
+        if (!empty($search->id)) {
             $query = $query
                 ->andWhere('w.id = :id')
                 ->setParameter('id', $search->id);
@@ -95,7 +95,7 @@ class WorkorderRepository extends ServiceEntityRepository
         if (!empty($search->closed)) {
             $query = $query
                 ->andWhere('w.workorderStatus = :cloture')
-                ->setParameter('cloture', 5 );
+                ->setParameter('cloture', 5);
         }
 
         if (!empty($search->preventive)) {
@@ -118,16 +118,17 @@ class WorkorderRepository extends ServiceEntityRepository
      *
      * @param int $templateNumber
      */
-    public function countPreventiveWorkorder($templateNumber){
+    public function countPreventiveWorkorder($templateNumber)
+    {
         return $this->createQueryBuilder('w')
-        ->select('count(w.id)')
-        ->join('w.workorderStatus', 's')
-        ->andWhere('w.templateNumber = :val')
-        ->setParameter('val', $templateNumber)
-        ->andWhere('s.name <> :status')
-        ->setParameter('status', 'CLOTURE')
-        ->getQuery()
-        ->getSingleScalarResult();
+            ->select('count(w.id)')
+            ->join('w.workorderStatus', 's')
+            ->andWhere('w.templateNumber = :val')
+            ->setParameter('val', $templateNumber)
+            ->andWhere('s.name <> :status')
+            ->setParameter('status', 'CLOTURE')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -138,6 +139,7 @@ class WorkorderRepository extends ServiceEntityRepository
     public function findAllPreventiveWorkorders($organisationId)
     {
         return $this->createQueryBuilder('w')
+            ->select('w', 's')
             ->join('w.workorderStatus', 's')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisationId)
@@ -145,6 +147,51 @@ class WorkorderRepository extends ServiceEntityRepository
             ->setParameter('enabled', true)
             ->andWhere('s.name <> :status')
             ->setParameter('status', 'CLOTURE')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les bons de travail préventifs
+     *
+     * @param int $organisationId
+     */
+    public function findIndicatorsWorkorders($organisation, $year)
+    {
+        $date = new DateTime($year);
+
+        return $this->createQueryBuilder('w')
+            ->select('w', 'm')
+            ->join('w.workorderStatus', 's')
+            ->join('w.machines', 'm')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisation)
+            ->andWhere('w.startDate > :year')
+            ->setParameter('year', $date)
+            ->andWhere('w.preventive = :preventive')
+            ->setParameter('preventive', false)
+            ->andWhere('w.durationDay > 0 OR w.durationHour > 0 OR w.durationMinute > 0')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les bons de travail préventifs pour affichage calendrier
+     *
+     * @param int $organisationId
+     */
+    public function findAllPreventiveForCalendar($organisationId, $year)
+    {
+        $date = new DateTime($year);
+
+        return $this->createQueryBuilder('w')
+            ->select('w')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisationId)
+            ->andWhere('w.preventive = :enabled')
+            ->setParameter('enabled', true)
+            ->andWhere('w.startDate > :year')
+            ->setParameter('year', $date)
             ->getQuery()
             ->getResult();
     }

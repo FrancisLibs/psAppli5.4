@@ -1,11 +1,17 @@
 {{ form_start(form) }}
-    <div class="row mt-5">
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4 class="text-primary">Titre</h4>
+            {{ form_widget(form.calendarTitle) }}  
+        </div>
+    </div>
+    <div class="row mt-4">
         <div class="col-12">
             <h4 class="text-primary">Demande</h4>
             {{ form_widget(form.request) }}  
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-12">
             <h4 class="text-primary">Remarque</h4>
             {{ form_widget(form.remark) }}  

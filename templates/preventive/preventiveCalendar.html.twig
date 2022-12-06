@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier préventifs{% endblock %}
+
+{% block body %}
+    <main class="d-flex justify-content-start mt-5">
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <header class="row mb-3 me-5 justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
+                    <h1 class="page-title">Bons de travail préventifs</h1>
+                    {# <a class="btn btn-primary btn-sm ms-5" href="{{ path('preventive_new', {'mode': 'preventive'}) }}" role="button">Nouveau préventif</a>
+                    <a class="btn btn-warning btn-sm ms-2" href="{{ path('preventiveCalendar') }}" role="button">Calendrier</a> #}
+                </div>
+            </header>
+            <section class="row">
+            
+                <div id="calendrier">
+                    
+                </div>
+            </section>
+        </article>
+        <div class="js-events-data" data-events="{{ data }}"></div>
+    </main>
+{% endblock %}
+{% block javascripts %} 
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js" 
+    integrity="sha256-7PzqE1MyWa/IV5vZumk1CVO6OQbaJE4ns7vmxuUP/7g=" crossorigin="anonymous"></script>   
+    <script>
+        window.onload = () => {
+            var eventsDiv = document.querySelector('.js-events-data');
+            var events = JSON.parse(eventsDiv.dataset.events);
+                        // console.log(events)
+            let calendarElt = document.querySelector("#calendrier");
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                timeZone: 'Europe/Paris',
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth,timeGridWeek'
+                },
+                events: events,
+                
+            })
+            calendar.render();
+        }
+    </script>
+{% endblock %}

@@ -34,14 +34,9 @@ class OnCallRepository extends ServiceEntityRepository
     public function findSearch(SearchOnCall $search, $organisation, $service): PaginationInterface
     {
         $query = $this->createQueryBuilder('o')
-            ->select('o')
+            ->select('o', 'u')
+            ->join('o.user', 'u')
             ->orderBy('o.id', 'DESC');
-
-        // if (!empty($search->user)) {
-        //     $query = $query
-        //         ->andWhere('u.username = :user')
-        //         ->setParameter('user', $search->user);
-        // }
 
         $query = $query->getQuery();
 

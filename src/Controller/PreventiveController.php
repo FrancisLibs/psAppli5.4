@@ -9,6 +9,7 @@ use App\Data\SearchTemplate;
 use App\Form\SearchTemplateForm;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
+use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,8 +29,10 @@ class PreventiveController extends AbstractController
     private $requestStack;
     private $machineRepository;
     private $templateRepository;
+    private $workorderRepository;
 
     public function __construct(
+        WorkorderRepository $workorderRepository,
         WorkorderStatusRepository $workorderStatusRepository,
         TemplateRepository $templateRepository,
         MachineRepository $machineRepository,
@@ -41,6 +44,7 @@ class PreventiveController extends AbstractController
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->requestStack = $requestStack;
         $this->machineRepository = $machineRepository;
+        $this->workorderRepository = $workorderRepository;
     }
 
     /**
@@ -313,5 +317,33 @@ class PreventiveController extends AbstractController
         return $this->redirectToRoute('template_edit', [
             'id'    =>  $newTemplate->getId(),
         ]);
+    }
+
+    /**
+     * @Route("calendar", name="preventiveCalendar")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function calendar(): Response
+    {
+        $user = $this->getUser();
+        $organisationId = $user->getOrganisation()->getId();
+        $year = '2022-01-01';
+
+        $events = $this->workorderRepository->findAllPreventiveForCalendar($organisationId, $year);
+
+        $rdvs = [];
+        foreach ($events as $event) {
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStartDate()->format('Y-m-d H:m:i'),
+                'end' => $event->getEndDate()->format('Y-m-d H:m:i'),
+                'title' => $event->getCalendarTitle(),
+                'description' => $event->getRequest(),
+            ];
+        }
+
+        $data = json_encode($rdvs);
+
+        return $this->renderForm('preventive/preventiveCalendar.html.twig', compact("data"));
     }
 }

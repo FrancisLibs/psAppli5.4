@@ -98,6 +98,11 @@ class Template
      */
     private $parts;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $calendarTitle;
+
     public function __construct()
     {
         $this->templatesParts = new ArrayCollection();
@@ -313,6 +318,18 @@ class Template
         if ($this->parts->removeElement($part)) {
             $part->removeTemplate($this);
         }
+
+        return $this;
+    }
+
+    public function getCalendarTitle(): ?string
+    {
+        return $this->calendarTitle;
+    }
+
+    public function setCalendarTitle(?string $calendarTitle): self
+    {
+        $this->calendarTitle = $calendarTitle;
 
         return $this;
     }

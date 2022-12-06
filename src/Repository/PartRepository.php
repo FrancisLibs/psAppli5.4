@@ -86,7 +86,7 @@ class PartRepository extends ServiceEntityRepository
     public function findPartsToBuy($organisation)
     {
         return $this->createQueryBuilder('p')
-            ->select('p', 's')
+            ->select('p', 's', 'f', 'o')
             ->join('p.stock', 's')
             ->join('p.organisation', 'o')
             ->join('p.provider', 'f')
@@ -99,13 +99,6 @@ class PartRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    // SELECT p.code, p.reference, p.designation, pro.name
-    // FROM part p 
-    // INNER JOIN stock s ON p.id = s.part_id
-    // INNER JOIN provider pro ON pro.id = p.provider_id
-    // WHERE s.qte_stock <= s.qte_min
-    // ORDER BY pro.name
 
     /**
      * @return Part[]

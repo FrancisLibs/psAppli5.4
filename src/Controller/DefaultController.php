@@ -127,6 +127,9 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    /**
+     * Création des BT préventifs à partir des templates
+     */
     private function preventiveProcessing($organisationId, $today)
     {
         // Recherche des templates préventifs
@@ -147,6 +150,7 @@ class DefaultController extends AbstractController
                     // Création du BT préventif, en récupérant les infos sur le template préventif
                     $workorder = new Workorder();
                     $workorder->setCreatedAt(new \DateTime())
+                        ->setCalendarTitle($template->getCalendarTitle())
                         ->setPreventiveDate($template->getNextDate())
                         ->setRequest($template->getRequest())
                         ->setRemark($template->getRemark())
@@ -175,7 +179,9 @@ class DefaultController extends AbstractController
         return;
     }
 
-    // Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
+    /**
+     *  Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
+     */
     private function setPreventiveStatus($organisation, $today)
     {
         $preventiveWorkorders = $this->workorderRepository->findAllPreventiveWorkorders($organisation);

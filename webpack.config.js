@@ -23,10 +23,10 @@ Encore
   .addEntry("app", "./assets/app.js")
   .addEntry("workorder", "./assets/JS/workorder.js")
   .addEntry("editDeliveryNote", "./assets/JS/editDeliveryNote.js")
-  .addEntry("jschart", "./assets/JS/jschart.js")
+  .addEntry("stockValueJschart", "./assets/JS/stockValueJschart.js")
+  .addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
   .addEntry("showMachine", "./assets/styles/showMachine.css")
   .addEntry("register", "./assets/styles/register.css")
-
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")

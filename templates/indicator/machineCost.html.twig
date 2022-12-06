@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Indicateurs : coût machines{% endblock %}
+
+{% block body %}
+    <main class="row justify-content-start" >
+        <menu class="d-flex justify-content-center mb-5">
+            {% include 'indicator/_indicator_navbar.html.twig' %}
+        </menu>
+        <aside class="col-2 displayMd mt-5">
+            {% include 'user/_photo.html.twig' %}
+        </aside>
+        <article class="col-10">
+            <header>
+                <div class="row"> 
+                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                        <h1 class="page-title me-5">Indicateur coût pièces détachées</h1>
+                        {# <a class="btn btn-primary btn-sm" href="{{ path('work_order_show') }}" role="button">Retour au BT</a> #}
+                    </div>
+                </div>
+            </header>
+            <section class="mt-4">
+                <div>
+                    <h4>Coût total des Pièces détachées : {{ totalPartsPrice }} Euros</h4>
+                </div>
+                <div class="d-flex justify-content-between flex-wrap mt-5">
+                    {% for machine in machineDatas %}
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ machine.name }}</h5>
+                                <p class="card-text">
+                                    {{ machine.partsPrice ?? 0 }}€
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ machine.name }}</h5>
+                                <p class="card-text">
+                                    {{machine.days}} jours {{machine.hours}} heures {{machine.minutes}} minutes
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </article>
+    </main>
+{% endblock %}

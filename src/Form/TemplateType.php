@@ -49,7 +49,10 @@ class TemplateType extends AbstractType
                 'label' => 'Glissant',
                 'required' => false,
             ])
-        ;
+            ->add('calendarTitle', TextType::class, [
+                'label' => 'Titre calendrier',
+                'required' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

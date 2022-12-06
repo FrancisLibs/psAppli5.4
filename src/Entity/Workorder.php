@@ -16,7 +16,7 @@ class Workorder
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
-    
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -198,6 +198,11 @@ class Workorder
      * @ORM\Column(type="float", nullable=true)
      */
     private $partsPrice;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $calendarTitle;
 
     public function __construct()
     {
@@ -537,6 +542,18 @@ class Workorder
     public function setPartsPrice(?float $partsPrice): self
     {
         $this->partsPrice = $partsPrice;
+
+        return $this;
+    }
+
+    public function getCalendarTitle(): ?string
+    {
+        return $this->calendarTitle;
+    }
+
+    public function setCalendarTitle(?string $calendarTitle): self
+    {
+        $this->calendarTitle = $calendarTitle;
 
         return $this;
     }

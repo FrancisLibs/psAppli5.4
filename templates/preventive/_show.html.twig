@@ -43,6 +43,19 @@
     </div>
 </div>
 
+{% if template.calendarTitle %}
+    <div class="row mt-4">
+        <div class="col-8">
+            <h4 class="text-primary">Titre : </h4>
+        </div>
+    </row>
+    <div class="row">
+        <div class="col-12 border border-info rounded">
+            <p>{{ template.calendarTitle }}</p>
+        </div>
+    </div>
+{% endif %}
+
 {% if template.request %}
     <div class="row mt-4">
         <div class="col-8">
