@@ -59,6 +59,30 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * @Route("/preventifRectif", name="preventif_rectif")
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function preventifRectif(): Response
+    {
+        //dd('ok');
+        $user = $this->getUser();
+        $organisationId = $user->getOrganisation()->getId();
+
+        $workorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
+        //dd($workorders);
+
+        foreach ($workorders as $workorder) {
+            $status = $this->workorderStatusRepository->findOneByName('CLOTURE');
+            $workorder->setWorkorderStatus($status);
+            $this->manager->persist($workorder);
+        }
+
+        $this->manager->flush();
+
+        return $this->render('admin/index.html.twig');
+    }
+
+    /**
      * Liste des bt
      * 
      * @Route("/", name="work_order_index", methods={"GET"})
@@ -103,7 +127,7 @@ class WorkorderController extends AbstractController
         $session = $this->requestStack->getSession();
         $userParams = [];
         $user = $this->getUser();
-        $organisation= $user->getOrganisation();
+        $organisation = $user->getOrganisation();
         $userParams[] = $organisation;
         $userParams[] = $user->getService();
 
@@ -199,7 +223,7 @@ class WorkorderController extends AbstractController
      */
     public function edit(Request $request, Workorder $workorder, $machine = null): Response
     {
-        $userParams=[];
+        $userParams = [];
         $user = $this->getUser();
         $userParams[] = $user->getOrganisation();
         $userParams[] = $user->getService();
@@ -217,9 +241,9 @@ class WorkorderController extends AbstractController
 
         $form = $this->createForm(WorkorderType::class, $workorder, [
             'userParams' => $userParams,
-            
+
         ]);
-        
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -257,7 +281,7 @@ class WorkorderController extends AbstractController
     }
 
     /**
-     * Affichage de la liste des pièces pour selection
+     * Affichage de la liste des pièces détachées pour selection
      *
      * @Route("/addPart/{id}/{mode?}", name="work_order_add_part", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
@@ -274,7 +298,6 @@ class WorkorderController extends AbstractController
             'documentId' => $id,
         ]);
     }
-
 
     /**
      * @Route("/{id}", name="work_order_delete", methods={"POST"})

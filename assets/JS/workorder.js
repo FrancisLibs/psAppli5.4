@@ -4,7 +4,6 @@ window.onload = () => {
   let workorderFormImplementation = workorderForm["workorder[implementation]"];
 
   // -------------------------------------------------------------------
-
   // Gestion du temps de l'intervention
   // Date et heure de début
   // Calcul de la durée si on a date et l'heure de début et date et l'heure de fin
@@ -33,7 +32,7 @@ window.onload = () => {
 
   // Gestion du temps de l'intervention
   function calcTemps() {
-    //     // Lecture des champs début intervention et création d'un dateTime
+    // Lecture des champs début intervention et création d'un dateTime
     let params = readParams();
 
     params.dateD.setHours(params.heureD);
@@ -41,7 +40,7 @@ window.onload = () => {
     params.dateF.setHours(params.heureF);
     params.dateF.setMinutes(params.minuteF);
 
-    // Test si calcul possible il faut que l'heure de fin soit définie
+    // Test si calcul possible : il faut que l'heure de fin soit définie
     if (params.heureF && params.minuteF) {
       //Calcul de la durée
       let diffTemps = Math.abs(params.dateF - params.dateD);
@@ -62,11 +61,13 @@ window.onload = () => {
     }
   }
 
-  // Si modif case duration (jours, heures ou minutes) calcul des autres données
+  //Si modif case duration (jours, heures ou minutes) calcul des autres données
   function duration() {
     let params = readParams();
+
     // Création objet Date
     let date = new Date(params.startDate);
+
     // Convertion en time stamp
     let dateTimeStamp = date.getTime();
 
@@ -82,7 +83,6 @@ window.onload = () => {
 
     // Ajout du temps à la date et à l'heure de début
     let newDate = dateTimeStamp + durationDay + durationHour + durationMinute;
-
     let newCalculateDate = new Date(newDate).toISOString().substring(0, 10);
     let newCalculateTime = new Date(newDate).toISOString().substring(11, 16);
 
@@ -100,14 +100,56 @@ window.onload = () => {
     }
   }
 
-  // Calcul des temps au moment du chargement de la page
-  calcTemps();
+  function modifEndDate() {
+    // Lecture des champs début intervention et création d'un dateTime
+    let params = readParams();
+    if (params.endDate < params.startDate) {
+      workorderForm["workorder[endDate]"].value =
+        workorderForm["workorder[startDate]"].value;
+    }
+  }
 
-  //   // Surveillance des modifications des dates
+  function verifEndDate() {
+    // Lecture des champs début intervention et création d'un dateTime
+    let params = readParams();
+    if (params.endDate < params.startDate) {
+      alert("Attention la date de fin est antérieure à la date de départ...");
+    }
+  }
+
+  function checkValidForm(e) {
+    // // Validation de la durée d'intervention
+    //calcTemps();
+    if (
+      workorderForm["workorder[durationDay]"].value == 0 &&
+      workorderForm["workorder[durationHour]"].value == 0 &&
+      workorderForm["workorder[durationMinute]"].value == 0
+    ) {
+      const reponse = confirm("Tu n'as pas mis de temps d'intervention, ok ?");
+      if (reponse) {
+        confirm("Ton BT restera ouvert jusqu'à la date de fin.");
+      } else {
+        e.preventDefault();
+      }
+    }
+  }
+
+  // Surveillance des modifications des dates
   let endTime = document.querySelector("#workorder_time");
   endTime.addEventListener("change", calcTemps, false);
 
   // Surveillance des modifications des temps de durée
   let durationForm = document.querySelector("#duration_time");
   durationForm.addEventListener("change", duration, false);
+
+  // Surveillance de la date de départ pour donner la même à la date de fin
+  let beginDate = workorderForm["workorder[startDate]"];
+  beginDate.addEventListener("change", modifEndDate, false);
+
+  // Surveillance de la date de fin qui doit être suppérieur à la date de départ
+  let endDate = workorderForm["workorder[endDate]"];
+  endDate.addEventListener("change", verifEndDate, false);
+
+  // Surveillance de la validation du formulaire
+  workorderForm.addEventListener("submit", checkValidForm, false);
 };

@@ -7,9 +7,13 @@ use App\Entity\Workorder;
 use App\Entity\StockValue;
 use App\Repository\PartRepository;
 use App\Repository\UserRepository;
+use App\Service\PreventiveService;
+use App\Service\StockValueService;
 use App\Repository\ParamsRepository;
+use App\Service\UserConnexionService;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
+use App\Service\PreventiveStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\Mailer\MailerInterface;
@@ -27,6 +31,8 @@ class DefaultController extends AbstractController
     private $userRepository;
     private $manager;
     private $partRepository;
+    private $preventiveService;
+    private $userConnexionService;
 
 
     public function __construct(
@@ -36,7 +42,11 @@ class DefaultController extends AbstractController
         ParamsRepository $paramsRepository,
         WorkorderStatusRepository $workorderStatusRepository,
         UserRepository $userRepository,
-        PartRepository $partRepository
+        PartRepository $partRepository,
+        PreventiveService $preventiveService,
+        PreventiveStatusService $preventiveStatusService,
+        UserConnexionService $userConnexionService,
+        StockValueService $stockValueService,
     ) {
         $this->paramsRepository = $paramsRepository;
         $this->workorderRepository = $workorderRepository;
@@ -45,6 +55,10 @@ class DefaultController extends AbstractController
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->userRepository = $userRepository;
         $this->partRepository = $partRepository;
+        $this->preventiveService = $preventiveService;
+        $this->preventiveStatusService = $preventiveStatusService;
+        $this->userConnexionService = $userConnexionService;
+        $this->stockValueService = $stockValueService;
     }
 
     /**
@@ -54,62 +68,50 @@ class DefaultController extends AbstractController
     public function index(MailerInterface $mailer): Response
     {
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
-        $organisationId = $organisation->getId();
-        $serviceId = $user->getService()->getId();
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        // Création d'un enregistrement des connexions
-        if ($user) {
-            $connexion = new Connexion();
-            $connexion
-                ->setDate(new \DateTime())
-                ->setUser($user);
+        $organisation = $user->getOrganisation();
+        $organisationId = $organisation->getId();
+        $serviceId = $user->getService()->getId();
 
-            $this->manager->persist($connexion);
-            $this->manager->flush();
-        }
+        $this->userConnexionService->registration($user);
 
         // Lecture des dates de vérification cherchées dans le fichier des paramètres
         $params = $this->paramsRepository->find(1);
         $lastPreventiveDate = $params->getLastPreventiveDate()->getTimestamp();
-        $lastStockValueDate = $params->getLastStockValueDate()->getTimestamp();
         $today = (new \DateTime())->getTimestamp();
 
         // Gestion des bons de travail préventifs
-        // On vérifie à chaque connexion  puis rajout d'1 jour à la date enregistrée
+        // Vérification à chaque connexion,
+        // mais rajout d'1 jour à la date enregistrée pour ne vérifier q'une fois/jour
+
         $lastPreventiveDate = $lastPreventiveDate + 24 * 60 * 60;
-        if ($lastPreventiveDate <= $today) {
-            // Définition de la prochaine date à celle d'aujourd'hui
+        // Test si traitement nécessaire (1 fois /jour à la première connexion)
+        // Si today est supérieur à lancienne date + 1 jour
+
+        if ($today >= $lastPreventiveDate) {
+            // Changement de la date du dernier traitement
             $params->setLastPreventiveDate(new \DateTime());
             $this->manager->persist($params);
+            $this->manager->flush();
 
-            $this->preventiveProcessing($organisationId, $today);
+            // Traitement des préventifs à ajouter si nécessaire
+            $this->preventiveService->preventiveProcessing($organisationId);
 
-            $this->setPreventiveStatus($organisationId, $today);
+            // Surveillance des status des préventifs en cours selon leurs paramètres
+            $this->preventiveStatusService->setPreventiveStatus($organisationId);
         }
 
         // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
+        $lastStockValueDate = $params->getLastStockValueDate()->getTimestamp();
 
         $lastStockValueDate = $lastStockValueDate + (60 * 60 * 24 * 7);
+
         if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
-            // Calcul du montant du stock
-            $totalStock = $this->partRepository->findTotalStock($organisation);
-
-            // Création de l'enregistrement
-            $stockValue = new StockValue();
-            $stockValue->setValue($totalStock)
-                ->setDate(new \Datetime())
-                ->setOrganisation($organisation);
-            $this->manager->persist($stockValue);
-
-            // Calcul nouvelle date dans le fichier params
-            $params->setLastStockValueDate(new \DateTime());
-
-            $this->manager->flush();
+            $this->stockValueService->computeStockValue($organisation, $organisationId, $params);
         }
 
         // ------------------------------------------------------------------------------
@@ -125,85 +127,5 @@ class DefaultController extends AbstractController
         return $this->render('default/index.html.twig', [
             'users'         => $users,
         ]);
-    }
-
-    /**
-     * Création des BT préventifs à partir des templates
-     */
-    private function preventiveProcessing($organisationId, $today)
-    {
-        // Recherche des templates préventifs
-        $templates = $this->templateRepository->findAllTemplates($organisationId);
-
-        foreach ($templates as $template) {
-            // Prochaine date en secondes
-            $nextDate = $template->getNextDate()->getTimestamp(); // Date de réalisation
-            // Jours avant la date en secondes
-            $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
-            // Date finale à prende en compte
-            $nextCalculateDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
-
-            // Test si template éligible
-            if ($nextCalculateDate <= $today) {
-                // Contrôle si BT préventif n'est pas déjà actif
-                if (!$this->workorderRepository->countPreventiveWorkorder($template->getTemplateNumber())) {
-                    // Création du BT préventif, en récupérant les infos sur le template préventif
-                    $workorder = new Workorder();
-                    $workorder->setCreatedAt(new \DateTime())
-                        ->setCalendarTitle($template->getCalendarTitle())
-                        ->setPreventiveDate($template->getNextDate())
-                        ->setRequest($template->getRequest())
-                        ->setRemark($template->getRemark())
-                        ->setOrganisation($template->getOrganisation())
-                        ->setTemplateNumber($template->getTemplateNumber())
-                        ->setUser($template->getUser())
-                        ->setType(Workorder::PREVENTIF)
-                        ->setPreventive(true)
-                        ->setDaysBeforeLate($template->getDaysBeforeLate());
-                    if ($template->getDaysBefore() > 0) {
-                        $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_PREP.']);
-                    } else {
-                        $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
-                    }
-                    $workorder->setWorkorderStatus($status);
-                    $machines = $template->getMachines();
-                    foreach ($machines as $machine) {
-                        $workorder->addMachine($machine);
-                    }
-
-                    $this->manager->persist($workorder);
-                }
-                $this->manager->flush();
-            }
-        }
-        return;
-    }
-
-    /**
-     *  Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
-     */
-    private function setPreventiveStatus($organisation, $today)
-    {
-        $preventiveWorkorders = $this->workorderRepository->findAllPreventiveWorkorders($organisation);
-        if ($preventiveWorkorders) {
-            foreach ($preventiveWorkorders as $workorder) {
-                $today = (new \Datetime())->getTimeStamp();
-                $preventiveDate = $workorder->getPreventiveDate()->getTimeStamp();
-                $daysBeforeLate = $workorder->getDaysBeforeLate() * 24 * 60 * 60;
-                $dateBerforeLate = $preventiveDate + $daysBeforeLate;
-
-                if ($today < $preventiveDate) {
-                    $status = $this->workorderStatusRepository->findOneByName('EN_PREP.');
-                } elseif ($today >= $preventiveDate && $today < $dateBerforeLate) {
-                    $status = $this->workorderStatusRepository->findOneByName('EN_COURS');
-                } elseif ($today > $dateBerforeLate) {
-                    $status = $this->workorderStatusRepository->findOneByName('EN_RETARD');
-                }
-
-                $workorder->setWorkorderStatus($status);
-                $this->manager->persist($workorder);
-            }
-            $this->manager->flush();
-        }
     }
 }

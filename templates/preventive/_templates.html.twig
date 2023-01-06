@@ -3,6 +3,8 @@
         <td data-label="Numéro" class="font_size_table">
             <a class="btn ntn-sm btn-primary" href="{{ path('template_show', {'id': template.id}) }}">{{ template.templateNumber }}</a>
         </td>
+        <td data-label="Demande" class="text-center font_size_table">{{ template.calendarTitle }}</td>
+        
         <td data-label="Demande" class="text-center font_size_table">{{ template.request }}</td>
         <td data-label="Prochaine date" class="text-center font_size_table">{{ template.nextDate|date("d/m/Y") }}</td>
         <td data-label="Machines" class="text-center font_size_table" >

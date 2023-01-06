@@ -143,11 +143,13 @@ class PartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findTotalStock($organisation)
+    public function findTotalStock($organisationId)
     {
         return $this->createQueryBuilder('p')
             ->join('p.stock', 's')
             ->select('SUM(p.steadyPrice * s.qteStock) as totalStock')
+            ->where('p.organisation = :organisationId')
+            ->setParameter('organisationId', $organisationId)
             ->getQuery()
             ->getSingleScalarResult();
     }

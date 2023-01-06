@@ -34,8 +34,7 @@ class TemplateRepository extends ServiceEntityRepository
             ->andWhere('t.organisation = :val')
             ->setParameter('val', $search->organisation)
             ->andWhere('t.active = :disabled')
-            ->setParameter('disabled', true)
-        ;
+            ->setParameter('disabled', true);
 
         if (!empty($search->machine)) {
             $machine = strtoupper($search->machine);
@@ -73,16 +72,30 @@ class TemplateRepository extends ServiceEntityRepository
     /**
      * Récupère les templates préventifs
      * 
-     * @param $oragnisation
+     * @param $organisation
      */
-    public function findAllTemplates($organisationId)
+    public function findAllActiveTemplates($organisationId)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.organisation = :val')
             ->setParameter('val', $organisationId)
-            ->andWhere('t.active = :disabled')
-            ->setParameter('disabled', true)
+            ->andWhere('t.active = :active')
+            ->setParameter('active', true)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Récupère 1 template par son id
+     * 
+     * @param $id
+     */
+    public function findOneById($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

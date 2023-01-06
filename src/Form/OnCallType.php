@@ -18,34 +18,37 @@ class OnCallType extends AbstractType
     {
         $builder
             ->add('callDay', DateType::class, [
-                'label' =>  'Jour'
+                'label' =>  'Jour',
+                'widget' => 'single_text',
             ])
             ->add('callTime', TimeType::class, [
-                'label' =>  'Heure'
+                'label' =>  'Heure',
+                'widget' => 'single_text',
             ])
             ->add('whoCalls', TextType::class, [
                 'label' =>  'Qui'
             ])
             ->add('arrivalTime', TimeType::class, [
-                'label' =>  'Heure d\'arrivée'
+                'label' =>  'Heure d\'arrivée',
+                'widget' => 'single_text'
             ])
             ->add('reason', TextareaType::class, [
                 'label' =>  'Cause'
             ])
             ->add('durationHours', IntegerType::class, [
-                'label' =>  'Heures'
+                'label' =>  'Heures',
             ])
             ->add('durationMinutes', IntegerType::class, [
-                'label' =>  'Minutes'
+                'label' =>  'Minutes',
             ])
             ->add('travelhours', IntegerType::class, [
-                'label' =>  'Heures'
+                'label' =>  'Heures',
             ])
             ->add('travelMinutes', IntegerType::class, [
-                'label' =>  'Minutes'
+                'label' =>  'Minutes',
             ])
             ->add('task', TextareaType::class, [
-                'label' =>  'Action'
+                'label' =>  'Action',
             ]);
     }
 

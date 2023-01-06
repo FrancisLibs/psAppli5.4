@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Calendrier préventifs{% endblock %}
@@ -16,10 +17,7 @@
                 </div>
             </header>
             <section class="row">
-            
-                <div id="calendrier">
-                    
-                </div>
+                <div id="calendrier"></div>
             </section>
         </article>
         <div class="js-events-data" data-events="{{ data }}"></div>
@@ -44,8 +42,8 @@
                     center: 'title',
                     end: 'dayGridMonth,timeGridWeek'
                 },
-                events: events,
-                
+                height: 650,
+                events: events,                
             })
             calendar.render();
         }

@@ -1,12 +1,10 @@
 {{ form_start(form) }}
     <div class="row mt-5">
-        <div class="col-8 col-sm-6 col-md-5 col-xl-4 d-flex justify-content-start">
+        <div class="d-flex justify-content-start align-items-baseline col-12 col-sm-7 col-md-5 col-xl-4">
             <h4 class="text-primary me-4">Technicien</h4>
             {{ form_row(form.user) }}
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="d-flex justify-content-start col-11 col-sm-8 col-lg-10 col-xl-5">
+        <div class="d-flex justify-content-start align-items-baseline col-12 col-sm-7 col-md-5 col-xl-4 ">
             <h4 class="me-5 text-primary">Type BT</h4>
             {{ form_row(form.type) }}
         </div>
@@ -39,25 +37,25 @@
                     <h4>Date</h4>
                 </div>
                 <div class="d-flex justify-content-around border border-secondary rounded me-3 p-3 pb-3">
-                    <div class="row">
+                    <div class="row justify-content-start">
                         <div class="mb-3 me-1">
                             {{ form_label(form.startDate) }}
                             <div class="caseTemps">
                                 {{ form_widget(form.startDate) }}
                             </div>
                         </div>
-                        <div>
-                            {{ form_label(form.startTime) }}
-                            <div class="caseHeure2">
-                                {{ form_widget(form.startTime) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="mb-3">
                             {{ form_label(form.endDate) }}
                             <div class="caseTemps">
                                 {{ form_widget(form.endDate) }}
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row justify-content-start">
+                        <div>
+                            {{ form_label(form.startTime) }}
+                            <div class="caseHeure2">
+                                {{ form_widget(form.startTime) }}
                             </div>
                         </div>
                         <div>

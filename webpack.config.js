@@ -27,6 +27,7 @@ Encore
   .addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
   .addEntry("showMachine", "./assets/styles/showMachine.css")
   .addEntry("register", "./assets/styles/register.css")
+  .addEntry("on_call_new", "./assets/styles/on_call_new.css")
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")

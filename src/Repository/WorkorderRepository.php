@@ -136,7 +136,7 @@ class WorkorderRepository extends ServiceEntityRepository
      *
      * @param int $organisationId
      */
-    public function findAllPreventiveWorkorders($organisationId)
+    public function findAllLatePreventiveWorkorders($organisationId)
     {
         return $this->createQueryBuilder('w')
             ->select('w', 's')
@@ -145,8 +145,27 @@ class WorkorderRepository extends ServiceEntityRepository
             ->setParameter('val', $organisationId)
             ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true)
-            ->andWhere('s.name <> :status')
-            ->setParameter('status', 'CLOTURE')
+            ->andWhere('s.name = :status')
+            ->setParameter('status', 'EN_RETARD')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les bons de travail préventifs
+     *
+     * @param int $organisationId
+     */
+    public function findAllActivePreventiveWorkorders($organisationId)
+    {
+        return $this->createQueryBuilder('w')
+            ->select('w', 's')
+            ->join('w.workorderStatus', 's')
+            ->andWhere('w.organisation = :val')
+            ->setParameter('val', $organisationId)
+            ->andWhere('w.preventive = :enabled')
+            ->setParameter('enabled', true)
+            ->andWhere("s.name = 'EN_COURS' OR s.name = 'EN_PREP.'")
             ->getQuery()
             ->getResult();
     }

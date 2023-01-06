@@ -13,11 +13,11 @@ class UserChecker implements UserCheckerInterface
     {
         if (!$user instanceof AppUser) {
             return;
-        } 
-        
+        }
+
         if (!$user->getActive()) {
             // the message passed to this exception is meant to be displayed to the user
-            throw new CustomUserMessageAccountStatusException('Ton compte a été inactivé.');
+            throw new CustomUserMessageAccountStatusException('Ton compte a été désactivé.');
         }
     }
 
@@ -26,6 +26,5 @@ class UserChecker implements UserCheckerInterface
         if (!$user instanceof AppUser) {
             return;
         }
-
     }
 }

@@ -330,7 +330,6 @@ class PreventiveController extends AbstractController
         $year = '2022-01-01';
 
         $events = $this->workorderRepository->findAllPreventiveForCalendar($organisationId, $year);
-
         $rdvs = [];
         foreach ($events as $event) {
             $rdvs[] = [

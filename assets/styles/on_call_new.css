@@ -1,0 +1,25 @@
+/* On_call new page */
+.on-call-day {
+  width: 165px;
+}
+
+.on-call-hour {
+  width: 115px;
+}
+
+.on-call-who {
+  width: 280px;
+}
+
+.on-call-travel-hours {
+  width: 130px;
+}
+.on-call-travel-minutes {
+  width: 130px;
+}
+.on-call-arrivall-time {
+  width: 135px;
+}
+.on-call-txt-box {
+  width: 73%;
+}

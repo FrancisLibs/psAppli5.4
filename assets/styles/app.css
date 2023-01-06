@@ -21,6 +21,16 @@ main {
   background: linear-gradient(#c2f0ea, white);
 }
 
+.cc-navbar .nav-link {
+  border-bottom: 1px solid transparent;
+  transition: padding-bottom 0.4s ease-in-out, border-color 0.3s ease;
+}
+
+.cc-navbar .nav-link:hover {
+  padding-bottom: 20px;
+  border-bottom-color: var(--bs-gray-600);
+}
+
 /* Traitement des tables responsives */
 @media (max-width: 800px) {
   /* Centrage d'un champ */

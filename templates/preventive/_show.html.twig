@@ -4,13 +4,10 @@
         <h5 class="champs_bt text-center">{{ template.templateNumber }}</h5>
     </div>
     <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-start">
-        <h4 class="text-primary">Créé le : </h4>
-        <h5 class="champs_bt text-center">{{ template.createdAt ? template.createdAt|date('d-m-Y', timezone="Europe/Paris") : '' }}</h5>
+        <h4 class="text-primary">Prochaine date : </h4>
+        <h5 class="champs_bt text-center">{{ template.nextDate|date('d-m-Y', timezone="Europe/Paris") }}</h5>
     </div>
-    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-start">
-        <h4 class="text-primary">Par : </h4>
-        <h5 class="champs_bt text-center">{{ template.user.firstName }}</h5>
-    </div>
+    
 </div>
 <div class="row mt-4">
     <div class="col-2">
