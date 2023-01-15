@@ -30,6 +30,7 @@ class PreventiveController extends AbstractController
     private $machineRepository;
     private $templateRepository;
     private $workorderRepository;
+    private $workorderStatusRepository;
 
     public function __construct(
         WorkorderRepository $workorderRepository,
@@ -37,7 +38,7 @@ class PreventiveController extends AbstractController
         TemplateRepository $templateRepository,
         MachineRepository $machineRepository,
         EntityManagerInterface $manager,
-        RequestStack $requestStack
+        RequestStack $requestStack,
     ) {
         $this->manager = $manager;
         $this->templateRepository = $templateRepository;
@@ -45,6 +46,7 @@ class PreventiveController extends AbstractController
         $this->requestStack = $requestStack;
         $this->machineRepository = $machineRepository;
         $this->workorderRepository = $workorderRepository;
+        $this->workorderStatusRepository = $workorderStatusRepository;
     }
 
     /**
@@ -327,18 +329,21 @@ class PreventiveController extends AbstractController
     {
         $user = $this->getUser();
         $organisationId = $user->getOrganisation()->getId();
-        $year = '2022-01-01';
+        $year = '2023-01-01';
 
         $events = $this->workorderRepository->findAllPreventiveForCalendar($organisationId, $year);
+        dd($events);
         $rdvs = [];
-        foreach ($events as $event) {
-            $rdvs[] = [
-                'id' => $event->getId(),
-                'start' => $event->getStartDate()->format('Y-m-d H:m:i'),
-                'end' => $event->getEndDate()->format('Y-m-d H:m:i'),
-                'title' => $event->getCalendarTitle(),
-                'description' => $event->getRequest(),
-            ];
+        if ($events) {
+            foreach ($events as $event) {
+                $rdvs[] = [
+                    'id' => $event->getId(),
+                    'start' => $event->getStartDate()->format('Y-m-d H:i:s'),
+                    'end' => $event->getEndDate()->format('Y-M-d H:i:s'),
+                    'title' => $event->getCalendarTitle(),
+                    'description' => $event->getRequest(),
+                ];
+            }
         }
 
         $data = json_encode($rdvs);

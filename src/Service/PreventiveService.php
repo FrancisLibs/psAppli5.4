@@ -36,15 +36,15 @@ class PreventiveService
         // Recherche des templates préventifs
         $templates = $this->templateRepository->findAllActiveTemplates($organisationId);
 
-
         $today = (new \DateTime())->getTimestamp();
 
         foreach ($templates as $template) {
-            //dd($template);
             // Prochaine date en secondes
             $nextDate = $template->getNextDate()->getTimestamp(); // Date de réalisation
-            // Jours avant la date en secondes
+
+            // Jours avant la date
             $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
+           
             // Date finale à prende en compte
             $nextComputeDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
 

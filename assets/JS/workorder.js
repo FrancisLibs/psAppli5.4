@@ -119,7 +119,7 @@ window.onload = () => {
 
   function checkValidForm(e) {
     // // Validation de la durée d'intervention
-    //calcTemps();
+    calcTemps();
     if (
       workorderForm["workorder[durationDay]"].value == 0 &&
       workorderForm["workorder[durationHour]"].value == 0 &&
@@ -128,6 +128,7 @@ window.onload = () => {
       const reponse = confirm("Tu n'as pas mis de temps d'intervention, ok ?");
       if (reponse) {
         confirm("Ton BT restera ouvert jusqu'à la date de fin.");
+        e.preventDefault();
       } else {
         e.preventDefault();
       }

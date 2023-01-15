@@ -33,6 +33,8 @@ class DefaultController extends AbstractController
     private $partRepository;
     private $preventiveService;
     private $userConnexionService;
+    private $preventiveStatusService;
+    private $stockValueService;
 
 
     public function __construct(
@@ -76,39 +78,41 @@ class DefaultController extends AbstractController
         $organisation = $user->getOrganisation();
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
+        $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour
+        $oneWeek = (new \DateInterval('P7D')); // 'P1D' = 1jour
 
         $this->userConnexionService->registration($user);
 
         // Lecture des dates de vérification cherchées dans le fichier des paramètres
+
         $params = $this->paramsRepository->find(1);
-        $lastPreventiveDate = $params->getLastPreventiveDate()->getTimestamp();
-        $today = (new \DateTime())->getTimestamp();
+        $lastDate = new \DateTime();
+        $lastDate->setTimestamp($params->getLastPreventiveDate()->getTimestamp())->add($oneDay);
+        $today = (new \DateTime());
 
-        // Gestion des bons de travail préventifs
-        // Vérification à chaque connexion,
-        // mais rajout d'1 jour à la date enregistrée pour ne vérifier q'une fois/jour
+        // Gestion des bons de travail préventifs : Vérification à chaque connexion,
+        // Rajout d'1 jour à la date enregistrée pour ne vérifier qu'une fois/jour
 
-        $lastPreventiveDate = $lastPreventiveDate + 24 * 60 * 60;
-        // Test si traitement nécessaire (1 fois /jour à la première connexion)
+        // Test si traitement possible (1 fois /jour à la première connexion)
         // Si today est supérieur à lancienne date + 1 jour
 
-        if ($today >= $lastPreventiveDate) {
-            // Changement de la date du dernier traitement
-            $params->setLastPreventiveDate(new \DateTime());
-            $this->manager->persist($params);
-            $this->manager->flush();
-
+        if ($today >= $lastDate || true) {
             // Traitement des préventifs à ajouter si nécessaire
             $this->preventiveService->preventiveProcessing($organisationId);
 
             // Surveillance des status des préventifs en cours selon leurs paramètres
             $this->preventiveStatusService->setPreventiveStatus($organisationId);
+
+            // Changement de la date du dernier traitement
+            $params->setLastPreventiveDate(new \DateTime());
+            $this->manager->persist($params);
+            $this->manager->flush();
         }
 
         // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
-        $lastStockValueDate = $params->getLastStockValueDate()->getTimestamp();
-
-        $lastStockValueDate = $lastStockValueDate + (60 * 60 * 24 * 7);
+        $lastStockValueDate = new \DateTime();
+        $lastStockValueDate->setTimestamp($params->getLastStockValueDate()->getTimestamp());
+        $lastStockValueDate->add($oneWeek);
 
         if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
             $this->stockValueService->computeStockValue($organisation, $organisationId, $params);

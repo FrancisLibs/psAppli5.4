@@ -201,7 +201,8 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findAllPreventiveForCalendar($organisationId, $year)
     {
-        $date = new DateTime($year);
+        $beginDate = new DateTime($year);
+        dd($beginDate);
 
         return $this->createQueryBuilder('w')
             ->select('w')
@@ -209,8 +210,8 @@ class WorkorderRepository extends ServiceEntityRepository
             ->setParameter('val', $organisationId)
             ->andWhere('w.preventive = :enabled')
             ->setParameter('enabled', true)
-            ->andWhere('w.startDate > :year')
-            ->setParameter('year', $date)
+            ->andWhere('w.startDate >= :startDate')
+            ->setParameter('startDate', $beginDate)
             ->getQuery()
             ->getResult();
     }

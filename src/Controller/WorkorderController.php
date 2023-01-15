@@ -37,6 +37,7 @@ class WorkorderController extends AbstractController
     private $machineRepository;
     private $templateRepository;
     private $workorderStatusRepository;
+    private $partRepository;
     private $pdf;
 
     public function __construct(
@@ -47,7 +48,7 @@ class WorkorderController extends AbstractController
         PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
         EntityManagerInterface $manager,
-        RequestStack $requestStack
+        RequestStack $requestStack,
     ) {
         $this->workorderRepository = $workorderRepository;
         $this->partRepository = $partRepository;
@@ -58,29 +59,29 @@ class WorkorderController extends AbstractController
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @Route("/preventifRectif", name="preventif_rectif")
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
-    public function preventifRectif(): Response
-    {
-        //dd('ok');
-        $user = $this->getUser();
-        $organisationId = $user->getOrganisation()->getId();
+    // /**
+    //  * @Route("/preventifRectif", name="preventif_rectif")
+    //  * @Security("is_granted('ROLE_ADMIN')")
+    //  */
+    // public function preventifRectif(): Response
+    // {
+    //     //dd('ok');
+    //     $user = $this->getUser();
+    //     $organisationId = $user->getOrganisation()->getId();
 
-        $workorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
-        //dd($workorders);
+    //     $workorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
+    //     //dd($workorders);
 
-        foreach ($workorders as $workorder) {
-            $status = $this->workorderStatusRepository->findOneByName('CLOTURE');
-            $workorder->setWorkorderStatus($status);
-            $this->manager->persist($workorder);
-        }
+    //     foreach ($workorders as $workorder) {
+    //         $status = $this->workorderStatusRepository->findOneByName('CLOTURE');
+    //         $workorder->setWorkorderStatus($status);
+    //         $this->manager->persist($workorder);
+    //     }
 
-        $this->manager->flush();
+    //     $this->manager->flush();
 
-        return $this->render('admin/index.html.twig');
-    }
+    //     return $this->render('admin/index.html.twig');
+    // }
 
     /**
      * Liste des bt
@@ -247,7 +248,6 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Contrôle BT terminé 
             $machine = $workorder->getMachines();
             $minute = $workorder->getDurationMinute();
@@ -261,13 +261,13 @@ class WorkorderController extends AbstractController
             } else {
                 $status = $this->workorderStatusRepository->findOneBy(['name' => 'EN_COURS']);
             }
+
             $workorder->setWorkorderStatus($status);
 
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute(
-                'work_order_show',
-                [
+                'work_order_show', [
                     'id' => $workorder->getId()
                 ],
                 Response::HTTP_SEE_OTHER
@@ -314,7 +314,7 @@ class WorkorderController extends AbstractController
     }
 
     /**
-     * Cloture des BT. Et calcul de la prochaine date pour les BT préventifs.
+     * Cloture des BT et calcul de la prochaine date pour les BT préventifs.
      * 
      * @Route("/closing/{id}", name="work_order_closing")
      * @Security("is_granted('ROLE_ADMIN')")
@@ -322,23 +322,33 @@ class WorkorderController extends AbstractController
     public function closing(Workorder $workorder): RedirectResponse
     {
 
-        if ($workorder->getDurationDay() > 0 || $workorder->getDurationHour() > 0 || $workorder->getDurationMinute() > 0) {
-            // Si cloture d'un préventif, réarmement du template pour la prochaine utilisation
+        if (
+            $workorder->getDurationDay() > 0
+            || $workorder->getDurationHour() > 0
+            || $workorder->getDurationMinute() > 0
+        ) {
+            // Si cloture d'un BT préventif, calcule de la prochaine date du template
             if ($workorder->getPreventive()) {
                 // récupération du template
                 $templateNumber = $workorder->getTemplateNumber();
                 $template = $this->templateRepository->findOneBy(['templateNumber' => $templateNumber]);
-                $period = $template->getPeriod() * 24 * 60 * 60;
-                $oldNextDate = $template->getNextDate()->getTimeStamp();
+                // Récup de la période en jours et transformation en secondes
+                $period = $template->getPeriod()* 24 * 60 * 60;
+                // Prochaine date en secondes
+                $nextDate = $workorder->getPreventiveDate()->getTimeStamp();
+                // Aujourd'hui en secondes
                 $today = (new \DateTime())->getTimeStamp();
-
-                // Si glissant, affection de la date du jour à la période
                 $date = new \DateTime();
+
                 if ($template->getSliding()) {
+                    // Si préventif glissant, ajout de la période à la date du jour
                     $date->setTimestamp($today + $period);
+                    //dd($date->format('d-m-Y'));
                     $template->setNextDate($date);
-                } else { // Sinon, affection de l'ancienne date à la période
-                    $date->setTimestamp($oldNextDate + $period);
+                } else {
+                    // Sinon, ajout de la période à la l'ancienne date
+                    $date->setTimestamp($nextDate + $period);
+                    //dd('ng', $date);
                     $template->setNextDate($date);
                 }
             }
@@ -346,7 +356,7 @@ class WorkorderController extends AbstractController
             $status = $this->workorderStatusRepository->findOneBy(['name' => 'CLOTURE']);
             $workorder->setWorkorderStatus($status);
         } else {
-            $this->addFlash('error', 'Merci mon lapin, de compléter les infos de durée d\'intervention !');
+            $this->addFlash('error', 'Merci de compléter les infos de durée d\'intervention !');
             return $this->redirectToRoute('work_order_edit', [
                 'id' => $workorder->getId(),
             ], Response::HTTP_SEE_OTHER);

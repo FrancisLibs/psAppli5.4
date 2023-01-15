@@ -79,13 +79,6 @@ main {
   background-size: cover;
 }
 
-.login_frame {
-  width: 58%;
-  border: 1px solid white;
-  margin: auto;
-  margin-top: 2em;
-}
-
 .logo_profil {
   width: 40px;
 }
@@ -317,12 +310,7 @@ No media query for `xs` since this is the default in Bootstrap */
     margin-top: 50px;
   }
 
-  .login_frame {
-    width: 47%;
-    border: 1px solid white;
-    margin: auto;
-    margin-top: 2em;
-  }
+  
 
   .default-logo {
     margin: auto;
@@ -342,12 +330,7 @@ No media query for `xs` since this is the default in Bootstrap */
     margin-top: 50px;
   }
 
-  .login_frame {
-    width: 33%;
-    border: 1px solid white;
-    margin: auto;
-    margin-top: 2em;
-  }
+ 
 
   .default-column {
     width: 48%;
@@ -362,12 +345,7 @@ No media query for `xs` since this is the default in Bootstrap */
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  .login_frame {
-    width: 28%;
-    border: 1px solid white;
-    margin: auto;
-    margin-top: 2em;
-  }
+  
 
   .register-form {
     width: 48%;
@@ -384,13 +362,6 @@ No media query for `xs` since this is the default in Bootstrap */
 
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {
-  .login_frame {
-    width: 22%;
-    border: 1px solid white;
-    margin: auto;
-    margin-top: 2em;
-  }
-
   .register-form {
     width: 40%;
     margin: auto;
