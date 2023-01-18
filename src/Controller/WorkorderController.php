@@ -242,7 +242,6 @@ class WorkorderController extends AbstractController
 
         $form = $this->createForm(WorkorderType::class, $workorder, [
             'userParams' => $userParams,
-
         ]);
 
         $form->handleRequest($request);

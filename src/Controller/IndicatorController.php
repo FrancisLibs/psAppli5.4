@@ -21,7 +21,7 @@ class IndicatorController extends AbstractController
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $year = '2022-01-01';
+        $year = '2023-01-01';
         $totalTime = 0;
         $totalDays = 0;
         $totalHours = 0;
@@ -83,7 +83,7 @@ class IndicatorController extends AbstractController
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $year = '2022-01-01';
+        $year = '2023-01-01';
         $totalPartsPrice = 0;
 
         $workorders = $this->workorderRepository->findIndicatorsWorkorders($organisation, $year);
@@ -127,7 +127,7 @@ class IndicatorController extends AbstractController
     {
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
-        $year = '2022-01-01';
+        $year = '2023-01-01';
         $datas[] = 0;
         $months = array(
             0 => " janvier ", " février ", " mars ", " avril ", " mai ", " juin ",
@@ -142,7 +142,7 @@ class IndicatorController extends AbstractController
             foreach ($workorders as $workorder) {
                 $workorderDate = $workorder->getCreatedAT();
                 $workorderPartsValue = $workorder->getPartsPrice();
-                $monthNumber = $this->month($workorderDate);
+                $monthNumber = $this->month($workorderDate)-1;
 
                 if (array_key_exists($monthNumber, $values)) {
                     $values[$monthNumber] = $values[$monthNumber] + $workorderPartsValue;

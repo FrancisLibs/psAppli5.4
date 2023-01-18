@@ -96,7 +96,7 @@ class DefaultController extends AbstractController
         // Test si traitement possible (1 fois /jour à la première connexion)
         // Si today est supérieur à lancienne date + 1 jour
 
-        if ($today >= $lastDate || true) {
+        if ($today >= $lastDate) {
             // Traitement des préventifs à ajouter si nécessaire
             $this->preventiveService->preventiveProcessing($organisationId);
 
