@@ -150,6 +150,8 @@ class PartRepository extends ServiceEntityRepository
             ->select('SUM(p.steadyPrice * s.qteStock) as totalStock')
             ->where('p.organisation = :organisationId')
             ->setParameter('organisationId', $organisationId)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
             ->getQuery()
             ->getSingleScalarResult();
     }

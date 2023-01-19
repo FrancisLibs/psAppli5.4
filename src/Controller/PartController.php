@@ -136,6 +136,7 @@ class PartController extends AbstractController
         $form = $this->createForm(PartType::class, $part);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $part->setActive(true);
             $part->setOrganisation($organisation);
@@ -143,6 +144,7 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
+            
 
             $this->manager->persist($part);
             $this->manager->flush();
