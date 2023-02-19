@@ -144,7 +144,7 @@ class PartController extends AbstractController
             $part->setReference(strtoupper($part->getReference()));
             $part->setDesignation(ucfirst($part->getDesignation()));
             $part->getStock()->setPlace(strtoupper($part->getStock()->getPlace()));
-            
+
 
             $this->manager->persist($part);
             $this->manager->flush();
@@ -312,23 +312,4 @@ class PartController extends AbstractController
             'Content-Type' => 'application/pdf',
         ]);
     }
-
-    // /**
-    //  * @Route("/action", name="part_action")
-    //  * @Security("is_granted('ROLE_ADMIN')")
-    //  */
-    // public function action(): Response
-    // {
-    //     $parts = $this->partRepository->findAll();
-
-    //     foreach ($parts as $part) {
-    //         $part->setDesignation(strtoupper($part->getDesignation()));
-    //         $part->setReference(strtoupper($part->getReference()));
-    //         $this->manager->persist($part);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
-    // }
 }

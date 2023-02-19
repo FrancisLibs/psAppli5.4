@@ -248,27 +248,5 @@ class MachineController extends AbstractController
             'machine' => $machine,
             'form' => $form,
         ]);
-    }
-
-    /**
-     * @Route("/action", name="machine_action", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
-    public function action(): Response
-    {
-        $machines = $this->machineRepository->findAll();
-        foreach ($machines as $machine) {
-            $machine->setConstructor(
-                strtoupper($machine->getConstructor())
-            );
-            $machine->setDesignation(
-                mb_strtoupper($machine->getDesignation())
-            );
-
-            $this->manager->persist($machine);
-        }
-        $this->manager->flush();
-
-        return $this->redirectToRoute('machine_index');
-    }
+    }   
 }

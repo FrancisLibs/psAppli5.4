@@ -23,28 +23,38 @@
         <div class="js-events-data" data-events="{{ data }}"></div>
     </main>
 {% endblock %}
-{% block javascripts %} 
+
+{% block javascripts %}
     {{ parent() }}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js" 
-    integrity="sha256-7PzqE1MyWa/IV5vZumk1CVO6OQbaJE4ns7vmxuUP/7g=" crossorigin="anonymous"></script>   
+        integrity="sha256-7PzqE1MyWa/IV5vZumk1CVO6OQbaJE4ns7vmxuUP/7g=" crossorigin="anonymous">
+    </script>
+
     <script>
         window.onload = () => {
             var eventsDiv = document.querySelector('.js-events-data');
             var events = JSON.parse(eventsDiv.dataset.events);
-                        // console.log(events)
             let calendarElt = document.querySelector("#calendrier");
             let calendar = new FullCalendar.Calendar(calendarElt, {
+                
                 initialView: 'dayGridMonth',
                 locale: 'fr',
-                timeZone: 'Europe/Paris',
+                timeZone: 'UTC',
                 headerToolbar: {
                     start: 'prev,next today',
                     center: 'title',
                     end: 'dayGridMonth,timeGridWeek'
+                    
+                },
+                buttonText: {
+                    today:    'aujourd\'hui',
+                    month:    'mois',
+                    week:     'semaine',
                 },
                 height: 650,
-                events: events,                
-            })
+                events: events
+                }
+            );
             calendar.render();
         }
     </script>

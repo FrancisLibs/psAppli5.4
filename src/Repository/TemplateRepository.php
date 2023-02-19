@@ -98,4 +98,26 @@ class TemplateRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Récupère les bons de travail préventifs pour affichage calendrier
+     *
+     * @param int $organisationId
+     * @param string $year
+     */
+    public function findAllTemplatesForCalendar($organisationId, $year)
+    {
+        $beginDate = new \DateTime($year);
+
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->andWhere('t.organisation = :val')
+            ->setParameter('val', $organisationId)
+            ->andWhere('t.active = :enabled')
+            ->setParameter('enabled', true)
+            ->andWhere('t.nextDate >= :nextDate')
+            ->setParameter('nextDate', $beginDate)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -225,7 +225,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * Validation du panier
+     * Validation du panier de pièces pour BT et BL 
      * 
      * @Route("/validation/{mode}/{documentId?}", name="cart_valid")
      * @Security("is_granted('ROLE_USER')")
@@ -240,18 +240,16 @@ class CartController extends AbstractController
         $panier = $session->get('panier', []);
 
         // Affection des pièces du panier au BT
-        // Si le BT a déjà des pièces
         if ($mode == "workorderAddPart") {
             // Récupération du BT dans la bdd
             $workorder = $this->workorderRepository->findOneBy(['id' => $documentId]);
-            // Puis des pièces de ce BT
+            // Puis des éventuelles pièces de ce BT
             $workorderParts = $workorder->getWorkorderParts();
            
             foreach ($panier as $id => $qte) {
                 $part = $this->partRepository->find($id);
-
+                // Vérification si la pièce est déjà dans le BT
                 foreach ($workorderParts->toArray() as $workorderPart) {
-
                     if ($workorderPart->getPart()->getId() === $id) {
 
                         // Modification de la quantité sur le BT
@@ -321,13 +319,15 @@ class CartController extends AbstractController
     {
         $workorderPart = new WorkorderPart();
         $part = $this->partRepository->find($id);
+        $partPrice = $part->getSteadyPrice();
+        
         $workorderPart->setPart($part);
+        $workorderPart->setPrice($partPrice);
         $workorderPart->setQuantity($qte);
 
         $workorder->addWorkorderPart($workorderPart);
 
         // Ajout du prix de la pièces au BT
-        $partPrice = $part->getSteadyPrice();
         $totalPartsPrice = $partPrice * $qte;
         $workorder->setPartsPrice($workorder->getPartsPrice() + $totalPartsPrice);
 

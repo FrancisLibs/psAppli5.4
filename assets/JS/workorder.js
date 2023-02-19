@@ -128,7 +128,6 @@ window.onload = () => {
       const reponse = confirm("Tu n'as pas mis de temps d'intervention, ok ?");
       if (reponse) {
         confirm("Ton BT restera ouvert jusqu'à la date de fin.");
-        e.preventDefault();
       } else {
         e.preventDefault();
       }

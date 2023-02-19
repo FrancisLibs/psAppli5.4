@@ -1,6 +1,7 @@
 .inputs {
   width: 100%;
 }
+
 .align {
   text-align: center;
 }
@@ -19,7 +20,7 @@
   text-align: center;
 }
 
-.forgot-password-link{
+.forgot-password-link {
   color: white;
 }
 

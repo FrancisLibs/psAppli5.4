@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Bon de Travail{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/assets/css/workorder-show.css">
+{% endblock %}
+
 
 {% block body %}
     <main class="d-flex justify-content-start mt-5">

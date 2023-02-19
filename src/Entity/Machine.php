@@ -117,12 +117,28 @@ class Machine
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Machine::class, inversedBy="machines")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Machine::class, mappedBy="parent")
+     */
+    private $machines;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $childLevel;
+
 
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->machines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,5 +378,59 @@ class Machine
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getMachines(): Collection
+    {
+        return $this->machines;
+    }
+
+    public function addMachine(self $machine): self
+    {
+        if (!$this->machines->contains($machine)) {
+            $this->machines[] = $machine;
+            $machine->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMachine(self $machine): self
+    {
+        if ($this->machines->removeElement($machine)) {
+            // set the owning side to null (unless already changed)
+            if ($machine->getParent() === $this) {
+                $machine->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getChildLevel(): ?int
+    {
+        return $this->childLevel;
+    }
+
+    public function setChildLevel(?int $childLevel): self
+    {
+        $this->childLevel = $childLevel;
+
+        return $this;
     }
 }

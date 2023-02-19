@@ -105,7 +105,6 @@ class Template
 
     public function __construct()
     {
-        $this->templatesParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
         $this->parts = new ArrayCollection();
     }

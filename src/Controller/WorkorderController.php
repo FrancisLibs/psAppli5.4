@@ -8,13 +8,13 @@ use App\Entity\Machine;
 use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
-use App\Form\WorkorderEditType;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\WorkorderPartRepository;
 use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,44 +44,21 @@ class WorkorderController extends AbstractController
 
         MachineRepository $machineRepository,
         WorkorderRepository $workorderRepository,
-        TemplateRepository $templateRepository,
-        PartRepository $partRepository,
         WorkorderStatusRepository $workorderStatusRepository,
+        TemplateRepository $templateRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack,
+        PartRepository $partRepository,
+
     ) {
         $this->workorderRepository = $workorderRepository;
-        $this->partRepository = $partRepository;
         $this->machineRepository = $machineRepository;
         $this->templateRepository = $templateRepository;
         $this->workorderStatusRepository = $workorderStatusRepository;
+        $this->partRepository = $partRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
     }
-
-    // /**
-    //  * @Route("/preventifRectif", name="preventif_rectif")
-    //  * @Security("is_granted('ROLE_ADMIN')")
-    //  */
-    // public function preventifRectif(): Response
-    // {
-    //     //dd('ok');
-    //     $user = $this->getUser();
-    //     $organisationId = $user->getOrganisation()->getId();
-
-    //     $workorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
-    //     //dd($workorders);
-
-    //     foreach ($workorders as $workorder) {
-    //         $status = $this->workorderStatusRepository->findOneByName('CLOTURE');
-    //         $workorder->setWorkorderStatus($status);
-    //         $this->manager->persist($workorder);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     return $this->render('admin/index.html.twig');
-    // }
 
     /**
      * Liste des bt
@@ -120,6 +97,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Nouveau BT
+     * 
      * @Route("/new/{id?}", name="work_order_new", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
@@ -208,6 +187,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Visualisation d'un BT
+     * 
      * @Route("/{id}", name="work_order_show", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
@@ -219,6 +200,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Edition d'un BT
+     * 
      * @Route("/edit/{id}/{machine?}", name="work_order_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
@@ -266,7 +249,8 @@ class WorkorderController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToRoute(
-                'work_order_show', [
+                'work_order_show',
+                [
                     'id' => $workorder->getId()
                 ],
                 Response::HTTP_SEE_OTHER
@@ -299,6 +283,8 @@ class WorkorderController extends AbstractController
     }
 
     /**
+     * Suppression d'un BT
+     * 
      * @Route("/{id}", name="work_order_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -332,7 +318,7 @@ class WorkorderController extends AbstractController
                 $templateNumber = $workorder->getTemplateNumber();
                 $template = $this->templateRepository->findOneBy(['templateNumber' => $templateNumber]);
                 // Récup de la période en jours et transformation en secondes
-                $period = $template->getPeriod()* 24 * 60 * 60;
+                $period = $template->getPeriod() * 24 * 60 * 60;
                 // Prochaine date en secondes
                 $nextDate = $workorder->getPreventiveDate()->getTimeStamp();
                 // Aujourd'hui en secondes

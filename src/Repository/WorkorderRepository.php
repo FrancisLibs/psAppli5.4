@@ -193,26 +193,4 @@ class WorkorderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    /**
-     * Récupère les bons de travail préventifs pour affichage calendrier
-     *
-     * @param int $organisationId
-     */
-    public function findAllPreventiveForCalendar($organisationId, $year)
-    {
-        $beginDate = new DateTime($year);
-        dd($beginDate);
-
-        return $this->createQueryBuilder('w')
-            ->select('w')
-            ->andWhere('w.organisation = :val')
-            ->setParameter('val', $organisationId)
-            ->andWhere('w.preventive = :enabled')
-            ->setParameter('enabled', true)
-            ->andWhere('w.startDate >= :startDate')
-            ->setParameter('startDate', $beginDate)
-            ->getQuery()
-            ->getResult();
-    }
 }

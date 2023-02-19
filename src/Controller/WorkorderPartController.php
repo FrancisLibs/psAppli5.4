@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class WorkorderPartController extends AbstractController
 {
     private $workorderPartRepository;
-    private $partRepositiory;
+    private $partRepository;
     private $manager;
 
     public function __construct(

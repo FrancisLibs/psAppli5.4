@@ -310,8 +310,6 @@ No media query for `xs` since this is the default in Bootstrap */
     margin-top: 50px;
   }
 
-  
-
   .default-logo {
     margin: auto;
     max-width: 62%;
@@ -330,8 +328,6 @@ No media query for `xs` since this is the default in Bootstrap */
     margin-top: 50px;
   }
 
- 
-
   .default-column {
     width: 48%;
   }
@@ -345,8 +341,6 @@ No media query for `xs` since this is the default in Bootstrap */
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  
-
   .register-form {
     width: 48%;
     margin: auto;

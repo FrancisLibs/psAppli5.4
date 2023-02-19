@@ -322,6 +322,8 @@ class PreventiveController extends AbstractController
     }
 
     /**
+     * Edition du calendrier des préventifs
+     * 
      * @Route("calendar", name="preventiveCalendar")
      * @Security("is_granted('ROLE_USER')")
      */
@@ -331,17 +333,76 @@ class PreventiveController extends AbstractController
         $organisationId = $user->getOrganisation()->getId();
         $year = '2023-01-01';
 
-        $events = $this->workorderRepository->findAllPreventiveForCalendar($organisationId, $year);
-        dd($events);
+        $templates = $this->templateRepository->findAllTemplatesForCalendar($organisationId, $year);
+        $preventiveWorkorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
+        //dd($preventiveWorkorders);
+
         $rdvs = [];
-        if ($events) {
-            foreach ($events as $event) {
+        if ($templates) {
+            foreach ($templates as $event) {
+                // Données lues
+                $daysBefore = $event->getDaysBefore(); // Jours avant
+                $secondsBefore = $daysBefore * 24 * 60 * 60; // Jours avant en secondes
+                $startDate = $event->getNextDate(); // Date début
+                $secondsStart = $startDate->getTimeStamp(); // Début en secondes
+                $secondsDuration = $event->getDuration() * 24 * 60 * 60; // Durée en secondes
+
+                // Données calculées
+                $dateBefore = new \Datetime(); // Date avant
+                $dateBefore->setTimestamp($secondsStart - $secondsBefore);
+
+                $dateBeforeOneDay = new \Datetime(); // Date avant + 1 jour
+                $dateBeforeOneDay->setTimestamp($secondsStart - $secondsBefore + 24 * 60 * 60);
+
+                $endDate = new \Datetime(); // Date de fin
+                $endDate->setTimestamp($secondsStart + $secondsDuration);
+
+                $id = $event->getId();
+                $title = $event->getCalendarTitle();
+
+                // Si durée de préparation
+                if ($secondsBefore > 0) {
+                    $rdvs[] = [
+                        // 'id' => 'P' . $id,
+                        'title' => 'Prep. ' .  $daysBefore . 'jours ' . $title,
+                        'start' => $dateBefore->format('Y-m-d'),
+                        'end' => $dateBeforeOneDay->format('Y-m-d'),
+                        'backgroundColor' => 'yellow',
+                        'textColor' => 'red',
+                    ];
+                }
+
                 $rdvs[] = [
-                    'id' => $event->getId(),
-                    'start' => $event->getStartDate()->format('Y-m-d H:i:s'),
-                    'end' => $event->getEndDate()->format('Y-M-d H:i:s'),
-                    'title' => $event->getCalendarTitle(),
-                    'description' => $event->getRequest(),
+                    // 'id' => $id,
+                    'title' => $title,
+                    'start' => $startDate->format('Y-m-d'),
+                    'end' => $endDate->format('Y-m-d'),
+                ];
+            }
+        }
+
+        if ($preventiveWorkorders) {
+            foreach ($preventiveWorkorders as $pWorkorder) {
+                $templateId = $pWorkorder->getTemplateNumber();
+                foreach ($templates as $template) {
+                    if ($template->getId() === $templateId) {
+                        $title = $template->getCalendarTitle();
+                        $startDate = $template->getNextDate(); // Date début
+                        $secondsStart = $startDate->getTimeStamp(); // Début en secondes
+                        $secondsDuration = $event->getDuration() * 24 * 60 * 60; // Durée en secondes
+                        $endDate = new \Datetime(); // Date de fin
+                        $endDate->setTimestamp($secondsStart + $secondsDuration);
+                    }
+                }
+                $date = new \Datetime();
+
+                $rdvs[] = [
+                    // 'id' => $id,
+                    'title' => 'Retard...' . $title,
+                    'start' => $endDate->format('Y-m-d'),
+                    'end' => $date->format('Y-m-d'),
+                    'backgroundColor' => 'red',
+                    'textColor' => 'yellow',
                 ];
             }
         }
