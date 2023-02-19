@@ -19,7 +19,7 @@ class ChildMachineController extends AbstractController
     {
         $parent = $machineRepository->find($parentId);
 
-        if (is_null($parent->getChildLevel())) {
+        if ($parent->getChildLevel()===null) {
             $childMachine = new Machine();
 
             $form = $this->createForm(MachineType::class, $childMachine);
@@ -43,8 +43,9 @@ class ChildMachineController extends AbstractController
                 'machine' => $childMachine,
                 'form' => $form,
             ]);
-        } else {
-            $this->get('session')->getFlashBag()->set('error', 'Une machine ne peut avoir qu\'un seul sous-niveau');
+        } 
+        
+        $this->get('session')->getFlashBag()->set('error', 'Une machine ne peut avoir qu\'un seul sous-niveau');
 
             return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
         }
