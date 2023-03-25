@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gmao PS Welcom ! !{% endblock %}
+{% block title %}Gmao PS Bienvenue ! !{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-around mt-5 mb-3 default-top-margin">
-        <div class="default-column">
+        <div class="col-6">
             <div class="row">
-                <h1 class="default-tiltle d-flex justify-content-center">Gestion maintenance PS</h1>
+                <h1 class="d-flex justify-content-center default-title">Gestion maintenance PS</h1>
             </div>
             <div class="row text-center">
                 <img class="default-logo" src="{{ asset('images/logo.png') }}" alt="Charcuterie Pierre Schmidt">            
@@ -23,8 +23,8 @@
                 {% endif %}
             </div>
         </div>
-        <div style="width: 45%;" class="displayMd">
-            <div class="text-center default-tiltle mb-5">
+        <div style="width: 45%;" class="displayMd col-6">
+            <div class="text-center default-title mb-5">
                 <p>The Team</p>
             </div>
             <div class="row">

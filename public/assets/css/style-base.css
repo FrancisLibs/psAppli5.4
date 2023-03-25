@@ -1,0 +1,61 @@
+/* Page login image de fond */
+.login {
+  min-height: 100%;
+  width: 100%;
+  background: url("/public/images/conditionnement4.png") no-repeat center center
+    fixed;
+  background-size: cover;
+}
+
+/* Page default */
+.default-top-margin {
+  padding-top: 100px;
+}
+
+.default-column {
+  margin-top: 2em;
+  width: 69%;
+}
+
+.default {
+  min-height: 100%;
+  width: 100%;
+  background-color: linear-gradient(#51e6b4, white);
+}
+
+.default-title {
+  font-family: "Concert One", cursive;
+  font-size: 4em;
+  color: black;
+  text-align: center;
+}
+
+.page-title {
+  font-family: georgia;
+  color: blue;
+  margin: 0px;
+}
+
+.margin-top-resp {
+  margin-top: 100px;
+}
+
+.btn-default {
+  display: inline-block;
+  color: white;
+  background-color: #4584e9;
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 502;
+  font-size: 1em;
+  border-radius: 20px;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 17px;
+  width: 200px;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  text-decoration: none;
+}

@@ -1,7 +1,7 @@
 {% for template in templates %}
     <tr>
         <td data-label="Numéro" class="font_size_table">
-            <a class="btn ntn-sm btn-primary" href="{{ path('template_show', {'id': template.id}) }}">{{ template.templateNumber }}</a>
+            <a class="btn index-button" href="{{ path('template_show', {'id': template.id}) }}">{{ template.templateNumber }}</a>
         </td>
         <td data-label="Demande" class="text-center font_size_table">{{ template.calendarTitle }}</td>
         

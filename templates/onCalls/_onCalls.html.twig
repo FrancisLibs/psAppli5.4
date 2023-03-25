@@ -5,7 +5,7 @@
     {% endif %}
     >
         <td data-label="Date" class="font_size_table">
-            <a class="btn btn-sm btn-primary" href="{{ path('onCall_show', {'id': onCall.id}) }}">{{ onCall.callDay|date('d-m-Y') }}</a>
+            <a class="btn btn-sm btn-primary index-button" href="{{ path('onCall_show', {'id': onCall.id}) }}">{{ onCall.callDay|date('d-m-Y') }}</a>
         </td>
         <td data-label="Heure" class="text-center font_size_table">{{ onCall.callTime|date('H:i:s') }}</td>
         <td data-label="Problème" class="text-center font_size_table">{{ onCall.reason }}</td>

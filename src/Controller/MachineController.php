@@ -120,12 +120,25 @@ class MachineController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="machine_new", methods={"GET","POST"})
+     * @Route("/new/{parentId?}", name="machine_new", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ?int $parentId): Response
     {
         $machine = new Machine();
+
+        if($parentId){
+             $parent = $this->machineRepository->find($parentId);
+             if($parent->getChildLevel() == 0){
+                $machine->setWorkshop($parent->getWorkshop());
+                $machine->setChildLevel(1);
+                $machine->setParent($parent);
+             }else{
+                $this->get('session')->getFlashBag()->set('error', 'Une machine ne peut avoir qu\'un seul sous-niveau');
+                return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
+             }
+        } 
+
         $form = $this->createForm(MachineType::class, $machine);
         $form->handleRequest($request);
 

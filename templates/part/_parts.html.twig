@@ -3,16 +3,16 @@
         <td data-label="Code" class="font_size_table">
             {% if mode == 'workorderAddPart' %}
                 {% if part.stock.qteStock > 0 and part.organisation == app.user.organisation %}
-                    <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_workorder', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
+                    <a class="btn index-button text-center" href="{{ path('cart_add_workorder', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
                 {% else %}
                     {{ part.code }}
                 {% endif %}
             {% elseif mode == 'newDeliveryNote' %}
-                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode}) }}">{{ part.code }}</a>
+                <a class="btn index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode}) }}">{{ part.code }}</a>
             {% elseif  mode == 'editDeliveryNote' %}
-                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
+                <a class="btn index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
             {% else %}
-                <a class="btn btn-sm btn-primary part-index-button text-center" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>
+                <a class="btn index-button text-center" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>
             {% endif %}
         </td>
         <td data-label="Designation" class="text-center font_size_table">{{ part.designation }}</td>

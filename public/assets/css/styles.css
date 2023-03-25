@@ -1,0 +1,157 @@
+body {
+  background-color: #bbd3e8;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Menu de navigation */
+.nav-link {
+  font-size: 1em !important;
+  text-align: center;
+}
+
+main {
+  min-height: 100%;
+  width: 100%;
+}
+
+.footer {
+  background: linear-gradient(#c2f0ea, white);
+}
+
+.cc-navbar .nav-link {
+  border-bottom: 1px solid transparent;
+  transition: padding-bottom 0.4s ease-in-out, border-color 0.3s ease;
+}
+
+.cc-navbar .nav-link:hover {
+  padding-bottom: 20px;
+  border-bottom-color: var(--bs-gray-600);
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-color: inherit;
+  border-style: none;
+  border-width: 0;
+}
+
+.logo_profil {
+  width: 40px;
+}
+
+.default-logo {
+  margin: auto;
+  max-width: 62%;
+}
+
+.bg-color-orange {
+  background-color: orange;
+}
+
+.index-button {
+  width: 108px;
+  background-color: #007bff;
+  padding: 2px;
+  color: white;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .default-logo {
+    margin: auto;
+    max-width: 62%;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .displayMd {
+    display: none;
+  }
+}
+
+/* X-Small devices (portrait phones, less than 576px)
+No media query for `xs` since this is the default in Bootstrap */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .displayMd {
+    display: none;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .displayMd {
+    display: none;
+  }
+
+  .register-form {
+    width: 91%;
+    margin: auto;
+    margin-top: 50px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .displayMd {
+    display: block;
+  }
+
+  .register-form {
+    width: 53%;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .edit-profil {
+    width: 92%;
+    margin: auto;
+    margin-top: 50px;
+  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .register-form {
+    width: 48%;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .edit-profil {
+    width: 89%;
+    margin: auto;
+    margin-top: 50px;
+  }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  .register-form {
+    width: 40%;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .edit-profil {
+    width: 81%;
+    margin: auto;
+    margin-top: 50px;
+  }
+}

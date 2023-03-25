@@ -21,7 +21,7 @@ liip_imagine:
       quality: 75
       filters:
         thumbnail:
-          size: [190, 190]
+          size: [150, 150]
           mode: outbound
     my_icones_filter:
       filters:
@@ -31,4 +31,3 @@ liip_imagine:
     my_machines_filter:
       quality: 75
       filters:
-

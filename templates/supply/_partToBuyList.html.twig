@@ -20,7 +20,7 @@
                     {% endif %}
                         {% if part.provider.name != varProvider %}
                             {% set varProvider = part.provider.name %}
-                            <td data-label="Fournisseur"><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn btn-primary btn-sm">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>
+                            <td data-label="Fournisseur"><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn index-button">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>
                         {% else %}
                             <td></td>
                         {% endif %}

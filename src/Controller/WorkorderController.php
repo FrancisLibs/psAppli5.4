@@ -272,9 +272,16 @@ class WorkorderController extends AbstractController
     public function addPart(Request $request, int $id, ?string $mode = null): Response
     {
         $session = $this->requestStack->getSession();
-
+        // Vidange du panier
         $session->remove('panier');
         $session->remove('data');
+
+        $workorder = $this->workorderRepository->find($id);
+        $machines = $workorder->getMachines();
+
+        if(count($machines)>1){
+            dd(count($machines));
+        }
 
         return $this->redirectToRoute('part_index', [
             'mode' => $mode,
