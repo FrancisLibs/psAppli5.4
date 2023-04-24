@@ -2,8 +2,7 @@
 .login {
   min-height: 100%;
   width: 100%;
-  background: url("/images/conditionnement4.png") no-repeat center center
-    fixed;
+  background: url("/images/conditionnement4.png") no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -31,9 +30,9 @@
 }
 
 .page-title {
-  font-family: georgia;
+  font-family: georgia, serif;
   color: blue;
-  margin: 0px;
+  margin: 0;
 }
 
 .margin-top-resp {

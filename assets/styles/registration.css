@@ -27,7 +27,7 @@
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .align {
-    text-align: center; 
+    text-align: center;
   }
 
   .login_frame {
@@ -41,7 +41,7 @@
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { 
   .align {
-    text-align: left; 
+    text-align: left;
   } 
 
   .login_frame {
@@ -53,9 +53,9 @@
 }
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
    .align {
-    text-align: left; 
+    text-align: left;
   }
 
   .login_frame {
@@ -67,9 +67,9 @@
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
  .align {
-    text-align: left; 
+    text-align: left;
   } 
 
   .login_frame {
