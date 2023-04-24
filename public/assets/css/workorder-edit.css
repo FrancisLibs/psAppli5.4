@@ -1,0 +1,28 @@
+.caseTemps {
+  width: 157px;
+}
+
+.caseHeure {
+  width: 82px;
+  margin-right: 10px;
+}
+
+.caseHeure2 {
+  width: 100px;
+}
+
+.bloc_date {
+  width: 400px;
+}
+
+.bloc_duree {
+  width: 320px;
+}
+
+.bloc_cout {
+  width: 177px;
+}
+
+.bloc_arret_machine {
+  width: 270px;
+}

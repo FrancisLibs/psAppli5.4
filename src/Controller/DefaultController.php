@@ -79,7 +79,7 @@ class DefaultController extends AbstractController
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
         $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour
-        $oneWeek = (new \DateInterval('P7D')); // 'P1D' = 1jour
+        $oneWeek = (new \DateInterval('P7D')); // 'P7D' = 7jour
 
         $this->userConnexionService->registration($user);
 
@@ -96,7 +96,8 @@ class DefaultController extends AbstractController
         // Test si traitement possible (1 fois /jour à la première connexion)
         // Si today est supérieur à lancienne date + 1 jour
 
-        if ($today >= $lastDate) {
+        //if ($today >= $lastDate) {
+        if($today >= $lastDate){
             // Traitement des préventifs à ajouter si nécessaire
             $this->preventiveService->preventiveProcessing($organisationId);
 

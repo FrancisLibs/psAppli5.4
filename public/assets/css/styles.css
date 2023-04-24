@@ -68,6 +68,10 @@ tr {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Buttons */
+.btn-middle {
+  width: 91px;
+}
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {

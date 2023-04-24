@@ -162,7 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->deliveryNotes = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
-        $this->oncalls = new ArrayCollection();
+        $this->onCalls = new ArrayCollection();
     }
 
     /**
@@ -609,29 +609,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Oncall[]
+     * @return Collection|OnCall[]
      */
     public function getOncalls(): Collection
     {
-        return $this->oncalls;
+        return $this->onCalls;
     }
 
-    public function addOncall(Oncall $oncall): self
+    public function addOnCall(Oncall $onCall): self
     {
-        if (!$this->oncalls->contains($oncall)) {
-            $this->oncalls[] = $oncall;
-            $oncall->setUser($this);
+        if (!$this->onCalls->contains($onCall)) {
+            $this->onCalls[] = $onCall;
+            $onCall->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeOncall(Oncall $oncall): self
+    public function removeOnCall(OnCall $onCall): self
     {
-        if ($this->oncalls->removeElement($oncall)) {
+        if ($this->onCalls->removeElement($onCall)) {
             // set the owning side to null (unless already changed)
-            if ($oncall->getUser() === $this) {
-                $oncall->setUser(null);
+            if ($onCall->getUser() === $this) {
+                $onCall->setUser(null);
             }
         }
 

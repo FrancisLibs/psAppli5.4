@@ -43,7 +43,7 @@ class PreventiveService
             $nextDate = $template->getNextDate()->getTimestamp(); // Date de réalisation
 
             // Jours avant la date
-            $secondsBefore = $template->getDaysBefore() * 24 * 60 * 60; // Jours avant réalisation
+            $secondsBefore = $template->getDaysBefore() * 24 * 3600; // Jours avant réalisation
            
             // Date finale à prende en compte
             $nextComputeDate = $nextDate - $secondsBefore; // Date finale d'activation en secondes
@@ -51,7 +51,7 @@ class PreventiveService
             // Test si template éligible : si la date du préventif est supérieure à la date du jour
             if ($today >= $nextComputeDate) {
                 // Contrôle si BT préventif n'est pas déjà actif
-                if (!$this->workorderRepository->countPreventiveWorkorder($template->getTemplateNumber())) {
+                if (!$this->workorderRepository->countPreventiveActiveWorkorder($template->getTemplateNumber())) {
                     // Création du BT préventif, en récupérant les infos sur le template préventif
                     $workorder = new Workorder();
                     $workorder->setCreatedAt(new \DateTime())
@@ -73,10 +73,10 @@ class PreventiveService
                     foreach ($machines as $machine) {
                         $workorder->addMachine($machine);
                     }
+                    // Ecriture en Bdd pour prendre en compte tous les BT à la prochaine occurence
                     $this->manager->persist($workorder);
+                    $this->manager->flush();
                 }
-
-                $this->manager->flush();
             }
         }
         return;

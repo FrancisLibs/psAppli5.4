@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderStatusRepository;
@@ -11,15 +12,18 @@ class PreventiveStatusService
 {
     private $workorderStatusRepository;
     private $workorderRepository;
+    private $templateRepository;
     private $manager;
 
     public function __construct(
         WorkorderRepository $workorderRepository,
         WorkorderStatusRepository $workorderStatusRepository,
+        TemplateRepository $templateRepository,
         EntityManagerInterface $manager,
     ) {
         $this->workorderRepository = $workorderRepository;
         $this->workorderStatusRepository = $workorderStatusRepository;
+        $this->templateRepository = $templateRepository;
         $this->manager = $manager;
     }
 
@@ -28,20 +32,19 @@ class PreventiveStatusService
      */
     public function setPreventiveStatus($organisationId)
     {
-        // Jour actuel
-        $today = new \DateTime();
-
         $preventiveWorkorders = $this->workorderRepository->findAllActivePreventiveWorkorders($organisationId);
-
         if ($preventiveWorkorders) {
-
             $today = (new \Datetime())->getTimeStamp();
 
             foreach ($preventiveWorkorders as $workorder) {
 
-                $preventiveDate = $workorder->getPreventiveDate()->getTimeStamp();
-                $lateDate = $preventiveDate + ($workorder->getDaysBeforeLate() * 24 * 60 * 60);
+                $preventiveTemplate = $this->templateRepository->find($workorder->getTemplateNumber());
 
+                $preventiveDate = $preventiveTemplate->getNextDate()->getTimeStamp();
+
+                $lateDate = $preventiveDate + $preventiveTemplate->getDaysBeforeLate() * 24 * 3600;
+
+                //dd($workorder->getId().'aujourd\hui : ' . $today . '  date : ' . $preventiveDate . '  duree : ' . $preventiveTemplate->getDaysBeforeLate());
                 if ($today > $preventiveDate) {
                     $status = $this->workorderStatusRepository->findOneByName('EN_COURS');
                     $workorder->setWorkorderStatus($status);

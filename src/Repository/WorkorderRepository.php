@@ -2,12 +2,14 @@
 
 namespace App\Repository;
 
-use App\Data\SearchPreventive;
+use DateTime;
 use App\Entity\Workorder;
 use App\Data\SearchWorkorder;
-use DateTime;
+use App\Data\SearchPreventive;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -114,19 +116,20 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Compte les BT préventifs avec un numéro de template
-     *
+     * Compte tous les BT préventifs actifs avec un numéro de template précis
+     * et qui ne sont pas cloturés 
+     * 
      * @param int $templateNumber
      */
-    public function countPreventiveWorkorder($templateNumber)
+    public function countPreventiveActiveWorkorder($templateNumber)
     {
         return $this->createQueryBuilder('w')
             ->select('count(w.id)')
             ->join('w.workorderStatus', 's')
             ->andWhere('w.templateNumber = :val')
             ->setParameter('val', $templateNumber)
-            ->andWhere('s.name <> :status')
-            ->setParameter('status', 'CLOTURE')
+            ->andWhere("s.name <> :val1")
+            ->setParameter('val1', 'CLOTURE')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -152,7 +155,7 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les bons de travail préventifs
+     * Récupère les bons de travail préventifs en cours
      *
      * @param int $organisationId
      */
@@ -161,11 +164,15 @@ class WorkorderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('w')
             ->select('w', 's')
             ->join('w.workorderStatus', 's')
-            ->andWhere('w.organisation = :val')
-            ->setParameter('val', $organisationId)
+            ->andWhere('w.organisation = :organisation')
             ->andWhere('w.preventive = :enabled')
-            ->setParameter('enabled', true)
-            ->andWhere("s.name = 'EN_COURS' OR s.name = 'EN_PREP.'")
+            ->andWhere('s.name <> :val1 AND s.name <> :val2')
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisationId),
+                new Parameter('enabled', true),
+                new Parameter('val1', 'CLOTURE'),
+                new Parameter('val2', 'TERMINE'),
+            ]))
             ->getQuery()
             ->getResult();
     }

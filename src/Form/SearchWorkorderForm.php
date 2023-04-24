@@ -76,7 +76,7 @@ class SearchWorkorderForm extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return '';
     }
