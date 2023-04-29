@@ -47,7 +47,10 @@
 						<a href="{{ path('admin') }}" class="nav-link">Administration</a>
 					</li>
 				{% endif %}
-
+				<form class="d-flex ms-5" role="search" action="" method="get">
+					<input class="form-control me-2" type="search" placeholder="Chercher" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Chercher</button>
+				</form>
 			</ul>
 			<ul class="navbar-nav align-items-center">
 				<li class="nav-item me-5">
@@ -70,6 +73,5 @@
 				</li>
 			</ul>
 		</div>
-
 	</div>
 </nav>
