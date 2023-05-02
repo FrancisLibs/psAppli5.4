@@ -10,9 +10,11 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mx-auto align-items-center">
-				<li class="me-5">
+				<li>
 					{{ render(path('isNotRead')) }}
 				</li>
+			</ul>
+			<ul class="navbar-nav mx-auto align-items-center">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Pièces détachées
@@ -47,7 +49,9 @@
 						<a href="{{ path('admin') }}" class="nav-link">Administration</a>
 					</li>
 				{% endif %}
-
+				<li class="nav-item mx-2">
+					{{ render(path('app_global_search')) }}
+				</li>
 			</ul>
 			<ul class="navbar-nav align-items-center">
 				<li class="nav-item me-5">
