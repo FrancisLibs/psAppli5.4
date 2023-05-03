@@ -1,30 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des astreintes{% endblock %}
+{% block title %}Liste des astreintes
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-lg-10">
-            <header class="row justify-content-start">
-                <div class="col-4 col-lg-3 col-xl-2">
-                    <h3 class="text-primary">Astreintes</h3>
-                </div>
-                <div class="col-6 col-sm-5 col-md-3">
-                    <a class="btn btn-primary btn-sm mb-3" href="{{ path('onCall_new') }}" role="button">Nouveau Rapport</a>
-                </div>
-            </header>
-            <section>
-                <div class="mt-5">
-                    {% include 'onCalls/_onCallList.html.twig' with {onCalls: onCalls} only %}
-                </div>
-                {# display navigation #}
-                <div class="navigation">
-                    {% include 'onCalls/_pagination.html.twig' %}
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-lg-10">
+			<header class="row justify-content-start">
+				<div class="col-4 col-lg-3 col-xl-2">
+					<h3 class="text-primary">Astreintes</h3>
+				</div>
+				<div class="col-6 col-sm-5 col-md-3">
+					<a class="btn btn-primary btn-sm mb-3" href="{{ path('onCall_new') }}" role="button">Nouveau Rapport</a>
+				</div>
+			</header>
+			<section>
+				<div class="mt-5">
+					{% include 'onCalls/_onCallList.html.twig' with {onCalls: onCalls} only %}
+				</div>
+				{# display navigation #}
+				<div class="navigation">
+					{% include 'onCalls/_pagination.html.twig' %}
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

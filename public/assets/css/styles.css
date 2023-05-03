@@ -74,21 +74,6 @@ tr {
   width: 91px;
 }
 
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
-  .default-logo {
-    margin: auto;
-    max-width: 62%;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  .displayMd {
-    display: none;
-  }
-}
-
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .displayMd {
@@ -98,6 +83,11 @@ tr {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+  .default-logo {
+    margin: auto;
+    max-width: 62%;
+  }
+
   .displayMd {
     display: none;
   }
@@ -112,7 +102,7 @@ tr {
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .displayMd {
-    display: block;
+    display: none;
   }
 
   .register-form {
@@ -141,6 +131,11 @@ tr {
     margin: auto;
     margin-top: 50px;
   }
+
+  .displayMd {
+    display: none;
+  }
+
 }
 
 /* XX-Large devices (larger desktops, 1400px and up) */
@@ -155,5 +150,9 @@ tr {
     width: 81%;
     margin: auto;
     margin-top: 50px;
+  }
+
+  .displayMd {
+    display: none;
   }
 }

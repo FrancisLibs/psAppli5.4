@@ -1,36 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Indicateurs : temps intervention{% endblock %}
+{% block title %}Indicateurs : temps intervention
+{% endblock %}
 
 {% block body %}
-    <main class="row justify-content-start" >
-        <menu class="d-flex justify-content-center mb-5">
-            {% include 'indicator/_indicator_navbar.html.twig' %}
-        </menu>
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-10">
-            <header>
-                <h1 class="page-title">Coût des pièces détachées/mois</h1>
-            </header>
-            <section class="mt-4">
-                <div class="row">
-                    <div class="col-11 col-sm-10 col-md-10 col-lg-8 col-xl-8 mt-3">
-                        <canvas id="myChart"></canvas>
-                    </div>
-                </div>
-            </section>
-        </article>
-        <div class="month" data-chartDates="{{ months }}"></div>
-        <div class="values" data-chartAmounts="{{ values }}"></div>
-    </main>
-    
+	<main class="row justify-content-start">
+		<menu class="d-flex justify-content-center mb-5">
+			{% include 'indicator/_indicator_navbar.html.twig' %}
+		</menu>
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-10">
+			<header>
+				<h1 class="page-title">Coût des pièces détachées/mois</h1>
+			</header>
+			<section class="mt-4">
+				<div class="row">
+					<div class="col-11 col-sm-10 col-md-10 col-lg-8 col-xl-8 mt-3">
+						<canvas id="myChart"></canvas>
+					</div>
+				</div>
+			</section>
+		</article>
+		<div class="month" data-chartdates="{{ months }}"></div>
+		<div class="values" data-chartamounts="{{ values }}"></div>
+	</main>
+
 {% endblock %}
-{% block javascripts %} 
-    {{ parent() }}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    // <script>src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"</script>
-    {{ encore_entry_script_tags('costPerMonthJschart') }}    
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+	//
+	<script>
+		src = "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"
+	</script>
+	{{ encore_entry_script_tags('costPerMonthJschart') }}
 {% endblock %}

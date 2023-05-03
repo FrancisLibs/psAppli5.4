@@ -1,24 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pièces en réappro{% endblock %}
+{% block title %}Pièces en réappro
+{% endblock %}
 
 {% set varProvider = "" %}
 {% block body %}
-    <div class="row part-js-filter justify-content-start mt-5" >
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col">
-            <section class="row">
-                <div class="col">
-                    <h1 class="page-title">Pièces en réappro</h1>
-                </div>
-            </section>
-            <section class="row part-js-filter">
-                <div class="col">
-                     {% include 'supply/_partToBuyList.html.twig' with {parts: parts, varProvider: varProvider} only %}
-                </div>
-            </section>
-        </article>
-    </div>            
+	<div class="row part-js-filter justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col">
+			<section class="row">
+				<div class="col">
+					<h1 class="page-title">Pièces en réappro</h1>
+				</div>
+			</section>
+			<section class="row part-js-filter">
+				<div class="col">
+					{% include 'supply/_partToBuyList.html.twig' with {parts: parts, varProvider: varProvider} only %}
+				</div>
+			</section>
+		</article>
+	</div>
 {% endblock %}

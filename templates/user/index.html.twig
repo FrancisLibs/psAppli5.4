@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Utilisateurs{% endblock %}
+{% block title %}Utilisateurs
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <div class="col-11 col-md-9 ms-1">
-            <div class="d-flex justify-content-start align-items-center mb-5">
-                <h1 class="me-5 page-title">Liste des Utilisateurs</h1>
-                <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
-            </div>
-            {% include 'user/_userList.html.twig' with {users: users} only %}
-        </div>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<div class="col-11 col-md-9 ms-1">
+			<div class="d-flex justify-content-start align-items-center mb-5">
+				<h1 class="me-5 page-title">Liste des Utilisateurs</h1>
+				<a class="btn btn-primary btn-sm" href="{{ path('app_register') }}" role="button">Nouvel utilisateur</a>
+			</div>
+			{% include 'user/_userList.html.twig' with {users: users} only %}
+		</div>
+	</main>
 {% endblock %}

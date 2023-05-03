@@ -1,28 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Provider{% endblock %}
+{% block title %}New Provider
+{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-8 offset-2">
-            <div class="row justify-content-start align-items-center">
-                <div class="col-3">
-                    <h3 class="text-primary">Création fournisseur</h3>
-                </div>
-                <div class="col-5">
-                    <a class="btn btn-primary btn-sm" href="{{ path('provider_index') }}" role="button">Listes des fournisseurs</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 mb-4 d-flex justify-content-start">
-            <aside class="col-2">
-                {{ include('user/_photo.html.twig') }}
-            </aside>
-            <div class="mt-4 col-6">
-                {{ include('provider/_form.html.twig') }}
-            </div>
-        </div>
-    </div>
+	<div class="row mt-5">
+		<div class="col-8 offset-2">
+			<div class="row justify-content-start align-items-center">
+				<div class="col-3">
+					<h3 class="text-primary">Création fournisseur</h3>
+				</div>
+				<div class="col-5">
+					<a class="btn btn-primary btn-sm" href="{{ path('provider_index') }}" role="button">Listes des fournisseurs</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 mb-4 d-flex justify-content-start">
+			{% include 'user/_photo.html.twig' %}
+			<div class="mt-4 col-6">
+				{{ include('provider/_form.html.twig') }}
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,44 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bon de Travail{% endblock %}
+{% block title %}Bon de Travail
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="/assets/css/workorder-show.css">
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/workorder-show.css">
 {% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12">
-            <header class="row mb-5 me-5 justify-content-start align-items-center flex-wrap">
-                <div class="d-flex justify-content-start align-items-center col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mb-2">
-                    {% if workorder.preventive %}
-                        <h1 class="page-title">Bon de Travail préventif</h1>
-                    {% else %}
-                        <h1 class="page-title">Bon de Travail</h1>
-                    {% endif %}
-                </div>
-                <div class="d-flex justify-content-start align-items-center flex-wrap col-12 col-sm-11 col-md-8 col-xl-7 ">
-                    <a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
-                    {% if workorder.workorderStatus.name != "CLOTURE" %}
-                        <a class="btn btn-warning btn-sm mb-2 me-2" href="{{ path('work_order_add_part', {'mode': 'workorderAddPart', 'id': workorder.id}) }}">Pièces détachées</a>
-                        <a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a class="btn btn-danger btn-sm mb-2 me-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
-                        {% endif %}
-                    {% endif %}
-                    <a class="btn btn-warning btn-sm mb-2 me-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Impression BT</a>
-                    {# {{ include('workorder/_delete_form.html.twig') }} #}
-                </div>
-            </header>
-            <section>
-                <div class="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-12">
-                    {% include 'workorder/_show.html.twig' %}
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12">
+			<header class="row mb-5 me-5 justify-content-start align-items-center flex-wrap">
+				<div class="d-flex justify-content-start align-items-center col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mb-2">
+					{% if workorder.preventive %}
+						<h1 class="page-title">Bon de Travail préventif</h1>
+					{% else %}
+						<h1 class="page-title">Bon de Travail</h1>
+					{% endif %}
+				</div>
+				<div class="d-flex justify-content-start align-items-center flex-wrap col-12 col-sm-11 col-md-8 col-xl-7 ">
+					<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('work_order_index') }}" role="button">Liste BT</a>
+					{% if workorder.workorderStatus.name != "CLOTURE" %}
+						<a class="btn btn-warning btn-sm mb-2 me-2" href="{{ path('work_order_add_part', {'mode': 'workorderAddPart', 'id': workorder.id}) }}">Pièces détachées</a>
+						<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('work_order_edit', {'id': workorder.id}) }}">Edition</a>
+						{% if is_granted('ROLE_ADMIN') %}
+							<a class="btn btn-danger btn-sm mb-2 me-2" href="{{ path('work_order_closing', {'id': workorder.id}) }}">Cloture</a>
+						{% endif %}
+					{% endif %}
+					<a class="btn btn-warning btn-sm mb-2 me-2" href="{{ path('pdf_workorder', {'id': workorder.id}) }}">Impression BT</a>
+					{# {{ include('workorder/_delete_form.html.twig') }} #}
+				</div>
+			</header>
+			<section>
+				<div class="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-12">
+					{% include 'workorder/_show.html.twig' %}
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

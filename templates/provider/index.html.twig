@@ -1,28 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Fournisseurs{% endblock %}
+{% block title %}Fournisseurs
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-md-11 col-lg-10 col-xl-9">
-            <header class="row mb-3 justify-content-start">
-                <div class="d-flex justify-content-start">
-                    <h3 class="text-primary">Fournisseurs</h3>
-                    <a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
-                </div>
-            </header>
-            <section class="row js-filter">
-                <div>
-                    {% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode, documentId: documentId, form: form} only %}
-                    {# Navigation #}
-                    <div class="col-10 offset-2 navigation js-filter-pagination mb-5">
-                        {% include 'provider/_pagination.html.twig' %}
-                    </div>
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
+			<header class="row mb-3 justify-content-start">
+				<div class="d-flex justify-content-start">
+					<h3 class="text-primary">Fournisseurs</h3>
+					<a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
+				</div>
+			</header>
+			<section class="row js-filter">
+				<div>
+					{% include 'provider/_providerList.html.twig' with {providers: providers, mode: mode, documentId: documentId, form: form} only %}
+					{# Navigation #}
+					<div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+						{% include 'provider/_pagination.html.twig' %}
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

@@ -1,26 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle pièce détachée{% endblock %}
+{% block title %}Nouvelle pièce détachée
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="ms-4 col-12">
-            <header class="d-flex justify-content-start align-items-center">
-                <div>
-                    <h1 class="page-title me-5">Création pièce</h1>
-                </div>
-                <div>
-                    <a class="btn btn-primary btn-sm" href="{{ path('part_index') }}" role="button">Listes des pièces</a>
-                </div>
-            </header>
-            <section class="row mt-5">
-                <div class="mb-4 col-12 col-lg-12 col-xl-12">
-                    {{ include('part/_form.html.twig') }}
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="ms-4 col-12">
+			<header class="d-flex justify-content-start align-items-center">
+				<div>
+					<h1 class="page-title me-5">Création pièce</h1>
+				</div>
+				<div>
+					<a class="btn btn-primary btn-sm" href="{{ path('part_index') }}" role="button">Listes des pièces</a>
+				</div>
+			</header>
+			<section class="row mt-5">
+				<div class="mb-4 col-12 col-lg-12 col-xl-12">
+					{{ include('part/_form.html.twig') }}
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

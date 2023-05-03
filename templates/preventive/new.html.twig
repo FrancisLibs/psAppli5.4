@@ -1,67 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau bon de travail{% endblock %}
+{% block title %}Nouveau bon de travail
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-md-11 col-lg-10">
-            <header class="row justify-content-start align-items-center">
-                <div class="col-7 col-sm7 col-md-5 col-xl-4">
-                    <h1 class="page-title">Nouveau BT préventif</h1>
-                </div>
-                <div class="col-5 col-lg-4 col-xl-3">
-                    <a class="btn btn-primary btn-sm" href="{{ path('template_index') }}" role="button">Listes des BT préventifs</a>
-                </div>
-            </header>
-            <section>
-                <div class="row mt-5">
-                    <div class="col-12 d-flex justify-content-start align-items-start flex-wrap">
-                        <div class="col-3 col-md-2 col-xl-2">
-                            <a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button"><h5>Machine(s)</h5></a>
-                        </div>
-                        {% if machinesWithData is not empty and machinesWithData is defined %}
-                            <div class="col-12 col-sm-8 col-md-11 col-lg-8 col-xl-6">
-                                <table class="table table-sm table-striped">
-                                    <thead>
-                                        <tr class="sorting">
-                                            <th>Code</th>
-                                            <th>Désignation </th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for machine in machinesWithData %}
-                                            <tr>
-                                                <td data-label="Code" class="font_size_table">{{ machine.internalCode }}</td>
-                                                <td data-label="Désignation" class="font_size_table">{{ machine.designation}}</td>
-                                                <td data-label="Action" class="font_size_table">
-                                                    <a href="{{ path('remove_machine_from_cart', 
-                                                        {'id': machine.id, 'mode': 'newPreventive'}) }}" 
-                                                        style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
-                                                        Supp
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-12 col-md-11 col-lg-10">
-                        {{ include('preventive/_form.html.twig') }}
-                    </div>
-                    
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10">
+			<header class="row justify-content-start align-items-center">
+				<div class="col-7 col-sm7 col-md-5 col-xl-4">
+					<h1 class="page-title">Nouveau BT préventif</h1>
+				</div>
+				<div class="col-5 col-lg-4 col-xl-3">
+					<a class="btn btn-primary btn-sm" href="{{ path('template_index') }}" role="button">Listes des BT préventifs</a>
+				</div>
+			</header>
+			<section>
+				<div class="row mt-5">
+					<div class="col-12 d-flex justify-content-start align-items-start flex-wrap">
+						<div class="col-3 col-md-2 col-xl-2">
+							<a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'selectPreventive'}) }}" role="button">
+								<h5>Machine(s)</h5>
+							</a>
+						</div>
+						{% if machinesWithData is not empty and machinesWithData is defined %}
+							<div class="col-12 col-sm-8 col-md-11 col-lg-8 col-xl-6">
+								<table class="table table-sm table-striped">
+									<thead>
+										<tr class="sorting">
+											<th>Code</th>
+											<th>Désignation
+											</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for machine in machinesWithData %}
+											<tr>
+												<td data-label="Code" class="font_size_table">{{ machine.internalCode }}</td>
+												<td data-label="Désignation" class="font_size_table">{{ machine.designation}}</td>
+												<td data-label="Action" class="font_size_table">
+													<a href="{{ path('remove_machine_from_cart', {'id': machine.id, 'mode': 'newPreventive'}) }}" style="margin-top: -3px;" class="btn btn-warning btn-sm p-1" role="button">
+														Supp
+													</a>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						{% endif %}
+					</div>
+					<div class="col-12 col-md-11 col-lg-10">
+						{{ include('preventive/_form.html.twig') }}
+					</div>
+
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
-
-

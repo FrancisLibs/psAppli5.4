@@ -10,9 +10,7 @@
 
 {% block body %}
 	<div class="row part-js-filter justify-content-start mt-5">
-		<aside class="col-2 displayMd mt-5">
-			{{ include('user/_photo.html.twig') }}
-		</aside>
+		{% include 'user/_photo.html.twig' %}
 		<article class="col-10">
 			<section class="row justify-content-between">
 				<div class="d-flex justify-content-between flex-wrap mb-4">
@@ -115,15 +113,15 @@
 					</div>
 				</div>
 				{# {% if part.qrCode %}
-								                    <div class="row">
-								                        <div class="col-4 col-sm-3 col-md-2">
-								                            <p class="fw-bold">QrCode</p>
-								                        </div>
-								                        <div class="col-8">
-								                            <img src="{{ asset('images/qr-codes/' ~ part.qrCode) | imagine_filter('my_little_filter') }}" />
-								                        </div>
-								                    </div>
-								                {% endif %} #}
+												                    <div class="row">
+												                        <div class="col-4 col-sm-3 col-md-2">
+												                            <p class="fw-bold">QrCode</p>
+												                        </div>
+												                        <div class="col-8">
+												                            <img src="{{ asset('images/qr-codes/' ~ part.qrCode) | imagine_filter('my_little_filter') }}" />
+												                        </div>
+												                    </div>
+												                {% endif %} #}
 			</section>
 			<section>
 				{% if part.machines is not empty %}

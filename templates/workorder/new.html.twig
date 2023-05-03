@@ -1,39 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau bon de travail{% endblock %}
+{% block title %}Nouveau bon de travail
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-md-11 col-lg-10 ms-1">
-            <header class="row mb-3 me-5">
-                <div class="d-flex justify-content-between align-items-center col-12 col-sm-11 col-md-12 col-lg-10 col-xl-9 mb-3">
-                    <h1 class="page-title">Nouveau BT</h1>
-                </div>
-            </header>
-            <section>
-                <div class="row justify-content-start align-items-top mt-5 ms-2 p-2 col-11 col-sm-10 col-xl-8">
-                    <a class="btn btn-primary new-btn me-5" href="{{ path('machine_choice', {'mode': 'newWorkorder'}) }}">Machine(s)</a>
-                    <div class="text-primary text-af-btn col-10 col-sm-7 col-lg-5 col-xl-6 mt-1">
-                        {% if workorder.machines is not empty %}
-                            {% for machine in workorder.machines %}
-                                {{ machine.designation }}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12 col-sm-11 col-xl-10">
-                        {{ include('workorder/_form.html.twig') }}
-                    </div>
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 ms-1">
+			<header class="row mb-3 me-5">
+				<div class="d-flex justify-content-between align-items-center col-12 col-sm-11 col-md-12 col-lg-10 col-xl-9 mb-3">
+					<h1 class="page-title">Nouveau BT</h1>
+				</div>
+			</header>
+			<section>
+				<div class="row justify-content-start align-items-top mt-5 ms-2 p-2 col-11 col-sm-10 col-xl-8">
+					<a class="btn btn-primary new-btn me-5" href="{{ path('machine_choice', {'mode': 'newWorkorder'}) }}">Machine(s)</a>
+					<div class="text-primary text-af-btn col-10 col-sm-7 col-lg-5 col-xl-6 mt-1">
+						{% if workorder.machines is not empty %}
+							{% for machine in workorder.machines %}
+								{{ machine.designation }}
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 col-sm-11 col-xl-10">
+						{{ include('workorder/_form.html.twig') }}
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('workorder') }}
+	{{ parent() }}
+	{{ encore_entry_script_tags('workorder') }}
 {% endblock %}

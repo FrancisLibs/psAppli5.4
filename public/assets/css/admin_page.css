@@ -1,0 +1,10 @@
+/* Administration page */
+.admin-title {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.admin-button {
+  width: 150px;
+}

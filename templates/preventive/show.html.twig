@@ -1,35 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bon de travail préventif{% endblock %}
+{% block title %}Bon de travail préventif
+{% endblock %}
 
 {% block body %}
-    <main class="row part-js-filter justify-content-start mt-5" >
-        <aside class="col-2 displayMd mt-5">
-            {{ include('user/_photo.html.twig') }}
-        </aside>
-        <article class="col">
-            <section class="row justify-content-between mb-5">
-                <div class="col-10 col-sm-6 col-md-5">
-                    <h1 class="page-title">Bon de Travail préventif</h1>
-                </div>            
-                <div class="col-12 col-sm-8 col-md-7">
-                    <div class="d-flex justify-content-start flex-wrap">
-                        {# <a class="btn btn-warning btn-sm me-2" href="{{ path('add_part', {'id': template.id}) }}">Pièces détachées</a> #}
-                        <a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('template_index') }}" role="button">Liste des préventifs</a>
-                        <a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('template_edit', {'id': template.id}) }}">Edition</a>
-                        <a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('copy_template', {'id': template.id}) }}" role="button">Copier</a>
-                        {# <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': template.id}) }}">Pdf</a> #}
-                        {% if is_granted('ROLE_ADMIN') %}
-                            {{ include('preventive/_delete_form.html.twig') }}
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="col-12 col-lg-10 col-xl-8">
-                    {% include 'preventive/_show.html.twig' %}
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="row part-js-filter justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col">
+			<section class="row justify-content-between mb-5">
+				<div class="col-10 col-sm-6 col-md-5">
+					<h1 class="page-title">Bon de Travail préventif</h1>
+				</div>
+				<div class="col-12 col-sm-8 col-md-7">
+					<div
+						class="d-flex justify-content-start flex-wrap">
+						{# <a class="btn btn-warning btn-sm me-2" href="{{ path('add_part', {'id': template.id}) }}">Pièces détachées</a> #}
+						<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('template_index') }}" role="button">Liste des préventifs</a>
+						<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('template_edit', {'id': template.id}) }}">Edition</a>
+						<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('copy_template', {'id': template.id}) }}" role="button">Copier</a>
+						{# <a class="btn btn-warning btn-sm me-2" href="{{ path('pdf_workorder', {'id': template.id}) }}">Pdf</a> #}
+						{% if is_granted('ROLE_ADMIN') %}
+							{{ include('preventive/_delete_form.html.twig') }}
+						{% endif %}
+					</div>
+				</div>
+			</section>
+			<section>
+				<div class="col-12 col-lg-10 col-xl-8">
+					{% include 'preventive/_show.html.twig' %}
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

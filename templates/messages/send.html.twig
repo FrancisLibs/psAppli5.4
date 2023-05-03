@@ -1,40 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Messagerie{% endblock %}
+{% block title %}Messagerie
+{% endblock %}
 
 {% block body %}
-     <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-lg-9">
-            <section class="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-8">
-                <h2 class="mb-5 text-primary">Envoyer un message</h2>
-                {{ form(form) }}
-                <a class="btn btn-primary mb-5" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                Voir mes dossiers
-                </a>
-            </section>
-            <section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="list-group">
-                        <a href="{{ path("messages") }}" class="list-group-item 
-                        list-group-item-action">Accueil</a>
-                    </div>
-                    <div class="list-group">
-                        <a href="{{ path("received") }}" class="list-group-item 
-                        list-group-item-action">Boite de réception</a>
-                    </div>
-                    <div class="list-group">
-                        <a href="{{ path("sent") }}" class="list-group-item 
-                        list-group-item-action">Eléments envoyés</a>
-                    </div>
-                </div>
-            </section>
-        </article>
-    </main>
-{% endblock %}
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-lg-9">
+			<section class="col-12 col-sm-12 col-md-11 col-lg-10 col-xl-8">
+				<h2 class="mb-5 text-primary">Envoyer un message</h2>
+				{{ form(form) }}
+					<a class="btn btn-primary mb-5" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+						Voir mes dossiers
+					</a>
+				</section>
+				<section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+					<div class="offcanvas-header">
+						<h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+						<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body">
+						<div class="list-group">
+							<a href="{{ path("messages") }}" class="list-group-item
+								                        list-group-item-action">Accueil</a>
+						</div>
+						<div class="list-group">
+							<a href="{{ path("received") }}" class="list-group-item
+								                        list-group-item-action">Boite de réception</a>
+						</div>
+						<div class="list-group">
+							<a href="{{ path("sent") }}" class="list-group-item
+								                        list-group-item-action">Eléments envoyés</a>
+						</div>
+					</div>
+				</section>
+			</article>
+		</main>
+	{% endblock %}

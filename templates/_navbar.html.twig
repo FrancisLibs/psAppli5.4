@@ -26,10 +26,10 @@
 						<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Réappro</a>
 					</div>
 				</li>
-				<li class="nav-item mx-2">
+				<li class="nav-item">
 					<a class="nav-link" href="{{ path('machine_index') }}">Machines</a>
 				</li>
-				<li class="nav-item mx-2">
+				<li class="nav-item">
 					<a class="nav-link" href="{{ path('work_order_index') }}">Bons de travail</a>
 				</li>
 				<li class="nav-item dropdown">
@@ -41,15 +41,15 @@
 						<a class="dropdown-item" href="{{ path('app_work_time') }}">Indicateurs</a>
 					</div>
 				</li>
-				<li class="nav-item mx-2">
+				<li class="nav-item">
 					<a href="{{ path('template_index') }}" class="nav-link">Préventif</a>
 				</li>
 				{% if is_granted('ROLE_ADMIN') %}
-					<li class="nav-item nav-item dropdown mx-2">
+					<li class="nav-item nav-item dropdown">
 						<a href="{{ path('admin') }}" class="nav-link">Administration</a>
 					</li>
 				{% endif %}
-				<li class="nav-item mx-2">
+				<li class="nav-item">
 					{{ render(path('app_global_search')) }}
 				</li>
 			</ul>

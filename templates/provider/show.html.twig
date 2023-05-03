@@ -1,24 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Fournisseur{% endblock %}
+{% block title %}Fournisseur
+{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-4 offset-2 mb-3 d-flex justify-content-start align-items-center">
-            <h3 class="text-primary">Fournisseur</h3>
-            <div class="d-flex justify-content-start ms-4">
-                <a class="btn btn-primary me-2" href="{{ path('provider_index') }}" role="button">Liste fournisseur</a>
-                <a class="btn btn-primary me-2" href="{{ path('provider_edit', {'id': provider.id}) }}">Edition</a>
-                {{ include('provider/_delete_form.html.twig') }}
-            </div>
-        </div>
-    </div>
-    <article class="row mt-5">
-        <aside class="col-2">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <div class="col-10">
-            {% include 'provider/_show.html.twig' %}
-        </div>
-    </article>    
+	<div class="row mt-5">
+		<div class="col-4 offset-2 mb-3 d-flex justify-content-start align-items-center">
+			<h3 class="text-primary">Fournisseur</h3>
+			<div class="d-flex justify-content-start ms-4">
+				<a class="btn btn-primary me-2" href="{{ path('provider_index') }}" role="button">Liste fournisseur</a>
+				<a class="btn btn-primary me-2" href="{{ path('provider_edit', {'id': provider.id}) }}">Edition</a>
+				{{ include('provider/_delete_form.html.twig') }}
+			</div>
+		</div>
+	</div>
+	<article class="row mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<div class="col-10">
+			{% include 'provider/_show.html.twig' %}
+		</div>
+	</article>
 {% endblock %}

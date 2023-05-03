@@ -1,69 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Messagerie{% endblock %}
+{% block title %}Messagerie
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="col-12 col-lg-9">
-            <section class="col-12">
-                <h2 class="mb-5 text-primary">Messagerie</h2>
-                <h4 class="mb-5">Eléments envoyés</h4>
-                <p class="mb-5">Vous avez envoyé {{ app.user.sent|length }} messages</p>
-                
-                <div class="row">
-                    <div class="col-3 col-lg-2 fw-bold">A</div>
-                    <div class="col-3 col-lg-2 text-center fw-bold">Sujet</div>
-                    <div class="col-3 col-lg-2 text-center fw-bold">Date</div>
-                    <div class="col-3 col-lg-1 text-center fw-bold text-center">Actions</div>
-                </div>
-                {% for message in app.user.sent %}
-                <div class="row">
-                    {% set bold = "fw-bold" %}
-                    {% if message.isRead %}
-                        {% set bold = "" %}               
-                    {% endif %}
-                    <div class="col-3 col-lg-2 {{ bold }}">{{ message.recipient.username }}</div>
-                    <div class="col-3 col-lg-2 text-center {{ bold }}"><a href="{{ path("read", {id: message.id}) }}">{{ message.title }}</a></div>
-                    <div class="col-3 col-lg-2 text-center {{ bold }}">{{ message.createdAt|date("m/d/Y") }}</div>
-                    <div class="col-3 col-lg-1 text-center {{ bold }}">
-                        <a href="{{ path("delete", {id: message.id}) }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-excel-fill text-danger" viewBox="0 0 16 16">
-                                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5.884 4.68 8 7.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 8l2.233 2.68a.5.5 0 0 1-.768.64L8 8.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 8 5.116 5.32a.5.5 0 1 1 .768-.64z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="col mt-5">
-                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                    Voir mes dossiers
-                    </a>
-                    <a class="btn btn-primary" href="{{ path("send") }}">Envoyer un message</a>
-                </div>
-            </section>
-            <section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="list-group">
-                        <a href="{{ path("messages") }}" class="list-group-item 
-                        list-group-item-action">Accueil</a>
-                    </div>
-                    <div class="list-group">
-                        <a href="{{ path("received") }}" class="list-group-item 
-                        list-group-item-action">Boite de réception</a>
-                    </div>
-                    <div class="list-group">
-                        <a href="{{ path("sent") }}" class="list-group-item 
-                        list-group-item-action active">Eléments envoyés</a>
-                    </div>
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-lg-9">
+			<section class="col-12">
+				<h2 class="mb-5 text-primary">Messagerie</h2>
+				<h4 class="mb-5">Eléments envoyés</h4>
+				<p class="mb-5">Vous avez envoyé
+					{{ app.user.sent|length }}
+					messages</p>
+
+				<div class="row">
+					<div class="col-3 col-lg-2 fw-bold">A</div>
+					<div class="col-3 col-lg-2 text-center fw-bold">Sujet</div>
+					<div class="col-3 col-lg-2 text-center fw-bold">Date</div>
+					<div class="col-3 col-lg-1 text-center fw-bold text-center">Actions</div>
+				</div>
+				{% for message in app.user.sent %}
+					<div class="row">
+						{% set bold = "fw-bold" %}
+						{% if message.isRead %}
+							{% set bold = "" %}
+						{% endif %}
+						<div class="col-3 col-lg-2 {{ bold }}">{{ message.recipient.username }}</div>
+						<div class="col-3 col-lg-2 text-center {{ bold }}">
+							<a href="{{ path("read", {id: message.id}) }}">{{ message.title }}</a>
+						</div>
+						<div class="col-3 col-lg-2 text-center {{ bold }}">{{ message.createdAt|date("m/d/Y") }}</div>
+						<div class="col-3 col-lg-1 text-center {{ bold }}">
+							<a href="{{ path("delete", {id: message.id}) }}">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-excel-fill text-danger" viewbox="0 0 16 16">
+									<path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5.884 4.68 8 7.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 8l2.233 2.68a.5.5 0 0 1-.768.64L8 8.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 8 5.116 5.32a.5.5 0 1 1 .768-.64z"/>
+								</svg>
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+				<div class="col mt-5">
+					<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+						Voir mes dossiers
+					</a>
+					<a class="btn btn-primary" href="{{ path("send") }}">Envoyer un message</a>
+				</div>
+			</section>
+			<section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+				<div class="offcanvas-header">
+					<h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+					<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				</div>
+				<div class="offcanvas-body">
+					<div class="list-group">
+						<a href="{{ path("messages") }}" class="list-group-item
+							                        list-group-item-action">Accueil</a>
+					</div>
+					<div class="list-group">
+						<a href="{{ path("received") }}" class="list-group-item
+							                        list-group-item-action">Boite de réception</a>
+					</div>
+					<div class="list-group">
+						<a href="{{ path("sent") }}" class="list-group-item
+							                        list-group-item-action active">Eléments envoyés</a>
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}

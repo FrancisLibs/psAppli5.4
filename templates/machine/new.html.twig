@@ -1,26 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle machine{% endblock %}
+{% block title %}Nouvelle machine
+{% endblock %}
 
 {% block body %}
-    <main class="d-flex justify-content-start mt-5 mb-5">
-        <aside class="col-2 displayMd mt-5">
-            {% include 'user/_photo.html.twig' %}
-        </aside>
-        <article class="ms-4">
-            <header class="d-flex justify-content-start align-items-center flex-wrap">
-                <div>
-                    <h1 class="page-title me-5">Création machine</h1>
-                </div>
-                <div>
-                    <a class="btn btn-primary btn-sm" href="{{ path('machine_index') }}" role="button">Listes des machines</a>
-                </div>
-            </header>
-            <section class="row mt-5">
-                <div class="mb-4 d-flex justify-content-start">
-                    {{ include('machine/_form.html.twig') }}
-                </div>
-            </section>
-        </article>
-    </main>
+	<main class="d-flex justify-content-start mt-5 mb-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="ms-4">
+			<header class="d-flex justify-content-start align-items-center flex-wrap">
+				<div>
+					<h1 class="page-title me-5">Création machine</h1>
+				</div>
+				<div>
+					<a class="btn btn-primary btn-sm" href="{{ path('machine_index') }}" role="button">Listes des machines</a>
+				</div>
+			</header>
+			<section class="row mt-5">
+				<div class="mb-4 d-flex justify-content-start">
+					{{ include('machine/_form.html.twig') }}
+				</div>
+			</section>
+		</article>
+	</main>
 {% endblock %}
