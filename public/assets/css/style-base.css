@@ -59,16 +59,4 @@
   text-decoration: none;
 }
 
-.search_word {
-  height: 25px;
-  padding: 0;
-  width: 93px;
-}
 
-.submit_search_word {
-  height: 25px;
-  padding: 0;
-  width: 70px;
-  background-color: blue;
-  color: white;
-}

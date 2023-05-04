@@ -5,7 +5,6 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="/assets/css/styles.css">
 {% endblock %}
 
 
@@ -14,7 +13,7 @@
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-lg-9">
 			<header class="d-flex justify-content-start align-items-center flex-wrap">
-				<div class="d-flex justify-content-start flex-wrap mb-5">
+				<div class="d-flex justify-content-start flex-wrap mb-4">
 					{% if mode == "selectPreventive" %}
 						<h1 class="page-title me-5">Machines -> BT préventif</h1>
 					{% elseif mode == "newWorkorder" %}
@@ -66,7 +65,7 @@
 				<div>
 					{% include 'machine/_machineList.html.twig' with {machines: machines, mode: mode, documentId: documentId, form: form} only %}
 					{# Navigation #}
-					<div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+					<div class="navigation js-filter-pagination mb-5">
 						{% include 'machine/_pagination.html.twig' %}
 					</div>
 				</div>

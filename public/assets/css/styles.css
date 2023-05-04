@@ -74,11 +74,28 @@ tr {
   width: 91px;
 }
 
+/* Navbar form */
+.search_word {
+  height: 25px;
+  padding: 0;
+  width: 93px;
+  margin-right: 5px;
+}
+
+.submit_search_word {
+  height: 25px;
+  padding: 0;
+  width: 70px;
+  background-color: blue;
+  color: white;
+}
+
+.displayMd {
+  display: none;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .displayMd {
-    display: none;
-  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -88,10 +105,6 @@ tr {
     max-width: 62%;
   }
 
-  .displayMd {
-    display: none;
-  }
-
   .register-form {
     width: 91%;
     margin: auto;
@@ -99,12 +112,35 @@ tr {
   }
 }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  .displayMd {
+@media (max-width: 800px) {
+  /* Centrage d'un champ */
+  .table-center {
+    text-align: center;
+  }
+
+  .table .sorting {
     display: none;
   }
 
+  .table tr {
+    display: block;
+    margin-bottom: 40px;
+  }
+
+  .table td {
+    display: block;
+    text-align: center;
+  }
+
+  .table td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
   .register-form {
     width: 53%;
     margin: auto;
@@ -133,9 +169,8 @@ tr {
   }
 
   .displayMd {
-    display: none;
+    display: block;
   }
-
 }
 
 /* XX-Large devices (larger desktops, 1400px and up) */
@@ -150,9 +185,5 @@ tr {
     width: 81%;
     margin: auto;
     margin-top: 50px;
-  }
-
-  .displayMd {
-    display: none;
   }
 }
