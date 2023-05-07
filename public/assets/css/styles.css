@@ -132,7 +132,7 @@ tr {
     text-align: center;
   }
 
-  .table td:before {
+  .table td::before {
     content: attr(data-label);
     float: left;
     font-weight: bold;

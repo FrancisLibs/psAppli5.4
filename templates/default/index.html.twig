@@ -6,15 +6,15 @@
     <div class="d-flex justify-content-around mt-5 mb-3 default-top-margin">
         <div class="col-6">
             <div class="row">
-                <h1 class="d-flex justify-content-center default-title">Gestion maintenance PS</h1>
+                <h1 class="d-flex justify-content-center default-title">Maintenance PS</h1>
             </div>
             <div class="row text-center">
                 <img class="default-logo" src="{{ asset('images/logo.png') }}" alt="Charcuterie Pierre Schmidt">            
             </div>
             <div class="row mt-5 ms-1 justify-content-around">
-                <a class="btn-default" href="{{ path('part_index') }}">Pièces détachées</a>
+                <a class="btn-default" href="{{ path('part_index') }}">Pièces</a>
                 <a class="btn-default" href="{{ path('machine_index') }}">Machines</a>
-                <a class="btn-default" href="{{ path('work_order_index') }}">Bons de travail</a>
+                <a class="btn-default" href="{{ path('work_order_index') }}">Travaux</a>
                 <a class="btn-default" href="{{ path('template_index') }}">Préventif</a>
                 <a class="btn-default" href="{{ path('onCall_index') }}">Astreintes</a>
                 {% if is_granted('ROLE_ADMIN') %}
