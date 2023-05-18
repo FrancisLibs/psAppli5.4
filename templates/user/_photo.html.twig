@@ -1,11 +1,11 @@
-<aside class="col-2 p-3 displayMd">
+<aside class="col-2 displayMd">
 	<div class="text-center d-flex flex-column">
 		{% if app.user.imageName is not null %}
 			<img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}"/>
 		{% else %}
 			<img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_middle_filter') }}" alt="Photo d'identité de {{ app.user.username }}"/>
 		{% endif %}
-		<div class="mt-2 border borer-danger rounded">
+		<div>
 			{{ app.user.firstName ~ " " ~ app.user.lastName }}
 		</div>
 	</div>

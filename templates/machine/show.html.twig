@@ -9,38 +9,36 @@
 {% endblock %}
 
 {% block body %}
-	{# {{ dump(machine) }} #}
 	<main>
-		<div
-			class="row justify-content-start flex-wrap mt-5">
-			{# left aside #}
+		<div class="row justify-content-start flex-wrap mt-5">
 			{% include 'user/_photo.html.twig' %}
-			{# Central #}
-			<article class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-5">
-				<header class="d-flex justify-content-start align-items-sm-baseline align-items-md-center flex-wrap">
-					<div class="d-flex">
+			<article class="col-12 col-xl-10">
+				<section class="row justify-content-start align-items-center">
+					<div class="mb-3 col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2">
 						<h1 class="page-title me-5">Machine</h1>
 					</div>
-					<div class="d-flex justify-content-start align-items-baseline flex-wrap">
-						<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_index') }}">Liste machines</a>
-						<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
-						{% if machine.childLevel == 0 %}
-							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
-						{% endif %}
-						<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
-						{% if machine.parent %}
-							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
-						{% endif %}
-						{% if is_granted('ROLE_ADMIN') %}
-							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
-							{{ include('machine/_delete_form.html.twig') }}
-						{% endif %}
+					<div class="col-12 col-sm-11 col-md-9 col-lg-8 col-xl-8 mb-2">
+						<div class="d-flex justify-content-start flex-wrap">
+							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_index') }}">Liste machines</a>
+							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
+							{% if machine.childLevel == 0 %}
+								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
+							{% endif %}
+							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
+							{% if machine.parent %}
+								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
+							{% endif %}
+							{% if is_granted('ROLE_ADMIN') %}
+								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
+								{{ include('machine/_delete_form.html.twig') }}
+							{% endif %}
+						</div>
 					</div>
-				</header>
+				</section>
 				<section class="row mt-5">
 					<div class="col-12">
 						<div class="row">
-							<div class="col-7">
+							<div class="col-12 col-md-8 col-lg-4">
 								<p>
 									<strong>Nom :
 									</strong>
@@ -50,7 +48,7 @@
 									{% endif %}
 									{{ machine.designation }}</p>
 							</div>
-							<div class="col-5">
+							<div class="col-12 col-md-3">
 								<p>
 									<strong>Code :
 									</strong>
@@ -58,44 +56,44 @@
 							</div>
 						</div>
 						<div class="row mt-4">
-							{% if machine.model %}
-								<div class="col-6">
-									{% if machine.model %}
-										<p>
-											<strong>Modèle :
-											</strong>
-											{{ machine.model }}</p>
-									{% endif %}
-								</div>
-							{% endif %}
-							{% if machine.buyDate %}
-								<div class="col-6">
+							<div class="col-12 col-md-8 col-lg-4">
+								{% if machine.model %}
+									<p>
+										<strong>Modèle :
+										</strong>
+										{{ machine.model }}
+									</p>
+								{% endif %}
+							</div>
+							<div class="col-12 col-md-3">
+								{% if machine.buyDate %}
 									<p>
 										<strong>Date achat :
 										</strong>
-										{{ machine.buyDate|date('d-m-Y') }}</p>
-								</div>
-							{% endif %}
+										{{ machine.buyDate|date('d-m-Y') }}
+									</p>
+								{% endif %}
+							</div>
 						</div>
 						<div class="row mt-4">
-							{% if machine.serialNumber %}
-								<div class="col-6 d-flex justify-content-start">
+							<div class="col-12 col-md-8 col-lg-4">
+								{% if machine.serialNumber %}
 									<p>
 										<strong>Numéro de série :
 										</strong>
-										{{ machine.serialNumber }}</p>
-								</div>
-							{% endif %}
-							<div class="col-6">
+										{{ machine.serialNumber }}
+									</p>
+								{% endif %}
+							</div>
+							<div class="col-12 col-md-3">
 								<p>
 									<strong>Constructeur :
 									</strong>
 									{{ machine.constructor }}</p>
 							</div>
-
 						</div>
 						<div class="row mt-4">
-							<div class="col-7">
+							<div class="col-12 col-md-8 col-lg-4">
 								<p>
 									<strong>Atelier :
 									</strong>
@@ -112,7 +110,7 @@
 								</div>
 							</div>
 							<div class="row mt-2">
-								<div class="col-12 mt-2">
+								<div class="col-12 col-md-11 col-lg-10 col-xl-9 mt-2">
 									{{ include('machine/_parts.html.twig') }}
 								</div>
 							</div>
