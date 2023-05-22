@@ -138,10 +138,13 @@ tr {
 }
 
 @media (min-width: 800px) {
+<<<<<<< HEAD
   h1 {
     font-size: 4rem;
   }
 
+=======
+>>>>>>> 3b5d2a8088d3309af3780b2157d80c476ebbd90a
   /* Centrage d'un champ */
   .table-center {
     text-align: center;
