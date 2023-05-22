@@ -10,6 +10,10 @@ body {
   width: 100%;
 }
 
+h1 {
+  font-size: 2.8rem;
+}
+
 /* Menu de navigation */
 .nav-link {
   font-size: 1em;
@@ -97,6 +101,10 @@ tr {
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
+  h1 {
+    font-size: 3.5rem;
+  }
+
   /* Footer */
   .footer_side {
     font-size: 1.5rem;
@@ -113,6 +121,10 @@ tr {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+
   .default-logo {
     margin: auto;
     max-width: 62%;
@@ -125,7 +137,11 @@ tr {
   }
 }
 
-@media (max-width: 800px) {
+@media (min-width: 800px) {
+  h1 {
+    font-size: 4rem;
+  }
+
   /* Centrage d'un champ */
   .table-center {
     text-align: center;
@@ -167,6 +183,10 @@ tr {
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+  h1 {
+    font-size: 4rem;
+  }
+
   .register-form {
     width: 53%;
     margin: auto;
@@ -182,6 +202,10 @@ tr {
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+  h1 {
+    font-size: 4rem;
+  }
+
   .register-form {
     width: 48%;
     margin: auto;
@@ -201,6 +225,10 @@ tr {
 
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {
+  h1 {
+    font-size: 4.5rem;
+  }
+
   .register-form {
     width: 40%;
     margin: auto;
