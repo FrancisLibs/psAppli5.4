@@ -125,7 +125,7 @@ tr {
   }
 }
 
-@media (max-width: 800px) {
+@media (min-width: 800px) {
   /* Centrage d'un champ */
   .table-center {
     text-align: center;
