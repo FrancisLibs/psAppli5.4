@@ -10,10 +10,6 @@ body {
   width: 100%;
 }
 
-h1 {
-  font-size: 2.8rem;
-}
-
 /* Menu de navigation */
 .nav-link {
   font-size: 1em;
@@ -99,52 +95,8 @@ tr {
   display: none;
 }
 
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) {
-  h1 {
-    font-size: 3.5rem;
-  }
-
-  /* Footer */
-  .footer_side {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .footer_center {
-    font-size: 1.8rem;
-    font-weight: bold;
-    text-align: center;
-  }
-}
-
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
-  h1 {
-    font-size: 3rem;
-  }
-
-  .default-logo {
-    margin: auto;
-    max-width: 62%;
-  }
-
-  .register-form {
-    width: 91%;
-    margin: auto;
-    margin-top: 50px;
-  }
-}
-
-@media (min-width: 800px) {
-<<<<<<< HEAD
-  h1 {
-    font-size: 4rem;
-  }
-
-=======
->>>>>>> 3b5d2a8088d3309af3780b2157d80c476ebbd90a
+/* Traitement des tables responsives */
+@media (max-width: 800px) {
   /* Centrage d'un champ */
   .table-center {
     text-align: center;
@@ -169,27 +121,40 @@ tr {
     float: left;
     font-weight: bold;
   }
+}
 
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
   /* Footer */
   .footer_side {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
   }
 
   .footer_center {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
     text-align: center;
   }
 }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  h1 {
-    font-size: 4rem;
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .default-logo {
+    margin: auto;
+    max-width: 62%;
   }
 
+  .register-form {
+    width: 91%;
+    margin: auto;
+    margin-top: 50px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
   .register-form {
     width: 53%;
     margin: auto;
@@ -205,10 +170,6 @@ tr {
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  h1 {
-    font-size: 4rem;
-  }
-
   .register-form {
     width: 48%;
     margin: auto;
@@ -217,8 +178,6 @@ tr {
 
   .edit-profil {
     width: 89%;
-    margin: auto;
-    margin-top: 50px;
   }
 
   .displayMd {
@@ -228,10 +187,6 @@ tr {
 
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {
-  h1 {
-    font-size: 4.5rem;
-  }
-
   .register-form {
     width: 40%;
     margin: auto;
@@ -240,7 +195,5 @@ tr {
 
   .edit-profil {
     width: 81%;
-    margin: auto;
-    margin-top: 50px;
   }
 }

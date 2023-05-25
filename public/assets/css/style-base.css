@@ -1,13 +1,5 @@
-/* Page login image de fond */
 h1 {
-  font-size: 3rem;
-}
-
-.login {
-  min-height: 100%;
-  width: 100%;
-  background: url("/images/conditionnement4.png") no-repeat center center fixed;
-  background-size: cover;
+  font-size: 2.5rem;
 }
 
 /* Page default */
@@ -28,10 +20,7 @@ h1 {
 
 .default-title {
   font-family: "Concert One", cursive;
-<<<<<<< HEAD
-=======
   font-weight: bold;
->>>>>>> 3b5d2a8088d3309af3780b2157d80c476ebbd90a
   color: black;
   text-align: center;
 }
@@ -65,8 +54,6 @@ h1 {
   transition: all 0.5s;
   text-decoration: none;
 }
-<<<<<<< HEAD
-=======
 
 @media (min-width: 576px) {
   h1 {
@@ -74,37 +61,26 @@ h1 {
   }
 }
 
-/* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+  h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 992px) {
   h1 {
     font-size: 4rem;
   }
 }
 
-@media (min-width: 800px) {
-  h1 {
-    font-size: 4.5rem;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  h1 {
-    font-size: 4.5rem;
-  }
-}
-
-/* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   h1 {
-    font-size: 4.5rem;
+    font-size: 4rem;
   }
 }
 
-/* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {
   h1 {
-    font-size: 4.5rem;
+    font-size: 4rem;
   }
 }
->>>>>>> 3b5d2a8088d3309af3780b2157d80c476ebbd90a

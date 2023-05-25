@@ -18,109 +18,16 @@
 				</div>
 				<div class="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-6 mb-2">
 					<div class="d-flex justify-content-start flex-wrap">
-						<a class="btn btn-primary btn-sm btn-middle me-2 mb-2" href="{{ path('part_index') }}" role="button">Liste pièces</a>
-						<a class="btn btn-primary btn-sm btn-middle me-2 mb-2" href="{{ path('part_edit', {'id': part.id}) }}">Edition</a>
-						<a class="btn btn-warning btn-sm btn-middle me-2 mb-2" href="{{ path('part_label', {'id': part.id}) }}">Etiquette</a>
+						<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('part_index') }}" role="button">Liste pièces</a>
+						<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('part_edit', {'id': part.id}) }}">Edition</a>
+						<a class="btn btn-warning btn-sm me-2 mb-2" href="{{ path('part_label', {'id': part.id}) }}">Etiquette</a>
 						{{ include('part/_delete_form.html.twig') }}
-						<a class="btn btn-info btn-sm btn-middle ms-2 mb-2" href="{{ path('show_appro', {'id': part.id}) }}">Appro</a>
+						<a class="btn btn-info btn-sm mb-2" href="{{ path('show_appro', {'id': part.id}) }}">Appro</a>
 					</div>
 				</div>
 			</section>
-			<section>
-				<div class="row mt-3">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Code</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.code }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Designation</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.designation }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Reference</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.reference }}</p>
-					</div>
-				</div>
-				{% if part.provider %}
-					<div class="row">
-						<div class="col-4 col-sm-3 col-md-2">
-							<p class="fw-bold">Fournisseur</p>
-						</div>
-						<div class="col-8">
-							<p>{{ part.provider.name }}</p>
-						</div>
-					</div>
-				{% endif %}
-				<div class="row">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Qte Stock</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.stock.qteStock }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Qte Min Stock</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.stock.qteMin }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4 col-sm-3 col-md-2">
-						<p class="fw-bold">Qte Max Stock</p>
-					</div>
-					<div class="col-8">
-						<p>{{ part.stock.qteMax }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-5 col-sm-3 col-md-2">
-						<p class="fw-bold">Emplacement Stock</p>
-					</div>
-					<div class="col-5">
-						<p>{{ part.stock.place }}</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-5 col-sm-3 col-md-2">
-						<p class="fw-bold">Prix moyen</p>
-					</div>
-					<div class="col-5">
-						<p>{{ part.steadyPrice|number_format(2) }}€</p>
-					</div>
-				</div>
-				{% if part.remark %}
-					<div class="row">
-						<div class="col-4 col-sm-3 col-md-2">
-							<p class="fw-bold">Remarque</p>
-						</div>
-						<div class="col-6">
-							<p>{{ part.remark }}</p>
-						</div>
-					</div>
-				{% endif %}
-			</section>
-			<section>
-				{% if part.machines is not empty %}
-					<h4>Machines</h4>
-					{% for machine in part.machines %}
-						<p>-
-							{{ machine.internalCode ~ " " }}{{ machine.designation }}</p>
-					{% endfor %}
-				{% endif %}
-			</section>
+			{% include 'part/_partShow.html.twig' %}
+			{% include 'part/_partShowMachine.html.twig' %}
 		</article>
 	</div>
 {% endblock %}

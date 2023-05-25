@@ -1,0 +1,8 @@
+<section>
+	{% if part.machines is not empty %}
+		<h4>Machines</h4>
+		{% for machine in part.machines %}
+			<p>- {{ machine.internalCode ~ " " }}{{ machine.designation }}</p>
+		{% endfor %}
+	{% endif %}
+</section>

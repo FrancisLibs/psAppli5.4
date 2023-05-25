@@ -1,0 +1,86 @@
+<section>
+	<div class="row mt-3">
+		<div class="col-12 col-sm-3 col-md-2">
+			<p class="fw-bold">Code</p>
+		</div>
+		<div class="col-12 col-sm-7 col-md-10">
+			<p>{{ part.code }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-sm-3 col-md-2">
+			<p class="fw-bold">Designation</p>
+		</div>
+		<div class="col-12 col-sm-7 col-md-10 ">
+			<p>{{ part.designation }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-sm-3 col-md-2">
+			<p class="fw-bold">Reference</p>
+		</div>
+		<div class="col-12 col-sm-7 col-md-10">
+			<p>{{ part.reference }}</p>
+		</div>
+	</div>
+	{% if part.provider %}
+		<div class="row">
+			<div class="col-12 col-sm-3 col-md-2">
+				<p class="fw-bold">Fournisseur</p>
+			</div>
+			<div class="col-12 col-sm-7 col-md-10">
+				<p>{{ part.provider.name }}</p>
+			</div>
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-7 col-sm-3 col-md-2">
+			<p class="fw-bold">Qte Stock</p>
+		</div>
+		<div class="col-5">
+			<p>{{ part.stock.qteStock }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-7 col-sm-3 col-md-2">
+			<p class="fw-bold">Qte Min Stock</p>
+		</div>
+		<div class="col-5">
+			<p>{{ part.stock.qteMin }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-7 col-sm-3 col-md-2">
+			<p class="fw-bold">Qte Max Stock</p>
+		</div>
+		<div class="col-5">
+			<p>{{ part.stock.qteMax }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-7 col-sm-3 col-md-2">
+			<p class="fw-bold">Emplacement Stock</p>
+		</div>
+		<div class="col-5">
+			<p>{{ part.stock.place }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-5 col-sm-3 col-md-2">
+			<p class="fw-bold">Prix moyen</p>
+		</div>
+		<div class="col-5">
+			<p>{{ part.steadyPrice|number_format(2) }}€</p>
+		</div>
+	</div>
+	{% if part.remark %}
+		<div class="row">
+			<div class="col-12 col-sm-3 col-md-2">
+				<p class="fw-bold">Remarque</p>
+			</div>
+			<div class="col-12">
+				<p>{{ part.remark }}</p>
+			</div>
+		</div>
+	{% endif %}
+</section>
