@@ -1,40 +1,35 @@
+{# Si c'est un BT préventif #}
 {% if workorder.preventive %}
 	<div class="row">
-		<div class="col-10 col-sm-5 col-md-5 col-lg-4 col-xl-3 mb-4 d-flex justify-content-start align-items-center">
-			<h5 class="text-primary me-2">Date prévue :
-			</h5>
-			<h5>{{ workorder.preventiveDate|date('d/m/Y') }}</h5>
+		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center flex-wrap mb-3">
+			<span class="item me-2">Date prévue :</span>
+			<span class="item-answer">{{ workorder.preventiveDate|date('d/m/Y') }}</span>
 		</div>
-		<div class="col-10 col-sm-5 col-md-5 col-lg-4 col-xl-3 mb-4 d-flex justify-content-start align-items-center">
-			<h5 class="text-primary me-2">Numéro de préventif :
-			</h5>
-			<h5>{{ workorder.templateNumber }}</h5>
+		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center flex-wrap mb-3">
+			<span class="item me-2">Numéro de préventif :</span>
+			<span class="item-answer">{{ workorder.templateNumber }}</span>
+		</div>
+		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
+			<span class="item me-2">Statut :</span>
+			<span class="item-answer">{{ workorder.workorderStatus.name }}</span>
 		</div>
 	</div>
 {% endif %}
-<div class="row mt-2 d-flex justify-content-start align-items-center">
-	<div class="col-10 col-sm-6 col-lg-4 col-xl-3 d-flex justify-content-start align-items-center mb-2">
-		<h5 class="text-primary me-2">Créé le :
-		</h5>
-		<h5>{{ workorder.createdAt ? workorder.createdAt|date('d/m/Y', timezone="Europe/Paris") : '' }}</h5>
+<div class="row">
+	<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
+		<span class="item me-2">Créé le :</span>
+		<span class="item-answer">{{ workorder.createdAt ? workorder.createdAt|date('d/m/Y', timezone="Europe/Paris") : '' }}</span>
 	</div>
-	<div class="col-10 col-sm-4 col-md-3 col-lg-2  d-flex justify-content-start align-items-center mb-2">
-		<h5 class="text-primary  me-2">Par :
-		</h5>
-		<h5>{{ workorder.user.firstName }}</h5>
-	</div>
-	<div class="col-10 col-sm-5 col-lg-4 d-flex justify-content-start align-items-center mb-2">
-		<h5 class="text-primary me-2">Statut :
-		</h5>
-		<h5>{{ workorder.workorderStatus.name }}</h5>
+	<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
+		<span class="item me-2">Par :</span>
+		<span class="item-answer">{{ workorder.user.firstName }}</span>
 	</div>
 </div>
-<div class="row mt-4">
-	<div class="col-12 mb-2">
-		<h5 class="text-primary">Machine(s)
-		</h5>
-	</div>
-	<div class="col-11 col-sm-11 col-md-11 col-xl-6">
+
+{# Machines #}
+<div class="row mt-2">
+	<span class="item">Machine(s)</span>
+	<div class="col-12 col-sm-12 col-md-12 col-xl-9">
 		<table class="table table-sm table-striped">
 			<thead>
 				<tr class="sorting">
@@ -48,9 +43,9 @@
 				{% for machine in workorder.machines %}
 					<tr>
 						<td data-label="Numéro : ">{{ machine.internalCode }}</td>
-						<td data-label="Désignation: " class="text-center">{{ machine.designation }}</td>
-						<td data-label="Num. Série : " class="text-center">{{ machine.serialNumber }}</td>
-						<td data-label="Constructeur : " class="text-center">{{ machine.constructor }}</td>
+						<td data-label="Désignation: " class="text-center">{{ machine.designation ? machine.designation : "-" }}</td>
+						<td data-label="Num. Série : " class="text-center">{{ machine.serialNumber ? machine.serialNumber : "-" }}</td>
+						<td data-label="Constructeur : " class="text-center">{{ machine.constructor ? machine.constructor : "-" }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -58,31 +53,27 @@
 	</div>
 </div>
 
-<div class="mt-1 row justify-content-start">
-	<div class="title">
-		Demande :
-	</div>
-	<div>{{ workorder.request }}</div>
+<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-center flex-wrap mb-3">
+	<div class="item me-2">Demande :</div>
+	<span class="item-answer">{{ workorder.request }}</span>
 </div>
 
 {% if workorder.implementation %}
-	<div class="row mt-4 justify-content-start">
-		<div class="title">
-			Réalisation :
-		</div>
-		<div>{{ workorder.implementation | nl2br }}</div>
+	<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-center flex-wrap mb-3">
+		<span class="item me-2">Réalisation :</span>
+		<span class="item-answer">{{ workorder.implementation | nl2br }}</span>
 	</div>
 {% endif %}
 
 {% if workorder.remark %}
-	<div class="row mt-4 justify-content-start">
-		<div class="title">Remarque :</div>
-		<div>{{ workorder.remark | nl2br }}</div>
+	<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-top flex-wrap">
+		<span class="item me-2">Remarque :</span>
+		<div class="item-answer">{{ workorder.remark | nl2br }}</div>
 	</div>
 {% endif %}
 <div class="row mt-4 justify-content-start">
-	<div class="title">Durée :</div>
-	<div class="col-5">
+	<span class="item">Durée :</span>
+	<span class="item-answer">
 		{% if workorder.durationDay > 0 %}
 			{{ workorder.durationDay }}
 			{% if workorder.durationDay > 1 %}
@@ -91,10 +82,10 @@
 				jour
 			{% endif %}
 		{% endif %}
-	</div>
+	</span>
 </div>
 <div class="row mt-1">
-	<div class="col-10 col-sm-11 col-md-11 col-xl-6">
+	<div class="col-12 col-sm-12 col-md-11 col-xl-6">
 		<table class="table">
 			<thead>
 				<tr class="sorting">
@@ -117,8 +108,8 @@
 </div>
 {% if workorder.workorderParts is not empty %}
 	<div class="row mt-1">
-		<div class="col-12 col-sm-11 col-md-12 col-lg-8 col-xl-6 mb-3">
-			<h5 class="text-primary">Pièces détachées</h5>
+		<div class="col-12 col-lg-11 col-xl-10 mb-3">
+			<h5 class="item">Pièces détachées</h5>
 			<div class="border rounded border-primary p-3">
 				<table class="table table-sm">
 					<thead>
@@ -137,16 +128,16 @@
 								{% set quantity = part.quantity %}
 								{% set price = part.price %}
 								{% set totalPrice = price * quantity %}
-								<td data-label="Code">{{ part.part.code }}</td>
-								<td data-label="Quantité" class="text-center">{{ quantity }}</td>
-								<td data-label="Désignation" class="text-center">{{ part.part.designation }}</td>
-								<td data-label="Qte stock" class="text-center">{{ part.part.stock.qteStock }}</td>
+								<td data-label="Code : ">{{ part.part.code }}</td>
+								<td data-label="Quantité : ">{{ quantity }}</td>
+								<td data-label="Désignation : ">{{ part.part.designation }}</td>
+								<td data-label="Qte stock : ">{{ part.part.stock.qteStock }}</td>
 								{% if part.part.steadyPrice > 0 %}
-									<td data-label="Prix" class="text-center">{{ price|format_number({fraction_digit: 2}) }}</td>
-									<td data-label="Prix" class="text-center">{{ totalPrice|format_number({fraction_digit: 2}) }}</td>
+									<td data-label="Prix : ">{{ price|format_number({fraction_digit: 2}) }}</td>
+									<td data-label="Prix : ">{{ totalPrice|format_number({fraction_digit: 2}) }}</td>
 								{% else %}
-									<td data-label="Prix" class="text-center">-</td>
-									<td data-label="Prix" class="text-center">-</td>
+									<td data-label="Prix : ">-</td>
+									<td data-label="Prix : ">-</td>
 								{% endif %}
 								{% if workorder.workorderStatus.name != "CLOTURE" %}
 									<td data-label="">
@@ -157,8 +148,8 @@
 						{% endfor %}
 					</tbody>
 				</table>
-				<div class="row justify-content-end">
-					<div class="col-4 col-xl-2 me-5 text-center border border-danger rounded">Total pièces :
+				<div class="d-flex justify-content-end">
+					<div class="border border-danger rounded p-2">Total pièces :
 						{{ workorder.partsPrice|format_number({fraction_digit: 2}) }}€</div>
 				</div>
 

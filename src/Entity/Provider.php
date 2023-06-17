@@ -69,6 +69,12 @@ class Provider
      */
     private $activity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="providers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
@@ -232,6 +238,18 @@ class Provider
     public function setActivity(?string $activity): self
     {
         $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }

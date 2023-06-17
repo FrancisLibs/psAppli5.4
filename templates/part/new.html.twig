@@ -3,23 +3,21 @@
 {% block title %}Nouvelle pièce détachée
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/partsNew.css">
+{% endblock %}
+
+
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="ms-4 col-12">
+		<article class="col-12 col-md-10">
 			<header class="d-flex justify-content-start align-items-center">
-				<div>
 					<h1 class="page-title me-5">Création pièce</h1>
-				</div>
-				<div>
 					<a class="btn btn-primary btn-sm" href="{{ path('part_index') }}" role="button">Listes des pièces</a>
-				</div>
 			</header>
-			<section class="row mt-5">
-				<div class="mb-4 col-12 col-lg-12 col-xl-12">
-					{{ include('part/_form.html.twig') }}
-				</div>
-			</section>
+			{{ include('part/_form.html.twig') }}
 		</article>
 	</main>
 {% endblock %}

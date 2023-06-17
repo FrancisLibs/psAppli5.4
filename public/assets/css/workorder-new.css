@@ -1,46 +1,3 @@
-.caseTemps {
-  width: 157px;
-}
-
-.caseHeure {
-  width: 82px;
-  margin-right: 10px;
-}
-
-.caseHeure2 {
-  width: 100px;
-}
-
-.bloc_date {
-  width: 400px;
-}
-
-.bloc_duree {
-  width: 320px;
-}
-
-.bloc_cout {
-  width: 177px;
-}
-
-.bloc_arret_machine {
-  width: 270px;
-}
-
-.item {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #0d6efd;
-  white-space: nowrap;
-}
-
-.item-answer {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #0d6efd;
-  white-space: normal;
-}
-
 .global-date-box {
   border: 1px solid blue;
   border-radius: 10px;
@@ -90,4 +47,11 @@
   justify-content: start;
   align-items: baseline;
   flex-wrap: wrap;
+}
+
+.item {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #0d6efd;
+  white-space: nowrap;
 }

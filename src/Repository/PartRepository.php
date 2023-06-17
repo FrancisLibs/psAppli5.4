@@ -4,12 +4,15 @@ namespace App\Repository;
 
 use App\Entity\Part;
 use App\Data\SearchPart;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Data\GlobalSearch;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\Id;
 
 class PartRepository extends ServiceEntityRepository
 {
@@ -117,6 +120,7 @@ class PartRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    
     /**
      * Undocumented function
      *
@@ -154,5 +158,43 @@ class PartRepository extends ServiceEntityRepository
             ->setParameter('disabled', true)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+     /**
+     * Récupère les machines liées à une recherche d'un mot
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return Part[]
+     */
+    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
+    {
+        $word =  "%".strtoupper($globalSearch->search)."%";
+    
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->andWhere('p.organisation = :organisation')
+
+            ->andWhere('p.active = true')
+
+            ->andWhere('
+                p.code LIKE :word 
+                OR 
+                p.designation LIKE :word
+                OR
+                p.reference LIKE :word
+                OR
+                p.remark LIKE :word
+            ')
+
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisation),
+                new Parameter('word', $word),
+            ])) 
+
+            ->orderBy('p.code', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

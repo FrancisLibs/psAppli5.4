@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Data\SearchGlobal;
+use App\Data\GlobalSearch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +14,7 @@ class GlobalSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('word', TextType::class, [
+            ->add('search', TextType::class, [
                 'label' => false,
             ])
             ->add('submit', SubmitType::class)
@@ -24,7 +24,14 @@ class GlobalSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => SearchGlobal::class,
+            'data_class' => GlobalSearch::class,
+            'method' => 'GET',
+            'csrf_protection' => false
         ]);
+    }
+
+     public function getBlockPrefix(): string
+    {
+        return '';
     }
 }

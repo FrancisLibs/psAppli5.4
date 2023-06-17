@@ -197,7 +197,7 @@ class MachineController extends AbstractController
             $machine->setInternalCode(strtoupper($machine->getInternalCode()));
             $machine->setConstructor(strtoupper($machine->getConstructor()));
             $machine->setDesignation(mb_strtoupper($machine->getDesignation()));
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute('machine_show', [
                 'id' => $machine->getId(),
@@ -243,10 +243,9 @@ class MachineController extends AbstractController
 
             $newMachine->setCreatedAt(new \Datetime());
 
-            $manager = $this->getDoctrine()->getManager();
 
-            $manager->persist($newMachine);
-            $manager->flush();
+            $this->manager->persist($newMachine);
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'machine_show',

@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition bon de travail
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/result-display.css">
+{% endblock %}
+
+{% block body %}
+	<main class="row justify-content-start mt-5 mb-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-xl-10">
+			<header class="d-flex justify-content-start align-items-center flex-wrap">
+				<h1 class="page-title me-5 mb-2">Résultat recherche</h1>
+				{# <div class="d-flex justify-content-start align-items-center flex-wrap">
+													<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
+													<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
+													{% if is_granted('ROLE_ADMIN') %}
+														{{ include('workorder/_delete_form.html.twig') }}
+													{% endif %}
+												</div> #}
+			</header>
+			<section>
+				<div class="title">
+					<a class="button_title" href="#" role="button">Machines ({{ machines|length }})</a>
+				</div>
+				<div class="content">
+					{% for machine in machines %}
+						<div>
+							<a href="{{ path('machine_show', {'id': machine.id}) }}" class="button_content">{{ machine.id }}</a>
+							{{ machine.designation }}
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+			<section>
+				<div class="title">
+					<a class="button_title" href="#" role="button">Pièces détachées ({{ parts|length }})</a>
+				</div>
+				<div class="content">
+					{% for part in parts %}
+						<div>
+							<a href="{{ path('part_show', {'id': part.id}) }}" class="button_content">{{ part.id }}</a>
+							{{ part.designation }}
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+			<section>
+				<div class="title">
+					<a class="button_title" href="#" role="button">Bulletins de livraison ({{ deliveryNotes|length }})</a>
+				</div>
+				<div class="content">
+					{% for deliveryNote in deliveryNotes %}
+						<div>
+							<a href="{{ path('deliveryNote_show', {'id': deliveryNote.id}) }}" class="button_content">{{deliveryNote.id }}</a>
+							{{ deliveryNote.provider.name }}
+							{{ deliveryNote.number }}
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+			<section>
+				<div class="title">
+					<a class="button_title" href="#" role="button">Bons de travaux ({{ workorders|length }})</a>
+				</div>
+				<div class="content">
+					{% for workorder in workorders %}
+						<div>
+							<a href="{{ path('work_order_show', {'id': workorder.id}) }}" class="button_content">{{workorder.id }}</a>
+							{{ workorder.startDate|date("m/d/Y") }}
+							{{ workorder.request }}
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+		</article>
+	</main>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/result_dispaly.js"></script>
+{% endblock %}

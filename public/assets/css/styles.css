@@ -21,6 +21,28 @@ main {
   width: 100%;
 }
 
+.date-box {
+  width: 160px;
+}
+
+.caseHeure {
+  width: 82px;
+  margin-right: 10px;
+}
+
+.time2-box {
+  width: 115px;
+}
+
+.pick-time-box {
+  width: 300px;
+}
+/* Texte après bouton */
+.text-af-btn {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
 /* Footer */
 .footer {
   background: linear-gradient(#c2f0ea, white);
@@ -61,7 +83,7 @@ tr {
 }
 
 .index-button {
-  width: 108px;
+  width: 150px;
   background-color: #007bff;
   padding: 2px;
   color: white;
@@ -95,6 +117,18 @@ tr {
   display: none;
 }
 
+/* Titre des pages */
+.page-title {
+  font-family: georgia, serif;
+  color: blue;
+  margin: 0;
+}
+
+/* Menu de navigation */
+.nav-item {
+  font-weight: bold;
+}
+
 /* Traitement des tables responsives */
 @media (max-width: 800px) {
   /* Centrage d'un champ */
@@ -108,7 +142,7 @@ tr {
 
   .table tr {
     display: block;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   .table td {

@@ -132,6 +132,12 @@ class Machine
      */
     private $childLevel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="machines")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisation;
+
 
     public function __construct()
     {
@@ -430,6 +436,18 @@ class Machine
     public function setChildLevel(?int $childLevel): self
     {
         $this->childLevel = $childLevel;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }

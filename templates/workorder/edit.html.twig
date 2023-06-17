@@ -11,61 +11,58 @@
 {% block body %}
 	<main class="row justify-content-start mt-5 mb-5">
 		{% include 'user/_photo.html.twig' %}
-		<article>
-			<header class="row mb-3 justify-content-start align-items-center flex-wrap">
-				<div class="col-8 col-sm-6 col-md-6 col-xl-5">
-					{% if workorder.preventive %}
-						<h1 class="page-title">Edition bon de travail préventif</h1>
-					{% else %}
-						<h1 class="page-title">Edition bon de travail</h1>
-					{% endif %}
-				</div>
-				<div class="col-10 col-sm-10 col-md-9 col-xl-4 d-flex justify-content-start align-items-center flex-wrap">
-					<a class="btn btn-primary btn-sm me-1" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
-					<a class="btn btn-primary btn-sm me-1" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
+		<article class="col-12 col-xl-10">
+			<header class="d-flex justify-content-start align-items-center flex-wrap">
+				{% if workorder.preventive %}
+					<h1 class="page-title me-5 mb-2">Edition bon de travail préventif</h1>
+				{% else %}
+					<h1 class="page-title me-5 mb-2">Edition bon de travail</h1>
+				{% endif %}
+				<div class="d-flex justify-content-start align-items-center flex-wrap">
+					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
+					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ include('workorder/_delete_form.html.twig') }}
 					{% endif %}
 				</div>
 			</header>
-			<div class="mt-4 col-12">
-				<div class="row mt-4">
-					<div class="col-10 d-flex justify-content-start align-items-center">
-						<h4 class="text-primary me-5">Machine(s)</h4>
-						{% if not workorder.preventive %}
-							<a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'documentId': workorder.id}) }}" role="button">Changer de machine</a>
-						{% endif %}
-					</div>
-				</div>
-				<div class="row mt-4">
-					<div class="col-10 d-flex justify-content-start align-items-center">
-						<table class="table table-sm table-striped">
-							<thead>
-								<tr class="sorting">
-									<th>Code</th>
-									<th class="text-center">Désignation</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for machine in workorder.machines %}
-									<tr>
-										<td data-label="Code">{{ machine.internalCode }}</td>
-										<td data-label="Désignation" class="text-center">{{ machine.designation }}</td>
+			<section class="row">
+				<div class="mt-4 col-12 col-xl-9">
+					<span class="item me-5">Machine(s)</span>
+					{% if not workorder.preventive %}
+						<a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'documentId': workorder.id}) }}" role="button">Changer de machine</a>
+					{% endif %}
+					<div class="row mt-2">
+						<div class="col-12 d-flex justify-content-start align-items-center">
+							<table class="table table-sm table-striped">
+								<thead>
+									<tr class="sorting">
+										<th>Code</th>
+										<th class="text-center">Désignation</th>
 									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									{% for machine in workorder.machines %}
+										<tr>
+											<td data-label="Code">{{ machine.internalCode }}</td>
+											<td data-label="Désignation" class="text-center">{{ machine.designation }}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
-				<div class="row mt-1">
-					<div class="col-12">
-						{{ include('workorder/_form.html.twig') }}
-					</div>
+			</section>
+			<section class="row">
+				<div class="col-12 col-xl-11">
+					{{ include('workorder/_form.html.twig') }}
 				</div>
-			</article>
-		</main>
-	{% endblock %}
-	{% block javascripts %}
-		{{ parent() }}
-		{{ encore_entry_script_tags('workorder') }}
-	{% endblock %}
+			</section>
+		</article>
+	</main>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('workorder') }}
+{% endblock %}

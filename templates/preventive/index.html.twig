@@ -4,22 +4,21 @@
 {% endblock %}
 
 {% block body %}
-
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
-			<header class="row mb-3 me-5 justify-content-start">
-				<div class="d-flex justify-content-start align-items-center">
-					<h1 class="page-title">Bons de travail préventifs</h1>
-					<a class="btn btn-primary btn-sm ms-5" href="{{ path('preventive_new', {'mode': 'preventive'}) }}" role="button">Nouveau préventif</a>
-					<a class="btn btn-warning btn-sm ms-2" href="{{ path('preventiveCalendar') }}" role="button">Calendrier</a>
+		<article class="col-12 col-xl-10">
+			<header class="justify-content-start mb-3 me-5">
+				<div class="d-flex justify-content-start align-items-center flex-wrap">
+					<h1 class="page-title me-5 mt-2">Bons de travail préventifs</h1>
+					<a class="btn btn-primary btn-sm mt-2 me-2" href="{{ path('preventive_new', {'mode': 'preventive'}) }}" role="button">Nouveau préventif</a>
+					<a class="btn btn-warning btn-sm mt-2" href="{{ path('preventiveCalendar') }}" role="button">Calendrier</a>
 				</div>
 			</header>
 			<section class="row js-filter">
 				<div>
 					{% include 'preventive/_templateList.html.twig' with {templates: templates, form: form} only %}
 					{# Navigation #}
-					<div class="col-10 offset-2 navigation js-filter-pagination mb-5">
+					<div class="col-10 navigation js-filter-pagination mb-5">
 						{% include 'preventive/_pagination.html.twig' %}
 					</div>
 				</div>

@@ -1,6 +1,6 @@
 {{ form_start(form, {'action': path('app_global_search')}) }}
     <div class="d-flex align-items-center">
-        {{ form_widget(form.word, {'attr': {'class': 'search_word'}}) }}
+        {{ form_widget(form.search, {'attr': {'class': 'search_word'}}) }}
         {{ form_widget(form.submit, { 
                 'label': 'Chercher', 
                 'attr': {'class': 'submit_search_word'}

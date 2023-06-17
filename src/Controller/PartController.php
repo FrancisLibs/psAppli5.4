@@ -8,7 +8,6 @@ use App\Form\PartType;
 use App\Data\SearchPart;
 use App\Service\PdfService;
 use App\Form\SearchPartForm;
-use App\Service\QrCodeService;
 use App\Repository\PartRepository;
 use App\Repository\StockValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -59,6 +58,7 @@ class PartController extends AbstractController
     {
         $user = $this->getUser();
         $organisation =  $user->getOrganisation();
+        
         $session = $this->requestStack->getSession();
 
         $data = new SearchPart();

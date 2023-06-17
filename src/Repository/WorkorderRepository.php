@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use DateTime;
 use App\Entity\Workorder;
+use App\Data\GlobalSearch;
 use App\Data\SearchWorkorder;
 use App\Data\SearchPreventive;
 use Doctrine\ORM\Query\Parameter;
@@ -197,6 +198,40 @@ class WorkorderRepository extends ServiceEntityRepository
             ->andWhere('w.preventive = :preventive')
             ->setParameter('preventive', false)
             ->andWhere('w.durationDay > 0 OR w.durationHour > 0 OR w.durationMinute > 0')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les machines liées à une recherche d'un mot
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return Part[]
+     */
+    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
+    {
+        $word =  "%".strtoupper($globalSearch->search)."%";
+    
+        return $this->createQueryBuilder('w')
+            ->select('w')
+            ->andWhere('w.organisation = :organisation')
+
+            ->andWhere('
+                w.remark LIKE :word 
+                OR 
+                w.request LIKE :word
+                OR
+                w.implementation LIKE :word
+            ')
+
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisation),
+                new Parameter('word', $word),
+            ])) 
+
+            ->orderBy('w.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

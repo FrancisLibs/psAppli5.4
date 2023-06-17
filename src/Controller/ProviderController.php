@@ -154,16 +154,18 @@ class ProviderController extends AbstractController
     }
 
     // /**
-    //  * @Route("/action", name="provider_action", methods={"GET","POST"})
+    //  * @Route("/action", name="app_provider_org", methods={"GET","POST"})
     //  * @Security("is_granted('ROLE_ADMIN')")
     //  */
     // public function action(): Response
     // {
     //     // dd('ok');
+    //     $organisation = $this->getUser()->getOrganisation();
+    //     //dd($organisation);
+
     //     $providers = $this->providerRepository->findAll();
     //     foreach ($providers as $provider) {
-    //         $provider->setName(strtoupper($provider->getName()));
-    //         $provider->setCity(strtoupper($provider->getCity()));
+    //         $provider->setOrganisation($organisation);
     //         $this->manager->persist($provider);
     //     }
 

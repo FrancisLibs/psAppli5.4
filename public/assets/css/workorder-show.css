@@ -3,3 +3,20 @@
   font-weight: bold;
   color: #0d6efd;
 }
+
+.item {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #0d6efd;
+  white-space: nowrap
+}
+
+.item-answer {
+  font-size: 1.2em;
+  font-weight: normal;
+  white-space: normal;
+}
+
+.machine-tab-item{
+  font-size: 3rem;
+}

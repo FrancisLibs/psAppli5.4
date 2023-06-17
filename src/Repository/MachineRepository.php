@@ -3,12 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\Machine;
+use App\Data\GlobalSearch;
 use App\Data\SearchMachine;
+use App\Entity\Organisation;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\Id;
 
 class MachineRepository extends ServiceEntityRepository
 {
@@ -84,4 +88,46 @@ class MachineRepository extends ServiceEntityRepository
             20
         );
     }
+
+    /**
+     * Récupère les machines liées à une recherche d'un mot
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return Machine[]
+     */
+    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
+    {
+        $word =  "%".strtoupper($globalSearch->search)."%";
+    
+        return $this->createQueryBuilder('m')
+            ->select('m')
+            ->andWhere('m.organisation = :organisation')
+
+            ->andWhere('m.active = true')
+
+            ->andWhere('
+                m.designation LIKE :word 
+                OR 
+                m.constructor LIKE :word
+                OR
+                m.serialNumber LIKE :word
+                OR
+                m.internalCode LIKE :word
+                OR
+                m.model LIKE :word
+            ')
+
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisation),
+                new Parameter('word', $word),
+            ])) 
+
+            ->orderBy('m.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+   
 }

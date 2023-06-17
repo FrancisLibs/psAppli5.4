@@ -7,17 +7,9 @@
 {% block body %}
 	<div class="row part-js-filter justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col">
-			<section class="row">
-				<div class="col">
-					<h1 class="page-title">Pièces en réappro</h1>
-				</div>
-			</section>
-			<section class="row part-js-filter">
-				<div class="col">
-					{% include 'supply/_partToBuyList.html.twig' with {parts: parts, varProvider: varProvider} only %}
-				</div>
-			</section>
+		<article class="col-12 col-md-11 col-lg-11 col-xl-10">
+			<h1 class="page-title mb-2">Pièces en réappro</h1>
+			{% include 'supply/_partToBuyList.html.twig' with {parts: parts, varProvider: varProvider} only %}
 		</article>
 	</div>
 {% endblock %}

@@ -4,14 +4,16 @@
 {% endblock %}
 
 {% block body %}
-	<main class="row justify-content-start">
-		<menu class="d-flex justify-content-center mb-5">
-			{% include 'indicator/_indicator_navbar.html.twig' %}
-		</menu>
+	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col-10">
+		<article class="col-12 col-xl-10">
 			<header>
-				<h1 class="page-title">Coût des pièces détachées/mois</h1>
+				<div class="row">
+					<div class="d-flex justify-content-start align-items-center flex-wrap">
+						<h1 class="page-title me-5">Coût des pièces détachées/mois</h1>
+						{% include 'indicator/_indicator_navbar.html.twig' %}
+					</div>
+				</div>
 			</header>
 			<section class="mt-4">
 				<div class="row">

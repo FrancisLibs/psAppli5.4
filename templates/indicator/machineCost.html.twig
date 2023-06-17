@@ -4,17 +4,14 @@
 {% endblock %}
 
 {% block body %}
-	<main class="row justify-content-start">
-		<menu class="d-flex justify-content-center mb-5">
-			{% include 'indicator/_indicator_navbar.html.twig' %}
-		</menu>
+	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col-10">
+		<article class="col-12 col-xl-10">
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
 						<h1 class="page-title me-5">Coût pièces détachées/machine</h1>
-						{# <a class="btn btn-primary btn-sm" href="{{ path('work_order_show') }}" role="button">Retour au BT</a> #}
+						{% include 'indicator/_indicator_navbar.html.twig' %}
 					</div>
 				</div>
 			</header>
@@ -26,9 +23,12 @@
 				</div>
 				<div class="d-flex justify-content-between flex-wrap mt-5">
 					{% for machine in machineDatas %}
-						<div class="card mb-3" style="width: 20rem;">
+						<div class="card mb-3" style="width: 17rem;">
 							<div class="card-body">
-								<h5 class="card-title">{{ machine.name }}</h5>
+								<span class="card-title">
+									<strong>{{ loop.index }}. 
+										{{ machine.name }}</strong>
+								</span>
 								<p class="card-text">
 									{{ machine.partsPrice ?? 0 }}€
 								</p>

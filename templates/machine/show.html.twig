@@ -35,92 +35,110 @@
 						</div>
 					</div>
 				</section>
-				<section class="row mt-5">
-					<div class="col-12">
-						<div class="row">
-							<div class="col-12 col-md-8 col-lg-4">
-								<p>
-									<strong>Nom :
-									</strong>
-									{% if machine.parent %}
-										{{ machine.parent.designation }}
-										->
-									{% endif %}
-									{{ machine.designation }}</p>
-							</div>
-							<div class="col-12 col-md-3">
-								<p>
-									<strong>Code :
-									</strong>
-									{{ machine.internalCode }}</p>
-							</div>
+				<section class="mt-5">
+
+					<div class="row">
+						<div class="col-12 col-md-8 col-lg-2">
+							<strong>Nom :</strong>
 						</div>
-						<div class="row mt-4">
-							<div class="col-12 col-md-8 col-lg-4">
-								{% if machine.model %}
-									<p>
-										<strong>Modèle :
-										</strong>
-										{{ machine.model }}
-									</p>
-								{% endif %}
-							</div>
-							<div class="col-12 col-md-3">
-								{% if machine.buyDate %}
-									<p>
-										<strong>Date achat :
-										</strong>
-										{{ machine.buyDate|date('d-m-Y') }}
-									</p>
-								{% endif %}
-							</div>
-						</div>
-						<div class="row mt-4">
-							<div class="col-12 col-md-8 col-lg-4">
-								{% if machine.serialNumber %}
-									<p>
-										<strong>Numéro de série :
-										</strong>
-										{{ machine.serialNumber }}
-									</p>
-								{% endif %}
-							</div>
-							<div class="col-12 col-md-3">
-								<p>
-									<strong>Constructeur :
-									</strong>
-									{{ machine.constructor }}</p>
-							</div>
-						</div>
-						<div class="row mt-4">
-							<div class="col-12 col-md-8 col-lg-4">
-								<p>
-									<strong>Atelier :
-									</strong>
-									{{ machine.workshop.name }}</p>
-							</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{% if machine.parent %}
+								{{ machine.parent.designation }}
+								->
+							{% else %}
+								-
+							{% endif %}
+							{{ machine.designation }}
 						</div>
 					</div>
-					<div>
-						{# Pièces détachées liées à la machine #}
-						{% if machine.parts is not empty %}
-							<div class="row mt-4">
-								<div class="col-6 mt-3">
-									<h3 class="text-primary">Pièces détachées</h3>
-								</div>
-							</div>
-							<div class="row mt-2">
-								<div class="col-12 col-md-11 col-lg-10 col-xl-9 mt-2">
-									{{ include('machine/_parts.html.twig') }}
-								</div>
-							</div>
-						{% endif %}
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-8 col-lg-2">
+							<strong>Code :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{{ machine.internalCode }}
+						</div>
 					</div>
-					<div class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-						{% if machine.imageName %}
-							<img style="width: 100%" src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}"/>
-						{% endif %}
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-8 col-lg-2">
+							<strong>Modèle :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{% if machine.model %}
+								{{ machine.model }}
+							{% else %}
+								-
+							{% endif %}
+						</div>
 					</div>
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-3 col-lg-2">
+							<strong>Date achat :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{% if machine.buyDate %}
+								{{ machine.buyDate|date('d-m-Y') }}
+							{% else %}
+								-
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-8 col-lg-2">
+							<strong>Numéro de série :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{% if machine.serialNumber %}
+								{{ machine.serialNumber }}
+							{% else %}
+								-
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-3 col-lg-2">
+							<strong>Constructeur :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{{ machine.constructor }}
+						</div>
+					</div>
+
+					<div class="row mt-2">
+						<div class="col-12 col-md-3 col-lg-2">
+							<strong>Atelier :</strong>
+						</div>
+						<div class="col-12 col-md-8 col-lg-4">
+							{{ machine.workshop.name }}
+						</div>
+					</div>
+				</section>
+
+				<section>
+					{# Pièces détachées liées à la machine #}
+					{% if machine.parts is not empty %}
+						<div class="row mt-4">
+							<div class="col-6 mt-3">
+								<h3 class="text-primary">Pièces détachées</h3>
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div class="col-12 col-md-11 col-lg-10 col-xl-9 mt-2">
+								{{ include('machine/_parts.html.twig') }}
+							</div>
+						</div>
+					{% endif %}
+				</section>
+				
+				<section class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+					{% if machine.imageName %}
+						<img style="width: 100%" src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}"/>
+					{% endif %}
 				</section>
 			</article>
 			{# Right aside #}

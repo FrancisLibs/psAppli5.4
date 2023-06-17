@@ -1,0 +1,25 @@
+.bag-title {
+  color: blue;
+  font-size: 1.5rem;
+}
+
+.btn_panier {
+  max-height: 1.5em;
+  font-size: 1em;
+  padding-top: 0;
+  margin-top: 5px;
+}
+
+.btn_supp {
+  max-height: 2em;
+  font-size: 0.6em;
+  padding-top: 0;
+}
+
+/* Affichage des pièces dans l'encart du panier */
+.items_display {
+  font-size: 0.8em;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}

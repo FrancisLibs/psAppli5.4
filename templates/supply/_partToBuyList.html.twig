@@ -1,37 +1,40 @@
-<div class="row mt-4">
-    <div class="col-12 col-md-12 col-xl-11">       
-        <table class="table table-sm table-striped">
-            <thead>
-                <tr class="sorting">
-                    <th scope="col" class="text-left">Fournisseur</th>
-                    <th scope="col" class="text-center">Code</th>
-                    <th scope="col" class="text-center">Désignation</th>
-                    <th scope="col" class="text-center">Référence</th>
-                    <th scope="col" class="text-center">Qte stock</th>
-                    <th scope="col" class="text-center">Qte en com.</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for part in parts %}
-                    {% if part.stock.approQte > 0 %}
-                        <tr style="background-color: #a7fb78;">
-                    {% else %}
-                        <tr>
-                    {% endif %}
-                        {% if part.provider.name != varProvider %}
-                            {% set varProvider = part.provider.name %}
-                            <td data-label="Fournisseur"><a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn index-button">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a></td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        <td data-label="Code" class="text-center">{{ part.code }}</td>
-                        <td data-label="Désignation" class="text-center">{{ part.designation }}</td>
-                        <td data-label="Référence" class="text-center">{{ part.reference }}</td>
-                        <td data-label="Qte stock" class="text-center">{{ part.stock.qteStock }}</td>
-                        <td data-label="En commande" class="text-center">{{ part.stock.approQte }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table> 
-    </div> 
-</div>
+<section class="row part-js-filter">
+	<div class="col-12 col-md-12 col-xl-11">
+		<table class="table table-sm table-striped">
+			<thead>
+				<tr class="sorting">
+					<th scope="col" class="text-left">Fournisseur</th>
+					<th scope="col" class="text-center">Code</th>
+					<th scope="col" class="text-center">Désignation</th>
+					<th scope="col" class="text-center">Référence</th>
+					<th scope="col" class="text-center">Qte stock</th>
+					<th scope="col" class="text-center">Qte en com.</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for part in parts %}
+					{% if part.stock.approQte > 0 %}
+						<tr style="background-color: #a7fb78;">
+						{% else %}
+							<tr>
+							{% endif %}
+							{% if part.provider.name != varProvider %}
+								{% set varProvider = part.provider.name %}
+								<td data-label="Fournisseur">
+									<a href="{{ path('parts_provider', {"id": part.provider.id}) }}" class="btn index-button">{{ varProvider ~ "   " ~ '(' ~ part.provider.code ~ ')' }}</a>
+								</td>
+							{% else %}
+								<td></td>
+							{% endif %}
+							<td data-label="Code" class="text-center">{{ part.code }}</td>
+							<td data-label="Désignation" class="text-center">{{ part.designation }}</td>
+							<td data-label="Référence" class="text-center">{{ part.reference }}</td>
+							<td data-label="Qte stock" class="text-center">{{ part.stock.qteStock }}</td>
+							<td data-label="En commande" class="text-center">{{ part.stock.approQte }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+</section>

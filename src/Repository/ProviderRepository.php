@@ -3,9 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Provider;
+use App\Data\GlobalSearch;
 use App\Data\SearchProvider;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -59,5 +62,39 @@ class ProviderRepository extends ServiceEntityRepository
             $search->page,
             15
         );
+    }
+
+    /**
+     * Récupère les machines liées à une recherche d'un mot
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return DeliveryNote[]
+     */
+    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
+    {
+        $word =  "%".strtoupper($globalSearch->search)."%";
+    
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->andWhere('p.organisation = :organisation')
+
+            ->andWhere('
+                p.name LIKE :word 
+                OR 
+                p.city LIKE :word
+                OR
+                p.phone LIKE :word
+            ')
+
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisation),
+                new Parameter('word', $word),
+            ])) 
+
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

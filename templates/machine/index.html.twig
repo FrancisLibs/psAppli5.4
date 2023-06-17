@@ -11,9 +11,9 @@
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col-12 col-lg-9">
-			<header class="d-flex justify-content-start align-items-center flex-wrap">
-				<div class="d-flex justify-content-start flex-wrap mb-4">
+		<article class="col-12 col-md-12 col-lg-12 col-xl-10">
+			<header>
+				<div class="d-flex justify-content-start align-items-center flex-wrap mb-4">
 					{% if mode == "selectPreventive" %}
 						<h1 class="page-title me-5">Machines -> BT préventif</h1>
 					{% elseif mode == "newWorkorder" %}

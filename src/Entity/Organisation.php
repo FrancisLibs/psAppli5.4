@@ -63,6 +63,16 @@ class Organisation
      */
     private $stockValues;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Machine::class, mappedBy="organisation")
+     */
+    private $machines;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Provider::class, mappedBy="organisation")
+     */
+    private $providers;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -70,9 +80,11 @@ class Organisation
         $this->workorders = new ArrayCollection();
         $this->parts = new ArrayCollection();
         $this->templates = new ArrayCollection();
-        $this->delivryNotes = new ArrayCollection();
+        $this->deliveryNotes = new ArrayCollection();
         $this->deliveryNotes = new ArrayCollection();
         $this->stockValues = new ArrayCollection();
+        $this->machines = new ArrayCollection();
+        $this->providers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -296,6 +308,66 @@ class Organisation
             // set the owning side to null (unless already changed)
             if ($stockValue->getOrganisation() === $this) {
                 $stockValue->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Machine>
+     */
+    public function getMachines(): Collection
+    {
+        return $this->machines;
+    }
+
+    public function addMachine(Machine $machine): self
+    {
+        if (!$this->machines->contains($machine)) {
+            $this->machines[] = $machine;
+            $machine->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMachine(Machine $machine): self
+    {
+        if ($this->machines->removeElement($machine)) {
+            // set the owning side to null (unless already changed)
+            if ($machine->getOrganisation() === $this) {
+                $machine->setOrganisation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Provider>
+     */
+    public function getProviders(): Collection
+    {
+        return $this->providers;
+    }
+
+    public function addProvider(Provider $provider): self
+    {
+        if (!$this->providers->contains($provider)) {
+            $this->providers[] = $provider;
+            $provider->setOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProvider(Provider $provider): self
+    {
+        if ($this->providers->removeElement($provider)) {
+            // set the owning side to null (unless already changed)
+            if ($provider->getOrganisation() === $this) {
+                $provider->setOrganisation(null);
             }
         }
 

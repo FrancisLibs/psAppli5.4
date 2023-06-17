@@ -2,10 +2,13 @@
 
 namespace App\Repository;
 
+use App\Data\GlobalSearch;
 use App\Entity\DeliveryNote;
 use App\Data\SearchDeliveryNote;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -70,6 +73,39 @@ class DeliveryNoteRepository extends ServiceEntityRepository
             ->join('d.deliveryNoteParts', 'p')
             ->andWhere('p.part = :val')
             ->setParameter('val', $part)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les machines liées à une recherche d'un mot
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return DeliveryNote[]
+     */
+    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
+    {
+        $word =  "%".strtoupper($globalSearch->search)."%";
+    
+        return $this->createQueryBuilder('d')
+            ->select('d')
+            ->innerjoin('d.provider', 'p')
+            ->andWhere('d.organisation = :organisation')
+
+            ->andWhere('
+                p.name LIKE :word 
+                OR 
+                d.number LIKE :word
+            ')
+
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisation),
+                new Parameter('word', $word),
+            ])) 
+
+            ->orderBy('d.number', 'ASC')
             ->getQuery()
             ->getResult();
     }
