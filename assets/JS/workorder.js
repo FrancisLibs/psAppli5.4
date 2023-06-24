@@ -1,7 +1,7 @@
 window.onload = () => {
-  const workorderForm = document.forms.workorder;
-  const workorderFormRequest = workorderForm["workorder[request]"];
-  const workorderFormImplementation = workorderForm["workorder[implementation]"];
+  let workorderForm = document.forms.workorder;
+  let workorderFormRequest = workorderForm["workorder[request]"];
+  let workorderFormImplementation = workorderForm["workorder[implementation]"];
 
   // -------------------------------------------------------------------
   // Gestion du temps de l'intervention
@@ -135,11 +135,11 @@ window.onload = () => {
   }
 
   // Surveillance des modifications des dates
-  const endTime = document.querySelector("#workorder_time");
+  let endTime = document.querySelector("#workorder_time");
   endTime.addEventListener("change", calcTemps, false);
 
   // Surveillance des modifications des temps de durée
-  const durationForm = document.querySelector("#duration_time");
+  let durationForm = document.querySelector("#duration_time");
   durationForm.addEventListener("change", duration, false);
 
   // Surveillance de la date de départ pour donner la même à la date de fin
