@@ -1,4 +1,4 @@
-let divClignotante = document.querySelector("#divClignotante");
+const divClignotante = document.querySelector("#divClignotante");
 
 function cligno() {
   if (divClignotante.style.visibility == "visible") {
