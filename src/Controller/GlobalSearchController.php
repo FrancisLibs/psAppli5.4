@@ -17,18 +17,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GlobalSearchController extends AbstractController
 {
-    protected $machineRepository;
-    protected $partRepository;
-    protected $deliveryNoteRepository;
-    protected $providerRepository;
-    protected $workorderRepository;
+    private $machineRepository;
+    private $partRepository;
+    private $deliveryNoteRepository;
+    private $providerRepository;
+    private $workorderRepository;
 
     public function __construct(
         MachineRepository $machineRepository, 
         PartRepository $partRepository, 
         DeliveryNoteRepository $deliveryNoteRepository, 
         ProviderRepository $providerRepository,
-        WorkorderRepository $workorderRepository)
+        WorkorderRepository $workorderRepository,
+    )
         {
             $this->machineRepository = $machineRepository;
             $this->partRepository = $partRepository;
@@ -37,7 +38,7 @@ class GlobalSearchController extends AbstractController
             $this->providerRepository = $providerRepository;
             $this->workorderRepository = $workorderRepository;
         }
-
+    
     #[Route('/global/search', name: 'app_global_search')]
     public function index(Request $request )
     {
@@ -64,8 +65,6 @@ class GlobalSearchController extends AbstractController
                 'workorders'    =>  $workorders,
             ]);
         }
-
-        
 
         return $this->render('global_search/form.html.twig', [
             'form' => $form->createView()

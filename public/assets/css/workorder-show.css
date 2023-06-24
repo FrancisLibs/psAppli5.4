@@ -8,7 +8,7 @@
   font-size: 1.2em;
   font-weight: bold;
   color: #0d6efd;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
 .item-answer {
@@ -17,6 +17,6 @@
   white-space: normal;
 }
 
-.machine-tab-item{
+.machine-tab-item {
   font-size: 3rem;
 }

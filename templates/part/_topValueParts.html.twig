@@ -1,0 +1,10 @@
+{% for part in parts %}
+	<tr>
+		<td data-label="Code" class="font_size_table">{{ part.code }}</td>
+		<td data-label="Designation" class="text-center font_size_table">{{ part.designation }}</td>
+		<td data-label="Référence" class="text-center font_size_table">{{ part.reference }}</td>
+		<td data-label="Emplacement" class="text-center font_size_table">{{ part.stock.place }}</td>
+		<td data-label="Qte stock" class="text-center font_size_table">{{ part.stock.qteStock }}</td>
+		<td data-label="Qte stock" class="text-center font_size_table">{{ part.steadyPrice|format_currency('EUR', {fraction_digit: 2}) }}</td>
+	</tr>
+{% endfor %}

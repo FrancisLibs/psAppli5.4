@@ -312,4 +312,38 @@ class PartController extends AbstractController
             'Content-Type' => 'application/pdf',
         ]);
     }
+
+    /**
+     * @ Valeur du stock de pièces détachées + affichage des 50 pièces les + chères
+     * 
+     * @Route("/stockTopValue", name="stock_top_value", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function topStockValue(): Response
+    {
+        $user = $this->getUser();
+        $organisation = $user->getOrganisation();
+
+        $totalStock = $this->partRepository->findTotalStock($organisation);
+        $stockValues = $this->stockValueRepository->findStockValues($organisation);
+        $topParts = $this->partRepository->findTopValueParts($organisation);
+        // dd($topParts);
+
+        $amounts = [];
+        $dates = [];
+
+        foreach ($stockValues as $value) {
+            $amount = $value->getValue();
+            $amounts[] = $amount;
+            $date =  $value->getDate()->format('d/m/Y');
+            $dates[] = $date;
+        }
+
+        return $this->render('part/top_value_parts.html.twig', [
+            'totalStock' => $totalStock,
+            'dates' =>  json_encode($dates),
+            'amounts' => json_encode($amounts),
+            'parts' => $topParts,
+        ]);
+    }
 }

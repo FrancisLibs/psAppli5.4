@@ -22,6 +22,7 @@
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{ path('delivery_note_index') }}">Bon de livraison</a>
 						<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Réappro</a>
+						<a class="dropdown-item" href="{{ path('stock_top_value') }}">Valeur stock</a>
 					</div>
 				</li>
 				<li class="nav-item me-3">
@@ -47,9 +48,9 @@
 						<a href="{{ path('admin') }}" class="nav-link">Administration</a>
 					</li>
 				{% endif %}
-				<li class="nav-item me-3">
+				{# <li class="nav-item me-3">
 					{{ render(path('app_global_search')) }}
-				</li>
+				</li> #}
 			</ul>
 			<ul class="navbar-nav align-items-center">
 				<li class="nav-item me-5">

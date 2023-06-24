@@ -161,7 +161,7 @@ class PartRepository extends ServiceEntityRepository
     }
 
      /**
-     * Récupère les machines liées à une recherche d'un mot
+     * Récupère les pièces liées à une recherche d'un mot
      *
      * @param Sorganisation
      * @param $globalSearch
@@ -194,6 +194,23 @@ class PartRepository extends ServiceEntityRepository
             ])) 
 
             ->orderBy('p.code', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+     /**
+     * @return top value Parts[]
+     */
+    public function findTopValueParts($organisation)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p', 's', 'o')
+            ->join('p.stock', 's')
+            ->join('p.organisation', 'o')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisation)
+            ->orderBy('p.steadyPrice', 'DESC')
+            ->setMaxResults(50)
             ->getQuery()
             ->getResult();
     }
