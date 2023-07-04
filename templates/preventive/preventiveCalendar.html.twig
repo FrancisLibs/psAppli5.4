@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" integrity="sha256-5veQuRbWaECuYxwap/IOE/DAwNxgm4ikX7nrgsqYp88=" crossorigin="anonymous">
+{% endblock %}
+
+
 {% block title %}Calendrier préventifs
 {% endblock %}
 
@@ -11,7 +17,7 @@
 				<div class="d-flex justify-content-start align-items-center">
 					<h1 class="page-title">Bons de travail préventifs</h1>
 					{# <a class="btn btn-primary btn-sm ms-5" href="{{ path('preventive_new', {'mode': 'preventive'}) }}" role="button">Nouveau préventif</a>
-						<a class="btn btn-warning btn-sm ms-2" href="{{ path('preventiveCalendar') }}" role="button">Calendrier</a> #}
+											<a class="btn btn-warning btn-sm ms-2" href="{{ path('preventiveCalendar') }}" role="button">Calendrier</a> #}
 				</div>
 			</header>
 			<section class="row">

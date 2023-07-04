@@ -15,13 +15,14 @@
 			<header class="d-flex justify-content-start align-items-center flex-wrap">
 				<h1 class="page-title me-5 mb-2">Résultat recherche</h1>
 				{# <div class="d-flex justify-content-start align-items-center flex-wrap">
-													<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
-													<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
-													{% if is_granted('ROLE_ADMIN') %}
-														{{ include('workorder/_delete_form.html.twig') }}
-													{% endif %}
-												</div> #}
+					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
+					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ include('workorder/_delete_form.html.twig') }}
+					{% endif %}
+				</div> #}
 			</header>
+			
 			<section>
 				<div class="title">
 					<a class="button_title" href="#" role="button">Machines ({{ machines|length }})</a>
@@ -35,6 +36,7 @@
 					{% endfor %}
 				</div>
 			</section>
+
 			<section>
 				<div class="title">
 					<a class="button_title" href="#" role="button">Pièces détachées ({{ parts|length }})</a>
@@ -48,6 +50,7 @@
 					{% endfor %}
 				</div>
 			</section>
+
 			<section>
 				<div class="title">
 					<a class="button_title" href="#" role="button">Bulletins de livraison ({{ deliveryNotes|length }})</a>
@@ -55,13 +58,14 @@
 				<div class="content">
 					{% for deliveryNote in deliveryNotes %}
 						<div>
-							<a href="{{ path('deliveryNote_show', {'id': deliveryNote.id}) }}" class="button_content">{{deliveryNote.id }}</a>
+							<a href="{{ path('delivery_note_show', {'id': deliveryNote.id}) }}" class="button_content">{{deliveryNote.id }}</a>
 							{{ deliveryNote.provider.name }}
 							{{ deliveryNote.number }}
 						</div>
 					{% endfor %}
 				</div>
 			</section>
+
 			<section>
 				<div class="title">
 					<a class="button_title" href="#" role="button">Bons de travaux ({{ workorders|length }})</a>
@@ -70,16 +74,17 @@
 					{% for workorder in workorders %}
 						<div>
 							<a href="{{ path('work_order_show', {'id': workorder.id}) }}" class="button_content">{{workorder.id }}</a>
-							{{ workorder.startDate|date("m/d/Y") }}
+							{{ workorder.startDate|date("d/m/Y") }}
 							{{ workorder.request }}
 						</div>
 					{% endfor %}
 				</div>
 			</section>
+			
 		</article>
 	</main>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	<script src="/assets/js/result_dispaly.js"></script>
+	<script src="/assets/js/globalSearch.js"></script>
 {% endblock %}

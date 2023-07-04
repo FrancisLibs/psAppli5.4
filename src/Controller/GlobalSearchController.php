@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Data\GlobalSearch;
 use App\Form\GlobalSearchType;
-use App\Repository\DeliveryNoteRepository;
-use App\Repository\MachineRepository;
 use App\Repository\PartRepository;
+use App\Repository\MachineRepository;
 use App\Repository\ProviderRepository;
 use App\Repository\WorkorderRepository;
+use App\Repository\DeliveryNoteRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -38,7 +39,8 @@ class GlobalSearchController extends AbstractController
             $this->providerRepository = $providerRepository;
             $this->workorderRepository = $workorderRepository;
         }
-    
+        
+    #[IsGranted('ROLE_USER')]
     #[Route('/global/search', name: 'app_global_search')]
     public function index(Request $request )
     {

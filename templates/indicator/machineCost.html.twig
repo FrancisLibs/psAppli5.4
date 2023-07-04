@@ -3,6 +3,12 @@
 {% block title %}Indicateurs : coût machines
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/machine-cost.css">
+{% endblock %}
+
+
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
@@ -15,18 +21,29 @@
 					</div>
 				</div>
 			</header>
-			<section class="mt-4">
-				<div>
-					<h4>Coût total des Pièces détachées :
+			<section class="mt-4 d-flex justify-content-start align-items-center">
+				<div class="me-5">
+					<p class="total-cost">Coût total des Pièces détachées :
 						{{ totalPartsPrice }}
-						Euros</h4>
+						Euros
+					</p>
 				</div>
+				<div>
+					<form action="#" method="post" class="form-date d-flex justify-content-start align-items-center" id="formDate">
+						<label for="datedepart" class="me-1">Date début : </label>
+						<input type="date" id="start-date" name="datedepart">
+						<label for="datefin" class="ms-5 me-1">Date fin : </label>
+						<input type="date" id="end-date" name="datefin">
+					</form>
+				</div>
+			</section>
+			<section>
 				<div class="d-flex justify-content-between flex-wrap mt-5">
 					{% for machine in machineDatas %}
 						<div class="card mb-3" style="width: 17rem;">
 							<div class="card-body">
 								<span class="card-title">
-									<strong>{{ loop.index }}. 
+									<strong>{{ loop.index }}.
 										{{ machine.name }}</strong>
 								</span>
 								<p class="card-text">
@@ -39,4 +56,9 @@
 			</section>
 		</article>
 	</main>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/machine-cost.js" defer></script>
 {% endblock %}

@@ -188,7 +188,7 @@ class WorkorderRepository extends ServiceEntityRepository
         $date = new DateTime($year);
 
         return $this->createQueryBuilder('w')
-            ->select('w', 'm')
+            ->select('w', 'm', 's')
             ->join('w.workorderStatus', 's')
             ->join('w.machines', 'm')
             ->andWhere('w.organisation = :val')
@@ -212,22 +212,28 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
     {
-        $word =  "%".strtoupper($globalSearch->search)."%";
+        $uppercaseWord =  "%".strtoupper($globalSearch->search)."%";
+        $word = "%".$globalSearch->search."%";
     
         return $this->createQueryBuilder('w')
-            ->select('w')
+            ->select('w', 'u')
+            ->join('w.user', 'u')
+
             ->andWhere('w.organisation = :organisation')
 
             ->andWhere('
-                w.remark LIKE :word 
+                w.remark LIKE :uppercaseWord
                 OR 
-                w.request LIKE :word
+                w.request LIKE :uppercaseWord
                 OR
-                w.implementation LIKE :word
+                w.implementation LIKE :uppercaseWord
+                OR
+                u.username LIKE :word
             ')
 
             ->setParameters(new ArrayCollection([
                 new Parameter('organisation', $organisation),
+                new Parameter('uppercaseWord', $uppercaseWord),
                 new Parameter('word', $word),
             ])) 
 
