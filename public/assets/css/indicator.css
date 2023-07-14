@@ -1,0 +1,17 @@
+.total-cost {
+  font-size: 1.6rem;
+  margin-bottom: 0;
+}
+
+#indicatorSubmit {
+  width: 100px;
+  height: 38px;
+}
+
+.form-label {
+  width: 45px;
+}
+
+.no-data {
+  font-size: 1.5rem;
+}

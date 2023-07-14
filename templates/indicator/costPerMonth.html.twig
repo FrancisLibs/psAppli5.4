@@ -3,6 +3,12 @@
 {% block title %}Indicateurs : temps intervention
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/indicator.css">
+{% endblock %}
+
+
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
@@ -10,21 +16,41 @@
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
-						<h1 class="page-title me-5">Coût des pièces détachées/mois</h1>
+						<h1 class="page-title me-5 mb-2">Coût des pièces détachées/mois</h1>
 						{% include 'indicator/_indicator_navbar.html.twig' %}
 					</div>
 				</div>
 			</header>
+			<section class="mt-4 d-flex justify-content-start flex-wrap text-align-center">
+				{{ form_start(form, {'attr': {'id': 'formDate', 'class': 'd-flex justify-content-start align-items-center flex-wrap'}}) }}
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Du :
+					</label>
+					{{ form_widget(form.startDate) }}
+				</div>
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Au :
+					</label>
+					{{ form_widget(form.endDate) }}
+				</div>
+				<button id="indicatorSubmit" type="submit" class="btn btn-primary btn-sm mb-2">Valider</button>
+				{{ form_end(form) }}
+			</section>
 			<section class="mt-4">
 				<div class="row">
-					<div class="col-11 col-sm-10 col-md-10 col-lg-8 col-xl-8 mt-3">
+					<div id="graphique" class="col-11 col-sm-10 col-md-10 col-lg-8 col-xl-8 mt-3">
 						<canvas id="myChart"></canvas>
 					</div>
 				</div>
 			</section>
 		</article>
-		<div class="month" data-chartdates="{{ months }}"></div>
-		<div class="values" data-chartamounts="{{ values }}"></div>
+
+		{% if months is not null %}
+			<div class="month" data-chartdates="{{ months }}"></div>
+		{% endif %}
+		{% if values is not null %}
+			<div class="values" data-chartamounts="{{ values }}"></div>
+		{% endif %}
 	</main>
 
 {% endblock %}
@@ -32,9 +58,7 @@
 	{{ parent() }}
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-	//
-	<script>
-		src = "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"
-	</script>
-	{{ encore_entry_script_tags('costPerMonthJschart') }}
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+	<script src="/assets/js/indicators.js" defer></script>
+	<script src="/assets/js/costPerMonthJschart.js" defer></script>
 {% endblock %}

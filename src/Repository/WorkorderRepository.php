@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Workorder;
 use App\Data\GlobalSearch;
+use App\Data\SearchIndicator;
 use App\Data\SearchWorkorder;
 use App\Data\SearchPreventive;
 use Doctrine\ORM\Query\Parameter;
@@ -18,7 +20,10 @@ class WorkorderRepository extends ServiceEntityRepository
 {
     private $paginator;
 
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+    public function __construct(
+        ManagerRegistry $registry, 
+        PaginatorInterface $paginator,
+        )
     {
         parent::__construct($registry, Workorder::class);
         $this->paginator = $paginator;
@@ -183,9 +188,11 @@ class WorkorderRepository extends ServiceEntityRepository
      *
      * @param int $organisationId
      */
-    public function findIndicatorsWorkorders($organisation, $year)
+    public function findIndicatorsWorkorders($organisation, $searchIndicator)
     {
-        $date = new DateTime($year);
+        $startDate = $searchIndicator->startDate;
+        $endDate = $searchIndicator->endDate;
+
 
         return $this->createQueryBuilder('w')
             ->select('w', 'm', 's')
@@ -193,10 +200,11 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.machines', 'm')
             ->andWhere('w.organisation = :val')
             ->setParameter('val', $organisation)
-            ->andWhere('w.startDate > :year')
-            ->setParameter('year', $date)
-            ->andWhere('w.preventive = :preventive')
-            ->setParameter('preventive', false)
+            ->andWhere('m.active = true')
+            ->andWhere('w.startDate > :startDate')
+            ->setParameter('startDate', $startDate)
+            ->andWhere('w.startDate < :endDate')
+            ->setParameter('endDate', $endDate)
             ->andWhere('w.durationDay > 0 OR w.durationHour > 0 OR w.durationMinute > 0')
             ->getQuery()
             ->getResult();

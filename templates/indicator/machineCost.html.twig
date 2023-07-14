@@ -5,9 +5,8 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="/assets/css/machine-cost.css">
+	<link rel="stylesheet" href="/assets/css/indicator.css">
 {% endblock %}
-
 
 {% block body %}
 	<main class="row justify-content-start mt-5">
@@ -16,42 +15,51 @@
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
-						<h1 class="page-title me-5">Coût pièces détachées/machine</h1>
+						<h1 class="page-title me-5 mb-2">Coût pièces détachées/machine</h1>
 						{% include 'indicator/_indicator_navbar.html.twig' %}
 					</div>
 				</div>
 			</header>
-			<section class="mt-4 d-flex justify-content-start align-items-center">
-				<div class="me-5">
+			<section class="mt-4 d-flex justify-content-start flex-wrap">
+				<div class="d-flex justify-content-start mb-3 me-5">
 					<p class="total-cost">Coût total des Pièces détachées :
 						{{ totalPartsPrice }}
 						Euros
 					</p>
 				</div>
-				<div>
-					<form action="#" method="post" class="form-date d-flex justify-content-start align-items-center" id="formDate">
-						<label for="datedepart" class="me-1">Date début : </label>
-						<input type="date" id="start-date" name="datedepart">
-						<label for="datefin" class="ms-5 me-1">Date fin : </label>
-						<input type="date" id="end-date" name="datefin">
-					</form>
+				{{ form_start(form, {'attr': {'id': 'formDate', 'class': 'd-flex justify-content-start align-items-center flex-wrap'}}) }}
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Du :
+					</label>
+					{{ form_widget(form.startDate) }}
 				</div>
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Au :
+					</label>
+					{{ form_widget(form.endDate) }}
+				</div>
+				<button id="indicatorSubmit" type="submit" class="btn btn-primary btn-sm mb-2">Valider</button>
+				{{ form_end(form) }}
 			</section>
 			<section>
 				<div class="d-flex justify-content-between flex-wrap mt-5">
-					{% for machine in machineDatas %}
-						<div class="card mb-3" style="width: 17rem;">
-							<div class="card-body">
-								<span class="card-title">
-									<strong>{{ loop.index }}.
-										{{ machine.name }}</strong>
-								</span>
-								<p class="card-text">
-									{{ machine.partsPrice ?? 0 }}€
-								</p>
+					{% if machineDatas %}
+						{% for machine in machineDatas %}
+							<div class="card mb-3" style="width: 17rem;">
+								<div class="card-body">
+									<span class="card-title">
+										<strong>{{ loop.index }}.
+											{{ machine.name }}</strong>
+									</span>
+									<p class="card-text">
+										{{ machine.partsPrice ?? 0 }}€
+									</p>
+								</div>
 							</div>
-						</div>
-					{% endfor %}
+						{% endfor %}
+					{% else %}
+						<P class="no-data">Il n'y a pas de données pour ces dates</P>
+					{% endif %}
 				</div>
 			</section>
 		</article>
@@ -60,5 +68,5 @@
 
 {% block javascripts %}
 	{{ parent() }}
-	<script src="/assets/js/machine-cost.js" defer></script>
+	<script src="/assets/js/indicators.js" defer></script>
 {% endblock %}

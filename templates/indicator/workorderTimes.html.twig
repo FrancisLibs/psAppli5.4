@@ -3,6 +3,12 @@
 {% block title %}Indicateurs : temps intervention
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/indicator.css">
+{% endblock %}
+
+
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
@@ -10,43 +16,76 @@
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
-						<h1 class="page-title me-5">Temps des interventions/machine</h1>
+						<h1 class="page-title me-5 mb-2">Temps des interventions/machine</h1>
 						{% include 'indicator/_indicator_navbar.html.twig' %}
 					</div>
 				</div>
 			</header>
-			<section class="mt-4">
-				<div>
-					<h4>Temps total des interventions :
-					{{totalDays}}
-					jours
-					{{totalHours}}
-					heures
-					{{totalMinutes}}
-					minutes</h3>
+
+			<section class="mt-4 d-flex justify-content-start flex-wrap">
+				<div class="d-flex justify-content-start mb-3 me-5">
+					<p class="total-cost">
+						Temps total des interventions :
+						{% if totalDays %}
+							{{ totalDays }}
+							jours
+						{% endif %}
+						{% if totalHours %}
+							{{ totalHours }}
+							heures
+						{% endif %}
+						{{ totalMinutes }}
+						minutes
+					</p>
 				</div>
+				{{ form_start(form, {'attr': {'id': 'formDate', 'class': 'd-flex justify-content-start align-items-center flex-wrap'}}) }}
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Du :
+					</label>
+					{{ form_widget(form.startDate) }}
+				</div>
+				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
+					<label class="form-label">Au :
+					</label>
+					{{ form_widget(form.endDate) }}
+				</div>
+				<button id="indicatorSubmit" type="submit" class="btn btn-primary btn-sm mb-2">Valider</button>
+				{{ form_end(form) }}
+			</section>
+			<section>
 				<div class="d-flex justify-content-between flex-wrap mt-5">
-					{% for machine in machineDatas %}
-						<div class="card mb-3" style="width: 17rem;">
-							<div class="card-body">
-								<span class="card-title">
-									<strong>{{ loop.index }}.
-										{{ machine.name }}</strong>
-								</span>
-								<p class="card-text">
-									{{machine.days}}
-									jours
-									{{machine.hours}}
-									heures
-									{{machine.minutes}}
-									minutes
-								</p>
-								{# <a href="#" class="btn btn-primary">Go somewhere</a> #}
+					{% if machineDatas is defined %}
+						{% for machine in machineDatas %}
+							<div class="card mb-3" style="width: 17rem;">
+								<div class="card-body">
+									<span class="card-title">
+										<strong>{{ loop.index }}.
+											{{ machine.name }}</strong>
+									</span>
+									<p class="card-text">
+										{% if machine.days %}
+											{{machine.days}}
+											jours
+										{% endif %}
+										{% if machine.hours %}
+											{{machine.hours}}
+											heures
+										{% endif %}
+										{{machine.minutes}}
+										minutes
+									</p>
+								</div>
 							</div>
-						</div>
-					{% endfor %}
+						{% endfor %}
+					{% else %}
+						<P class="no-data">Il n'y a pas de données pour ces dates</P>
+					{% endif %}
 				</div>
 			</section>
 		</article>
 	</main>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/indicators.js" defer></script>
 {% endblock %}
