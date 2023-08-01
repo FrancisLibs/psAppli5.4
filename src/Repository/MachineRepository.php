@@ -128,6 +128,4 @@ class MachineRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-   
 }

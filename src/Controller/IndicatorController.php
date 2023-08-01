@@ -25,7 +25,7 @@ class IndicatorController extends AbstractController
         $user = $this->getUser();
         $organisation = $user->getOrganisation();
 
-        if(empty($searchIndicator->startDate)){
+        if (empty($searchIndicator->startDate)) {
             $searchIndicator->startDate = new \DateTime('2022/01/01');
             $searchIndicator->endDate = new \DateTime('2023/12/31');
         };
@@ -38,11 +38,11 @@ class IndicatorController extends AbstractController
 
     #[Route('/indicator/workTime', name: 'app_work_time')]
     public function workTime(Request $request): Response
-    {        
+    {
         $searchIndicator = new SearchIndicator();
-        
+
         // $searchIndicator = null;
-        
+
         $workorders = $this->readWorkorders($searchIndicator);
 
         $datas = $this->workTimeProcess($workorders);
@@ -117,7 +117,7 @@ class IndicatorController extends AbstractController
                 // total time in minutes
                 $totalTime = $totalTime + $machineDatas[$machineId]['totalMinutes'];
             }
-            
+
             // compute of the values in days, hours and minutes
             $totalHours = (int)floor($totalTime / 60);
             $totalMinutes = $totalTime - ($totalHours * 60);
@@ -146,7 +146,7 @@ class IndicatorController extends AbstractController
 
         $searchIndicator = new SearchIndicator();
         $workorders = $this->readWorkorders($searchIndicator);
-        
+
         $machineDatas = $this->processWorkorders($workorders);
 
         $form = $this->createForm(SearchIndicatorType::class, $searchIndicator);
@@ -154,18 +154,17 @@ class IndicatorController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $workorders = $this->readWorkorders($searchIndicator);
-            
-            $machineDatas = $this->processWorkorders($workorders);  
+
+            $machineDatas = $this->processWorkorders($workorders);
         }
 
-        $totalPartsPrice=0;
-        if($machineDatas){
-            foreach($machineDatas as $machineData){
+        $totalPartsPrice = 0;
+        if ($machineDatas) {
+            foreach ($machineDatas as $machineData) {
                 $totalPartsPrice = $totalPartsPrice + $machineData['partsPrice'];
             }
-
         }
-        
+
 
         return $this->render('indicator/machineCost.html.twig', [
             'form' => $form->createView(),
@@ -176,18 +175,12 @@ class IndicatorController extends AbstractController
 
     private function processWorkorders($workorders)
     {
-        if ($workorders != null){
-            
+        if ($workorders != null) {
             $machineDatas = [];
-
             foreach ($workorders as $workorder) {
-
                 $machines = $workorder->getMachines();
-
                 foreach ($machines as $machine) {
-
                     $machineId = $machine->getId();
-
                     if (isset($machineDatas[$machineId])) {
                         $machineDatas[$machineId]['BT'] = ++$machineDatas[$machineId]['BT'];
                         $machineDatas[$machineId]['partsPrice'] = $machineDatas[$machineId]['partsPrice'] + $workorder->getPartsPrice();
@@ -204,14 +197,14 @@ class IndicatorController extends AbstractController
             // Sort of machineDatas array
             $columns = array_column($machineDatas, 'partsPrice');
             array_multisort($columns, SORT_DESC, $machineDatas);
-            
+
             // Suppression des machines à 0€
             $index = 0;
-            foreach($machineDatas as $machineData){
-                if( $machineData['partsPrice'] <= 0 ) {
-                    unset ($machineDatas[$index]);
+            foreach ($machineDatas as $machineData) {
+                if ($machineData['partsPrice'] <= 0) {
+                    unset($machineDatas[$index]);
                 }
-                $index ++;
+                $index++;
             }
 
             return $machineDatas;
@@ -223,31 +216,28 @@ class IndicatorController extends AbstractController
     public function costPerMonth(Request $request): Response
     {
         $searchIndicator = new SearchIndicator();
-
         $workorders = $this->readWorkorders($searchIndicator);
-
         $form = $this->createForm(SearchIndicatorType::class, $searchIndicator);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $workorders = $this->readWorkorders($searchIndicator);
         }
 
-        $datas= array();
+        $datas = array();
 
         if ($workorders != null) {
             foreach ($workorders as $workorder) {
 
                 $workorderDateMonth = $workorder->getStartDate()->format('m');
                 $workorderDateYear = (int)$workorder->getStartDate()->format('y');
-                $monthNumber = $workorderDateYear. "-". $workorderDateMonth . "-01";
+                $monthNumber = $workorderDateYear . "-" . $workorderDateMonth . "-01";
 
                 $workorderPartsValue = $workorder->getPartsPrice();
 
                 if (array_key_exists($monthNumber, $datas)) {
                     $datas[$monthNumber]['value'] = $datas[$monthNumber]['value'] + $workorderPartsValue;
                 } else {
-                    $datas[$monthNumber]['number']= $monthNumber;
+                    $datas[$monthNumber]['number'] = $monthNumber;
                     $datas[$monthNumber]['monthName'] = $workorderDateMonth;
                     $datas[$monthNumber]['year'] = $workorderDateYear;
                     $datas[$monthNumber]['value'] = $workorderPartsValue;
@@ -257,9 +247,8 @@ class IndicatorController extends AbstractController
             array_multisort($datas, SORT_ASC, SORT_REGULAR);
 
             $index = 0;
-            foreach($datas as $data) {
-                $months[$index] = $data['monthName']. "/" . $data['year'];
-                //dump($data['monthName']);
+            foreach ($datas as $data) {
+                $months[$index] = $data['monthName'] . "/" . $data['year'];
                 $values[$index] = $data['value'];
                 $index++;
             }
@@ -272,34 +261,124 @@ class IndicatorController extends AbstractController
         }
 
         return $this->render('indicator/costPerMonth.html.twig', [
-                'form' => $form->createView(),
-                'months' =>  null,
-                'values' => null,
-            ]);
+            'form' => $form->createView(),
+            'months' =>  null,
+            'values' => null,
+        ]);
     }
 
-    private function manageTime($machineDatas)
+    private function manageTime($datas)
     {
-        if ($machineDatas['minutes'] >= 59) {
-            $minutes = $machineDatas['minutes'] % 60;
-            $hours = (int)floor($machineDatas['minutes'] / 60);
-            $machineDatas['minutes'] = $minutes;
-            $machineDatas['hours'] = $machineDatas['hours'] + $hours;
+        if ($datas['minutes'] >= 59) {
+            $minutes = $datas['minutes'] % 60;
+            $hours = (int)floor($datas['minutes'] / 60);
+            $datas['minutes'] = $minutes;
+            $datas['hours'] = $datas['hours'] + $hours;
         }
 
-        if ($machineDatas['hours'] >= 24) {
-            $hours = $machineDatas['hours'] % 24;
-            $days = (int)floor($machineDatas['hours'] / 24);
-            $machineDatas['hours'] = $hours;
-            $machineDatas['days'] = $machineDatas['days'] + $days;
+        if ($datas['hours'] >= 24) {
+            $hours = $datas['hours'] % 24;
+            $days = (int)floor($datas['hours'] / 24);
+            $datas['hours'] = $hours;
+            $datas['days'] = $datas['days'] + $days;
         }
 
         // Count of total minutes/workorder
-        $machineDatas['totalMinutes'] =
-            ($machineDatas['days'] * 24 * 60)
-            + ($machineDatas['hours'] * 60)
-            + ($machineDatas['minutes']);
+        $datas['totalMinutes'] =
+            ($datas['days'] * 24 * 60)
+            + ($datas['hours'] * 60)
+            + ($datas['minutes']);
 
-        return $machineDatas;
+        return $datas;
+    }
+
+    #[Route('/indicator/curatifPreventif', name: 'app_cur_prev')]
+    public function CuratifVSPreventif(Request $request): Response
+    {
+        $searchIndicator = new SearchIndicator();
+        $workorders = $this->readWorkorders($searchIndicator);
+        $preventive = [];
+        $curative = [];
+
+        $form = $this->createForm(SearchIndicatorType::class, $searchIndicator);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $workorders = $this->readWorkorders($searchIndicator);
+        }
+
+        if ($workorders != null) {
+            foreach ($workorders as $workorder) {
+                $workorderDateMonth = $workorder->getStartDate()->format('m');
+                $workorderDateYear = (int)$workorder->getStartDate()->format('y');
+                $monthNumber = $workorderDateYear . "/" . $workorderDateMonth;
+
+                if ($workorder->getPreventive()) {
+                    if (array_key_exists($monthNumber, $preventive)) {
+                        $preventive[$monthNumber] += $this->manageCuraPrevTime($workorder);
+                    } else {
+                        $preventive[$monthNumber] = $this->manageCuraPrevTime($workorder);
+                    }
+                } else {
+                    if (array_key_exists($monthNumber, $curative)) {
+                        $curative[$monthNumber] += $this->manageCuraPrevTime($workorder);
+                    } else {
+                        $curative[$monthNumber] = $this->manageCuraPrevTime($workorder);
+                    }
+                }
+            }
+
+            // Sort of the array
+            $columns = array_keys($preventive);
+            array_multisort($columns, SORT_ASC, SORT_REGULAR, $preventive);
+
+            // Sort of the array
+            $columns = array_keys($curative);
+            array_multisort($columns, SORT_ASC, SORT_REGULAR, $curative);
+
+            $index = 0;
+            $months=[];
+            foreach ($preventive as $key => $value) {
+                $months[$index] = $key;
+                $valuesPreventive[$index] = $value;
+                $index++;
+            }
+
+            $index = 0;
+            foreach ($curative as $key => $value) {
+                $valuesCurative[$index] = $value;
+                $index++;
+            }
+
+            foreach ($months as $month) {
+                $month =  substr($month, 3) . "/" . substr($month, 0, 2);
+            }
+
+            return $this->render('indicator/preventiveVSCurative.html.twig', [
+                'form' => $form->createView(),
+                'months' => json_encode($months),
+                'valuesPreventive' =>  json_encode($valuesPreventive),
+                'valuesCurative' => json_encode($valuesCurative),
+            ]);
+        }
+
+        return $this->render('indicator/costPerMonth.html.twig', [
+            'form' => $form->createView(),
+            'months' =>  null,
+            'valuesPreventive' => null,
+            'valuesCurative' => null,
+
+        ]);
+    }
+
+    private function manageCuraPrevTime($data)
+    {
+        $minutes = $data->getDurationMinute();
+        $hours = $data->getDurationHour();
+        $days = $data->getDurationDay();
+
+        $minutes = ($hours * 60) + ($days * 24 * 60);
+
+        return $minutes;
     }
 }

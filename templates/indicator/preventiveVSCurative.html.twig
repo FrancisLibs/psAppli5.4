@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Indicateurs : temps intervention
+{% block title %}Indicateurs : préventif VS curatif
 {% endblock %}
 
 {% block stylesheets %}
@@ -16,7 +16,7 @@
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
-						<h1 class="page-title me-5 mb-2">Coût des pièces détachées/mois</h1>
+						<h1 class="page-title me-5 mb-2">Curatif VS préventif</h1>
 						{% include 'indicator/_indicator_navbar.html.twig' %}
 					</div>
 				</div>
@@ -46,11 +46,17 @@
 		</article>
 
 		{% if months is not null %}
-			<div class="month" data-chartdates="{{ months }}"></div>
+			<div id="chartLabels" data-chartdates="{{ months }}"></div>
 		{% endif %}
-		{% if values is not null %}
-			<div class="values" data-chartamounts="{{ values }}"></div>
+
+		{% if valuesPreventive is not null %}
+			<div id="chartData1" data-dataset1="{{ valuesPreventive }}"></div>
 		{% endif %}
+
+		{% if valuesCurative is not null %}
+			<div id="chartData2" data-dataset2="{{ valuesCurative }}"></div>
+		{% endif %}
+
 	</main>
 
 {% endblock %}
@@ -60,5 +66,5 @@
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2" defer></script>
 	<script src="/assets/js/indicators.js" defer></script>
-	<script src="/assets/js/costPerMonthJschart.js" defer></script>
+	<script src="/assets/js/prevVsCurative.js" defer></script>
 {% endblock %}

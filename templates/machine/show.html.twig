@@ -24,7 +24,7 @@
 							{% if machine.childLevel == 0 %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
 							{% endif %}
-							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_workorders', {'id': machine.id}) }}">Bons de travail</a>
+							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_statistics', {'id': machine.id}) }}">Stats</a>
 							{% if machine.parent %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
 							{% endif %}
@@ -36,17 +36,13 @@
 					</div>
 				</section>
 				<section class="mt-5">
-
 					<div class="row">
 						<div class="col-12 col-md-8 col-lg-2">
 							<strong>Nom :</strong>
 						</div>
 						<div class="col-12 col-md-8 col-lg-4">
 							{% if machine.parent %}
-								{{ machine.parent.designation }}
-								->
-							{% else %}
-								-
+								{{ machine.parent.designation }} ->
 							{% endif %}
 							{{ machine.designation }}
 						</div>

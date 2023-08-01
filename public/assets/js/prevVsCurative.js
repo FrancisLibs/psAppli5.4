@@ -3,10 +3,17 @@ let data = {
   labels: "",
   datasets: [
     {
-      label: "Pièces détachées",
-      data: [],
-      backgroundColor: ["rgba(255, 159, 64, 0.2)"],
-      borderColor: ["rgba(255, 99, 132, 1)"],
+      label: "Préventif",
+      data:[],
+      backgroundColor: ["#E62A00"],
+      borderColor: ["#E62A00"],
+      borderWidth: 1,
+    },
+    {
+      label: "Curatif",
+      data:[],
+      backgroundColor: ["#420BE6"],
+      borderColor: ["#420BE6"],
       borderWidth: 1,
     },
   ],
@@ -14,7 +21,7 @@ let data = {
 
 // Config block
 const config = {
-  type: "line",
+  type: "bar",
   data,
   options: {
     responsive: true,
@@ -24,7 +31,12 @@ const config = {
         title: {
           color: "black",
           display: true,
-          text: "Dates",
+          text: "Mois",
+          font: {
+            size: 15,
+            family: "tahoma",
+            weight: "bold",
+          },
         },
         grid: {
           color: "blue",
@@ -38,7 +50,12 @@ const config = {
         title: {
           color: "black",
           display: true,
-          text: "Montant",
+          text: "Temps(minutes)",
+          font: {
+            size: 15,
+            family: "tahoma",
+            weight: "bold",
+          },
         },
         grid: {
           color: "blue",
@@ -46,7 +63,7 @@ const config = {
         ticks: {
           // Include a dollar sign in the ticks
           callback: function (value, index, ticks) {
-            return value + " €";
+            return value + " min";
           },
         },
         beginAtZero: false,
@@ -55,7 +72,7 @@ const config = {
     plugins: {
       subtitle: {
         display: true,
-        text: "Coût des Pièces détachées",
+        text: "Préventif VS Curatif",
         color: "blue",
         font: {
           size: 20,
@@ -72,20 +89,36 @@ const config = {
 
 // Render / Init block
 document.addEventListener("DOMContentLoaded", function () {
+
   try {
-    const datesDiv = document.querySelector(".month");
-    let dates = datesDiv.dataset.chartdates;
-    let datesValues = JSON.parse(dates);
-    data.labels = datesValues;
+    const datesDiv = document.getElementById("chartLabels");
+    let dates = JSON.parse(datesDiv.dataset.chartdates);
+    data.labels = dates;
+  }catch (error) {
+    console.log(error);
+  }
 
-    let amountsDiv = document.querySelector(".values");
-    let amountsValues = JSON.parse(amountsDiv.dataset.chartamounts);
-    data.datasets[0].data = amountsValues;
+  try{
+    const valuesDiv = document.getElementById("chartData1");
+    valuesPreventive = JSON.parse(valuesDiv.dataset.dataset1);
+    data.datasets[0].data = valuesPreventive;
+  }catch(error) {
+    console.log(error);
+  }
 
+  try{
+    const valuesDiv = document.getElementById("chartData2");
+    valuesCurative = JSON.parse(valuesDiv.dataset.dataset2);
+    data.datasets[1].data = valuesCurative;
+  }catch(error) {
+    console.log(error);
+  }
+
+  try{
     const myChart = new Chart(document.getElementById("myChart"), config);
-  } catch (error) {
     const dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);
+  }catch (error) {
     dateNotOk.innerText = "Il n\'y a pas de données pour ces dates";
     dateNotOk.className = "no-data";
   }

@@ -21,10 +21,9 @@ class WorkorderRepository extends ServiceEntityRepository
     private $paginator;
 
     public function __construct(
-        ManagerRegistry $registry, 
+        ManagerRegistry $registry,
         PaginatorInterface $paginator,
-        )
-    {
+    ) {
         parent::__construct($registry, Workorder::class);
         $this->paginator = $paginator;
     }
@@ -186,7 +185,7 @@ class WorkorderRepository extends ServiceEntityRepository
     /**
      * Récupère les bons de travail préventifs
      *
-     * @param int $organisationId
+     * @param $organisation
      */
     public function findIndicatorsWorkorders($organisation, $searchIndicator)
     {
@@ -220,9 +219,9 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
     {
-        $uppercaseWord =  "%".strtoupper($globalSearch->search)."%";
-        $word = "%".$globalSearch->search."%";
-    
+        $uppercaseWord =  "%" . strtoupper($globalSearch->search) . "%";
+        $word = "%" . $globalSearch->search . "%";
+
         return $this->createQueryBuilder('w')
             ->select('w', 'u')
             ->join('w.user', 'u')
@@ -243,9 +242,41 @@ class WorkorderRepository extends ServiceEntityRepository
                 new Parameter('organisation', $organisation),
                 new Parameter('uppercaseWord', $uppercaseWord),
                 new Parameter('word', $word),
-            ])) 
+            ]))
 
             ->orderBy('w.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les workorder liées à une machine
+     *
+     * @param int SorganisationId
+     * @param $machine
+     * 
+     * @return workorders
+     */
+    public function findAllWorkordersByMachine($organisationId, $searchIndicator, $machineId,)
+    {
+        $startDate = $searchIndicator->startDate;
+        $endDate = $searchIndicator->endDate;
+
+        return $this->createQueryBuilder('w')
+            ->select('w', 'o', 'm')
+            ->join('w.organisation', 'o')
+            ->join('w.machines', 'm')
+            ->andWhere('o.id = :organisation')
+            ->andWhere('m.id = :machine')
+            ->andWhere('w.startDate > :startDate')
+            ->andWhere('w.startDate < :endDate')
+            ->andWhere('w.durationDay > 0 OR w.durationHour > 0 OR w.durationMinute > 0')
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisationId),
+                new Parameter('machine', $machineId),
+                new Parameter('startDate', $startDate),
+                new Parameter('endDate', $endDate),
+            ]))
             ->getQuery()
             ->getResult();
     }
