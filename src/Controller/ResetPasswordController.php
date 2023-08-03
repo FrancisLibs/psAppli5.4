@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Mime\Address;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -28,10 +29,12 @@ class ResetPasswordController extends AbstractController
     use ResetPasswordControllerTrait;
 
     private $resetPasswordHelper;
+    private $manager;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
+    public function __construct(EntityManagerInterface $manager, ResetPasswordHelperInterface $resetPasswordHelper)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->manager = $manager;
     }
 
     /**
@@ -121,7 +124,7 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -136,7 +139,7 @@ class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $this->manager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Data\SearchIndicator;
 use App\Form\SearchIndicatorType;
+use App\Service\OrganisationService;
 use App\Repository\WorkorderRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,16 +15,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class IndicatorController extends AbstractController
 {
     private $workorderRepository;
+    private $organisation;
 
-    public function __construct(WorkorderRepository $workorderRepository)
+    public function __construct(WorkorderRepository $workorderRepository, OrganisationService $organisation)
     {
         $this->workorderRepository = $workorderRepository;
+        $this->organisation=$organisation;
     }
 
     private function readWorkorders($searchIndicator)
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         if (empty($searchIndicator->startDate)) {
             $searchIndicator->startDate = new \DateTime('2022/01/01');

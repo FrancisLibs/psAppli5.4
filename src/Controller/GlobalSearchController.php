@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Data\GlobalSearch;
 use App\Form\GlobalSearchType;
 use App\Repository\PartRepository;
+use App\Service\OrganisationService;
 use App\Repository\MachineRepository;
 use App\Repository\ProviderRepository;
 use App\Repository\WorkorderRepository;
@@ -23,6 +24,7 @@ class GlobalSearchController extends AbstractController
     private $deliveryNoteRepository;
     private $providerRepository;
     private $workorderRepository;
+    private $organisation;
 
     public function __construct(
         MachineRepository $machineRepository, 
@@ -30,6 +32,7 @@ class GlobalSearchController extends AbstractController
         DeliveryNoteRepository $deliveryNoteRepository, 
         ProviderRepository $providerRepository,
         WorkorderRepository $workorderRepository,
+        OrganisationService $organisation,
     )
         {
             $this->machineRepository = $machineRepository;
@@ -38,14 +41,14 @@ class GlobalSearchController extends AbstractController
             $this->partRepository = $partRepository;
             $this->providerRepository = $providerRepository;
             $this->workorderRepository = $workorderRepository;
+            $this->organisation = $organisation;
         }
         
     #[IsGranted('ROLE_USER')]
     #[Route('/global/search', name: 'app_global_search')]
     public function index(Request $request )
     {
-        $user = $this->getUser();
-        $organisation =  $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $data = new GlobalSearch();
 

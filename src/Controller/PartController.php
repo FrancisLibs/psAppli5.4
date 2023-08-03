@@ -9,6 +9,7 @@ use App\Data\SearchPart;
 use App\Service\PdfService;
 use App\Form\SearchPartForm;
 use App\Repository\PartRepository;
+use App\Service\OrganisationService;
 use App\Repository\StockValueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
@@ -33,8 +34,9 @@ class PartController extends AbstractController
     protected $requestStack;
     protected $deliveryNoteRepository;
     protected $security;
+    protected $organisation;
 
-    public function __construct(Secu $security, DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
+    public function __construct(OrganisationService $organisation, Secu $security, DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
     {
         $this->partRepository = $partRepository;
         $this->stockValueRepository = $stockValueRepository;
@@ -42,6 +44,7 @@ class PartController extends AbstractController
         $this->requestStack = $requestStack;
         $this->deliveryNoteRepository = $deliveryNoteRepository;
         $this->security = $security;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -56,8 +59,7 @@ class PartController extends AbstractController
      */
     public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
     {
-        $user = $this->getUser();
-        $organisation =  $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
         
         $session = $this->requestStack->getSession();
 
@@ -127,7 +129,7 @@ class PartController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $organisation = $this->getUser()->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
         $part = new Part();
         $stock = new Stock();
         $stock->setApproQte(0);
@@ -254,8 +256,7 @@ class PartController extends AbstractController
      */
     public function infos(): Response
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $totalStock = $this->partRepository->findTotalStock($organisation);
         $stockValues = $this->stockValueRepository->findStockValues($organisation);
@@ -321,8 +322,7 @@ class PartController extends AbstractController
      */
     public function topStockValue(): Response
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $totalStock = $this->partRepository->findTotalStock($organisation);
         $stockValues = $this->stockValueRepository->findStockValues($organisation);

@@ -14,6 +14,7 @@ use App\Form\SearchDeliveryNoteForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DeliveryNoteRepository;
+use App\Service\OrganisationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,8 +33,10 @@ class DeliveryNoteController extends AbstractController
     private $deliveryNoteRepository;
     private $providerRepository;
     private $partRepository;
+    private $organisation;
 
     public function __construct(
+        OrganisationService $organisation,
         EntityManagerInterface $entityManagerInterface,
         RequestStack $requestStack,
         DeliveryNoteRepository $deliveryNoteRepository,
@@ -45,6 +48,7 @@ class DeliveryNoteController extends AbstractController
         $this->deliveryNoteRepository = $deliveryNoteRepository;
         $this->providerRepository = $providerRepository;
         $this->partRepository = $partRepository;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -57,8 +61,7 @@ class DeliveryNoteController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $user = $this->getUser();
-        $organisation =  $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $data = new SearchDeliveryNote();
         $data->organisation = $organisation;
@@ -98,7 +101,7 @@ class DeliveryNoteController extends AbstractController
     {
         $user = $this->getUser();
         $session = $this->requestStack->getSession();
-        $organisation = $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
         $deliveryNote = new DeliveryNote();
 
         // Vérification si fournisseur du BL en session
@@ -302,9 +305,8 @@ class DeliveryNoteController extends AbstractController
     public function delete(Request $request, DeliveryNote $deliveryNote): Response
     {
         if ($this->isCsrfTokenValid('delete' . $deliveryNote->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($deliveryNote);
-            $entityManager->flush();
+            $this->manager->remove($deliveryNote);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('delivery_note_index', [], Response::HTTP_SEE_OTHER);

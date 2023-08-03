@@ -10,6 +10,7 @@ use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
 use App\Form\SearchWorkorderForm;
 use App\Repository\PartRepository;
+use App\Service\OrganisationService;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
@@ -39,9 +40,9 @@ class WorkorderController extends AbstractController
     private $workorderStatusRepository;
     private $partRepository;
     private $pdf;
+    private $organisation;
 
     public function __construct(
-
         MachineRepository $machineRepository,
         WorkorderRepository $workorderRepository,
         WorkorderStatusRepository $workorderStatusRepository,
@@ -49,7 +50,7 @@ class WorkorderController extends AbstractController
         EntityManagerInterface $manager,
         RequestStack $requestStack,
         PartRepository $partRepository,
-
+        OrganisationService $organisation,
     ) {
         $this->workorderRepository = $workorderRepository;
         $this->machineRepository = $machineRepository;
@@ -58,6 +59,7 @@ class WorkorderController extends AbstractController
         $this->partRepository = $partRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -78,7 +80,7 @@ class WorkorderController extends AbstractController
 
         $data = new SearchWorkorder();
         $data->page = $request->get('page', 1);
-        $data->organisation = $this->getUser()->getOrganisation()->getId();
+        $data->organisation = $this->organisation->getOrganisation()->getId();
         $form = $this->createForm(SearchWorkorderForm::class, $data);
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
@@ -107,7 +109,7 @@ class WorkorderController extends AbstractController
         $session = $this->requestStack->getSession();
         $userParams = [];
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $userParams[] = $organisation;
         $userParams[] = $user->getService();
 
@@ -209,7 +211,7 @@ class WorkorderController extends AbstractController
     {
         $userParams = [];
         $user = $this->getUser();
-        $userParams[] = $user->getOrganisation();
+        $userParams[] = $this->organisation->getOrganisation();
         $userParams[] = $user->getService();
 
         // Lorsqu'il y a une machine en paramètre, on est dans le cas de l'édition de BT

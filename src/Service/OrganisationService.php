@@ -2,18 +2,24 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-
+use Symfony\Component\Security\Core\Security;
 
 class OrganisationService
 {
-    private $user;
+    private $security;
 
-    public function __construct(User $user){
-        $this->user = $user;
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
     }
 
-    public function organisation(){
-        return $this->user->getOrganisation();
+    public function getOrganisation()
+    {
+        // gets the current user
+        $user = $this->security->getUser();
+
+        $organisation = $user->getOrganisation();
+
+        return $organisation;
     }
 }

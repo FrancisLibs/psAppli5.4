@@ -8,6 +8,7 @@ use App\Data\SearchMachine;
 use App\Data\SearchIndicator;
 use App\Form\SearchMachineForm;
 use App\Form\SearchIndicatorType;
+use App\Service\OrganisationService;
 use App\Repository\MachineRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,13 +29,15 @@ class MachineController extends AbstractController
     private $manager;
     private $requestStack;
     private $workorderRepository;
+    private $organisation;
 
-    public function __construct(MachineRepository $machineRepository, EntityManagerInterface $manager, WorkorderRepository $workorderRepository, RequestStack $requestStack)
+    public function __construct(OrganisationService $organisation, MachineRepository $machineRepository, EntityManagerInterface $manager, WorkorderRepository $workorderRepository, RequestStack $requestStack)
     {
         $this->machineRepository = $machineRepository;
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -130,8 +133,7 @@ class MachineController extends AbstractController
      */
     public function new(Request $request, ?int $parentId): Response
     {
-        $user = $this->getUser();
-        $organisation =  $user->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $machine = new Machine();
 
@@ -183,14 +185,13 @@ class MachineController extends AbstractController
 
     private function readWorkorders($searchIndicator, $machineId)
     {
-        $user = $this->getUser();
-        $organisationId = $user->getOrganisation()->getId();
+        $organisationId =  $this->organisation->getOrganisation()->getId();
 
         if (empty($searchIndicator->startDate)) {
             $searchIndicator->startDate = new \DateTime('2022/01/01');
             $searchIndicator->endDate = new \DateTime('2023/12/31');
         };
-        
+
         return $workorders = $this->workorderRepository->findAllWorkordersByMachine($organisationId, $searchIndicator, $machineId);
     }
 
@@ -200,15 +201,23 @@ class MachineController extends AbstractController
      */
     public function machine_statistics(Machine $machine, Request $request): Response
     {
-        $user = $this->getUser();
-        $organisationId =  $user->getOrganisation()->getId();
         $machineId = $machine->getId();
         $searchIndicator = new SearchIndicator();
 
+        // Comptage du nombre de BT
+        $totalWorkorders = 0;
+        $totalPreventive = 0;
+        $totalCurative = 0;
         $workorders = $this->readWorkorders($searchIndicator, $machineId);
+        foreach ($workorders as $workorder) {
+            $totalWorkorders++;
+            if ($workorder->getPreventive()) {
+                $totalPreventive++;
+            } else {
+                $totalCurative++;
+            }
+        }
 
-        // Infos à extraire :
-        // Nombre de BT/mois
         // Temps de Travail préventif/mois
         $preventiveTime = [];
         // Temps de travail curatif/mois
@@ -285,6 +294,9 @@ class MachineController extends AbstractController
                 'preventiveTime' =>  json_encode($preventiveTime),
                 'curativeTime' => json_encode($curativeTime),
                 'partsValue' => json_encode($partsValue),
+                'totalWorkorder' => $totalWorkorders,
+                'totalPreventive' => $totalPreventive,
+                'totalCurative' => $totalCurative,
             ]);
         }
 
@@ -295,6 +307,9 @@ class MachineController extends AbstractController
             'preventiveTime' => null,
             'curativeTime' => null,
             'partsValue' => null,
+            'totalWorkorder' => $totalWorkorders,
+            'totalPreventive' => $totalPreventive,
+            'totalCurative' => $totalCurative,
         ]);
     }
 

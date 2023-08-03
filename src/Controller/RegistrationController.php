@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Security\EmailVerifier;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,12 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class RegistrationController extends AbstractController
 {
     private $emailVerifier;
+    private $manager;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EntityManagerInterface $manager, EmailVerifier $emailVerifier)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->manager = $manager;
     }
 
     /**
@@ -44,9 +47,9 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setActive(true);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+
+            $this->manager->persist($user);
+            $this->manager->flush();
 
             return $this->redirectToRoute('app_login');
         }

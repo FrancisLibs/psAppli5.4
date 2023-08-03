@@ -7,6 +7,7 @@ use App\Entity\Template;
 use App\Form\TemplateType;
 use App\Data\SearchTemplate;
 use App\Form\SearchTemplateForm;
+use App\Service\OrganisationService;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
@@ -31,6 +32,7 @@ class PreventiveController extends AbstractController
     private $templateRepository;
     private $workorderRepository;
     private $workorderStatusRepository;
+    private $organisation;
 
     public function __construct(
         WorkorderRepository $workorderRepository,
@@ -39,6 +41,7 @@ class PreventiveController extends AbstractController
         MachineRepository $machineRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack,
+        OrganisationService $organisation,
     ) {
         $this->manager = $manager;
         $this->templateRepository = $templateRepository;
@@ -47,6 +50,7 @@ class PreventiveController extends AbstractController
         $this->machineRepository = $machineRepository;
         $this->workorderRepository = $workorderRepository;
         $this->workorderStatusRepository = $workorderStatusRepository;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -68,7 +72,10 @@ class PreventiveController extends AbstractController
         $data = new SearchTemplate();
 
         $data->page = $request->get('page', 1);
-        $data->organisation = $this->getUser()->getOrganisation();
+
+        $organisation = $this->organisation->getOrganisation();
+
+        $data->organisation = $this->organisation->getOrganisation();
 
         $form = $this->createForm(SearchTemplateForm::class, $data);
 
@@ -111,7 +118,7 @@ class PreventiveController extends AbstractController
             }
         }
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $template = new Template();
         $template
             ->setCreatedAt(new \DateTime())
@@ -205,7 +212,7 @@ class PreventiveController extends AbstractController
             // Vérification si machines dans le BT
             $machines = $template->getMachines();
             if (!$machines->isEmpty()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->manager->flush();
 
                 return $this->redirectToRoute(
                     'template_show',
@@ -286,7 +293,7 @@ class PreventiveController extends AbstractController
     public function copyTemplate(Template $template): Response
     {
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
 
         $newTemplate = new Template();
 
@@ -329,8 +336,7 @@ class PreventiveController extends AbstractController
      */
     public function calendar(): Response
     {
-        $user = $this->getUser();
-        $organisationId = $user->getOrganisation()->getId();
+        $organisationId = $this->organisation->getOrganisation()->getId();
         $year = '2023-01-01';
 
         $templates = $this->templateRepository->findAllTemplatesForCalendar($organisationId, $year);

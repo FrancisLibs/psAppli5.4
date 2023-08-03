@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use App\Service\PreventiveService;
 use App\Service\StockValueService;
 use App\Repository\ParamsRepository;
+use App\Service\OrganisationService;
 use App\Service\UserConnexionService;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
@@ -35,6 +36,7 @@ class DefaultController extends AbstractController
     private $userConnexionService;
     private $preventiveStatusService;
     private $stockValueService;
+    private $organisation;
 
 
     public function __construct(
@@ -49,6 +51,7 @@ class DefaultController extends AbstractController
         PreventiveStatusService $preventiveStatusService,
         UserConnexionService $userConnexionService,
         StockValueService $stockValueService,
+        OrganisationService $organisation,
     ) {
         $this->paramsRepository = $paramsRepository;
         $this->workorderRepository = $workorderRepository;
@@ -61,6 +64,7 @@ class DefaultController extends AbstractController
         $this->preventiveStatusService = $preventiveStatusService;
         $this->userConnexionService = $userConnexionService;
         $this->stockValueService = $stockValueService;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -75,7 +79,7 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
         $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour
@@ -97,7 +101,7 @@ class DefaultController extends AbstractController
         // Si today est supérieur à lancienne date + 1 jour
 
         //if ($today >= $lastDate) {
-        if($today >= $lastDate){
+        if ($today >= $lastDate) {
             // Traitement des préventifs à ajouter si nécessaire
             $this->preventiveService->preventiveProcessing($organisationId);
 

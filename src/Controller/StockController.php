@@ -6,6 +6,7 @@ use App\Entity\Stock;
 use App\Form\Stock1Type;
 use App\Repository\PartRepository;
 use App\Repository\StockRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +19,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StockController extends AbstractController
 {
     private $partRepository;
+    private $manager;
 
-    public function __construct(PartRepository $partRepository)
+    public function __construct(EntityManagerInterface $manager, PartRepository $partRepository)
     {
         $this->partRepository = $partRepository;
+        $this->manager = $manager;
     }
 
     /**
@@ -46,9 +49,8 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($stock);
-            $entityManager->flush();
+            $this->manager->persist($stock);
+            $this->manager->flush();
 
             return $this->redirectToRoute('stock_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -80,7 +82,7 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute('stock_index', [], Response::HTTP_SEE_OTHER);
         }

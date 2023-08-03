@@ -6,6 +6,7 @@ use App\Entity\Messages;
 use App\Form\MessagesType;
 use App\Repository\UserRepository;
 use Symfony\Component\Mime\Message;
+use App\Service\OrganisationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -18,11 +19,13 @@ class MessagesController extends AbstractController
 {
     private $userRepository;
     private $manager;
+    private $organisation;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $manager)
+    public function __construct(OrganisationService $organisation, UserRepository $userRepository, EntityManagerInterface $manager)
     {
         $this->userRepository = $userRepository;
         $this->manager = $manager;
+        $this->organisation = $organisation;
     }
 
     #[IsGranted('ROLE_USER')]
@@ -47,7 +50,7 @@ class MessagesController extends AbstractController
             $message->setSender($user);
 
             if ($form->get('all')->getData()) {
-                $organisation = $user->getOrganisation();
+                $organisation =  $this->organisation->getOrganisation();
                 $service = $user->getService();
                 $receivers = $this->userRepository->findBy([
                     'organisation' => $organisation,
@@ -94,10 +97,9 @@ class MessagesController extends AbstractController
     public function read(Messages $message): Response
     {
         $message->setIsRead(true);
-        $em = $this->getDoctrine()->getManager();
 
-        $em->persist($message);
-        $em->flush();
+        $this->manager->persist($message);
+        $this->manager->flush();
 
         return $this->render(
             'messages/read.html.twig',
@@ -109,9 +111,8 @@ class MessagesController extends AbstractController
     #[Route('/delete/{id}', name: 'delete')]
     public function delete(Messages $message): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($message);
-        $em->flush();
+        $this->manager->remove($message);
+        $this->manager->flush();
 
         return $this->redirectToRoute("received");
     }

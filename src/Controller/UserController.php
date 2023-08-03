@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserEditType;
 use App\Repository\UserRepository;
+use App\Service\OrganisationService;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,19 +23,22 @@ class UserController extends AbstractController
     private $userRepository;
     private $workorderRepository;
     private $manager;
+    private $organisation;
 
     public function __construct(
         EntityManagerInterface $manager,
         Security $security,
         UserRepository $userRepository,
         WorkorderRepository $workorderRepository,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        OrganisationService $organisation,
     ) {
         $this->hasher = $passwordHasher;
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -48,7 +52,7 @@ class UserController extends AbstractController
     public function userList()
     {
         $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $users = $this->userRepository->findAllActive();
 
         return $this->render('user/index.html.twig', [

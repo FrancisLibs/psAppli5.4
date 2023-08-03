@@ -72,18 +72,34 @@
 					<div class="mb-3">
 						<h3 class="page-sub-title">Plus d'infos :</h3>
 					</div>
-					<div>
-						<div class="d-flex justify-start align-items-center">
-							<span class="me-2">Nombre total de BT :</span>
-							<span  id="totalBtNumber"></span>
+					<div class="d-flex justify-content-start">
+						<div class="me-5">
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Nombre total de BT :</span>
+								<span id="totalBtNumber">{{ totalWorkorder }}</span>
+							</div>
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Nombre total de BT Préventifs :</span>
+								<span id="totalBtPréventifNumber">{{ totalPreventive }}</span>
+							</div>
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Nombre total de BT Curatifs :</span>
+								<span id="totalBtCuratifNumber">{{ totalCurative }}</span>
+							</div>
 						</div>
-						<div class="d-flex justify-start align-items-center">
-							<span class="me-2">Nombre total de BT Préventifs :</span>
-							<span id="totalBtPréventifNumber"></span>
-						</div>
-						<div class="d-flex justify-start align-items-center">
-							<span class="me-2">Nombre total de BT Curatifs :</span>
-							<span id="totalBtCuratifNumber"></span>
+						<div>
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Temps total d'intervention :</span>
+								<span id="totalBtTime"></span>
+							</div>
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Temps total de préventifs :</span>
+								<span id="totalBtPréventifTime"></span>
+							</div>
+							<div class="d-flex justify-start align-items-center">
+								<span class="me-2">Temps total de curatifs :</span>
+								<span id="totalBtCuratifTime"></span>
+							</div>
 						</div>
 					</div>
 				</section>

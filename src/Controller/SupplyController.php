@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Provider;
 use App\Repository\PartRepository;
+use App\Service\OrganisationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,13 +17,16 @@ class SupplyController extends AbstractController
 {
     private $entityManager;
     private $partRepository;
+    private $organisation;
 
     public function __construct(
         EntityManagerInterface $manager,
-        PartRepository $partRepository
+        PartRepository $partRepository,
+        OrganisationService $organisation,
     ) {
         $this->entityManager = $manager;
         $this->partRepository = $partRepository;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -30,8 +34,7 @@ class SupplyController extends AbstractController
      */
     public function partsToBuy(): Response
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $parts = $this->partRepository->findPartsToBuy($organisation);
 
         return $this->render('supply/partsToBuy.html.twig', [
@@ -44,8 +47,7 @@ class SupplyController extends AbstractController
      */
     public function partReception(): Response
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $parts = $this->partRepository->findPartsToBuy($organisation);
 
         return $this->render('supply/partsToBuy.html.twig', [
@@ -62,8 +64,7 @@ class SupplyController extends AbstractController
      */
     public function providerPart(Provider $provider): Response
     {
-        $user = $this->getUser();
-        $organisation = $user->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
 
         return $this->render('supply/providerParts.html.twig', [

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Workshop;
 use App\Form\WorkshopType;
 use App\Repository\WorkshopRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,10 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class WorkshopController extends AbstractController
 {
     private $workshopRepository;
+    private $manager;
 
-    public function __construct(WorkshopRepository $workshopRepository)
+    public function __construct(EntityManagerInterface $manager, WorkshopRepository $workshopRepository)
     {
         $this->workshopRepository = $workshopRepository;
+        $this->manager = $manager;
     }
 
     /**
@@ -43,9 +46,8 @@ class WorkshopController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($workshop);
-            $entityManager->flush();
+            $this->manager->persist($workshop);
+            $this->manager->flush();
 
             return $this->redirectToRoute('workshop_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -75,7 +77,7 @@ class WorkshopController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute('workshop_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -91,10 +93,9 @@ class WorkshopController extends AbstractController
      */
     public function delete(Request $request, Workshop $workshop): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$workshop->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($workshop);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $workshop->getId(), $request->request->get('_token'))) {
+            $this->manager->remove($workshop);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('workshop_index', [], Response::HTTP_SEE_OTHER);

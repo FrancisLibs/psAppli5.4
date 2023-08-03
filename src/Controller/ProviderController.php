@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Provider;
 use App\Form\ProviderType;
 use App\Data\SearchProvider;
-use App\Form\SearchProviderForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,7 +107,6 @@ class ProviderController extends AbstractController
     {
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
-        $data->organisation = $this->getUser()->getOrganisation()->getId();
 
         $form = $this->createForm(SearchProviderForm::class, $data);
         $form->handleRequest($request);

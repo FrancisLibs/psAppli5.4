@@ -26,23 +26,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let numberOfTotalBt = numberOfBtCurative + numberOfPreventiveBt;
 
-  // TOTAL OF BT---------------------------------------------------
-  const totalOfBt = document.getElementById("totalBtNumber");
+  // TOTAL OF BT TIME---------------------------------------------------
+  const totalOfBt = document.getElementById("totalBtTime");
   let totalBt = document.createElement("span");
-  totalBt.innerText = numberOfTotalBt;
+  totalBt.innerText = transformTime(numberOfTotalBt);
   totalOfBt.appendChild(totalBt);
 
-  // TOTAL OF PREVENTIVE BT----------------------------------------
-  const totalOfpreventiveBt = document.getElementById("totalBtPréventifNumber");
+  // TOTAL OF PREVENTIVE BT  TIME----------------------------------------
+  const totalOfpreventiveBt = document.getElementById("totalBtPréventifTime");
   let totalPrevBt = document.createElement("span");
-  totalPrevBt.innerText = numberOfPreventiveBt;
+  totalPrevBt.innerText = transformTime(numberOfPreventiveBt);
   totalOfpreventiveBt.appendChild(totalPrevBt);
 
-  // TOTAL OF CURATIVE BT-----------------------------------------
-  const totalOfCurativeBt = document.getElementById("totalBtCuratifNumber");
+  // TOTAL OF CURATIVE BT  TIME-----------------------------------------
+  const totalOfCurativeBt = document.getElementById("totalBtCuratifTime");
   let totalCurBt = document.createElement("span");
-  totalCurBt.innerText = numberOfBtCurative;
+  totalCurBt.innerText = transformTime(numberOfBtCurative);
   totalOfCurativeBt.appendChild(totalCurBt);
+
+  function transformTime(minutes) {
+    var Myexp = new RegExp("^[0-9]+$", "g");
+    if (Myexp.test(minutes)) {
+      var nbHour = parseInt(minutes / 60, 10);
+      var nbminuteRestante = minutes % 60;
+      if (nbHour > 0) {
+        return nbHour + "h " + nbminuteRestante + "min";
+      } else {
+        return nbminuteRestante + "min";
+      }
+    }
+  }
 
   // ----------------------------------------------------------GRAPH 1 PREVENTIF VS CURATIF----------------------------
   // Setup block
@@ -124,8 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   try {
-    const ctx1 = document.getElementById("preventiveCurative").getContext("2d");
-    const myChart1 = new Chart(ctx1, config);
+    const ctx = document.getElementById("preventiveCurative").getContext("2d");
+    const myChart1 = new Chart(ctx, config);
   } catch (error) {
     const dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);
@@ -206,8 +219,8 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   try {
-    const ctx2 = document.getElementById("partsvalue");
-    const myChart2 = new Chart(ctx2, config);
+    const ctx = document.getElementById("partsvalue");
+    const myChart2 = new Chart(ctx, config);
   } catch (error) {
     const dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);

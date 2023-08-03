@@ -7,6 +7,7 @@ use App\Form\OnCallType;
 use App\Data\SearchOnCall;
 use App\Form\SearchOnCallForm;
 use App\Repository\OnCallRepository;
+use App\Service\OrganisationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class OnCallController extends AbstractController
 {
     private $onCallRepository;
+    private $organisation;
 
-    public function __construct(OnCallRepository $onCallRepository)
+    public function __construct(OrganisationService $organisation, OnCallRepository $onCallRepository)
     {
         $this->onCallRepository = $onCallRepository;
+        $this->organisation = $organisation;
     }
 
     /**
@@ -37,7 +40,7 @@ class OnCallController extends AbstractController
     public function index(Request $request): Response
     {
         $user = $this->getUser();
-        $organisation = $user->getOrganisation()->getId();
+        $organisation =  $this->organisation->getOrganisation();
         $service = $user->getService()->getId();
 
         $data = new SearchOnCall();
