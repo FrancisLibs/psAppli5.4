@@ -36,7 +36,7 @@ class PartController extends AbstractController
     protected $security;
     protected $organisation;
 
-    
+
     public function __construct(
         OrganisationService $organisation, 
         Secu $security, 

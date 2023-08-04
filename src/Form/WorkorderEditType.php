@@ -15,91 +15,114 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class WorkorderEditType extends AbstractType
 {
+
     public function buildForm(
-        FormBuilderInterface $builder, 
-        array $options
+        FormBuilderInterface $builder,
+        array $options,
     ) {
         $builder
             ->add(
-                'type', ChoiceType::class, [
-                'label' => false,
-                'choices'  => [
-                    'Curatif' => 1,
-                    'Préventif' => 2,
-                    'Amélioratif' => 3,
+                'type',
+                ChoiceType::class,
+                [
+                    'label' => false,
+                    'choices'  => [
+                        'Curatif' => 1,
+                        'Préventif' => 2,
+                        'Amélioratif' => 3,
                     ],
                 ]
             )
             ->add(
-                'request', TextType::class, [
-                'label' => 'Demande'
+                'request',
+                TextType::class,
+                [
+                    'label' => 'Demande'
                 ]
             )
             ->add(
-                'implementation', TextType::class, [
-                'label' => 'Réalisation'
+                'implementation',
+                TextType::class,
+                [
+                    'label' => 'Réalisation'
                 ]
             )
             ->add(
-                'remark', TextareaType::class, [
-                'label' => 'Remarque',
-                'required' => false,
+                'remark',
+                TextareaType::class,
+                [
+                    'label' => 'Remarque',
+                    'required' => false,
                 ]
             )
             ->add(
-                'startDate', DateType::class, [
-                'input' => 'datetime',
-                'label' => 'Date début',
-                'widget' => 'single_text',
+                'startDate',
+                DateType::class,
+                [
+                    'input' => 'datetime',
+                    'label' => 'Date début',
+                    'widget' => 'single_text',
                 ]
             )
             ->add(
-                'startTime', TimeType::class, [
-                'label' => 'Heure début',
-                'widget' => 'single_text',
-                'input' => 'datetime',
+                'startTime',
+                TimeType::class,
+                [
+                    'label' => 'Heure début',
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
                 ]
             )
             ->add(
-                'endDate', DateType::class, [
-                'input' => 'datetime',
-                'label' => 'Date fin',
-                'widget' => 'single_text',
+                'endDate',
+                DateType::class,
+                [
+                    'input' => 'datetime',
+                    'label' => 'Date fin',
+                    'widget' => 'single_text',
                 ]
             )
             ->add(
-                'endTime', TimeType::class, [
-                'label' => 'Heure fin',
-                'widget' => 'single_text',
-                'input' => 'datetime',
-                'required'  => false,
+                'endTime',
+                TimeType::class,
+                [
+                    'label' => 'Heure fin',
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
+                    'required'  => false,
                 ]
             )
             ->add(
-                'durationDay', TextType::class, [
-                'label' =>  'jours',
+                'durationDay',
+                TextType::class,
+                ['label' =>  'jours']
+            )
+            ->add(
+                'durationHour',
+                TextType::class,
+                [
+                    'label' =>  'Heures'
                 ]
             )
             ->add(
-                'durationHour', TextType::class, [
-                'label' =>  'Heures'
+                'durationMinute',
+                TextType::class,
+                ['label' =>  'Minutes']
+            )
+            ->add(
+                'stopTimeHour',
+                TextType::class,
+                [
+                    'label' => 'Heure',
+                    'required' => false,
                 ]
             )
             ->add(
-                'durationMinute', TextType::class, [
-                'label' =>  'Minutes'
-                ]
-            )
-            ->add(
-                'stopTimeHour', TextType::class, [
-                'label' => 'Heure',
-                'required' => false,
-                ]
-            )
-            ->add(
-                'stopTimeMinute', TextType::class, [
-                'label' => 'Minute',
-                'required' => false,
+                'stopTimeMinute',
+                TextType::class,
+                [
+                    'label' => 'Minute',
+                    'required' => false,
                 ]
             );
     }
@@ -108,8 +131,8 @@ class WorkorderEditType extends AbstractType
     {
         $resolver->setDefaults(
             [
-            'data_class' => Workorder::class,
-            'translation_domain' => 'forms'
+                'data_class' => Workorder::class,
+                'translation_domain' => 'forms'
             ]
         );
     }
