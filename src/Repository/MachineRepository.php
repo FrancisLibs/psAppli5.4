@@ -1,12 +1,16 @@
 <?php
 
+/** 
+ * Machine repository
+ * author F. Libs
+ * php version 8.02
+ */
+
 namespace App\Repository;
 
 use App\Entity\Machine;
 use App\Data\GlobalSearch;
 use App\Data\SearchMachine;
-use App\Entity\Organisation;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -18,11 +22,15 @@ class MachineRepository extends ServiceEntityRepository
 {
     private $paginator;
 
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
-    {
+
+    public function __construct(
+        ManagerRegistry $registry,
+        PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, Machine::class);
         $this->paginator = $paginator;
     }
+
 
     /**
      * Récupère les machines liées à une recherche
@@ -97,18 +105,18 @@ class MachineRepository extends ServiceEntityRepository
      * 
      * @return Machine[]
      */
-    public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
-    {
-        $word =  "%".strtoupper($globalSearch->search)."%";
-    
+    public function findGlobalSearch(
+        $organisation,
+        GlobalSearch $globalSearch
+    ) {
+        $word = "%" . strtoupper($globalSearch->search) . "%";
+
         return $this->createQueryBuilder('m')
             ->select('m')
             ->andWhere('m.organisation = :organisation')
-
             ->andWhere('m.active = true')
-
-            ->andWhere('
-                m.designation LIKE :word 
+            ->andWhere(
+                'm.designation LIKE :word 
                 OR 
                 m.constructor LIKE :word
                 OR
@@ -116,13 +124,16 @@ class MachineRepository extends ServiceEntityRepository
                 OR
                 m.internalCode LIKE :word
                 OR
-                m.model LIKE :word
-            ')
-
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisation),
-                new Parameter('word', $word),
-            ])) 
+                m.model LIKE :word'
+            )
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                        new Parameter('organisation', $organisation),
+                        new Parameter('word', $word),
+                    ]
+                )
+            )
 
             ->orderBy('m.id', 'ASC')
             ->getQuery()
