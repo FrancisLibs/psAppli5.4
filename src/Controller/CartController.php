@@ -3,18 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Part;
-use App\Data\SearchPart;
 use App\Entity\Workorder;
 use App\Entity\WorkorderPart;
-use App\Entity\DeliveryNotePart;
 use App\Repository\PartRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\DeliveryNoteRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,18 +23,16 @@ class CartController extends AbstractController
 {
     private $partRepository;
     private $workorderRepository;
-    private $deliveryNoteRepository;
     private $requestStack;
     private $manager;
+
 
     public function __construct(
         PartRepository $partRepository,
         WorkorderRepository $workorderRepository,
-        DeliveryNoteRepository $deliveryNoteRepository,
         RequestStack $requestStack,
         EntityManagerInterface $manager
     ) {
-        $this->deliveryNoteRepository = $deliveryNoteRepository;
         $this->partRepository = $partRepository;
         $this->workorderRepository = $workorderRepository;
         $this->requestStack = $requestStack;
@@ -61,16 +55,20 @@ class CartController extends AbstractController
         $panierWithData = [];
 
         foreach ($panier as $id => $quantity) {
-            $panierWithData[] = [
-                'part' => $this->partRepository->find($id),
-                'quantity' => $quantity,
-            ];
+            $panierWithData[] =
+                [
+                    'part' => $this->partRepository->find($id),
+                    'quantity' => $quantity,
+                ];
         }
 
-        return $this->redirectToRoute('part_index', [
-            'documentId' => $documentId,
-            'mode' => $mode,
-        ]);
+        return $this->redirectToRoute(
+            'part_index',
+            [
+                'documentId' => $documentId,
+                'mode' => $mode,
+            ]
+        );
     }
 
     /**
@@ -95,10 +93,13 @@ class CartController extends AbstractController
             ];
         }
 
-        return $this->render('cart/index.html.twig', [
-            'items' => $panierWithData,
-            'workorderId' => $workorderId,
-        ]);
+        return $this->render(
+            'cart/index.html.twig',
+            [
+                'items' => $panierWithData,
+                'workorderId' => $workorderId,
+            ]
+        );
     }
 
     /**
@@ -125,7 +126,7 @@ class CartController extends AbstractController
         $qteCart = 0;
         if (!empty($panier)) {
             foreach ($panier as $key => $value) {
-                if ($key == $id) {
+                if ($key === $id) {
                     $qteCart = $value;
                 }
             }
@@ -141,10 +142,13 @@ class CartController extends AbstractController
 
             $session->set('panier', $panier);
         }
-        return $this->redirectToRoute('part_index', [
-            'mode' => $mode,
-            'documentId' => $documentId,
-        ]);
+        return $this->redirectToRoute(
+            'part_index',
+            [
+                'mode' => $mode,
+                'documentId' => $documentId,
+            ]
+        );
     }
 
     /**
@@ -170,10 +174,13 @@ class CartController extends AbstractController
 
         $session->set('panier', $panier);
 
-        return $this->redirectToRoute('part_index', [
-            'mode' => $mode,
-            'documentId' => $documentId,
-        ]);
+        return $this->redirectToRoute(
+            'part_index',
+            [
+                'mode' => $mode,
+                'documentId' => $documentId,
+            ]
+        );
     }
 
     /**
@@ -197,10 +204,13 @@ class CartController extends AbstractController
 
         $session->set('panier', $panier);
 
-        return $this->redirectToRoute('part_index', [
-            'documentId' => $documentId,
-            'mode' => $mode,
-        ]);
+        return $this->redirectToRoute(
+            'part_index',
+            [
+                'documentId' => $documentId,
+                'mode' => $mode,
+            ]
+        );
     }
 
     /**
@@ -218,10 +228,13 @@ class CartController extends AbstractController
         $session = $this->requestStack->getSession();
         $session->remove('panier');
 
-        return $this->redirectToRoute('part_index', [
-            'documentId' => $documentId,
-            'mode' => $mode,
-        ]);
+        return $this->redirectToRoute(
+            'part_index',
+            [
+                'documentId' => $documentId,
+                'mode' => $mode,
+            ]
+        );
     }
 
     /**
@@ -309,10 +322,13 @@ class CartController extends AbstractController
             ]);
         }
 
-        return $this->redirectToRoute('delivery_note_show', [
-            'id' => $documentId,
-            'mode' => $mode,
-        ]);
+        return $this->redirectToRoute(
+            'delivery_note_show',
+            [
+                'id' => $documentId,
+                'mode' => $mode,
+            ]
+        );
     }
 
     private function addPartToWorkorder($id, $qte, $workorder)
@@ -320,7 +336,7 @@ class CartController extends AbstractController
         $workorderPart = new WorkorderPart();
         $part = $this->partRepository->find($id);
         $partPrice = $part->getSteadyPrice();
-        
+
         $workorderPart->setPart($part);
         $workorderPart->setPrice($partPrice);
         $workorderPart->setQuantity($qte);
