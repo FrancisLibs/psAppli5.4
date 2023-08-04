@@ -18,11 +18,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class WorkorderType extends AbstractType
 {
-    private $userRepository;
+    private $_userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
+        $this->_userRepository = $userRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -39,7 +39,7 @@ class WorkorderType extends AbstractType
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'firstName',
-                'choices' => $this->userRepository->findAllActiveUserByOrganisationAndService
+                'choices' => $this->_userRepository->findAllActiveUserByOrganisationAndService
                     ($options['userParams']),
                 'label' => false,
             ])

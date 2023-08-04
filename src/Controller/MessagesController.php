@@ -21,6 +21,7 @@ class MessagesController extends AbstractController
     private $manager;
     private $organisation;
 
+
     public function __construct(OrganisationService $organisation, UserRepository $userRepository, EntityManagerInterface $manager)
     {
         $this->userRepository = $userRepository;
@@ -50,7 +51,7 @@ class MessagesController extends AbstractController
             $message->setSender($user);
 
             if ($form->get('all')->getData()) {
-                $organisation =  $this->organisation->getOrganisation();
+                $organisation = $this->organisation->getOrganisation();
                 $service = $user->getService();
                 $receivers = $this->userRepository->findBy([
                     'organisation' => $organisation,

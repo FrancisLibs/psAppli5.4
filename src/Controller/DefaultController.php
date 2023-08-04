@@ -2,9 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Connexion;
-use App\Entity\Workorder;
-use App\Entity\StockValue;
 use App\Repository\PartRepository;
 use App\Repository\UserRepository;
 use App\Service\PreventiveService;
@@ -16,7 +13,6 @@ use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use App\Service\PreventiveStatusService;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,12 +22,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DefaultController extends AbstractController
 {
     private $paramsRepository;
-    private $workorderRepository;
-    private $templateRepository;
-    private $workorderStatusRepository;
     private $userRepository;
     private $manager;
-    private $partRepository;
     private $preventiveService;
     private $userConnexionService;
     private $preventiveStatusService;
@@ -41,12 +33,8 @@ class DefaultController extends AbstractController
 
     public function __construct(
         EntityManagerInterface $manager,
-        TemplateRepository $templateRepository,
-        WorkorderRepository $workorderRepository,
         ParamsRepository $paramsRepository,
-        WorkorderStatusRepository $workorderStatusRepository,
         UserRepository $userRepository,
-        PartRepository $partRepository,
         PreventiveService $preventiveService,
         PreventiveStatusService $preventiveStatusService,
         UserConnexionService $userConnexionService,
@@ -54,12 +42,8 @@ class DefaultController extends AbstractController
         OrganisationService $organisation,
     ) {
         $this->paramsRepository = $paramsRepository;
-        $this->workorderRepository = $workorderRepository;
-        $this->templateRepository = $templateRepository;
         $this->manager = $manager;
-        $this->workorderStatusRepository = $workorderStatusRepository;
         $this->userRepository = $userRepository;
-        $this->partRepository = $partRepository;
         $this->preventiveService = $preventiveService;
         $this->preventiveStatusService = $preventiveStatusService;
         $this->userConnexionService = $userConnexionService;

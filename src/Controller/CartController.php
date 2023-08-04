@@ -245,7 +245,7 @@ class CartController extends AbstractController
             $workorder = $this->workorderRepository->findOneBy(['id' => $documentId]);
             // Puis des éventuelles pièces de ce BT
             $workorderParts = $workorder->getWorkorderParts();
-           
+
             foreach ($panier as $id => $qte) {
                 $part = $this->partRepository->find($id);
                 // Vérification si la pièce est déjà dans le BT

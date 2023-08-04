@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Workorder;
 use App\Entity\WorkorderPart;
 use App\Repository\PartRepository;
-use App\Service\OrganisationService;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderPartRepository;

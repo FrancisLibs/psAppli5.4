@@ -36,8 +36,16 @@ class PartController extends AbstractController
     protected $security;
     protected $organisation;
 
-    public function __construct(OrganisationService $organisation, Secu $security, DeliveryNoteRepository $deliveryNoteRepository, PartRepository $partRepository, StockValueRepository $stockValueRepository, EntityManagerInterface $manager, RequestStack $requestStack)
-    {
+    
+    public function __construct(
+        OrganisationService $organisation, 
+        Secu $security, 
+        DeliveryNoteRepository $deliveryNoteRepository, 
+        PartRepository $partRepository, 
+        StockValueRepository $stockValueRepository, 
+        EntityManagerInterface $manager, 
+        RequestStack $requestStack
+    ) {
         $this->partRepository = $partRepository;
         $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;

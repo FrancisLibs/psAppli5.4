@@ -31,12 +31,11 @@ class PreventiveController extends AbstractController
     private $machineRepository;
     private $templateRepository;
     private $workorderRepository;
-    private $workorderStatusRepository;
     private $organisation;
+
 
     public function __construct(
         WorkorderRepository $workorderRepository,
-        WorkorderStatusRepository $workorderStatusRepository,
         TemplateRepository $templateRepository,
         MachineRepository $machineRepository,
         EntityManagerInterface $manager,
@@ -45,12 +44,10 @@ class PreventiveController extends AbstractController
     ) {
         $this->manager = $manager;
         $this->templateRepository = $templateRepository;
-        $this->workorderStatusRepository = $workorderStatusRepository;
         $this->requestStack = $requestStack;
         $this->machineRepository = $machineRepository;
         $this->workorderRepository = $workorderRepository;
-        $this->workorderStatusRepository = $workorderStatusRepository;
-        $this->organisation = $organisation;
+        $this->organisation = $organisation->getOrganisation();
     }
 
     /**
@@ -73,9 +70,7 @@ class PreventiveController extends AbstractController
 
         $data->page = $request->get('page', 1);
 
-        $organisation = $this->organisation->getOrganisation();
-
-        $data->organisation = $this->organisation->getOrganisation();
+        $data->organisation = $this->organisation;
 
         $form = $this->createForm(SearchTemplateForm::class, $data);
 
@@ -118,7 +113,7 @@ class PreventiveController extends AbstractController
             }
         }
         $user = $this->getUser();
-        $organisation = $this->organisation->getOrganisation();
+        $organisation = $this->organisation;
         $template = new Template();
         $template
             ->setCreatedAt(new \DateTime())
@@ -293,7 +288,7 @@ class PreventiveController extends AbstractController
     public function copyTemplate(Template $template): Response
     {
         $user = $this->getUser();
-        $organisation = $this->organisation->getOrganisation();
+        $organisation = $this->organisation;
 
         $newTemplate = new Template();
 
@@ -336,7 +331,7 @@ class PreventiveController extends AbstractController
      */
     public function calendar(): Response
     {
-        $organisationId = $this->organisation->getOrganisation()->getId();
+        $organisationId = $this->organisation->getId();
         $year = '2023-01-01';
 
         $templates = $this->templateRepository->findAllTemplatesForCalendar($organisationId, $year);

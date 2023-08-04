@@ -40,7 +40,7 @@ class OnCallController extends AbstractController
     public function index(Request $request): Response
     {
         $user = $this->getUser();
-        $organisation =  $this->organisation->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $service = $user->getService()->getId();
 
         $data = new SearchOnCall();

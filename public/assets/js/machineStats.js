@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
   totalOfCurativeBt.appendChild(totalCurBt);
 
   function transformTime(minutes) {
-    var Myexp = new RegExp("^[0-9]+$", "g");
+    var Myexp = new RegExp("^[0-9]+$");
     if (Myexp.test(minutes)) {
       var nbHour = parseInt(minutes / 60, 10);
       var nbminuteRestante = minutes % 60;
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   try {
     const ctx = document.getElementById("preventiveCurative").getContext("2d");
-    const myChart1 = new Chart(ctx, config);
+    new Chart(ctx, config);
   } catch (error) {
     const dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   try {
     const ctx = document.getElementById("partsvalue");
-    const myChart2 = new Chart(ctx, config);
+    new Chart(ctx, config);
   } catch (error) {
     const dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);
