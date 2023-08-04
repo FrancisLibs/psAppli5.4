@@ -26,7 +26,7 @@ class WorkorderEditType extends AbstractType
                 ChoiceType::class,
                 [
                     'label' => false,
-                    'choices'  => [
+                    'choices' => [
                         'Curatif' => 1,
                         'Préventif' => 2,
                         'Amélioratif' => 3,
@@ -43,9 +43,7 @@ class WorkorderEditType extends AbstractType
             ->add(
                 'implementation',
                 TextType::class,
-                [
-                    'label' => 'Réalisation'
-                ]
+                ['label' => 'Réalisation']
             )
             ->add(
                 'remark',
@@ -95,19 +93,19 @@ class WorkorderEditType extends AbstractType
             ->add(
                 'durationDay',
                 TextType::class,
-                ['label' =>  'jours']
+                ['label' => 'jours']
             )
             ->add(
                 'durationHour',
                 TextType::class,
                 [
-                    'label' =>  'Heures'
+                    'label' => 'Heures'
                 ]
             )
             ->add(
                 'durationMinute',
                 TextType::class,
-                ['label' =>  'Minutes']
+                ['label' => 'Minutes']
             )
             ->add(
                 'stopTimeHour',

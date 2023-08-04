@@ -108,17 +108,17 @@ class WorkorderType extends AbstractType
             ->add(
                 'durationDay',
                 TextType::class,
-                ['label' =>  'Jours']
+                ['label' => 'Jours']
             )
             ->add(
                 'durationHour',
                 TextType::class,
-                ['label' =>  'Heures']
+                ['label' => 'Heures']
             )
             ->add(
                 'durationMinute',
                 TextType::class,
-                ['label' =>  'Minutes']
+                ['label' => 'Minutes']
             )
             ->add(
                 'stopTimeHour',
@@ -139,7 +139,7 @@ class WorkorderType extends AbstractType
             ->add(
                 'operationPrice',
                 NumberType::class,
-                ['label' =>  'Cout opération']
+                ['label' => 'Cout opération']
             );
     }
 
@@ -149,7 +149,7 @@ class WorkorderType extends AbstractType
             [
                 'data_class' => WorkOrder::class,
                 'userParams' => null,
-                'translation_domain' => 'forms'
+                'translation_domain' => 'forms',
             ]
         );
     }
