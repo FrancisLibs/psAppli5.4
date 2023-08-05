@@ -21,14 +21,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController
 {
-    private $paramsRepository;
-    private $userRepository;
-    private $manager;
-    private $preventiveService;
-    private $userConnexionService;
-    private $preventiveStatusService;
-    private $stockValueService;
-    private $organisation;
+    private $_paramsRepository;
+    private $_userRepository;
+    private $_manager;
+    private $_preventiveService;
+    private $_userConnexionService;
+    private $_preventiveStatusService;
+    private $_stockValueService;
+    private $_organisation;
 
 
     public function __construct(
@@ -41,18 +41,19 @@ class DefaultController extends AbstractController
         StockValueService $stockValueService,
         OrganisationService $organisation,
     ) {
-        $this->paramsRepository = $paramsRepository;
-        $this->manager = $manager;
-        $this->userRepository = $userRepository;
-        $this->preventiveService = $preventiveService;
-        $this->preventiveStatusService = $preventiveStatusService;
-        $this->userConnexionService = $userConnexionService;
-        $this->stockValueService = $stockValueService;
-        $this->organisation = $organisation;
+        $this->_paramsRepository = $paramsRepository;
+        $this->_manager = $manager;
+        $this->_userRepository = $userRepository;
+        $this->_preventiveService = $preventiveService;
+        $this->_preventiveStatusService = $preventiveStatusService;
+        $this->_userConnexionService = $userConnexionService;
+        $this->_stockValueService = $stockValueService;
+        $this->_organisation = $organisation;
     }
 
+
     /**
-     * @Route("/", name="home")
+     * @Route("/",                          name="home")
      * @Security("is_granted('ROLE_USER')")
      */
     public function index(MailerInterface $mailer): Response
@@ -63,19 +64,21 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $organisation = $this->organisation->getOrganisation();
+        $organisation = $this->_organisation->getOrganisation();
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
         $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour
         $oneWeek = (new \DateInterval('P7D')); // 'P7D' = 7jour
 
-        $this->userConnexionService->registration($user);
+        $this->_userConnexionService->registration($user);
 
         // Lecture des dates de vérification cherchées dans le fichier des paramètres
 
-        $params = $this->paramsRepository->find(1);
+        $params = $this->_paramsRepository->find(1);
         $lastDate = new \DateTime();
-        $lastDate->setTimestamp($params->getLastPreventiveDate()->getTimestamp())->add($oneDay);
+        $lastDate->setTimestamp(
+            $params->getLastPreventiveDate()->getTimestamp()
+        )->add($oneDay);
         $today = (new \DateTime());
 
         // Gestion des bons de travail préventifs : Vérification à chaque connexion,
@@ -87,38 +90,46 @@ class DefaultController extends AbstractController
         //if ($today >= $lastDate) {
         if ($today >= $lastDate) {
             // Traitement des préventifs à ajouter si nécessaire
-            $this->preventiveService->preventiveProcessing($organisationId);
+            $this->_preventiveService->preventiveProcessing($organisationId);
 
             // Surveillance des status des préventifs en cours selon leurs paramètres
-            $this->preventiveStatusService->setPreventiveStatus($organisationId);
+            $this->_preventiveStatusService->setPreventiveStatus($organisationId);
 
             // Changement de la date du dernier traitement
             $params->setLastPreventiveDate(new \DateTime());
-            $this->manager->persist($params);
-            $this->manager->flush();
+            $this->_manager->persist($params);
+            $this->_manager->flush();
         }
 
-        // Gestion de l'enregistrement de la valeur du stock, une fois par semaine-------
+        // Gestion de l'enregistrement de la valeur du stock, 
+        // une fois par semaine-------
         $lastStockValueDate = new \DateTime();
-        $lastStockValueDate->setTimestamp($params->getLastStockValueDate()->getTimestamp());
+        $lastStockValueDate->setTimestamp(
+            $params->getLastStockValueDate()->getTimestamp()
+        );
         $lastStockValueDate->add($oneWeek);
 
-        if ($today >= $lastStockValueDate) { // Si la date du jour est >= d'une semaine à l'ancienne date
-            $this->stockValueService->computeStockValue($organisation, $organisationId, $params);
+        // Si la date du jour est >= d'une semaine à l'ancienne date
+        if ($today >= $lastStockValueDate) { 
+            $this->_stockValueService->computeStockValue(
+                $organisation, $organisationId, $params
+            );
         }
 
         // ------------------------------------------------------------------------------
         // Récupération des utilisateurs pour l'affichage des photos
         // Par organisation ET service
-        $users = $this->userRepository->findBy(
+        $users = $this->_userRepository->findBy(
             [
                 'organisation' => $organisationId,
                 'service' => $serviceId,
                 'active' => true,
             ],
         );
-        return $this->render('default/index.html.twig', [
+        return $this->render(
+            'default/index.html.twig', [
             'users'         => $users,
-        ]);
+            ]
+        );
     }
 }

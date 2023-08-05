@@ -14,10 +14,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DeliveryNotePartRepository extends ServiceEntityRepository
 {
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DeliveryNotePart::class);
     }
+    
 
     // /**
     //  * @return DeliveryNotePart[] Returns an array of DeliveryNotePart objects

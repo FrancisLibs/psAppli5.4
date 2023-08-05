@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -21,10 +22,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
-    private $partRepository;
-    private $workorderRepository;
-    private $requestStack;
-    private $manager;
+    private $_partRepository;
+    private $_workorderRepository;
+    private $_requestStack;
+    private $_manager;
 
 
     public function __construct(
@@ -33,31 +34,27 @@ class CartController extends AbstractController
         RequestStack $requestStack,
         EntityManagerInterface $manager
     ) {
-        $this->partRepository = $partRepository;
-        $this->workorderRepository = $workorderRepository;
-        $this->requestStack = $requestStack;
-        $this->manager = $manager;
+        $this->_partRepository = $partRepository;
+        $this->_workorderRepository = $workorderRepository;
+        $this->_requestStack = $requestStack;
+        $this->_manager = $manager;
     }
 
     /**
      * Appel de la liste des pièces à ajouter au panier
-     * 
-     * @Route("/add_part/{documentId?}/{mode?}", name="add_part", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * @param   Workorder   $workorder
-     * @param   string      $mode
-     * @return  Response
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/add_part/{documentId?}/{mode?}', name: 'add_part', methods:["GET"])]
     public function addPart(?int $documentId, ?string $mode): Response
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->_requestStack->getSession();
         $panier = $session->get('panier', []);
         $panierWithData = [];
 
         foreach ($panier as $id => $quantity) {
             $panierWithData[] =
                 [
-                    'part' => $this->partRepository->find($id),
+                    'part' => $this->_partRepository->find($id),
                     'quantity' => $quantity,
                 ];
         }
@@ -73,22 +70,19 @@ class CartController extends AbstractController
 
     /**
      * Liste des pièces dans le panier
-     * 
-     * @Route("/{documentId}", name="cart_index")
-     * @Security("is_granted('ROLE_USER')")
-     * @param   workorderId
-     * @return  response
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{documentId}', name: 'cart_index')]
     public function index($workorderId): Response
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->_requestStack->getSession();
 
         $panier = $session->get('panier', []);
 
         $panierWithData = [];
         foreach ($panier as $id => $quantity) {
             $panierWithData[] = [
-                'part' => $this->partRepository->find($id),
+                'part' => $this->_partRepository->find($id),
                 'quantity' => $quantity,
             ];
         }
@@ -104,17 +98,15 @@ class CartController extends AbstractController
 
     /**
      * Ajoute une pièce dans le panier des BT
-     *  
-     * @Route("/add/workOrder/{id}/{mode}/{documentId?}", name="cart_add_workorder")
-     * @Security("is_granted('ROLE_USER')")
-     * @param   id              $id de la pièce ajoutée
-     * @param   workorderId     id du workorder
-     * @param   mode
-     * @return redirectResponse
      */
-    public function addWorkorderPart(Part $part, string $mode, ?int $documentId = null): RedirectResponse
-    {
-        $session = $this->requestStack->getSession();
+    #[IsGranted('ROLE_USER')]
+    #[Route('/add/workOrder/{id}/{mode}/{documentId?}', name: 'cart_add_workorder')]
+    public function addWorkorderPart(
+        Part $part, 
+        string $mode, 
+        ?int $documentId = null
+    ): RedirectResponse {
+        $session = $this->_requestStack->getSession();
         $panier = $session->get('panier', []);
 
         $id = $part->getId();
@@ -132,7 +124,8 @@ class CartController extends AbstractController
             }
         }
 
-        // Test si selon la quantité disponible, il est possible de mettre la pièce dans le panier
+        // Test si selon la quantité disponible, 
+        // il est possible de mettre la pièce dans le panier
         if (($qteStock > 0 && $qteStock > $qteCart)) {
             if (!empty($panier[$id])) {
                 $panier[$id]++;
@@ -153,17 +146,18 @@ class CartController extends AbstractController
 
     /**
      * Ajoute une pièce dans le panier des BL
-     * 
-     * @Route("/add/deliveryNote/{id}/{mode}/{documentId?}", name="cart_add_delivery_note")
-     * @Security("is_granted('ROLE_USER')")
-     * @param   id              $id de la pièce ajoutée
-     * @param   documentId     id du workorder
-     * @param   mode
-     * @return redirectResponse
      */
-    public function addDeliveryWorkPart(int $id, string $mode, ?int $documentId): RedirectResponse
-    {
-        $session = $this->requestStack->getSession();
+    #[IsGranted('ROLE_USER')]
+    #[Route(
+        '/add/deliveryNote/{id}/{mode}/{documentId?}', 
+        name: 'cart_add_delivery_note'
+    )]
+    public function addDeliveryWorkPart(
+        int $id, 
+        string $mode, 
+        ?int $documentId
+    ): RedirectResponse {
+        $session = $this->_requestStack->getSession();
         $panier = $session->get('panier', []);
 
         if (empty($panier[$id])) {
@@ -185,17 +179,15 @@ class CartController extends AbstractController
 
     /**
      * Enlève une pièce du panier
-     * 
-     * @Route("/remove/{id}/{mode}/{documentId?}", name="cart_remove")
-     * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param   id              id de la pièce à enlever
-     * @param   workorderId     id du workorder
-     * @return  RedirectResponse
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(
+        '/remove/{id}/{mode}/{documentId?}', 
+        name: 'cart_remove'
+    )]
     public function remove(int $id, string $mode, ?int $documentId): RedirectResponse
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->_requestStack->getSession();
         $panier = $session->get('panier', []);
 
         if (!empty($panier[$id])) {
@@ -215,17 +207,15 @@ class CartController extends AbstractController
 
     /**
      * Vidange du panier
-     * 
-     * @Route("/empty/{mode}/{documentId?}", name="cart_empty")
-     * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param int documentId   id du document actuel
-     * @param string mode
-     * @return RedirectResponse
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(
+        '/empty/{mode}/{documentId?}', 
+        name: 'cart_remove'
+    )]
     public function empty(string $mode, ?int $documentId): RedirectResponse
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->_requestStack->getSession();
         $session->remove('panier');
 
         return $this->redirectToRoute(
@@ -239,44 +229,50 @@ class CartController extends AbstractController
 
     /**
      * Validation du panier de pièces pour BT et BL 
-     * 
-     * @Route("/validation/{mode}/{documentId?}", name="cart_valid")
-     * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param documentId   id du document
-     * 
-     * @return RedirectResponse
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route(
+        '/validation/{mode}/{documentId?}', 
+        name: 'cart_valid'
+    )]
     public function valid(string $mode, ?int $documentId): RedirectResponse
     {
-        $session = $this->requestStack->getSession();
+        $session = $this->_requestStack->getSession();
         $panier = $session->get('panier', []);
 
         // Affection des pièces du panier au BT
         if ($mode == "workorderAddPart") {
             // Récupération du BT dans la bdd
-            $workorder = $this->workorderRepository->findOneBy(['id' => $documentId]);
+            $workorder = $this->_workorderRepository->findOneBy(
+                ['id' => $documentId]
+            );
             // Puis des éventuelles pièces de ce BT
             $workorderParts = $workorder->getWorkorderParts();
 
             foreach ($panier as $id => $qte) {
-                $part = $this->partRepository->find($id);
+                $part = $this->_partRepository->find($id);
                 // Vérification si la pièce est déjà dans le BT
                 foreach ($workorderParts->toArray() as $workorderPart) {
                     if ($workorderPart->getPart()->getId() === $id) {
 
                         // Modification de la quantité sur le BT
-                        $workorderPart->setQuantity($workorderPart->getQuantity() + $qte);
+                        $workorderPart->setQuantity(
+                            $workorderPart->getQuantity() + $qte
+                        );
 
                         // Modification de la quantité en stock
-                        $this->decreaseStock($part, $qte);
+                        $this->_decreaseStock($part, $qte);
 
                         // Modification de la valeur de pièces sur le BT
-                        $workorder->setPartsPrice($workorder->getPartsPrice() + $part->getSteadyPrice() * $qte);
+                        $workorder->setPartsPrice(
+                            $workorder->getPartsPrice() 
+                            + 
+                            ($part->getSteadyPrice() * $qte)
+                        );
 
                         // Ecriture en bdd
-                        $this->manager->persist($workorderPart);
-                        $this->manager->persist($part);
+                        $this->_manager->persist($workorderPart);
+                        $this->_manager->persist($part);
 
                         // Effacement de la pièce du panier
                         unset($panier[$id]);
@@ -286,8 +282,8 @@ class CartController extends AbstractController
             // Traitement des pièces qui ne sont pas encore dans le BT
             foreach ($panier as $id => $qte) {
                 // Ajout de la pièce au bt
-                $this->addPartToWorkorder($id, $qte, $workorder);
-                $part = $this->partRepository->find($id);
+                $this->_addPartToWorkorder($id, $qte, $workorder);
+                $part = $this->_partRepository->find($id);
 
                 // Ajout de la pièce à la machine si elle n'y existe pas encore
                 $machines = $workorder->getMachines();
@@ -297,7 +293,7 @@ class CartController extends AbstractController
                 }
             }
 
-            $this->manager->persist($workorder);
+            $this->_manager->persist($workorder);
         }
 
         if ($mode == "newDeliveryNote") {
@@ -305,21 +301,24 @@ class CartController extends AbstractController
         }
 
         if ($mode == "editDeliveryNote") {
-            return $this->redirectToRoute('delivery_note_edit', [
-                'id' => $documentId,
-            ]);
+            return $this->redirectToRoute(
+                'delivery_note_edit', 
+                ['id' => $documentId]
+            );
         }
 
-        $this->manager->flush();
+        $this->_manager->flush();
 
         // Effacement du panier
         $session->remove('panier');
 
         if ($mode == "workorderAddPart") {
-            return $this->redirectToRoute('work_order_show', [
+            return $this->redirectToRoute(
+                'work_order_show', [
                 'id' => $documentId,
                 'mode' => $mode,
-            ]);
+                ]
+            );
         }
 
         return $this->redirectToRoute(
@@ -331,10 +330,10 @@ class CartController extends AbstractController
         );
     }
 
-    private function addPartToWorkorder($id, $qte, $workorder)
+    private function _addPartToWorkorder($id, $qte, $workorder)
     {
         $workorderPart = new WorkorderPart();
-        $part = $this->partRepository->find($id);
+        $part = $this->_partRepository->find($id);
         $partPrice = $part->getSteadyPrice();
 
         $workorderPart->setPart($part);
@@ -348,14 +347,14 @@ class CartController extends AbstractController
         $workorder->setPartsPrice($workorder->getPartsPrice() + $totalPartsPrice);
 
         // Modification de la quantité de pièces en stock
-        $this->decreaseStock($part, $qte);
+        $this->_decreaseStock($part, $qte);
 
-        $this->manager->persist($workorder);
-        $this->manager->persist($workorderPart);
-        $this->manager->persist($part);
+        $this->_manager->persist($workorder);
+        $this->_manager->persist($workorderPart);
+        $this->_manager->persist($part);
     }
 
-    private function decreaseStock($part, $qte)
+    private function _decreaseStock($part, $qte)
     {
         $stock = $part->getStock();
         $stock->setQteStock($stock->getQteStock() - $qte);

@@ -18,12 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GlobalSearchController extends AbstractController
 {
-    private $machineRepository;
-    private $partRepository;
-    private $deliveryNoteRepository;
-    private $providerRepository;
-    private $workorderRepository;
-    private $organisation;
+    private $_machineRepository;
+    private $_partRepository;
+    private $_deliveryNoteRepository;
+    private $_providerRepository;
+    private $_workorderRepository;
+    private $_organisation;
 
     public function __construct(
         MachineRepository $machineRepository,
@@ -33,20 +33,20 @@ class GlobalSearchController extends AbstractController
         WorkorderRepository $workorderRepository,
         OrganisationService $organisation,
     ) {
-        $this->machineRepository = $machineRepository;
-        $this->partRepository = $partRepository;
-        $this->deliveryNoteRepository = $deliveryNoteRepository;
-        $this->partRepository = $partRepository;
-        $this->providerRepository = $providerRepository;
-        $this->workorderRepository = $workorderRepository;
-        $this->organisation = $organisation;
+        $this->_machineRepository = $machineRepository;
+        $this->_partRepository = $partRepository;
+        $this->_deliveryNoteRepository = $deliveryNoteRepository;
+        $this->_partRepository = $partRepository;
+        $this->_providerRepository = $providerRepository;
+        $this->_workorderRepository = $workorderRepository;
+        $this->_organisation = $organisation;
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route('/global/search', name: 'app_global_search')]
     public function index(Request $request)
     {
-        $organisation = $this->organisation->getOrganisation();
+        $organisation = $this->_organisation->getOrganisation();
 
         $data = new GlobalSearch();
 
@@ -54,23 +54,43 @@ class GlobalSearchController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $machines = $this->machineRepository->findGlobalSearch($organisation, $data);
-            $parts = $this->partRepository->findGlobalSearch($organisation, $data);
-            $deliveryNotes = $this->deliveryNoteRepository->findGlobalSearch($organisation, $data);
-            $providers = $this->providerRepository->findGlobalSearch($organisation, $data);
-            $workorders = $this->workorderRepository->findGlobalSearch($organisation, $data);
+            $machines = $this->_machineRepository->findGlobalSearch(
+                $organisation, 
+                $data
+            );
+            $parts = $this->_partRepository->findGlobalSearch(
+                $organisation, 
+                $data
+            );
+            $deliveryNotes = $this->_deliveryNoteRepository->findGlobalSearch(
+                $organisation, 
+                $data
+            );
+            $providers = $this->_providerRepository->findGlobalSearch(
+                $organisation, 
+                $data
+            );
+            $workorders = $this->_workorderRepository->findGlobalSearch(
+                $organisation, 
+                $data
+            );
 
-            return $this->render('global_search/resultDisplay.html.twig', [
+            return $this->render(
+                'global_search/resultDisplay.html.twig', 
+                [
                 'machines'      => $machines,
                 'parts'         =>  $parts,
                 'deliveryNotes' => $deliveryNotes,
                 'providers'     => $providers,
                 'workorders'    =>  $workorders,
-            ]);
+                ]
+            );
         }
 
-        return $this->render('global_search/form.html.twig', [
+        return $this->render(
+            'global_search/form.html.twig', [
             'form' => $form->createView()
-        ]);
+            ]
+        );
     }
 }

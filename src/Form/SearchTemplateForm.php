@@ -11,24 +11,29 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SearchTemplateForm extends AbstractType
 {
+    
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('machine', TextType::class, [
+            ->add(
+                'machine', TextType::class, 
+                [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Machine...']
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SearchTemplate::class,
             'method' => 'GET',
             'csrf_protection' => false
-        ]);
+            ]
+        );
     }
 
     public function getBlockPrefix(): string
