@@ -14,18 +14,20 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 class ProviderRepository extends ServiceEntityRepository
 {
-    private $paginator;
+    private $_paginator;
     
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
-    {
+    public function __construct(
+        ManagerRegistry $registry, 
+        PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, Provider::class);
-        $this->paginator = $paginator;
+        $this->_paginator = $paginator;
     }
 
     /**
      * Récupère les bons de travail liés à une recherche
      *
-     * @param Searchprovider $searchProvider
+     * @param  Searchprovider $searchProvider
      * @return PaginationInterface
      */
     public function findSearch(SearchProvider $search): PaginationInterface
@@ -57,7 +59,7 @@ class ProviderRepository extends ServiceEntityRepository
 
         $query = $query->getQuery();
 
-        return $this->paginator->paginate(
+        return $this->_paginator->paginate(
             $query,
             $search->page,
             15
@@ -80,18 +82,24 @@ class ProviderRepository extends ServiceEntityRepository
             ->select('p')
             ->andWhere('p.organisation = :organisation')
 
-            ->andWhere('
+            ->andWhere(
+                '
                 p.name LIKE :word 
                 OR 
                 p.city LIKE :word
                 OR
                 p.phone LIKE :word
-            ')
+            '
+            )
 
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisation),
-                new Parameter('word', $word),
-            ])) 
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisation),
+                    new Parameter('word', $word),
+                    ]
+                )
+            ) 
 
             ->orderBy('p.name', 'ASC')
             ->getQuery()

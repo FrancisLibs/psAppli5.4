@@ -15,6 +15,7 @@ class PreventiveStatusService
     private $templateRepository;
     private $manager;
 
+
     public function __construct(
         WorkorderRepository $workorderRepository,
         WorkorderStatusRepository $workorderStatusRepository,
@@ -25,7 +26,9 @@ class PreventiveStatusService
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->templateRepository = $templateRepository;
         $this->manager = $manager;
+
     }
+
 
     /**
      *  Pour l'évolution du BT dans le temps et gérer son état : modification du statut...
@@ -37,14 +40,10 @@ class PreventiveStatusService
             $today = (new \Datetime())->getTimeStamp();
 
             foreach ($preventiveWorkorders as $workorder) {
-
                 $preventiveTemplate = $this->templateRepository->find($workorder->getTemplateNumber());
-
                 $preventiveDate = $preventiveTemplate->getNextDate()->getTimeStamp();
+                $lateDate = $preventiveDate + ($preventiveTemplate->getDaysBeforeLate() * 24 * 3600);
 
-                $lateDate = $preventiveDate + $preventiveTemplate->getDaysBeforeLate() * 24 * 3600;
-
-                //dd($workorder->getId().'aujourd\hui : ' . $today . '  date : ' . $preventiveDate . '  duree : ' . $preventiveTemplate->getDaysBeforeLate());
                 if ($today > $preventiveDate) {
                     $status = $this->workorderStatusRepository->findOneByName('EN_COURS');
                     $workorder->setWorkorderStatus($status);
@@ -57,8 +56,10 @@ class PreventiveStatusService
 
                 $this->manager->persist($workorder);
             }
+
             $this->manager->flush();
         }
+        
         return;
     }
 }
