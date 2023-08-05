@@ -17,25 +17,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MessagesController extends AbstractController
 {
-    private $userRepository;
-    private $manager;
-    private $organisation;
+    private $_userRepository;
+    private $_manager;
+    private $_organisation;
 
 
-    public function __construct(OrganisationService $organisation, UserRepository $userRepository, EntityManagerInterface $manager)
-    {
-        $this->userRepository = $userRepository;
-        $this->manager = $manager;
-        $this->organisation = $organisation;
+    public function __construct(
+        OrganisationService $organisation, 
+        UserRepository $userRepository, 
+        EntityManagerInterface $manager
+    ) {
+        $this->_userRepository = $userRepository;
+        $this->_manager = $manager;
+        $this->_organisation = $organisation;
     }
+
 
     #[IsGranted('ROLE_USER')]
     #[Route('/messages', name: 'messages')]
     public function index(): Response
     {
-        return $this->render('messages/index.html.twig', [
-            'controller_name' => 'MessagesController',
-        ]);
+        return $this->render(
+            'messages/index.html.twig', 
+            ['controller_name' => 'MessagesController']
+        );
     }
 
     #[IsGranted('ROLE_USER')]
@@ -51,12 +56,14 @@ class MessagesController extends AbstractController
             $message->setSender($user);
 
             if ($form->get('all')->getData()) {
-                $organisation = $this->organisation->getOrganisation();
+                $organisation = $this->_organisation->getOrganisation();
                 $service = $user->getService();
-                $receivers = $this->userRepository->findBy([
+                $receivers = $this->_userRepository->findBy(
+                    [
                     'organisation' => $organisation,
                     'service' => $service,
-                ]);
+                    ]
+                );
 
                 foreach ($receivers as $receiver) {
                     if ($receiver <> $user) {
@@ -68,22 +75,30 @@ class MessagesController extends AbstractController
                             ->setSender($user)
                             ->setTitle($message->getTitle());
 
-                        $this->manager->persist($newMessage);
+                        $this->_manager->persist($newMessage);
                     }
                 }
-                $this->addFlash('success', "Ton message a bien été envoyé à tout les membres du service");
+                $this->addFlash(
+                    'success', 
+                    "Ton message a bien été envoyé à tout les membres du service"
+                );
             } else {
-                $this->manager->persist($message);
-                $this->addFlash('success', "Ton message a bien été envoyé à " . $message->getRecipient()->getFirstName());
+                $this->_manager->persist($message);
+                $this->addFlash(
+                    'success', 
+                    "Ton message a bien été envoyé à " . $message->getRecipient()->getFirstName()
+                );
             }
-            $this->manager->flush();
+            $this->_manager->flush();
 
             return $this->redirectToRoute("messages");
         }
 
-        return $this->render("messages/send.html.twig", [
+        return $this->render(
+            "messages/send.html.twig", [
             "form" => $form->createView()
-        ]);
+            ]
+        );
     }
 
     #[IsGranted('ROLE_USER')]
@@ -99,8 +114,8 @@ class MessagesController extends AbstractController
     {
         $message->setIsRead(true);
 
-        $this->manager->persist($message);
-        $this->manager->flush();
+        $this->_manager->persist($message);
+        $this->_manager->flush();
 
         return $this->render(
             'messages/read.html.twig',
@@ -112,8 +127,8 @@ class MessagesController extends AbstractController
     #[Route('/delete/{id}', name: 'delete')]
     public function delete(Messages $message): Response
     {
-        $this->manager->remove($message);
-        $this->manager->flush();
+        $this->_manager->remove($message);
+        $this->_manager->flush();
 
         return $this->redirectToRoute("received");
     }
@@ -138,14 +153,16 @@ class MessagesController extends AbstractController
             $user = $this->getUser();
             $messagesNew->setSender($user);
 
-            $this->manager->persist($messagesNew);
+            $this->_manager->persist($messagesNew);
             $this->addFlash('success', "Ta réponse a bien été envoyée.");
-            $this->manager->flush();
+            $this->_manager->flush();
             return $this->redirectToRoute("messages");
         }
 
-        return $this->render("messages/send.html.twig", [
+        return $this->render(
+            "messages/send.html.twig", [
             "form" => $form->createView()
-        ]);
+            ]
+        );
     }
 }

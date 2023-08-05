@@ -70,8 +70,10 @@ class ResetPasswordController extends AbstractController
      */
     public function checkEmail(): Response
     {
-        // Generate a fake token if the user does not exist or someone hit this page directly.
-        // This prevents exposing whether or not a user was found with the given email address or not
+        // Generate a fake token if the user does 
+        //not exist or someone hit this page directly.
+        // This prevents exposing whether or not a 
+        //user was found with the given email address or not
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             $resetToken = $this->_resetPasswordHelper->generateFakeResetToken();
         }
@@ -88,11 +90,16 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, string $token = null): Response
-    {
+    public function reset(
+        Request $request, 
+        UserPasswordHasherInterface $passwordHasher, 
+        string $token = null
+    ): Response {
         if ($token) {
-            // We store the token in session and remove it from the URL, to avoid the URL being
-            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
+            // We store the token in session and 
+            // remove it from the URL, to avoid the URL being
+            // loaded in a browser and potentially 
+            // leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
 
             return $this->redirectToRoute('app_reset_password');
@@ -100,7 +107,9 @@ class ResetPasswordController extends AbstractController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
+            throw $this->createNotFoundException(
+                'No reset password token found in the URL or in the session.'
+            );
         }
 
         try {
@@ -146,8 +155,10 @@ class ResetPasswordController extends AbstractController
         );
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
-    {
+    private function processSendingPasswordResetEmail(
+        string $emailFormData, 
+        MailerInterface $mailer
+    ): RedirectResponse {
         $user = $this->_manager->getRepository(User::class)->findOneBy(
             ['email' => $emailFormData]
         );

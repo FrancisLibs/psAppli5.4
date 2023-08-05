@@ -450,17 +450,17 @@ class DeliveryNoteController extends AbstractController
     ): Response {
          $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
 
-         $html = $this->renderView(
-            'prints/multi_label_print.html.twig',
-            ['deliveryNoteParts' => $deliveryNoteParts]
-         );
+            $html = $this->renderView(
+                'prints/multi_label_print.html.twig',
+                ['deliveryNoteParts' => $deliveryNoteParts]
+            );
 
          $pdfService->printLabel($html);
 
-         return new Response(
-            '', 
-            200, 
-            ['Content-Type' => 'application/pdf']
-         );
+            return new Response(
+                '', 
+                200, 
+                ['Content-Type' => 'application/pdf']
+            );
     }
 }

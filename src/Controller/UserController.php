@@ -9,66 +9,56 @@ use App\Service\OrganisationService;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as extraSecurity;
 
 class UserController extends AbstractController
 {
-    private $hasher;
-    private $security;
-    private $userRepository;
-    private $workorderRepository;
-    private $manager;
-    private $organisation;
+    protected $userRepository;
+    protected $workorderRepository;
+    protected $manager;
+    protected $organisation;
+
 
     public function __construct(
         EntityManagerInterface $manager,
-        Security $security,
         UserRepository $userRepository,
         WorkorderRepository $workorderRepository,
-        UserPasswordHasherInterface $passwordHasher,
         OrganisationService $organisation,
     ) {
-        $this->hasher = $passwordHasher;
-        $this->security = $security;
         $this->userRepository = $userRepository;
         $this->workorderRepository = $workorderRepository;
         $this->manager = $manager;
         $this->organisation = $organisation;
     }
 
+
     /**
      * Users list
-     * 
-     * @Route("/admin/user/index", name="user_index")
-     * @extraSecurity("is_granted('ROLE_ADMIN')")
-     * @param Request $request
-     * @return RedirectResponse|Response
      */
+    #[Route('/admin/user/index', name: 'user_index')]
+    #[IsGranted('ROLE_ADMIN')]
     public function userList()
     {
         $user = $this->getUser();
         $organisation = $this->organisation->getOrganisation();
         $users = $this->userRepository->findAllActive();
 
-        return $this->render('user/index.html.twig', [
+        return $this->render(
+            'user/index.html.twig', [
             'users' => $users,
-        ]);
+            ]
+        );
     }
 
     /**
      * Edit user
-     * 
-     * @Route("/user/{id}/edit", name="user_edit")
-     * @param  User $user
-     * @param  Request $request
-     * @param  EntityManagerInterface $manager
-     * @return RedirectResponse|Response
      */
+    #[Route('/user/{id}/edit', name: 'user_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function userEdit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserEditType::class, $user);
@@ -80,24 +70,25 @@ class UserController extends AbstractController
             $this->manager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié.");
-            return $this->redirectToRoute('user_profil', [
+            return $this->redirectToRoute(
+                'user_profil', [
                 'id' => $user->getId(),
-            ]);
+                ]
+            );
         }
-        return $this->render('user/edit.html.twig', [
+        return $this->render(
+            'user/edit.html.twig', [
             'form'  => $form->createView(),
             'user'  => $user,
-        ]);
+            ]
+        );
     }
 
     /**
      * Delete user
-     *
-     * @Route("/user/{id}/delete", name="user_delete", methods={"POST"} )
-     * @extraSecurity("is_granted('ROLE_ADMIN')")
-     * @param                      User $user
-     * @return                     RedirectResponse
      */
+    #[Route('/user/{id}/delete', name: 'user_delete', methods:["POST"])]
+    #[IsGranted('ROLE_ADMIN')]
     public function userDelete(Request $request, User $user)
     {
         $token = $request->request->get('_token');
@@ -113,7 +104,10 @@ class UserController extends AbstractController
             }
 
             if ($user == $currentUser) {
-                $this->addFlash('error', 'Vous ne pouvez pas vous désactivé vous-même');
+                $this->addFlash(
+                    'error', 
+                    'Vous ne pouvez pas vous désactivé vous-même'
+                );
                 return $this->redirectToRoute('user_index');
             }
         }
@@ -124,21 +118,19 @@ class UserController extends AbstractController
 
     /**
      * User profil
-     *
-     * @Route("/user/{id}/profil", name="user_profil")
-     * @extraSecurity("is_granted('ROLE_USER')")
-     * @param                      User $user
-     * @return                     RedirectResponse
      */
+    #[Route('/user/{id}/profil', name: 'user_profil')]
+    #[IsGranted('ROLE_ADMIN')]
     public function userProfil(User $user)
     {
         // BT de l'utilisateur
         $workorders = $this->workorderRepository->findBy(['user' => $user]);
         
-
-        return $this->render('user/profil.html.twig', [
+        return $this->render(
+            'user/profil.html.twig', [
             'user' => $user,
             'workorder' => $workorders
-        ]);
+            ]
+        );
     }
 }

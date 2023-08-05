@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -26,12 +27,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class PreventiveController extends AbstractController
 {
-    private $manager;
-    private $requestStack;
-    private $machineRepository;
-    private $templateRepository;
-    private $workorderRepository;
-    private $organisation;
+    protected $manager;
+    protected $requestStack;
+    protected $machineRepository;
+    protected $templateRepository;
+    protected $workorderRepository;
+    protected $organisation;
 
 
     public function __construct(
@@ -50,13 +51,14 @@ class PreventiveController extends AbstractController
         $this->organisation = $organisation->getOrganisation();
     }
 
+
     /**
      * Liste des BT préventifs
      * 
-     * @Route("/", name="template_index", methods={"GET"})
+     * @Route("/",                          name="template_index", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      * 
-     * @param Request 
+     * @param  Request 
      * @return Response 
      */
     public function index(Request $request): Response
@@ -79,28 +81,36 @@ class PreventiveController extends AbstractController
         $templates = $this->templateRepository->findTemplates($data);
 
         if ($request->get('ajax')) {
-            return new JsonResponse([
-                'content'       =>  $this->renderView('preventive/_templates.html.twig', ['templates' => $templates]),
-                'sorting'       =>  $this->renderView('preventive/_sorting.html.twig', ['templates' => $templates]),
-                'pagination'    =>  $this->renderView('preventive/_pagination.html.twig', ['templates' => $templates]),
-            ]);
+            return new JsonResponse(
+                [
+                'content'       =>  $this->renderView(
+                    'preventive/_templates.html.twig', 
+                    ['templates' => $templates]
+                ),
+                'sorting'       =>  $this->renderView(
+                    'preventive/_sorting.html.twig', 
+                    ['templates' => $templates]
+                ),
+                'pagination'    =>  $this->renderView(
+                    'preventive/_pagination.html.twig', 
+                    ['templates' => $templates]
+                ),
+                ]
+            );
         }
-        return $this->render('preventive/index.html.twig', [
+        return $this->render(
+            'preventive/index.html.twig', [
             'templates' =>  $templates,
             'form'  =>  $form->createView(),
-        ]);
+            ]
+        );
     }
 
     /**
      * Création d'un template préventif
-     * 
-     * @Route("/new/{id?}", name="template_new", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param Machine $machine
-     * @param Request 
-     * @return Response
      */
+    #[Route('/new/{id?}', name: 'template_new', methods:["GET", "POST"])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, Machine $machine = null): Response
     {
         // Récupération des machines lors d'un BT préventif
@@ -143,7 +153,8 @@ class PreventiveController extends AbstractController
                 $this->emptySearchMachine($request);
 
                 // Numéro de template
-                $lastTemplate = $this->templateRepository->findLastTemplate($organisation);
+                $lastTemplate 
+                    = $this->templateRepository->findLastTemplate($organisation);
                 if ($lastTemplate) {
                     $lastNumber = $lastTemplate->getTemplateNumber();
                     $template->setTemplateNumber($lastNumber + 1);
@@ -154,39 +165,46 @@ class PreventiveController extends AbstractController
                 $this->manager->persist($template);
                 $this->manager->flush();
 
-                return $this->render('preventive/show.html.twig', [
+                return $this->render(
+                    'preventive/show.html.twig', [
                     'template' => $template
-                ]);
+                    ]
+                );
             }
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
-        return $this->renderForm('preventive/new.html.twig', [
+        return $this->renderForm(
+            'preventive/new.html.twig', [
             'template' => $template,
             'form' => $form,
             'mode' => 'newPreventive',
             'machinesWithData' => $machinesWithData,
-        ]);
+            ]
+        );
     }
 
     /**
-     * @Route("/{id}", name="template_show", methods={"GET"})
+     * @Route("/{id}",                      name="template_show", methods={"GET"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function show(Template $template): Response
     {
-        return $this->render('preventive/show.html.twig', [
+        return $this->render(
+            'preventive/show.html.twig', [
             'template' => $template,
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/edit/{id}/{mode?}", name="template_edit", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_USER')")
-     */
-    public function edit(Request $request, Template $template, ?string $mode): Response
-    {
+    #[Route('/edit/{id}/{mode?}', name: 'template_edit', methods:["GET", "POST"])]
+    #[IsGranted('ROLE_USER')]
+    public function edit(
+        Request $request, 
+        Template $template, 
+        ?string $mode
+    ): Response {
         if ($mode == 'editPreventive') {
-            // Attribution des éventuelles machines en session au BT préventif
+             // Attribution des éventuelles machines en session au BT préventif
             $session = $this->requestStack->getSession();
             $machines = $session->get('machines');
             if ($machines) {
@@ -219,21 +237,26 @@ class PreventiveController extends AbstractController
             }
             $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
         }
-        return $this->renderForm('preventive/edit.html.twig', [
+        return $this->renderForm(
+            'preventive/edit.html.twig', [
             'template' => $template,
             'mode' => 'editPreventive',
             'form' => $form,
-        ]);
+            ]
+        );
     }
 
     /**
      * Enlever une machine du BT
      * 
-     * @Route("/machine/remove/{id}/{machine}", name="preventive_machine_remove", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * 
      * @return Response 
      */
+    #[Route(
+        '/machine/remove/{id}/{machine}', 
+        name: 'preventive_machine_remove', 
+        methods:["GET"]
+    )]
+    #[IsGranted('ROLE_USER')]
     public function removeMachine(Template $template, Machine $machine)
     {
         $machine = $this->machineRepository->find($machine);
@@ -267,24 +290,27 @@ class PreventiveController extends AbstractController
         return;
     }
 
-    /**
-     * @Route("/{id}", name="template_delete", methods={"POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[Route('/{id}', name: 'template_delete', methods:["POST"])]
+    #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Template $template): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $template->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $template->getId(), 
+            $request->request->get('_token')
+        )
+        ) {
             $template->setActive(false);
             $this->manager->flush();
         }
 
-        return $this->redirectToRoute('template_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute(
+            'template_index', [], 
+            Response::HTTP_SEE_OTHER
+        );
     }
 
-    /**
-     * @Route("copy_template/{id}", name="copy_template", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[Route('copy_template/{id}', name: 'copy_template', methods:["GET", "POST"])]
+    #[IsGranted('ROLE_ADMIN')]
     public function copyTemplate(Template $template): Response
     {
         $user = $this->getUser();
@@ -318,42 +344,55 @@ class PreventiveController extends AbstractController
         $this->manager->flush();
 
 
-        return $this->redirectToRoute('template_edit', [
+        return $this->redirectToRoute(
+            'template_edit', [
             'id'    =>  $newTemplate->getId(),
-        ]);
+            ]
+        );
     }
 
     /**
      * Edition du calendrier des préventifs
-     * 
-     * @Route("calendar", name="preventiveCalendar")
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[Route('calendar', name: 'preventiveCalendar')]
+    #[IsGranted('ROLE_ADMIN')]
     public function calendar(): Response
     {
         $organisationId = $this->organisation->getId();
         $year = '2023-01-01';
 
-        $templates = $this->templateRepository->findAllTemplatesForCalendar($organisationId, $year);
-        $preventiveWorkorders = $this->workorderRepository->findAllLatePreventiveWorkorders($organisationId);
-        //dd($preventiveWorkorders);
+        $templates = $this->templateRepository->findAllTemplatesForCalendar(
+            $organisationId, 
+            $year
+        );
+        $preventiveWorkorders 
+            = $this->workorderRepository->findAllLatePreventiveWorkorders(
+                $organisationId
+            );
 
         $rdvs = [];
         if ($templates) {
             foreach ($templates as $event) {
                 // Données lues
                 $daysBefore = $event->getDaysBefore(); // Jours avant
-                $secondsBefore = $daysBefore * 24 * 60 * 60; // Jours avant en secondes
+                
+                // Jours avant en secondes
                 $startDate = $event->getNextDate(); // Date début
-                $secondsStart = $startDate->getTimeStamp(); // Début en secondes
-                $secondsDuration = $event->getDuration() * 24 * 60 * 60; // Durée en secondes
+                $secondsBefore = $daysBefore * 24 * 60 * 60;
+
+                // Début en secondes
+                $secondsStart = $startDate->getTimeStamp();
+                // Durée en secondes
+                $secondsDuration = $event->getDuration() * 24 * 60 * 60;
 
                 // Données calculées
                 $dateBefore = new \Datetime(); // Date avant
                 $dateBefore->setTimestamp($secondsStart - $secondsBefore);
 
                 $dateBeforeOneDay = new \Datetime(); // Date avant + 1 jour
-                $dateBeforeOneDay->setTimestamp($secondsStart - $secondsBefore + 24 * 60 * 60);
+                $dateBeforeOneDay->setTimestamp(
+                    $secondsStart - $secondsBefore + 24 * 60 * 60
+                );
 
                 $endDate = new \Datetime(); // Date de fin
                 $endDate->setTimestamp($secondsStart + $secondsDuration);
@@ -388,10 +427,14 @@ class PreventiveController extends AbstractController
                 foreach ($templates as $template) {
                     if ($template->getId() === $templateId) {
                         $title = $template->getCalendarTitle();
-                        $startDate = $template->getNextDate(); // Date début
-                        $secondsStart = $startDate->getTimeStamp(); // Début en secondes
-                        $secondsDuration = $event->getDuration() * 24 * 60 * 60; // Durée en secondes
-                        $endDate = new \Datetime(); // Date de fin
+                        // Date début
+                        $startDate = $template->getNextDate();
+                        // Début en secondes
+                        $secondsStart = $startDate->getTimeStamp();
+                        // Durée en secondes
+                        $secondsDuration = $event->getDuration() * 24 * 60 * 60;
+                        // Date de fin
+                        $endDate = new \Datetime();
                         $endDate->setTimestamp($secondsStart + $secondsDuration);
                     }
                 }
@@ -410,6 +453,9 @@ class PreventiveController extends AbstractController
 
         $data = json_encode($rdvs);
 
-        return $this->renderForm('preventive/preventiveCalendar.html.twig', compact("data"));
+        return $this->renderForm(
+            'preventive/preventiveCalendar.html.twig', 
+            compact("data")
+        );
     }
 }

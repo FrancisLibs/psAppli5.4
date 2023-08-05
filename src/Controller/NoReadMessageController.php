@@ -15,8 +15,9 @@ class NoReadMessageController extends AbstractController
         $user = $this->getUser();
         $noReadMails = $messagesRepository->countNoReadMessages($user);
         
-        return $this->render('no_read_message/mailCount.html.twig', [
-            'noReadMails' => $noReadMails,
-        ]);
+        return $this->render(
+            'no_read_message/mailCount.html.twig', 
+            ['noReadMails' => $noReadMails]
+        );
     }
 }

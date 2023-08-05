@@ -9,7 +9,6 @@ use App\Entity\Workorder;
 use App\Form\WorkorderType;
 use App\Data\SearchWorkorder;
 use App\Form\SearchWorkorderForm;
-use App\Repository\PartRepository;
 use App\Service\OrganisationService;
 use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
@@ -38,8 +37,6 @@ class WorkorderController extends AbstractController
     private $_machineRepository;
     private $_templateRepository;
     private $_workorderStatusRepository;
-    private $_partRepository;
-    private $_pdf;
     private $_organisation;
 
 
@@ -50,14 +47,12 @@ class WorkorderController extends AbstractController
         TemplateRepository $templateRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack,
-        PartRepository $partRepository,
         OrganisationService $organisation,
     ) {
         $this->_workorderRepository = $workorderRepository;
         $this->_machineRepository = $machineRepository;
         $this->_templateRepository = $templateRepository;
         $this->_workorderStatusRepository = $workorderStatusRepository;
-        $this->_partRepository = $partRepository;
         $this->_manager = $manager;
         $this->_requestStack = $requestStack;
         $this->_organisation = $organisation;
@@ -66,9 +61,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Liste des bt
-     * 
-     * @param  Request $request
-     * @return Response 
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/', name: 'work_order_index', methods:["GET"])]
@@ -217,9 +209,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Visualisation d'un BT
-     * 
-     * @Route("/{id}",                      name="work_order_show", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'work_order_show', methods:["GET"])]
@@ -318,7 +307,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Affichage de la liste des pièces détachées pour selection
-     *
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/addPart/{id}/{mode?}', name: 'work_order_add_part', methods:["GET"])]
@@ -349,7 +337,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Suppression d'un BT
-     * 
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'work_order_delete', methods:["POST"])]
@@ -373,7 +360,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Cloture des BT et calcul de la prochaine date pour les BT préventifs.
-     * 
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/closing/{id}', name: 'work_order_closing')]
@@ -437,7 +423,6 @@ class WorkorderController extends AbstractController
 
     /**
      * Impression d'un BT
-     * 
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/pdf/{id}', name: 'pdf_workorder')]

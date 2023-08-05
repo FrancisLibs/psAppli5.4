@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security as Secu;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -55,25 +55,27 @@ class PartController extends AbstractController
         $this->organisation = $organisation;
     }
 
+
     /**
      * @ Liste des pièces détachées
-     * 
-     * @Route("/list/{mode?}/{documentId?}", name="part_index", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * 
-     * @param Request $request
-     * @param int documentId
-     * @param string mode
      */
-    public function index(Request $request, ?string $mode = null, ?int $documentId = null): Response
-    {
+    #[IsGranted('ROLE_USER')]
+    #[Route('/list/{mode?}/{documentId?}', name: 'part_index', methods:('GET'))]
+    public function index(
+        Request $request, 
+        ?string $mode = null, 
+        ?int $documentId = null
+    ): Response {
         $organisation =  $this->organisation->getOrganisation();
         
         $session = $this->requestStack->getSession();
 
         $data = new SearchPart();
 
-        if ($mode == "workorderAddPart" || $mode == "newDeliveryNote" || $mode == "editDeliveryNote") {
+        if ($mode == "workorderAddPart" 
+            || $mode == "newDeliveryNote" 
+            || $mode == "editDeliveryNote"
+        ) {
             $data = $session->get('data', null);
             if (!$data) {
                 $data = new SearchPart();
@@ -91,14 +93,33 @@ class PartController extends AbstractController
         $parts = $this->partRepository->findSearch($data);
 
         if ($request->get('ajax')) {
-            return new JsonResponse([
-                'content'       =>  $this->renderView('part/_parts.html.twig', ['parts' => $parts, 'mode' => $mode, 'documentId' => $documentId]),
-                'sorting'       =>  $this->renderView('part/_sorting.html.twig', ['parts' => $parts]),
-                'pagination'    =>  $this->renderView('part/_pagination.html.twig', ['parts' => $parts]),
-            ]);
+            return new JsonResponse(
+                [
+                'content'       =>  $this->renderView(
+                    'part/_parts.html.twig', 
+                    [
+                        'parts' => $parts, 
+                        'mode' => $mode, 
+                        'documentId' => $documentId
+                    ]
+                ),
+                'sorting'       =>  $this->renderView(
+                    'part/_sorting.html.twig', 
+                    ['parts' => $parts]
+                ),
+                'pagination'    =>  $this->renderView(
+                    'part/_pagination.html.twig', 
+                    ['parts' => $parts]
+                ),
+                ]
+            );
         }
 
-        if ($mode == 'workorderAddPart' || $mode == 'editReceivedPart' || $mode == 'editDeliveryNote' || $mode == 'newDeliveryNote') {
+        if ($mode == 'workorderAddPart' 
+            || $mode == 'editReceivedPart' 
+            || $mode == 'editDeliveryNote' 
+            || $mode == 'newDeliveryNote'
+        ) {
             $panier = $session->get('panier', null);
             if ($panier) {
                 $panierWithData = [];
@@ -108,33 +129,37 @@ class PartController extends AbstractController
                         'quantity' => $quantity,
                     ];
                 }
-                return $this->render('part/index.html.twig', [
+                return $this->render(
+                    'part/index.html.twig', [
                     'parts' =>  $parts,
                     'form'  =>  $form->createView(),
                     'mode'  =>  $mode,
                     'items' => $panierWithData,
                     'documentId' => $documentId,
-                ]);
+                    ]
+                );
             }
-            return $this->render('part/index.html.twig', [
+            return $this->render(
+                'part/index.html.twig', [
                 'parts' =>  $parts,
                 'form'  =>  $form->createView(),
                 'documentId' => $documentId,
                 'mode'  =>  $mode,
-            ]);
+                ]
+            );
         }
-        return $this->render('part/index.html.twig', [
+        return $this->render(
+            'part/index.html.twig', [
             'parts' =>  $parts,
             'form'  =>  $form->createView(),
             'documentId' => $documentId,
             'mode'  =>  "index",
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/new", name="part_new", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/new', name: 'part_new', methods: ["GET","POST"])]
     public function new(Request $request): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -159,33 +184,35 @@ class PartController extends AbstractController
             $this->manager->persist($part);
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_show', [
+            return $this->redirectToRoute(
+                'part_show', [
                 'id' => $part->getId(),
 
-            ], Response::HTTP_SEE_OTHER);
+                ], Response::HTTP_SEE_OTHER
+            );
         }
 
-        return $this->renderForm('part/new.html.twig', [
+        return $this->renderForm(
+            'part/new.html.twig', [
             'part' => $part,
             'form' => $form,
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/show/{id}", name="part_show", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/show/{id}', name: 'part_show', methods: ["GET"])]
     public function show(Part $part): Response
     {
-        return $this->render('part/show.html.twig', [
+        return $this->render(
+            'part/show.html.twig', [
             'part' => $part,
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/edit/{id}", name="part_edit", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/edit/{id}', name: 'part_edit', methods: ["GET", "POST"])]
     public function edit(Request $request, Part $part): Response
     {
         $form = $this->createForm(PartType::class, $part);
@@ -199,24 +226,30 @@ class PartController extends AbstractController
 
             $this->manager->flush();
 
-            return $this->redirectToRoute('part_show', [
+            return $this->redirectToRoute(
+                'part_show', [
                 'id' => $part->getId(),
-            ], Response::HTTP_SEE_OTHER);
+                ], Response::HTTP_SEE_OTHER
+            );
         }
 
-        return $this->renderForm('part/edit.html.twig', [
+        return $this->renderForm(
+            'part/edit.html.twig', [
             'part' => $part,
             'form' => $form,
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/delete/{id}", name="part_delete", methods={"POST"})
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/delete/{id}', name: 'part_delete', methods: ["POST"])]
     public function delete(Request $request, Part $part): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $part->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $part->getId(), 
+            $request->request->get('_token')
+        )
+        ) {
             $part->setActive(false);
             $this->manager->flush();
         }
@@ -224,10 +257,8 @@ class PartController extends AbstractController
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/approzero", name="appro_to_zero")
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/approzero', name: 'appro_to_zero')]
     public function setApproToZero(): Response
     {
         $parts = $this->partRepository->findAll();
@@ -247,10 +278,8 @@ class PartController extends AbstractController
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/reception", name="reception_part")
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/reception', name: 'reception_part')]
     public function reception(): Response
     {
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
@@ -258,10 +287,9 @@ class PartController extends AbstractController
 
     /**
      * @ Valeur du stock de pièces détachées
-     * 
-     * @Route("/infos", name="parts_value", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/infos', name: 'parts_value', methods:['GET', 'POST'])]
     public function infos(): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -279,55 +307,60 @@ class PartController extends AbstractController
             $dates[] = $date;
         }
 
-        return $this->render('part/infos_pieces.html.twig', [
+        return $this->render(
+            'part/infos_pieces.html.twig', [
             'totalStock' => $totalStock,
             'dates' =>  json_encode($dates),
             'amounts' => json_encode($amounts),
-        ]);
+            ]
+        );
     }
 
-    /**
-     * @Route("/appro/{id}", name="show_appro")
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/appro/{id}', name: 'show_appro')]
     public function appro(Part $part)
     {
-        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNotesAppro($part->getId());
+        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNotesAppro(
+            $part->getId()
+        );
 
-        return $this->render('part/showAppro.html.twig', [
+        return $this->render(
+            'part/showAppro.html.twig', [
             'deliveryNotes' => $deliveryNotes,
             'part' => $part,
-        ]);
+            ]
+        );
     }
 
     /**
      * 
      * @param PdfService $pdfService
      * Impession étiquette d'une pièce 
-     * 
-     * @Route("/partlabel/{id}", name="part_label")
-     * @Security("is_granted('ROLE_USER')")
-
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/partlabel/{id}', name: 'part_label')]
     public function printLabel(Part $part, PdfService $pdfService): Response
     {
-        $html = $this->renderView('prints/one_label_print.html.twig', [
+        $html = $this->renderView(
+            'prints/one_label_print.html.twig', [
             'part' => $part,
-        ]);
+            ]
+        );
 
         $pdfService->printLabel($html);
 
-        return new Response('', 200, [
+        return new Response(
+            '', 200, [
             'Content-Type' => 'application/pdf',
-        ]);
+            ]
+        );
     }
 
     /**
      * @ Valeur du stock de pièces détachées + affichage des 50 pièces les + chères
-     * 
-     * @Route("/stockTopValue", name="stock_top_value", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/stockTopValue', name: 'stock_top_value', methods:["GET","POST"])]
     public function topStockValue(): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -347,11 +380,13 @@ class PartController extends AbstractController
             $dates[] = $date;
         }
 
-        return $this->render('part/top_value_parts.html.twig', [
+        return $this->render(
+            'part/top_value_parts.html.twig', [
             'totalStock' => $totalStock,
             'dates' =>  json_encode($dates),
             'amounts' => json_encode($amounts),
             'parts' => $topParts,
-        ]);
+            ]
+        );
     }
 }

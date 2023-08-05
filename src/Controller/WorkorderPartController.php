@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Workorder;
-use App\Entity\WorkorderPart;
 use App\Repository\PartRepository;
-use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkorderPartRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -17,9 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class WorkorderPartController extends AbstractController
 {
-    private $workorderPartRepository;
-    private $partRepository;
-    private $manager;
+    protected $workorderPartRepository;
+    protected $partRepository;
+    protected $manager;
+
 
     public function __construct(
         WorkorderPartRepository $workorderPartRepositiory,
@@ -31,11 +31,12 @@ class WorkorderPartController extends AbstractController
         $this->manager = $manager;
     }
 
+
     /**
      * Retirer des pièces détachées d'un BT en édition et réintégration dans le stock
-     * 
-     * @Route("/remove/{id}/{workorderPartId}", name="remove_part")
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/remove/{id}/{workorderPartId}', name: 'remove_part')]
     public function remove(Workorder $workorder, int $workorderPartId): Response
     {
         $workorderParts = $workorder->getWorkorderParts();
@@ -62,8 +63,10 @@ class WorkorderPartController extends AbstractController
             $this->manager->flush();
         }
 
-        return $this->redirectToRoute('work_order_show', [
+        return $this->redirectToRoute(
+            'work_order_show', [
             'id' => $workorder->getId()
-        ], Response::HTTP_SEE_OTHER);
+            ], Response::HTTP_SEE_OTHER
+        );
     }
 }
