@@ -21,9 +21,9 @@
 					<div class="col-5 mt-2 mb-3 offset-3 border border-primary rounded p-2">
 						<div class="d-flex justify-content-start">
 							<h4>Panier</h4>
-							<a href="{{ path('cart_index', {'workorderId': workorderId}) }}" class="ml-4 btn btn-primary btn-sm btn_panier">Visualiser</a>
-							<a href="{{ path('cart_valid', {'id': workorderId}) }}" class="ml-4 btn btn-warning btn-sm btn_panier">Valider</a>
-							<a href="{{ path('cart_empty', {'workorderId': workorderId}) }}" class="ml-4 btn btn-danger btn-sm btn_panier">vider</a>
+							<a href="{{ path('cart_index', {'workorderId': workorderId}) }}" class="ms-4 btn btn-primary btn-sm btn_panier">Visualiser</a>
+							<a href="{{ path('cart_valid', {'id': workorderId}) }}" class="ms-4 btn btn-warning btn-sm btn_panier">Valider</a>
+							<a href="{{ path('cart_empty', {'workorderId': workorderId}) }}" class="ms-4 btn btn-danger btn-sm btn_panier">vider</a>
 						</div>
 					</div>
 					{% for item in items %}
@@ -31,9 +31,9 @@
 							<a href="{{ path('cart_remove', {'id': item.part.id, 'workorderId': workorderId}) }}" class="btn btn-sm btn-danger btn_supp">Supp</a>
 						</span>
 						<span class="items_display">
-							<strong>{{ item.quantity }}x
-								{{ item.part.code }}</strong>
-							:
+							<strong>{{ item.quantity }}x{{ item.part.code }}
+								&nbsp; : &nbsp;</strong>
+
 							{{ item.part.designation }}</span><br>
 					{% endfor %}
 				{% endif %}

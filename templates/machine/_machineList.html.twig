@@ -1,13 +1,14 @@
 <div class="row">
-    {{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
-        <table class="table table-sm table-striped">
-            <thead>
-                {% include 'machine/_filter.html.twig' %}
-                {% include 'machine/_sorting.html.twig' %}
-            </thead>
-            <tbody class="js-filter-content">
-                {% include 'machine/_machines.html.twig' %}
-            </tbody>
-        </table>
-    {{ form_end(form) }}
+	{{ form_start(form, {attr: {class: 'filter js-filter-form'}}) }}
+	{{ form_widget(form.active) }}
+	<table class="table table-sm table-striped">
+		<thead>
+			{% include 'machine/_filter.html.twig' %}
+			{% include 'machine/_sorting.html.twig' %}
+		</thead>
+		<tbody class="js-filter-content">
+			{% include 'machine/_machines.html.twig' %}
+		</tbody>
+	</table>
+	{{ form_end(form) }}
 </div>

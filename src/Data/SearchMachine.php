@@ -52,4 +52,11 @@ class SearchMachine
      * @var string
      */
     public $workshop;
+
+    /**
+     * Machine active
+     *
+     * @var string
+     */
+    public $active;
 }

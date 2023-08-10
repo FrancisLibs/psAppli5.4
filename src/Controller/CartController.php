@@ -40,6 +40,7 @@ class CartController extends AbstractController
         $this->_manager = $manager;
     }
 
+
     /**
      * Appel de la liste des pièces à ajouter au panier
      */
@@ -211,7 +212,7 @@ class CartController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route(
         '/empty/{mode}/{documentId?}', 
-        name: 'cart_remove'
+        name: 'cart_empty'
     )]
     public function empty(string $mode, ?int $documentId): RedirectResponse
     {

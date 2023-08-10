@@ -321,11 +321,6 @@ class WorkorderController extends AbstractController
         $session->remove('data');
 
         $workorder = $this->_workorderRepository->find($id);
-        $machines = $workorder->getMachines();
-
-        if(count($machines)>1) {
-            dd(count($machines));
-        }
 
         return $this->redirectToRoute(
             'part_index', [

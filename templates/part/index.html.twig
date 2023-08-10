@@ -33,15 +33,15 @@
 						<div class="border border-primary rounded p-3">
 							<div class="d-flex justify-content-start align-items-baseline">
 								<span class="bag-title mb-3">Panier</span>
-								<a href="{{ path('cart_valid', {'documentId': documentId, 'mode': mode}) }}" class="ms-2 btn btn-primary btn-sm btn_panier">Valider</a>
-								<a href="{{ path('cart_empty', {'documentId': documentId, 'mode': mode}) }}" class="ms-2 btn btn-warning btn-sm btn_panier">vider</a>
+								<a href="{{ path('cart_valid', { 'mode': mode, 'documentId': documentId }) }}" class="ms-2 btn btn-primary btn-sm btn_panier">Valider</a>
+								<a href="{{ path('cart_empty', { 'mode': mode, 'documentId': documentId }) }}" class="ms-2 btn btn-warning btn-sm btn_panier">vider</a>
 							</div>
 							{% for item in items %}
 								<div class="items_display">
 									<a href="{{ path('cart_remove', {'id': item.part.id, 'documentId': documentId, 'mode': mode}) }}" class="btn btn-sm btn-danger btn_supp me-2 mb-2">Supp</a>
 									<strong>{{ item.quantity }}
 										x
-										{{ item.part.code }}:
+										{{ item.part.code }}&nbsp;:&nbsp;
 									</strong>
 									{{ item.part.designation }}
 								</div>

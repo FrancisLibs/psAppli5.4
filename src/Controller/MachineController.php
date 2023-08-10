@@ -51,15 +51,14 @@ class MachineController extends AbstractController
     /**
      * @ Liste des machines
      * 
-     * @Route("/list/{mode?}/{documentId?}", name="machine_index", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * 
      * @param Request $request
      * @param string  $mode
      * @param int     $documentId
      * 
      * @return Response
      */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/list/{mode?}/{documentId?}', name: 'machine_index', methods:["GET"])]
     public function index(
         Request $request, 
         ?string $mode = null, 

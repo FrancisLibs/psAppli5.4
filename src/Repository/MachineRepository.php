@@ -43,9 +43,8 @@ class MachineRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('m')
             ->orderBy('m.constructor', 'ASC')
             ->select('m', 'w')
-            ->join('m.workshop', 'w')
-            ->andWhere('m.active = :disabled')
-            ->setParameter('disabled', true);
+            ->join('m.workshop', 'w');
+            
 
         if (!empty($search->internalCode)) {
             $internalCode = strtoupper($search->internalCode);
@@ -87,6 +86,17 @@ class MachineRepository extends ServiceEntityRepository
                 ->andWhere('w.id = :workshop')
                 ->setParameter('workshop', $search->workshop);
         }
+
+        if(!empty($search->active)){
+            $query = $query
+            ->andWhere('m.active = :disabled')
+            ->setParameter('disabled', FALSE);
+        } else {
+            $query = $query
+            ->andWhere('m.active = :disabled')
+            ->setParameter('disabled', TRUE);
+        }
+        
 
         $query = $query->getQuery();
 
