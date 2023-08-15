@@ -1,0 +1,19 @@
+.very_large_field {
+    min-width: 454px;
+    background: white;
+}
+
+.large_field {
+    min-width: 290px;
+    background: white;
+}
+
+.middle_field {
+    min-width: 220px;
+    background: white;
+}
+
+.small_field {
+    min-width: 150px;
+    background: white;
+}

@@ -3,25 +3,25 @@
 {% block title %}New Provider
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/provider.css">
+{% endblock %}
+
 {% block body %}
-	<div class="row mt-5">
-		<div class="col-8 offset-2">
-			<div class="row justify-content-start align-items-center">
-				<div class="col-3">
-					<h3 class="text-primary">Création fournisseur</h3>
-				</div>
-				<div class="col-5">
+	<main class="row justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
+			<header>
+				<div class="d-flex justify-content-start align-items-center flex-wrap mb-3">
+					<h3 class="text-primary me-5">Création fournisseur</h3>
 					<a class="btn btn-primary btn-sm" href="{{ path('provider_index') }}" role="button">Listes des fournisseurs</a>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 mb-4 d-flex justify-content-start">
-			{% include 'user/_photo.html.twig' %}
-			<div class="mt-4 col-6">
+			</header>
+			<section class="mb-4">
 				{{ include('provider/_form.html.twig') }}
-			</div>
-		</div>
-	</div>
+			</section>
+		</article>
+	</main>
+
 {% endblock %}

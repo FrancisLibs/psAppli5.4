@@ -43,8 +43,6 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function userList()
     {
-        $user = $this->getUser();
-        $organisation = $this->organisation->getOrganisation();
         $users = $this->userRepository->findAllActive();
 
         return $this->render(

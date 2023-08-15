@@ -9,6 +9,7 @@ use App\Repository\OrganisationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/organisation')]
@@ -16,12 +17,15 @@ class OrganisationController extends AbstractController
 {
     protected $entityManager;
 
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
+
     #[Route('/', name: 'app_organisation_index', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(OrganisationRepository $organisationRepository): Response
     {
         return $this->render(
@@ -32,6 +36,7 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_organisation_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request): Response
     {
         $organisation = new Organisation();
@@ -59,6 +64,7 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_organisation_show', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(Organisation $organisation): Response
     {
         return $this->render(
@@ -69,6 +75,7 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_organisation_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, Organisation $organisation): Response
     {
         $form = $this->createForm(OrganisationType::class, $organisation);
@@ -93,6 +100,7 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_organisation_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Organisation $organisation): Response
     {
         if ($this->isCsrfTokenValid(

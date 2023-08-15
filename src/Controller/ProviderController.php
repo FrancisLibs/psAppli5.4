@@ -36,6 +36,7 @@ class ProviderController extends AbstractController
 
 
     #[Route('/show/{id}', name: 'provider_show', methods:["GET"])]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(Provider $provider): Response
     {
         return $this->render(
@@ -112,12 +113,11 @@ class ProviderController extends AbstractController
     /**
      * Liste des fournisseurs
      * 
-     * @Route("/{mode?}/{documentId?}",     name="provider_index", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     * 
      * @param  Request $request
      * @return Response 
      */
+    #[Route('/{mode?}/{documentId?}', name: 'provider_index', methods:["GET"])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(
         Request $request,
         ?string $mode, 

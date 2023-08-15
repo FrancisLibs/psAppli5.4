@@ -13,6 +13,7 @@ class ProviderSessionController extends AbstractController
     
     protected $requestStack;
 
+    
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;

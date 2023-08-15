@@ -5,8 +5,6 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -17,11 +15,13 @@ class MachineCartController extends AbstractController
 {
     private $_requestStack;
 
+
     public function __construct(RequestStack $requestStack)
     {
         $this->_requestStack = $requestStack;
     }
 
+    
     /**
      * @return redirectToRoute
      */

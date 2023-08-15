@@ -25,6 +25,7 @@ class GlobalSearchController extends AbstractController
     private $_workorderRepository;
     private $_organisation;
 
+
     public function __construct(
         MachineRepository $machineRepository,
         PartRepository $partRepository,
@@ -42,6 +43,7 @@ class GlobalSearchController extends AbstractController
         $this->_organisation = $organisation;
     }
 
+    
     #[IsGranted('ROLE_USER')]
     #[Route('/global/search', name: 'app_global_search')]
     public function index(Request $request)

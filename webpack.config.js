@@ -24,7 +24,7 @@ Encore
   .addEntry("workorder", "./assets/JS/workorder.js")
   .addEntry("editDeliveryNote", "./assets/JS/editDeliveryNote.js")
   .addEntry("stockValueJschart", "./assets/JS/stockValueJschart.js")
-  .addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
+  // .addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
 
   .addEntry("showMachine", "./assets/styles/showMachine.css")
   .addEntry("register", "./assets/styles/register.css")

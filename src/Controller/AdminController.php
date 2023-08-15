@@ -14,10 +14,11 @@ class AdminController extends AbstractController
 {
     /**
      * Admin page
-     * 
-     * @Route("/admin", name="admin")
+     *
      * @return          RedirectResponse|Response
      */
+    #[Route("/admin", name: "admin", methods:['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
         return $this->render(

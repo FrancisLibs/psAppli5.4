@@ -7,13 +7,9 @@
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-md-12 col-lg-12 col-xl-10">
-			<header class="row mb-3 me-5 justify-content-start align-items-center">
-				<div class="col-12 col-sm-6 col-md-5 col-lg-5 col-xl-5">
-					<h1 class="page-title">Bons de travail</h1>
-				</div>
-				<div class="col-12 col-sm-6">
-					<a class="btn btn-primary" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
-				</div>
+			<header class="d-flex justify-content-start align-items-center flex-wrap mb-5">
+				<h1 class="page-title me-5">Bons de travail</h1>
+				<a class="btn btn-primary btn-ms" href="{{ path('work_order_new') }}" role="button">Nouveau bon de travail</a>
 			</header>
 			<section class="row js-filter">
 				<div>

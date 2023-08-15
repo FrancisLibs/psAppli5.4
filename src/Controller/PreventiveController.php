@@ -12,7 +12,6 @@ use App\Repository\MachineRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\WorkorderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\WorkorderStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -355,7 +354,7 @@ class PreventiveController extends AbstractController
      * Edition du calendrier des préventifs
      */
     #[Route('calendar', name: 'preventiveCalendar')]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     public function calendar(): Response
     {
         $organisationId = $this->organisation->getId();

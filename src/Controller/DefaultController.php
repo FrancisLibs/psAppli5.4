@@ -9,14 +9,13 @@ use App\Service\StockValueService;
 use App\Repository\ParamsRepository;
 use App\Service\OrganisationService;
 use App\Service\UserConnexionService;
-use App\Repository\TemplateRepository;
-use App\Repository\WorkorderRepository;
 use App\Service\PreventiveStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController
@@ -52,10 +51,8 @@ class DefaultController extends AbstractController
     }
 
 
-    /**
-     * @Route("/",                          name="home")
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[Route('/', name:'home')]
+    #[IsGranted('ROLE_USER')]
     public function index(MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -128,7 +125,7 @@ class DefaultController extends AbstractController
         );
         return $this->render(
             'default/index.html.twig', [
-            'users'         => $users,
+            'users' => $users,
             ]
         );
     }

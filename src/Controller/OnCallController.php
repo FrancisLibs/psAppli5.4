@@ -23,6 +23,7 @@ class OnCallController extends AbstractController
     private $_onCallRepository;
     private $_organisation;
 
+
     public function __construct(
         OrganisationService $organisation, 
         OnCallRepository $onCallRepository
@@ -31,14 +32,15 @@ class OnCallController extends AbstractController
         $this->_organisation = $organisation;
     }
 
+    
     /**
      * Liste des rapports d'astreinte
      *
      * @param  Request $request
      * @return Response
      * 
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[IsGranted('ROLE_USER')]
     #[Route('/', name: 'onCall_index', methods: ['GET'])]
     public function index(Request $request): Response
     {

@@ -7,10 +7,10 @@
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
-			<header class="row mb-3 justify-content-start">
-				<div class="d-flex justify-content-start">
-					<h3 class="text-primary">Fournisseurs</h3>
-					<a class="btn btn-primary btn-sm mb-3 ms-5" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
+			<header>
+				<div class="d-flex justify-content-start align-items-center flex-wrap mb-5">
+					<h1 class="text-primary me-5">Fournisseurs</h1>
+					<a class="btn btn-primary btn-sm" href="{{ path('provider_new') }}" role="button">Nouveau fournisseur</a>
 				</div>
 			</header>
 			<section class="row js-filter">

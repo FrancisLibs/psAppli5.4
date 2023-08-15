@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Service{% endblock %}
+{% block title %}Nouveau service
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Service</h1>
+	<div class="d-flex justify-content-start align-items-center">
+		<h1 class="me-5">Nouveau service de l'organisation :
+			{{ organisation.designation }}</h1>
+		<a class="btn btn-primary btn-sm me-3" href="{{ path('service_index') }}">Retour à la liste</a>
+	</div>
 
-    {{ include('service/_form.html.twig') }}
-
-    <a href="{{ path('service_index') }}">back to list</a>
+	{{ include('service/_form.html.twig') }}
 {% endblock %}

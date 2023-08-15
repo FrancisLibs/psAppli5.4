@@ -4,38 +4,64 @@ namespace App\Controller;
 
 use App\Entity\Service;
 use App\Form\ServiceType;
+use App\Service\OrganisationService;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/service')]
 class ServiceController extends AbstractController
 {
+    protected $organisation;
+    protected $serviceRepository;
+    protected $manager;
+
+
+    public function __construct(
+        ServiceRepository $serviceRepository, 
+        OrganisationService $organisation,
+        EntityManagerInterface $manager,
+    ) {
+        $this->organisation = $organisation;
+        $this->serviceRepository = $serviceRepository;
+        $this->manager = $manager;
+    }
+
+
     #[Route('/', name: 'service_index', methods: ['GET'])]
-    public function index(ServiceRepository $serviceRepository): Response
+    #[IsGranted('ROLE_ADMIN')]
+    public function index(): Response
     {
+        $organisation = $this->organisation->getOrganisation();
+        $services = $this->serviceRepository->findAllServicesByOrganisation($organisation->getId());
+
         return $this->render(
-            'service/index.html.twig', [
-            'services' => $serviceRepository->findAll(),
+            'service/index.html.twig', 
+            [
+                'services' => $services,
+                'organisation' => $organisation,
             ]
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'service_new', methods: ['GET', 'POST'])]
     public function new(
-        Request $request, 
-        EntityManagerInterface $entityManager
+        Request $request
     ): Response {
+        $organisation = $this->organisation->getOrganisation();
         $service = new Service();
+        $service->setOrganisation($organisation);
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($service);
-            $entityManager->flush();
+            $this->manager->persist($service);
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'service_index', 
@@ -45,13 +71,16 @@ class ServiceController extends AbstractController
         }
 
         return $this->renderForm(
-            'service/new.html.twig', [
+            'service/new.html.twig', 
+            [
             'service' => $service,
             'form' => $form,
+            'organisation' => $organisation,
             ]
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'service_show', methods: ['GET'])]
     public function show(Service $service): Response
     {
@@ -62,17 +91,17 @@ class ServiceController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'service_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request, 
         Service $service, 
-        EntityManagerInterface $entityManager
     ): Response {
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'service_index', 
@@ -89,19 +118,19 @@ class ServiceController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'service_delete', methods: ['POST'])]
     public function delete(
         Request $request, 
         Service $service, 
-        EntityManagerInterface $entityManager
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete'.$service->getId(), 
             $request->request->get('_token')
         )
         ) {
-            $entityManager->remove($service);
-            $entityManager->flush();
+            $this->manager->remove($service);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('service_index', [], Response::HTTP_SEE_OTHER);

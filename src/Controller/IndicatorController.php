@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class IndicatorController extends AbstractController
@@ -46,6 +47,7 @@ class IndicatorController extends AbstractController
 
 
     #[Route('/indicator/workTime', name: 'app_work_time')]
+    #[IsGranted('ROLE_USER')]
     public function workTime(Request $request): Response
     {
         $searchIndicator = new SearchIndicator();
@@ -171,6 +173,7 @@ class IndicatorController extends AbstractController
     }
 
     #[Route('/indicator/machineCost', name: 'app_machine_cost')]
+    #[IsGranted('ROLE_USER')]
     public function machineCost(Request $request): Response
     {
 
@@ -249,6 +252,7 @@ class IndicatorController extends AbstractController
     }
 
     #[Route('/indicator/costPerMonth', name: 'app_cost_per_month')]
+    #[IsGranted('ROLE_USER')]
     public function costPerMonth(Request $request): Response
     {
         $searchIndicator = new SearchIndicator();
@@ -295,7 +299,7 @@ class IndicatorController extends AbstractController
             return $this->render(
                 'indicator/costPerMonth.html.twig', [
                 'form' => $form->createView(),
-                'months' =>  json_encode($months),
+                'months' => json_encode($months),
                 'values' => json_encode($values),
                 ]
             );
@@ -304,7 +308,7 @@ class IndicatorController extends AbstractController
         return $this->render(
             'indicator/costPerMonth.html.twig', [
             'form' => $form->createView(),
-            'months' =>  null,
+            'months' => null,
             'values' => null,
             ]
         );
@@ -336,6 +340,7 @@ class IndicatorController extends AbstractController
     }
 
     #[Route('/indicator/curatifPreventif', name: 'app_cur_prev')]
+    #[IsGranted('ROLE_USER')]
     public function curatifVsPreventif(Request $request): Response
     {
         $searchIndicator = new SearchIndicator();

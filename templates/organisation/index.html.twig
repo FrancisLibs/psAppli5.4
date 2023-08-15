@@ -1,35 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Organisation index{% endblock %}
+{% block title %}Organisation index
+{% endblock %}
 
 {% block body %}
-    <h1>Organisation index</h1>
+	<h1>Organisations</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Designation</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for organisation in organisations %}
-            <tr>
-                <td>{{ organisation.id }}</td>
-                <td>{{ organisation.designation }}</td>
-                <td>
-                    <a href="{{ path('app_organisation_show', {'id': organisation.id}) }}">show</a>
-                    <a href="{{ path('app_organisation_edit', {'id': organisation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Designation</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for organisation in organisations %}
+				<tr>
+					<td>{{ organisation.id }}</td>
+					<td>{{ organisation.designation }}</td>
+					<td>
+						<a href="{{ path('app_organisation_show', {'id': organisation.id}) }}">show</a>
+						<a href="{{ path('app_organisation_edit', {'id': organisation.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="3">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('app_organisation_new') }}">Create new</a>
+	<a href="{{ path('app_organisation_new') }}">Create new</a>
 {% endblock %}

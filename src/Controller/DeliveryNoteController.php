@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -101,7 +100,7 @@ class DeliveryNoteController extends AbstractController
         return $this->render(
             'delivery_note/index.html.twig', [
             'delivery_notes' => $deliveryNotes,
-            'form'          =>  $form->createView(),
+            'form' =>  $form->createView(),
             ]
         );
     }
@@ -438,7 +437,7 @@ class DeliveryNoteController extends AbstractController
     /**
      * Impression d'étiquettes de pièces à la réception
      */
-     #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_USER')]
     #[Route(
         '/label/{id}', 
         name: 'label_print', 
@@ -448,14 +447,14 @@ class DeliveryNoteController extends AbstractController
         DeliveryNote $deliveryNote, 
         PdfService $pdfService
     ): Response {
-         $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
+        $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
 
             $html = $this->renderView(
                 'prints/multi_label_print.html.twig',
                 ['deliveryNoteParts' => $deliveryNoteParts]
             );
 
-         $pdfService->printLabel($html);
+        $pdfService->printLabel($html);
 
             return new Response(
                 '', 
