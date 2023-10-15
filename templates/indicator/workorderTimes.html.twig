@@ -60,7 +60,8 @@
 								<div class="card-body">
 									<span class="card-title">
 										<strong>{{ loop.index }}.
-											{{ machine.name }}</strong>
+											<a href="{{ path('machine_statistics', {'id': machine.id}) }}">{{ machine.name }}</a>
+										</strong>
 									</span>
 									<p class="card-text">
 										{% if machine.days %}
