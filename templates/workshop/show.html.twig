@@ -1,32 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Atelier{% endblock %}
+{% block title %}Atelier
+{% endblock %}
 
 {% block body %}
-    <div class="row mt-5">
-        <div class="col-6 mx-auto">
-            <div class="row">
-                <div class="col-6 d-flex justify-content-start align-items-center">
-                    <h3 class="text-primary me-5">Atelier</h3>
-                    <div class="d-flex justify-content-start">
-                        <a class="btn btn-primary btn-sm me-2" href="{{ path('workshop_index') }}" role="button">Liste ateliers</a>
-                        <a class="btn btn-primary btn-sm me-2" href="{{ path('workshop_edit', {'id': workshop.id}) }}">Edition</a>
-                        {{ include('workshop/_delete_form.html.twig') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <article class="row">
-        <div class="col-6 mx-auto mt-4">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>Nom</th>
-                        <td>{{ workshop.name }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </article>
+	<main class="row justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
+			<header class="row mb-3 justify-content-start">
+				<div class="d-flex justify-content-start align-items-center">
+					<h3 class="text-primary me-5">Atelier</h3>
+					<div class="d-flex justify-content-start">
+						<a class="btn btn-primary btn-sm me-2" href="{{ path('workshop_index') }}" role="button">Liste ateliers</a>
+						<a class="btn btn-primary btn-sm me-2" href="{{ path('workshop_edit', {'id': workshop.id}) }}">Edition</a>
+						{{ include('workshop/_delete_form.html.twig') }}
+					</div>
+				</div>
+			</header>
+			<div class="row">
+				<div class="col-6 mt-4">
+                    <span>Nom : </span>
+                    <span>{{ workshop.name }}</span>
+				</div>
+			</div>
+		</article>
+	</main>
 {% endblock %}
