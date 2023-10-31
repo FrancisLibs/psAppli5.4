@@ -280,4 +280,26 @@ class WorkorderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Compte les bons de travail préventifs en retard
+     *
+     * @param int $organisationId
+     */
+    public function countLateBT($organisationId)
+    {
+        return $this->createQueryBuilder('w')
+            ->select('count(w.id)')
+            ->join('w.workorderStatus', 's')
+            ->andWhere('w.organisation = :organisation')
+            ->andWhere('w.preventive = :enabled')
+            ->andWhere('s.name = :val1')
+            ->setParameters(new ArrayCollection([
+                new Parameter('organisation', $organisationId),
+                new Parameter('enabled', true),
+                new Parameter('val1', 'EN_RETARD'),
+            ]))
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

@@ -9,6 +9,7 @@ use App\Service\StockValueService;
 use App\Repository\ParamsRepository;
 use App\Service\OrganisationService;
 use App\Service\UserConnexionService;
+use App\Repository\WorkorderRepository;
 use App\Service\PreventiveStatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -28,6 +29,7 @@ class DefaultController extends AbstractController
     private $_preventiveStatusService;
     private $_stockValueService;
     private $_organisation;
+    private $_workorderRepository;
 
 
     public function __construct(
@@ -39,6 +41,7 @@ class DefaultController extends AbstractController
         UserConnexionService $userConnexionService,
         StockValueService $stockValueService,
         OrganisationService $organisation,
+        WorkorderRepository $workorderRepository,
     ) {
         $this->_paramsRepository = $paramsRepository;
         $this->_manager = $manager;
@@ -48,10 +51,11 @@ class DefaultController extends AbstractController
         $this->_userConnexionService = $userConnexionService;
         $this->_stockValueService = $stockValueService;
         $this->_organisation = $organisation;
+        $this->_workorderRepository = $workorderRepository;
     }
 
 
-    #[Route('/', name:'home')]
+    #[Route('/', name: 'home')]
     #[IsGranted('ROLE_USER')]
     public function index(MailerInterface $mailer): Response
     {
@@ -107,9 +111,11 @@ class DefaultController extends AbstractController
         $lastStockValueDate->add($oneWeek);
 
         // Si la date du jour est >= d'une semaine à l'ancienne date
-        if ($today >= $lastStockValueDate) { 
+        if ($today >= $lastStockValueDate) {
             $this->_stockValueService->computeStockValue(
-                $organisation, $organisationId, $params
+                $organisation,
+                $organisationId,
+                $params
             );
         }
 
@@ -123,9 +129,12 @@ class DefaultController extends AbstractController
                 'active' => true,
             ],
         );
+        $lateBT = $this->_workorderRepository->countLateBT($organisationId);
         return $this->render(
-            'default/index.html.twig', [
-            'users' => $users,
+            'default/index.html.twig',
+            [
+                'users' => $users,
+                'lateBT' => $lateBT,
             ]
         );
     }

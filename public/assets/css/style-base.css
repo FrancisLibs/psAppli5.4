@@ -48,6 +48,22 @@ h1 {
   text-decoration: none;
 }
 
+.cadre-info-vert {
+  border: 2px solid #11e828;
+  border-radius: 5px;
+  width: 300px;
+  margin: 10px;
+  padding: 20px;
+}
+
+.cadre-info-rouge {
+  border: 2px solid #e9370f;
+  border-radius: 5px;
+  width: 300px;
+  margin: 10px;
+  padding: 20px;
+}
+
 @media (min-width: 576px) {
   h1 {
     font-size: 3.5rem;
