@@ -5,7 +5,7 @@
 	{{ encore_entry_link_tags('showMachine') }}
 {% endblock %}
 
-{% block title %}Machine - Edition
+{% block title %}Equipement - Edition
 {% endblock %}
 
 {% block body %}
@@ -14,10 +14,10 @@
 		<article class="col-12 col-md-12 col-lg-12 col-xl-10">
 			<header class="row mb-3 justify-content-start align-items-center flex-wrap">
 				<div class="col-12 col-sm-7 col-md-6 col-lg-5">
-					<h1 class="page-title me-5">Edition machine</h1>
+					<h1 class="page-title me-5">Edition équipement</h1>
 				</div>
 				<div class="col-12 col-sm-6 d-flex justify-content-start align-items-base flex-wrap">
-					<a class="btn btn-primary btn-sm me-3 mb-2" href="{{ path('machine_index') }}" role="button">Liste des machines</a>
+					<a class="btn btn-primary btn-sm me-3 mb-2" href="{{ path('machine_index') }}" role="button">Liste des équipements</a>
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ include('machine/_delete_form.html.twig') }}
 					{% endif %}

@@ -11,14 +11,14 @@
 			<header>
 				<div class="d-flex justify-content-start align-items-center flex-wrap mb-4">
 					{% if mode == "selectPreventive" %}
-						<h1 class="page-title me-5">Machines -> BT préventif</h1>
+						<h1 class="page-title me-5">Eqipement -> BT préventif</h1>
 					{% elseif mode == "newWorkorder" %}
-						<h1 class="page-title me-5">Machine -> BT</h1>
+						<h1 class="page-title me-5">Eqipement -> BT</h1>
 					{% else %}
-						<h1 class="page-title me-5">Machines</h1>
+						<h1 class="page-title me-5">Equipements</h1>
 					{% endif %}
 					{% if mode != 'selectPreventive' and mode != 'workorderSelect' and mode != 'newWorkorder' %}
-						<a class="btn btn-primary btn-sm" href="{{ path('machine_new') }}" role="button">Nouvelle machine</a>
+						<a class="btn btn-primary btn-sm" href="{{ path('machine_new') }}" role="button">Nouvel équipement</a>
 					{% endif %}
 				</div>
 				{# Encart des mahines en haut à droite #}

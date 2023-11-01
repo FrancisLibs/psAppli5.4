@@ -15,19 +15,19 @@
 			<article class="col-12 col-xl-10">
 				<section class="row justify-content-start align-items-center">
 					<div class="mb-3 col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2">
-						<h1 class="page-title me-5">Machine</h1>
+						<h1 class="page-title me-5">Equipement</h1>
 					</div>
 					<div class="col-12 col-sm-11 col-md-9 col-lg-8 col-xl-8 mb-2">
 						<div class="d-flex justify-content-start flex-wrap">
-							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_index') }}">Liste machines</a>
+							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_index') }}">Liste équipements</a>
 							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
-							{% if machine.childLevel == 0 %}
+							{# {% if machine.childLevel == 0 %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
 							{% endif %}
 							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_statistics', {'id': machine.id}) }}">Stats</a>
 							{% if machine.parent %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
-							{% endif %}
+							{% endif %} #}
 							{% if is_granted('ROLE_ADMIN') %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
 								{{ include('machine/_delete_form.html.twig') }}

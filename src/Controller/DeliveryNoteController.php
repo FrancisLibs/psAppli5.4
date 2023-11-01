@@ -28,37 +28,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class DeliveryNoteController extends AbstractController
 {
-    private $_manager;
-    private $_requestStack;
-    private $_deliveryNoteRepository;
-    private $_providerRepository;
-    private $_partRepository;
-    private $_organisation;
+    protected $manager;
+    protected $requestStack;
+    protected $deliveryNoteRepo;
+    protected $providerRepository;
+    protected $partRepository;
+    protected $organisation;
+
 
     public function __construct(
         OrganisationService $organisation,
         EntityManagerInterface $entityManagerInterface,
         RequestStack $requestStack,
-        DeliveryNoteRepository $deliveryNoteRepository,
+        DeliveryNoteRepository $deliveryNoteRepo,
         ProviderRepository $providerRepository,
         PartRepository $partRepository
-    ) {
-        $this->_manager = $entityManagerInterface;
-        $this->_requestStack = $requestStack;
-        $this->_deliveryNoteRepository = $deliveryNoteRepository;
-        $this->_providerRepository = $providerRepository;
-        $this->_partRepository = $partRepository;
-        $this->_organisation = $organisation;
+    )     
+    {
+        $this->manager = $entityManagerInterface;
+        $this->requestStack = $requestStack;
+        $this->deliveryNoteRepo = $deliveryNoteRepo;
+        $this->providerRepository = $providerRepository;
+        $this->partRepository = $partRepository;
+        $this->organisation = $organisation;
     }
+
 
     /**
      * Liste des BL
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/', name: 'delivery_note_index', methods:["GET"])]
+    #[Route('/', name: 'delivery_note_index', methods: ["GET"])]
     public function index(Request $request): Response
     {
-        $organisation =  $this->_organisation->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
 
         $data = new SearchDeliveryNote();
         $data->organisation = $organisation;
@@ -66,7 +69,7 @@ class DeliveryNoteController extends AbstractController
 
         // Effacement du fournisseur, des pièces détachées, 
         // de la date et fournisseur en session
-        $session = $this->_requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->remove('providerId');
         $session->remove('panier');
         $session->remove('deliveryNoteDate');
@@ -76,48 +79,49 @@ class DeliveryNoteController extends AbstractController
 
         $form->handleRequest($request);
 
-        $deliveryNotes = $this->_deliveryNoteRepository->findSearch($data);
+        $deliveryNotes = $this->deliveryNoteRepo->findSearch($data);
 
         if ($request->get('ajax')) {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'delivery_note/_delivery_notes.html.twig', 
-                    ['delivery_notes' => $deliveryNotes]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'delivery_note/_sorting.html.twig', 
-                    ['delivery_notes' => $deliveryNotes]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'delivery_note/_pagination.html.twig', 
-                    ['delivery_notes' => $deliveryNotes]
-                ),
+                    'content'       =>  $this->renderView(
+                        'delivery_note/_delivery_notes.html.twig',
+                        ['delivery_notes' => $deliveryNotes]
+                    ),
+                    'sorting'       =>  $this->renderView(
+                        'delivery_note/_sorting.html.twig',
+                        ['delivery_notes' => $deliveryNotes]
+                    ),
+                    'pagination'    =>  $this->renderView(
+                        'delivery_note/_pagination.html.twig',
+                        ['delivery_notes' => $deliveryNotes]
+                    ),
                 ]
             );
         }
 
         return $this->render(
-            'delivery_note/index.html.twig', [
-            'delivery_notes' => $deliveryNotes,
-            'form' =>  $form->createView(),
+            'delivery_note/index.html.twig',
+            [
+                'delivery_notes' => $deliveryNotes,
+                'form' =>  $form->createView(),
             ]
         );
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/new', name: 'delivery_note_new', methods:["GET", "POST"])]
+    #[Route('/new', name: 'delivery_note_new', methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $user = $this->getUser();
-        $session = $this->_requestStack->getSession();
-        $organisation =  $this->_organisation->getOrganisation();
+        $session = $this->requestStack->getSession();
+        $organisation =  $this->organisation->getOrganisation();
         $deliveryNote = new DeliveryNote();
 
         // Vérification si fournisseur du BL en session
         $providerId = $session->get('providerId', null);
         if ($providerId) {
-            $provider = $this->_providerRepository->findOneBy(['id' => $providerId]);
+            $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
         }
 
         // Gestion du numéro du BL en session
@@ -137,12 +141,12 @@ class DeliveryNoteController extends AbstractController
         if ($panier) {
             foreach ($panier as $id => $quantity) {
                 $deliveryNotePart = new DeliveryNotePart();
-                $part = $this->_partRepository->find($id);
+                $part = $this->partRepository->find($id);
                 $deliveryNotePart->setPart($part);
                 $deliveryNotePart->setQuantity($quantity);
                 $deliveryNote->addDeliveryNotePart($deliveryNotePart);
             }
-            $this->_manager->persist($deliveryNotePart);
+            $this->manager->persist($deliveryNotePart);
         }
 
         $form = $this->createForm(DeliveryNoteType::class, $deliveryNote);
@@ -159,7 +163,7 @@ class DeliveryNoteController extends AbstractController
             $deliveryNote->setOrganisation($organisation);
             $deliveryNote->setUser($user);
 
-            $this->_manager->persist($deliveryNote);
+            $this->manager->persist($deliveryNote);
 
             // Modification du stock de pièces détachées 
             // et du nombre de pièces en commande
@@ -186,71 +190,76 @@ class DeliveryNoteController extends AbstractController
                 }
             }
 
-            $this->_manager->persist($deliveryNote);
-            $this->_manager->flush();
+            $this->manager->persist($deliveryNote);
+            $this->manager->flush();
 
             // Effacement du panier de pièces détachées
             $session->remove('panier');
 
             return $this->redirectToRoute(
-                'delivery_note_show', [
-                'id' => $deliveryNote->getId(),
-                ], Response::HTTP_SEE_OTHER
+                'delivery_note_show',
+                [
+                    'id' => $deliveryNote->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
             );
         }
 
         if (isset($provider)) {
             return $this->renderForm(
-                'delivery_note/new.html.twig', [
-                'form' => $form,
-                'provider' => $provider,
-                'mode' => 'newDeliveryNote',
+                'delivery_note/new.html.twig',
+                [
+                    'form' => $form,
+                    'provider' => $provider,
+                    'mode' => 'newDeliveryNote',
                 ]
             );
         }
 
         return $this->renderForm(
-            'delivery_note/new.html.twig', [
-            'deliveryNote' => $deliveryNote,
-            'form' => $form,
-            'mode' => 'newDeliveryNote',
+            'delivery_note/new.html.twig',
+            [
+                'deliveryNote' => $deliveryNote,
+                'form' => $form,
+                'mode' => 'newDeliveryNote',
             ]
         );
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/{id}', 
-        name: 'delivery_note_show', 
-        methods:["GET"]
+        '/{id}',
+        name: 'delivery_note_show',
+        methods: ["GET"]
     )]
     public function show(DeliveryNote $deliveryNote): Response
     {
         return $this->render(
-            'delivery_note/show.html.twig', [
-            'delivery_note' => $deliveryNote,
+            'delivery_note/show.html.twig',
+            [
+                'delivery_note' => $deliveryNote,
             ]
         );
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/{id}/edit/{providerId?}', 
-        name: 'delivery_note_edit', 
-        methods:["GET","POST"]
+        '/{id}/edit/{providerId?}',
+        name: 'delivery_note_edit',
+        methods: ["GET", "POST"]
     )]
     public function edit(
-        Request $request, 
-        DeliveryNote $deliveryNote, 
+        Request $request,
+        DeliveryNote $deliveryNote,
         ?int $providerId = null
     ): Response {
-        $session = $this->_requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
         if ($providerId) {
-            $provider = $this->_providerRepository->findOneById($providerId);
+            $provider = $this->providerRepository->findOneById($providerId);
             $deliveryNote->setProvider($provider);
-            $this->_manager->flush();
+            $this->manager->flush();
         }
 
         // Traitement des pièces du panier
@@ -267,12 +276,12 @@ class DeliveryNoteController extends AbstractController
             }
             if ($flag) {
                 $deliveryNotePart = new DeliveryNotePart();
-                $part = $this->_partRepository->find($id);
+                $part = $this->partRepository->find($id);
                 $deliveryNotePart->setPart($part);
                 $deliveryNotePart->setQuantity($qte);
                 $deliveryNote->addDeliveryNotePart($deliveryNotePart);
             }
-            $this->_manager->flush();
+            $this->manager->flush();
 
             // Après traitement -> suppression du panier
             $session->remove('panier');
@@ -313,8 +322,8 @@ class DeliveryNoteController extends AbstractController
                         $part->getPart()->getStock()->setQteStock($qteStock + $qte);
                         if ($part->getQuantity() == 0) {
                             $deliveryNote->removeDeliveryNotePart($part);
-                            $this->_manager->remove($part);
-                            $this->_manager->flush();
+                            $this->manager->remove($part);
+                            $this->manager->flush();
                         }
                         $flag = false;
                     }
@@ -327,54 +336,56 @@ class DeliveryNoteController extends AbstractController
                 }
             }
             $session->remove('oldParts');
-            $this->_manager->flush();
+            $this->manager->flush();
 
 
             return $this->redirectToRoute(
-                'delivery_note_show', [
-                'id' => $deliveryNote->getId(),
-                ], Response::HTTP_SEE_OTHER
+                'delivery_note_show',
+                [
+                    'id' => $deliveryNote->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'delivery_note/edit.html.twig', [
-            'deliveryNote' => $deliveryNote,
-            'form' => $form,
-            'mode' => 'editDeliveryNote'
+            'delivery_note/edit.html.twig',
+            [
+                'deliveryNote' => $deliveryNote,
+                'form' => $form,
+                'mode' => 'editDeliveryNote'
             ]
         );
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'delivery_note_delete', methods:["POST"])]
+    #[Route('/{id}', name: 'delivery_note_delete', methods: ["POST"])]
     public function delete(Request $request, DeliveryNote $deliveryNote): Response
     {
         if ($this->isCsrfTokenValid(
-            'delete' . $deliveryNote->getId(), 
+            'delete' . $deliveryNote->getId(),
             $request->request->get('_token')
-        )
-        ) {
-            $this->_manager->remove($deliveryNote);
-            $this->_manager->flush();
+        )) {
+            $this->manager->remove($deliveryNote);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute(
-            'delivery_note_index', 
-            [], 
+            'delivery_note_index',
+            [],
             Response::HTTP_SEE_OTHER
         );
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/{id}/removePart/{partId}', 
-        name: 'delivery_note_delete_part', 
-        methods:["GET"]
+        '/{id}/removePart/{partId}',
+        name: 'delivery_note_delete_part',
+        methods: ["GET"]
     )]
     public function removePart(
-        Request $request, 
-        DeliveryNote $deliveryNote, 
+        Request $request,
+        DeliveryNote $deliveryNote,
         int $partId
     ): Response {
         $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
@@ -387,16 +398,18 @@ class DeliveryNoteController extends AbstractController
                 } else {
                     $deliveryNote->removeDeliveryNotePart($part);
                 }
-                $this->_manager->persist($part);
+                $this->manager->persist($part);
             }
         }
-        $this->_manager->persist($deliveryNote);
-        $this->_manager->flush();
+        $this->manager->persist($deliveryNote);
+        $this->manager->flush();
 
         return $this->redirectToRoute(
-            'delivery_note_show', [
-            'id' => $deliveryNote->getId()
-            ], Response::HTTP_SEE_OTHER
+            'delivery_note_show',
+            [
+                'id' => $deliveryNote->getId()
+            ],
+            Response::HTTP_SEE_OTHER
         );
     }
 
@@ -404,13 +417,13 @@ class DeliveryNoteController extends AbstractController
      * Mise en session du numéro du BL
      */
     #[Route(
-        '/saveNumber/{deliveryNoteNumber?}', 
-        name: 'save_number_in_session', 
-        methods:["GET"]
+        '/saveNumber/{deliveryNoteNumber?}',
+        name: 'save_number_in_session',
+        methods: ["GET"]
     )]
     public function deliveryNoteNumberSession(?string $deliveryNoteNumber)
     {
-        $session = $this->_requestStack->getSession();
+        $session = $this->requestStack->getSession();
         if ($deliveryNoteNumber === null) {
             $session->remove('deliveryNoteNumber');
         } else {
@@ -423,13 +436,13 @@ class DeliveryNoteController extends AbstractController
      * Mise en session de la date du BL
      */
     #[Route(
-        '/saveDate/{deliveryNoteDate?}', 
-        name: 'save_date_in_session', 
-        methods:["GET"]
+        '/saveDate/{deliveryNoteDate?}',
+        name: 'save_date_in_session',
+        methods: ["GET"]
     )]
     public function deliveryNoteDateSession(?string $deliveryNoteDate)
     {
-        $session = $this->_requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->set('deliveryNoteDate', $deliveryNoteDate);
         return $this->json(['code' => 200, 'message' => $deliveryNoteDate], 200);
     }
@@ -439,27 +452,27 @@ class DeliveryNoteController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/label/{id}', 
-        name: 'label_print', 
-        methods:["GET"]
+        '/label/{id}',
+        name: 'label_print',
+        methods: ["GET"]
     )]
     public function printLabel(
-        DeliveryNote $deliveryNote, 
+        DeliveryNote $deliveryNote,
         PdfService $pdfService
     ): Response {
         $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
 
-            $html = $this->renderView(
-                'prints/multi_label_print.html.twig',
-                ['deliveryNoteParts' => $deliveryNoteParts]
-            );
+        $html = $this->renderView(
+            'prints/multi_label_print.html.twig',
+            ['deliveryNoteParts' => $deliveryNoteParts]
+        );
 
         $pdfService->printLabel($html);
 
-            return new Response(
-                '', 
-                200, 
-                ['Content-Type' => 'application/pdf']
-            );
+        return new Response(
+            '',
+            200,
+            ['Content-Type' => 'application/pdf']
+        );
     }
 }
