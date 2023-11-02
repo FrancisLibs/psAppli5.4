@@ -24,13 +24,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/machine")
  */
+
 class MachineController extends AbstractController
 {
-    private $_machineRepository;
-    private $_manager;
-    private $_requestStack;
-    private $_workorderRepository;
-    private $_organisation;
+    protected $machineRepository;
+    protected $manager;
+    protected $requestStack;
+    protected $workorderRepository;
+    protected $organisation;
 
 
     public function __construct(
@@ -40,11 +41,11 @@ class MachineController extends AbstractController
         WorkorderRepository $workorderRepository, 
         RequestStack $requestStack
     ) {
-        $this->_machineRepository = $machineRepository;
-        $this->_workorderRepository = $workorderRepository;
-        $this->_manager = $manager;
-        $this->_requestStack = $requestStack;
-        $this->_organisation = $organisation;
+        $this->machineRepository = $machineRepository;
+        $this->workorderRepository = $workorderRepository;
+        $this->manager = $manager;
+        $this->requestStack = $requestStack;
+        $this->organisation = $organisation;
     }
 
 
@@ -65,7 +66,7 @@ class MachineController extends AbstractController
         ?int $documentId = null
     ): Response {
         $machinesWithData = [];
-        $session = $this->_requestStack->getSession();
+        $session = $this->requestStack->getSession();
 
         // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
@@ -74,7 +75,7 @@ class MachineController extends AbstractController
             // If machines in session
             if ($machines) {
                 foreach ($machines as $id) {
-                    $machinesWithData[] = $this->_machineRepository->find($id);
+                    $machinesWithData[] = $this->machineRepository->find($id);
                 }
             }
         }
@@ -90,7 +91,7 @@ class MachineController extends AbstractController
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchMachineForm::class, $data);
         $form->handleRequest($request);
-        $machines = $this->_machineRepository->findSearch($data);
+        $machines = $this->machineRepository->findSearch($data);
 
         if ($request->get('ajax') && ($mode == 'newWorkorder' || $mode == null)) {
             return new JsonResponse(
@@ -195,12 +196,12 @@ class MachineController extends AbstractController
     )]
     public function new(Request $request, ?int $parentId): Response
     {
-        $organisation =  $this->_organisation->getOrganisation();
+        $organisation =  $this->organisation->getOrganisation();
 
         $machine = new Machine();
 
         if ($parentId) {
-            $parent = $this->_machineRepository->find($parentId);
+            $parent = $this->machineRepository->find($parentId);
             if ($parent->getChildLevel() == 0) {
                 $machine->setWorkshop($parent->getWorkshop());
                 $machine->setChildLevel(1);
@@ -229,8 +230,8 @@ class MachineController extends AbstractController
             $machine->setDesignation(mb_strtoupper($machine->getDesignation()));
             $machine->setActive(true);
             $machine->setOrganisation($organisation);
-            $this->_manager->persist($machine);
-            $this->_manager->flush();
+            $this->manager->persist($machine);
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'machine_index', 
@@ -262,14 +263,14 @@ class MachineController extends AbstractController
 
     private function _readWorkorders($searchIndicator, $machineId)
     {
-        $organisationId =  $this->_organisation->getOrganisation()->getId();
+        $organisationId =  $this->organisation->getOrganisation()->getId();
 
         if (empty($searchIndicator->startDate)) {
             $searchIndicator->startDate = new \DateTime('2022/01/01');
             $searchIndicator->endDate = new \DateTime('2023/12/31');
         };
 
-        return $workorders = $this->_workorderRepository->findAllWorkordersByMachine(
+        return $workorders = $this->workorderRepository->findAllWorkordersByMachine(
             $organisationId, 
             $searchIndicator, 
             $machineId
@@ -439,7 +440,7 @@ class MachineController extends AbstractController
             $machine->setInternalCode(strtoupper($machine->getInternalCode()));
             $machine->setConstructor(strtoupper($machine->getConstructor()));
             $machine->setDesignation(mb_strtoupper($machine->getDesignation()));
-            $this->_manager->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'machine_show', [
@@ -467,7 +468,7 @@ class MachineController extends AbstractController
         $token = $request->request->get('_token');
         if ($this->isCsrfTokenValid('delete' . $machine->getId(), $token)) {
             $machine->setActive(false);
-            $this->_manager->flush();
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute('machine_index', [], Response::HTTP_SEE_OTHER);
@@ -494,8 +495,8 @@ class MachineController extends AbstractController
             $newMachine->setCreatedAt(new \Datetime());
 
 
-            $this->_manager->persist($newMachine);
-            $this->_manager->flush();
+            $this->manager->persist($newMachine);
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'machine_show',
