@@ -44,7 +44,7 @@ class CartController extends AbstractController
      * Appel de la liste des pièces à ajouter au panier
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/add_part/{documentId?}/{mode?}', name: 'add_part', methods:["GET"])]
+    #[Route('/add_part/{documentId?}/{mode?}', name: 'add_part', methods: ["GET"])]
     public function addPart(?int $documentId, ?string $mode): Response
     {
         $session = $this->_requestStack->getSession();
@@ -102,8 +102,8 @@ class CartController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/add/workOrder/{id}/{mode}/{documentId?}', name: 'cart_add_workorder')]
     public function addWorkorderPart(
-        Part $part, 
-        string $mode, 
+        Part $part,
+        string $mode,
         ?int $documentId = null
     ): RedirectResponse {
         $session = $this->_requestStack->getSession();
@@ -149,12 +149,12 @@ class CartController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/add/deliveryNote/{id}/{mode}/{documentId?}', 
+        '/add/deliveryNote/{id}/{mode}/{documentId?}',
         name: 'cart_add_delivery_note'
     )]
     public function addDeliveryWorkPart(
-        int $id, 
-        string $mode, 
+        int $id,
+        string $mode,
         ?int $documentId
     ): RedirectResponse {
         $session = $this->_requestStack->getSession();
@@ -182,7 +182,7 @@ class CartController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/remove/{id}/{mode}/{documentId?}', 
+        '/remove/{id}/{mode}/{documentId?}',
         name: 'cart_remove'
     )]
     public function remove(int $id, string $mode, ?int $documentId): RedirectResponse
@@ -210,7 +210,7 @@ class CartController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/empty/{mode}/{documentId?}', 
+        '/empty/{mode}/{documentId?}',
         name: 'cart_empty'
     )]
     public function empty(string $mode, ?int $documentId): RedirectResponse
@@ -232,7 +232,7 @@ class CartController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/validation/{mode}/{documentId?}', 
+        '/validation/{mode}/{documentId?}',
         name: 'cart_valid'
     )]
     public function valid(string $mode, ?int $documentId): RedirectResponse
@@ -265,9 +265,9 @@ class CartController extends AbstractController
 
                         // Modification de la valeur de pièces sur le BT
                         $workorder->setPartsPrice(
-                            $workorder->getPartsPrice() 
-                            + 
-                            ($part->getSteadyPrice() * $qte)
+                            $workorder->getPartsPrice()
+                                +
+                                ($part->getSteadyPrice() * $qte)
                         );
 
                         // Ecriture en bdd
@@ -302,7 +302,7 @@ class CartController extends AbstractController
 
         if ($mode == "editDeliveryNote") {
             return $this->redirectToRoute(
-                'delivery_note_edit', 
+                'delivery_note_edit',
                 ['id' => $documentId]
             );
         }
@@ -314,9 +314,10 @@ class CartController extends AbstractController
 
         if ($mode == "workorderAddPart") {
             return $this->redirectToRoute(
-                'work_order_show', [
-                'id' => $documentId,
-                'mode' => $mode,
+                'work_order_show',
+                [
+                    'id' => $documentId,
+                    'mode' => $mode,
                 ]
             );
         }

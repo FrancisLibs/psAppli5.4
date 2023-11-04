@@ -17,12 +17,12 @@ class AdminController extends AbstractController
      *
      * @return          RedirectResponse|Response
      */
-    #[Route("/admin", name: "admin", methods:['GET'])]
+    #[Route("/admin", name: "admin", methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
         return $this->render(
-            'admin/index.html.twig', 
+            'admin/index.html.twig',
             ['controller_name' => 'AdminController']
         );
     }

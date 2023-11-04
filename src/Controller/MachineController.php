@@ -35,10 +35,10 @@ class MachineController extends AbstractController
 
 
     public function __construct(
-        OrganisationService $organisation, 
-        MachineRepository $machineRepository, 
-        EntityManagerInterface $manager, 
-        WorkorderRepository $workorderRepository, 
+        OrganisationService $organisation,
+        MachineRepository $machineRepository,
+        EntityManagerInterface $manager,
+        WorkorderRepository $workorderRepository,
         RequestStack $requestStack
     ) {
         $this->machineRepository = $machineRepository;
@@ -51,18 +51,18 @@ class MachineController extends AbstractController
 
     /**
      * @ Liste des machines
-     * 
+     *
      * @param Request $request
      * @param string  $mode
      * @param int     $documentId
-     * 
+     *
      * @return Response
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/list/{mode?}/{documentId?}', name: 'machine_index', methods:["GET"])]
+    #[Route('/list/{mode?}/{documentId?}', name: 'machine_index', methods: ["GET"])]
     public function index(
-        Request $request, 
-        ?string $mode = null, 
+        Request $request,
+        ?string $mode = null,
         ?int $documentId = null
     ): Response {
         $machinesWithData = [];
@@ -70,7 +70,7 @@ class MachineController extends AbstractController
 
         // En mode "selectPreventive" ou "editpreventive"
         // on cherche les machines qu'on a mises dans la session
-        if ($mode == "selectPreventive" || $mode == 'editPreventive') {
+        if ($mode === "selectPreventive" || $mode === 'editPreventive') {
             $machines = $session->get('machines');
             // If machines in session
             if ($machines) {
@@ -79,9 +79,9 @@ class MachineController extends AbstractController
                 }
             }
         }
-        // Reprise de l'ancienne recherche lors 
+        // Reprise de l'ancienne recherche lors
         // de la selection des machines pour un préventif
-        $dataMachinePreventive = $session->get('dataMachinePreventive');
+        // $dataMachinePreventive = $session->get('dataMachinePreventive');
         $data = new SearchMachine();
 
         // if ($mode == "selectPreventive" && $dataMachinePreventive) {
@@ -93,65 +93,70 @@ class MachineController extends AbstractController
         $form->handleRequest($request);
         $machines = $this->machineRepository->findSearch($data);
 
-        if ($request->get('ajax') && ($mode == 'newWorkorder' || $mode == null)) {
+        if ($request->get('ajax') && ($mode === 'newWorkorder' || $mode === null)) {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'machine/_machines.html.twig', 
-                    ['machines' => $machines, 'mode' => $mode]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'machine/_sorting.html.twig', 
-                    ['machines' => $machines]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'machine/_pagination.html.twig', 
-                    ['machines' => $machines]
-                ),
+                    'content'       =>  $this->renderView(
+                        'machine/_machines.html.twig',
+                        ['machines' => $machines, 'mode' => $mode]
+                    ),
+                    'sorting'       =>  $this->renderView(
+                        'machine/_sorting.html.twig',
+                        ['machines' => $machines]
+                    ),
+                    'pagination'    =>  $this->renderView(
+                        'machine/_pagination.html.twig',
+                        ['machines' => $machines]
+                    ),
                 ]
             );
         }
 
-        if ($request->get('ajax') && $mode == 'modif') {
+        if ($request->get('ajax') && $mode === 'modif') {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'machine/_machines.html.twig', 
-                    ['machines' => $machines, 
-                    'mode' => $mode, 
-                    'documentId' => $documentId]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'machine/_sorting.html.twig', 
-                    ['machines' => $machines]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'machine/_pagination.html.twig', 
-                    ['machines' => $machines]
-                ),
+                    'content' =>  $this->renderView(
+                        'machine/_machines.html.twig',
+                        [
+                            'machines' => $machines,
+                            'mode' => $mode,
+                            'documentId' => $documentId
+                        ]
+                    ),
+                    'sorting' =>  $this->renderView(
+                        'machine/_sorting.html.twig',
+                        ['machines' => $machines]
+                    ),
+                    'pagination' =>  $this->renderView(
+                        'machine/_pagination.html.twig',
+                        ['machines' => $machines]
+                    ),
                 ]
             );
         }
 
-        if ($request->get('ajax') 
-            && ($mode == 'selectPreventive' || $mode = 'editPreventive')
+        if (
+            $request->get('ajax')
+            && ($mode === 'selectPreventive' || $mode === 'editPreventive')
         ) {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'machine/_machines.html.twig', 
-                    ['machines' => $machines, 
-                    'mode' => $mode, 
-                    'documentId' => $documentId]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'machine/_sorting.html.twig', 
-                    ['machines' => $machines]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'machine/_pagination.html.twig', 
-                    ['machines' => $machines]
-                ),
+                    'content' =>  $this->renderView(
+                        'machine/_machines.html.twig',
+                        [
+                            'machines' => $machines,
+                            'mode' => $mode,
+                            'documentId' => $documentId
+                        ]
+                    ),
+                    'sorting' =>  $this->renderView(
+                        'machine/_sorting.html.twig',
+                        ['machines' => $machines]
+                    ),
+                    'pagination' =>  $this->renderView(
+                        'machine/_pagination.html.twig',
+                        ['machines' => $machines]
+                    ),
                 ]
             );
         }
@@ -159,30 +164,33 @@ class MachineController extends AbstractController
         if ($request->get('ajax')) {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'machine/_machines.html.twig', 
-                    ['machines' => $machines, 
-                    'mode' => null]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'machine/_sorting.html.twig', 
-                    ['machines' => $machines]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'machine/_pagination.html.twig', 
-                    ['machines' => $machines]
-                ),
+                    'content' =>  $this->renderView(
+                        'machine/_machines.html.twig',
+                        [
+                            'machines' => $machines,
+                            'mode' => null
+                        ]
+                    ),
+                    'sorting' =>  $this->renderView(
+                        'machine/_sorting.html.twig',
+                        ['machines' => $machines]
+                    ),
+                    'pagination' =>  $this->renderView(
+                        'machine/_pagination.html.twig',
+                        ['machines' => $machines]
+                    ),
                 ]
             );
         }
 
         return $this->render(
-            'machine/index.html.twig', [
-            'machines'          =>  $machines,
-            'form'              =>  $form->createView(),
-            'mode'              =>  $mode,
-            'documentId'        =>  $documentId,
-            'machinesWithData'  =>  $machinesWithData,
+            'machine/index.html.twig',
+            [
+                'machines' => $machines,
+                'form' => $form->createView(),
+                'mode' => $mode,
+                'documentId' => $documentId,
+                'machinesWithData' => $machinesWithData,
 
             ]
         );
@@ -190,9 +198,9 @@ class MachineController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/new/{parentId?}', 
+        '/new/{parentId?}',
         name: 'machine_new',
-        methods:["GET","POST"]
+        methods: ["GET", "POST"]
     )]
     public function new(Request $request, ?int $parentId): Response
     {
@@ -202,18 +210,18 @@ class MachineController extends AbstractController
 
         if ($parentId) {
             $parent = $this->machineRepository->find($parentId);
-            if ($parent->getChildLevel() == 0) {
+            if ($parent->getChildLevel() === 0) {
                 $machine->setWorkshop($parent->getWorkshop());
                 $machine->setChildLevel(1);
                 $machine->setParent($parent);
             } else {
-                $this->get('session')->getFlashBag()->set(
-                    'error', 
+                $this->addFlash(
+                    'error',
                     'Une machine ne peut avoir qu\'un seul sous-niveau'
                 );
                 return $this->redirectToRoute(
-                    'machine_index', 
-                    [], 
+                    'machine_index',
+                    [],
                     Response::HTTP_SEE_OTHER
                 );
             }
@@ -234,16 +242,17 @@ class MachineController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToRoute(
-                'machine_index', 
+                'machine_index',
                 [],
                 Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'machine/new.html.twig', [
-            'machine' => $machine,
-            'form' => $form,
+            'machine/new.html.twig',
+            [
+                'machine' => $machine,
+                'form' => $form,
             ]
         );
     }
@@ -255,15 +264,16 @@ class MachineController extends AbstractController
     public function show(Machine $machine): Response
     {
         return $this->render(
-            'machine/show.html.twig', [
-            'machine' => $machine,
+            'machine/show.html.twig',
+            [
+                'machine' => $machine,
             ]
         );
     }
 
     private function _readWorkorders($searchIndicator, $machineId)
     {
-        $organisationId =  $this->organisation->getOrganisation()->getId();
+        $organisationId = $this->organisation->getOrganisation()->getId();
 
         if (empty($searchIndicator->startDate)) {
             $searchIndicator->startDate = new \DateTime('2022/01/01');
@@ -271,16 +281,16 @@ class MachineController extends AbstractController
         };
 
         return $workorders = $this->workorderRepository->findAllWorkordersByMachine(
-            $organisationId, 
-            $searchIndicator, 
+            $organisationId,
+            $searchIndicator,
             $machineId
         );
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/statistics/{id}', 
-        name: 'machine_statistics', 
+        '/statistics/{id}',
+        name: 'machine_statistics',
         methods: ["GET", "POST"]
     )]
     public function machineStatistics(Machine $machine, Request $request): Response
@@ -374,31 +384,33 @@ class MachineController extends AbstractController
             $months = array_keys($partsValue);
 
             return $this->render(
-                'machine/stats.html.twig', [
-                'form' => $form->createView(),
-                'machine' => $machine,
-                'months' =>  json_encode($months),
-                'preventiveTime' =>  json_encode($preventiveTime),
-                'curativeTime' => json_encode($curativeTime),
-                'partsValue' => json_encode($partsValue),
-                'totalWorkorder' => $totalWorkorders,
-                'totalPreventive' => $totalPreventive,
-                'totalCurative' => $totalCurative,
+                'machine/stats.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'machine' => $machine,
+                    'months' =>  json_encode($months),
+                    'preventiveTime' => json_encode($preventiveTime),
+                    'curativeTime' => json_encode($curativeTime),
+                    'partsValue' => json_encode($partsValue),
+                    'totalWorkorder' => $totalWorkorders,
+                    'totalPreventive' => $totalPreventive,
+                    'totalCurative' => $totalCurative,
                 ]
             );
         }
 
         return $this->render(
-            'machine/stats.html.twig', [
-            'form' => $form->createView(),
-            'machine' => $machine,
-            'months' =>  null,
-            'preventiveTime' => null,
-            'curativeTime' => null,
-            'partsValue' => null,
-            'totalWorkorder' => $totalWorkorders,
-            'totalPreventive' => $totalPreventive,
-            'totalCurative' => $totalCurative,
+            'machine/stats.html.twig',
+            [
+                'form' => $form->createView(),
+                'machine' => $machine,
+                'months' => null,
+                'preventiveTime' => null,
+                'curativeTime' => null,
+                'partsValue' => null,
+                'totalWorkorder' => $totalWorkorders,
+                'totalPreventive' => $totalPreventive,
+                'totalCurative' => $totalCurative,
             ]
         );
     }
@@ -427,8 +439,8 @@ class MachineController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/edit/{id}', 
-        name: 'machine_edit', 
+        '/edit/{id}',
+        name: 'machine_edit',
         methods: ["GET", "POST"]
     )]
     public function edit(Request $request, Machine $machine): Response
@@ -443,24 +455,27 @@ class MachineController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToRoute(
-                'machine_show', [
-                'id' => $machine->getId(),
-                ], Response::HTTP_SEE_OTHER
+                'machine_show',
+                [
+                    'id' => $machine->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'machine/edit.html.twig', [
-            'machine' => $machine,
-            'form' => $form,
+            'machine/edit.html.twig',
+            [
+                'machine' => $machine,
+                'form' => $form,
             ]
         );
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route(
-        '/delete/{id}', 
-        name: 'machine_delete', 
+        '/delete/{id}',
+        name: 'machine_delete',
         methods: ["POST"]
     )]
     public function delete(Request $request, Machine $machine): Response
@@ -476,9 +491,9 @@ class MachineController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route(
-        '/copy/{id}', 
-        name: 'machine_copy', 
-        methods: ["GET","POST"]
+        '/copy/{id}',
+        name: 'machine_copy',
+        methods: ["GET", "POST"]
     )]
     public function COPY(Request $request, Machine $machine): Response
     {
@@ -508,9 +523,10 @@ class MachineController extends AbstractController
         }
 
         return $this->renderForm(
-            'machine/edit.html.twig', [
-            'machine' => $machine,
-            'form' => $form,
+            'machine/edit.html.twig',
+            [
+                'machine' => $machine,
+                'form' => $form,
             ]
         );
     }
