@@ -68,8 +68,8 @@ class MachineController extends AbstractController
         $machinesWithData = [];
         $session = $this->requestStack->getSession();
 
-        // En mode "selectPreventive" ou "editpreventive"
-        // on cherche les machines qu'on a mises dans la session
+        // En mode "selectPreventive" ou "editpreventive".
+        // on cherche les machines qu'on a mises dans la session.
         if ($mode === "selectPreventive" || $mode === 'editPreventive') {
             $machines = $session->get('machines');
             // If machines in session
@@ -79,8 +79,8 @@ class MachineController extends AbstractController
                 }
             }
         }
-        // Reprise de l'ancienne recherche lors
-        // de la selection des machines pour un préventif
+        // Reprise de l'ancienne recherche lors.
+        // de la selection des machines pour un préventif.
         // $dataMachinePreventive = $session->get('dataMachinePreventive');
         $data = new SearchMachine();
 
@@ -96,15 +96,15 @@ class MachineController extends AbstractController
         if ($request->get('ajax') && ($mode === 'newWorkorder' || $mode === null)) {
             return new JsonResponse(
                 [
-                    'content'       =>  $this->renderView(
+                    'content' =>  $this->renderView(
                         'machine/_machines.html.twig',
                         ['machines' => $machines, 'mode' => $mode]
                     ),
-                    'sorting'       =>  $this->renderView(
+                    'sorting' =>  $this->renderView(
                         'machine/_sorting.html.twig',
                         ['machines' => $machines]
                     ),
-                    'pagination'    =>  $this->renderView(
+                    'pagination' =>  $this->renderView(
                         'machine/_pagination.html.twig',
                         ['machines' => $machines]
                     ),
@@ -141,7 +141,7 @@ class MachineController extends AbstractController
         ) {
             return new JsonResponse(
                 [
-                    'content' =>  $this->renderView(
+                    'content' => $this->renderView(
                         'machine/_machines.html.twig',
                         [
                             'machines' => $machines,
@@ -149,11 +149,11 @@ class MachineController extends AbstractController
                             'documentId' => $documentId
                         ]
                     ),
-                    'sorting' =>  $this->renderView(
+                    'sorting' => $this->renderView(
                         'machine/_sorting.html.twig',
                         ['machines' => $machines]
                     ),
-                    'pagination' =>  $this->renderView(
+                    'pagination' => $this->renderView(
                         'machine/_pagination.html.twig',
                         ['machines' => $machines]
                     ),
@@ -164,18 +164,18 @@ class MachineController extends AbstractController
         if ($request->get('ajax')) {
             return new JsonResponse(
                 [
-                    'content' =>  $this->renderView(
+                    'content' => $this->renderView(
                         'machine/_machines.html.twig',
                         [
                             'machines' => $machines,
                             'mode' => null
                         ]
                     ),
-                    'sorting' =>  $this->renderView(
+                    'sorting' => $this->renderView(
                         'machine/_sorting.html.twig',
                         ['machines' => $machines]
                     ),
-                    'pagination' =>  $this->renderView(
+                    'pagination' => $this->renderView(
                         'machine/_pagination.html.twig',
                         ['machines' => $machines]
                     ),
@@ -204,7 +204,7 @@ class MachineController extends AbstractController
     )]
     public function new(Request $request, ?int $parentId): Response
     {
-        $organisation =  $this->organisation->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
 
         $machine = new Machine();
 
@@ -298,7 +298,7 @@ class MachineController extends AbstractController
         $machineId = $machine->getId();
         $searchIndicator = new SearchIndicator();
 
-        // Comptage du nombre de BT
+        // Comptage du nombre de BT.
         $totalWorkorders = 0;
         $totalPreventive = 0;
         $totalCurative = 0;
@@ -312,11 +312,11 @@ class MachineController extends AbstractController
             }
         }
 
-        // Temps de Travail préventif/mois
+        // Temps de Travail préventif/mois.
         $preventiveTime = [];
-        // Temps de travail curatif/mois
+        // Temps de travail curatif/mois.
         $curativeTime = [];
-        // Prix des pièces/mois
+        // Prix des pièces/mois.
         $partsValue = [];
 
         $form = $this->createForm(SearchIndicatorType::class, $searchIndicator);
@@ -330,14 +330,14 @@ class MachineController extends AbstractController
             foreach ($workorders as $workorder) {
                 if (!is_null($workorder->getStartDate())) {
 
-                    // Mois du BT
+                    // Mois du BT.
                     $workorderDateMonth = $workorder->getStartDate()->format('m');
                     $workorderDateYear = (int)$workorder
                         ->getStartDate()
                         ->format('y');
                     $monthNumber = $workorderDateYear . "/" . $workorderDateMonth;
 
-                    // Prix des pièces
+                    // Prix des pièces.
                     $parts = $workorder->getPartsPrice();
 
                     if (array_key_exists($monthNumber, $partsValue)) {
@@ -346,7 +346,7 @@ class MachineController extends AbstractController
                         $partsValue[$monthNumber] = $parts;
                     }
 
-                    // Temps de travail
+                    // Temps de travail.
                     $time = $this->_manageTime($workorder);
 
                     if ($workorder->getpreventive()) {
@@ -365,7 +365,7 @@ class MachineController extends AbstractController
                 }
             }
 
-            // Sort of array and inverting months number
+            // Sort of array and inverting months number.
             $columns = array_keys($partsValue);
             array_multisort($columns, SORT_ASC, SORT_REGULAR, $partsValue);
             $partsValue = $this->_invertingMonthNumber($partsValue);
@@ -388,7 +388,7 @@ class MachineController extends AbstractController
                 [
                     'form' => $form->createView(),
                     'machine' => $machine,
-                    'months' =>  json_encode($months),
+                    'months' => json_encode($months),
                     'preventiveTime' => json_encode($preventiveTime),
                     'curativeTime' => json_encode($curativeTime),
                     'partsValue' => json_encode($partsValue),

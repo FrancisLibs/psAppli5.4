@@ -68,12 +68,12 @@ class DefaultController extends AbstractController
         $organisation = $this->_organisation->getOrganisation();
         $organisationId = $organisation->getId();
         $serviceId = $user->getService()->getId();
-        $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour
-        $oneWeek = (new \DateInterval('P7D')); // 'P7D' = 7jour
+        $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour.
+        $oneWeek = (new \DateInterval('P7D')); // 'P7D' = 7jour.
 
         $this->_userConnexionService->registration($user);
 
-        // Lecture des dates de vérification cherchées dans le fichier des paramètres
+        // Lecture des dates de vérification cherchées dans le fichier des paramètres.
 
         $params = $this->_paramsRepository->find(1);
         $lastDate = new \DateTime();
@@ -82,35 +82,35 @@ class DefaultController extends AbstractController
         )->add($oneDay);
         $today = (new \DateTime());
 
-        // Gestion des bons de travail préventifs : Vérification à chaque connexion,
-        // Rajout d'1 jour à la date enregistrée pour ne vérifier qu'une fois/jour
+        // Gestion des bons de travail préventifs : Vérification à chaque connexion.
+        // Rajout d'1 jour à la date enregistrée pour ne vérifier qu'une fois/jour.
 
-        // Test si traitement possible (1 fois /jour à la première connexion)
-        // Si today est supérieur à lancienne date + 1 jour
+        // Test si traitement possible (1 fois /jour à la première connexion).
+        // Si today est supérieur à lancienne date + 1 jour.
 
         //if ($today >= $lastDate) {
         if ($today >= $lastDate) {
-            // Traitement des préventifs à ajouter si nécessaire
+            // Traitement des préventifs à ajouter si nécessaire.
             $this->_preventiveService->preventiveProcessing($organisationId);
 
-            // Surveillance des status des préventifs en cours selon leurs paramètres
+            // Surveillance des status des préventifs en cours selon leurs paramètres.
             $this->_preventiveStatusService->setPreventiveStatus($organisationId);
 
-            // Changement de la date du dernier traitement
+            // Changement de la date du dernier traitement.
             $params->setLastPreventiveDate(new \DateTime());
             $this->_manager->persist($params);
             $this->_manager->flush();
         }
 
-        // Gestion de l'enregistrement de la valeur du stock, 
-        // une fois par semaine-------
+        // Gestion de l'enregistrement de la valeur du stock .
+        // une fois par semaine-------.
         $lastStockValueDate = new \DateTime();
         $lastStockValueDate->setTimestamp(
             $params->getLastStockValueDate()->getTimestamp()
         );
         $lastStockValueDate->add($oneWeek);
 
-        // Si la date du jour est >= d'une semaine à l'ancienne date
+        // Si la date du jour est >= d'une semaine à l'ancienne date.
         if ($today >= $lastStockValueDate) {
             $this->_stockValueService->computeStockValue(
                 $organisation,
@@ -119,9 +119,9 @@ class DefaultController extends AbstractController
             );
         }
 
-        // ------------------------------------------------------------------------------
-        // Récupération des utilisateurs pour l'affichage des photos
-        // Par organisation ET service
+        // ----------------------------------------------------------.
+        // Récupération des utilisateurs pour l'affichage des photos.
+        // Par organisation ET service.
         $users = $this->_userRepository->findBy(
             [
                 'organisation' => $organisationId,

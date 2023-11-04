@@ -67,8 +67,8 @@ class DeliveryNoteController extends AbstractController
         $data->organisation = $organisation;
         $data->page = $request->get('page', 1);
 
-        // Effacement du fournisseur, des pièces détachées, 
-        // de la date et fournisseur en session
+        // Effacement du fournisseur, des pièces détachées.
+        // de la date et fournisseur en session.
         $session = $this->requestStack->getSession();
         $session->remove('providerId');
         $session->remove('panier');
@@ -118,25 +118,25 @@ class DeliveryNoteController extends AbstractController
         $organisation =  $this->organisation->getOrganisation();
         $deliveryNote = new DeliveryNote();
 
-        // Vérification si fournisseur du BL en session
+        // Vérification si fournisseur du BL en session.
         $providerId = $session->get('providerId', null);
         if ($providerId) {
             $provider = $this->providerRepository->findOneBy(['id' => $providerId]);
         }
 
-        // Gestion du numéro du BL en session
+        // Gestion du numéro du BL en session.
         $deliveryNoteNumber = $session->get('deliveryNoteNumber', null);
         if ($deliveryNoteNumber) {
             $deliveryNote->setNumber($deliveryNoteNumber);
         }
 
-        // Gestion de la date du BL en session
+        // Gestion de la date du BL en session.
         $deliveryNoteDate = $session->get('deliveryNoteDate', null);
         if ($deliveryNoteDate) {
             $deliveryNote->setDate(new \DateTime($deliveryNoteDate));
         }
 
-        // Gestion des pièces en session
+        // Gestion des pièces en session.
         $panier = $session->get('panier', []);
         if ($panier) {
             foreach ($panier as $id => $quantity) {
@@ -165,8 +165,8 @@ class DeliveryNoteController extends AbstractController
 
             $this->manager->persist($deliveryNote);
 
-            // Modification du stock de pièces détachées 
-            // et du nombre de pièces en commande
+            // Modification du stock de pièces détachées.
+            // et du nombre de pièces en commande.
             $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
             foreach ($deliveryNoteParts as $deliveryNotePart) {
                 $deliveryNotePartQte = $deliveryNotePart->getQuantity();
@@ -193,7 +193,7 @@ class DeliveryNoteController extends AbstractController
             $this->manager->persist($deliveryNote);
             $this->manager->flush();
 
-            // Effacement du panier de pièces détachées
+            // Effacement du panier de pièces détachées.
             $session->remove('panier');
 
             return $this->redirectToRoute(
@@ -283,12 +283,12 @@ class DeliveryNoteController extends AbstractController
             }
             $this->manager->flush();
 
-            // Après traitement -> suppression du panier
+            // Après traitement -> suppression du panier.
             $session->remove('panier');
         }
 
-        // Mise en mémoire des pièces du BL avant modification, 
-        // pour le traitement des pièces détachées
+        // Mise en mémoire des pièces du BL avant modification.
+        // pour le traitement des pièces détachées.
         $oldParts = $session->get('oldParts', null);
         if (!$oldParts) {
             $oldParts = $deliveryNote->getDeliveryNoteParts();
@@ -300,24 +300,23 @@ class DeliveryNoteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 1) Lire les pièces contenues dans le formulaire
+            // 1) Lire les pièces contenues dans le formulaire.
             $parts = $deliveryNote->getDeliveryNoteParts();
 
-            // 2) Boucler sur les pièces de l'ancien BL et 
-            // comparer avec les pièces du formulaire
+            // 2) Boucler sur les pièces de l'ancien BL et comparer avec les pièces du formulaire.
             foreach ($parts as $part) {
                 $flag = true;
                 $id = $part->getPart()->getId();
-                // Quantité actuelle en stock pour la pièce en cours
+                // Quantité actuelle en stock pour la pièce en cours.
                 $qteStock = $part->getPart()->getStock()->getQteStock();
 
                 foreach ($oldParts as $oldPart) {
                     $oldId = $oldPart->getPart()->getId();
 
-                    // Si c'est la même pièce
+                    // Si c'est la même pièce.
                     if ($id == $oldId) {
-                        // $qte est la différence de quantité entre 
-                        // l'ancien BL et celui modifié
+                        // $qte est la différence de quantité entre.
+                        // l'ancien BL et celui modifié.
                         $qte = $part->getQuantity() - $oldPart->getQuantity();
                         $part->getPart()->getStock()->setQteStock($qteStock + $qte);
                         if ($part->getQuantity() == 0) {
@@ -328,7 +327,7 @@ class DeliveryNoteController extends AbstractController
                         $flag = false;
                     }
                 }
-                // C'est une nouvelle pièce
+                // C'est une nouvelle pièce.
                 if ($flag) {
                     $qteStock = $part->getPart()->getStock()->getQteStock();
                     $qte = $part->getQuantity();
