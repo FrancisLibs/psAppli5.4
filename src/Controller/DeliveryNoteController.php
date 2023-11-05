@@ -26,8 +26,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/delivery/note")
  */
+
 class DeliveryNoteController extends AbstractController
 {
+
     protected $manager;
     protected $requestStack;
     protected $deliveryNoteRepo;
@@ -43,8 +45,7 @@ class DeliveryNoteController extends AbstractController
         DeliveryNoteRepository $deliveryNoteRepo,
         ProviderRepository $providerRepository,
         PartRepository $partRepository
-    )     
-    {
+    ) {
         $this->manager = $entityManagerInterface;
         $this->requestStack = $requestStack;
         $this->deliveryNoteRepo = $deliveryNoteRepo;
@@ -81,18 +82,18 @@ class DeliveryNoteController extends AbstractController
 
         $deliveryNotes = $this->deliveryNoteRepo->findSearch($data);
 
-        if ($request->get('ajax')) {
+        if ($request->get('ajax') === true) {
             return new JsonResponse(
                 [
-                    'content'       =>  $this->renderView(
+                    'content' => $this->renderView(
                         'delivery_note/_delivery_notes.html.twig',
                         ['delivery_notes' => $deliveryNotes]
                     ),
-                    'sorting'       =>  $this->renderView(
+                    'sorting' => $this->renderView(
                         'delivery_note/_sorting.html.twig',
                         ['delivery_notes' => $deliveryNotes]
                     ),
-                    'pagination'    =>  $this->renderView(
+                    'pagination' => $this->renderView(
                         'delivery_note/_pagination.html.twig',
                         ['delivery_notes' => $deliveryNotes]
                     ),
@@ -303,7 +304,7 @@ class DeliveryNoteController extends AbstractController
             // 1) Lire les pièces contenues dans le formulaire.
             $parts = $deliveryNote->getDeliveryNoteParts();
 
-            // 2) Boucler sur les pièces de l'ancien BL et comparer avec les pièces du formulaire.
+            // 2) Boucler sur les pièces de l'ancien BL et comp avec les pièces du form.
             foreach ($parts as $part) {
                 $flag = true;
                 $id = $part->getPart()->getId();
@@ -364,7 +365,8 @@ class DeliveryNoteController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $deliveryNote->getId(),
             $request->request->get('_token')
-        )) {
+        )
+        ) {
             $this->manager->remove($deliveryNote);
             $this->manager->flush();
         }
