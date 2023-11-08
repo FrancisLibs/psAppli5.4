@@ -39,7 +39,7 @@ class DeliveryNoteController extends AbstractController
     protected $providerRepository;
 
     protected $partRepository;
-    
+
     protected $organisation;
 
 
@@ -116,7 +116,7 @@ class DeliveryNoteController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/new', name: 'delivery_note_new', methods: ["GET", "POST"])]
+    #[Route('/new', name: 'delivery_note_new', methods: ["GET", "POST"])]    
     public function new(Request $request): Response
     {
         $user = $this->getUser();
@@ -159,7 +159,6 @@ class DeliveryNoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if (empty($provider)) {
                 $this->addFlash('error', 'Tu n\'as pas sélectionné de fournisseur');
                 return $this->redirectToRoute('delivery_note_new');
@@ -305,7 +304,6 @@ class DeliveryNoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // 1) Lire les pièces contenues dans le formulaire.
             $parts = $deliveryNote->getDeliveryNoteParts();
 
