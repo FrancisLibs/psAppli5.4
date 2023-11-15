@@ -1,4 +1,4 @@
-<section>
+<section class="mb-5">
 	<div class="row mt-3">
 		<div class="col-12 col-sm-3 col-md-2">
 			<p class="fw-bold">Code</p>
@@ -73,14 +73,24 @@
 			<p>{{ part.steadyPrice|number_format(2) }}€</p>
 		</div>
 	</div>
-	{% if part.remark %}
-		<div class="row">
-			<div class="col-12 col-sm-3 col-md-2">
-				<p class="fw-bold">Remarque</p>
-			</div>
-			<div class="col-12">
-				<p>{{ part.remark }}</p>
-			</div>
+	<div class="row">
+		<div class="col-12 col-sm-3 col-md-2">
+			<p class="fw-bold">Remarque</p>
 		</div>
-	{% endif %}
+		<div class="col-12">
+			<p>{{ part.remark }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-5 col-sm-3 col-md-2">
+			<p class="fw-bold">Date dernière commande</p>
+		</div>
+		<div class="col-5">
+			{% if part.lastCommandeDate %}
+				<p>{{ part.lastCommandeDate|date('d/m/Y', timezone="Europe/Paris") }}</p>
+			{% else %}
+				<p>Pas de date de commande</p>
+			{% endif %}
+		</div>
+	</div>
 </section>

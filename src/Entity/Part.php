@@ -25,10 +25,9 @@ class Part
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, unique = true)
      * @Assert\NotBlank
-     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")
-     * message="Le code ne respecte pas le format !"
+     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")message="Le code ne respecte pas le format !"
      */
     private $code;
 
@@ -99,6 +98,11 @@ class Part
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $qrCode;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastCommandeDate;
 
     public function __construct()
     {
@@ -346,6 +350,23 @@ class Part
     public function setQrCode(?string $qrCode): self
     {
         $this->qrCode = $qrCode;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function getLastCommandeDate(): ?\DateTimeInterface
+    {
+        return $this->lastCommandeDate;
+    }
+
+    public function setLastCommandeDate(?\DateTimeInterface $lastCommandeDate): self
+    {
+        $this->lastCommandeDate = $lastCommandeDate;
 
         return $this;
     }

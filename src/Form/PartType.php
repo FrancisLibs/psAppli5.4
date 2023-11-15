@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -31,7 +32,7 @@ class PartType extends AbstractType
                 'class'     => Provider::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('p')
-                    ->orderBy('p.name', 'ASC');
+                        ->orderBy('p.name', 'ASC');
                 },
                 'choice_label'   =>  'name',
                 'required'  => false,
@@ -42,7 +43,16 @@ class PartType extends AbstractType
                 'required' => false,
 
             ])
-        ;
+            ->add(
+                'lastCommandeDate',
+                DateType::class,
+                [
+                    'input' => 'datetime',
+                    'label' => 'Date de commande',
+                    'widget' => 'single_text',
+                    'required'  => false,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
