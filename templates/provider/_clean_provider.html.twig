@@ -1,0 +1,40 @@
+{{ form_start(form) }}
+<div class="my-custom-class-for-errors">
+	{{ form_errors(form) }}
+</div>
+<div class="row mb-2 justify-content-start align-items-end">
+	<div class="col-3">
+		<strong>{{ form_label(form.providerToKeep) }}</strong>
+		{{ form_widget(form.providerToKeep) }}
+	</div>
+	<div class="col-1 btn-provider me-3">
+		{{ form_widget(form.submit) }}
+	</div>
+	<div class="col-1 btn-provider">
+		<button type="button" id="btnReverse" class="btn btn-primary">Reverse</button>
+	</div>
+	<div class="col-1 btn-provider me-3">
+		<button type="button" id="btnUpdate" class="btn btn-primary">Actualiser</button>
+	</div>
+	<div class="col-3">
+		<strong>{{ form_label(form.providerToReplace) }}</strong>
+		{{ form_widget(form.providerToReplace) }}
+	</div>
+
+</div>
+{{ form_end(form) }}
+
+<div class="row mb-2">
+	<div class="col-3" id="provider1"></div>
+	<div class="offset-3 col-3" id="provider2"></div>
+</div>
+
+<div class="row mb-3">
+	<div class="col-3" id="parts1"></div>
+	<div class="offset-3 col-3" id="parts2"></div>
+</div>
+
+<div class="row mb-3">
+	<div class="col-3" id="deliveryNotes1"></div>
+	<div class="offset-3 col-3" id="deliveryNotes2"></div>
+</div>

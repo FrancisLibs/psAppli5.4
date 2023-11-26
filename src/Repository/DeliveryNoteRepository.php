@@ -109,4 +109,23 @@ class DeliveryNoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Fonction de recherche de bon de livraison selon le fournisseur
+     *
+     * @param integer $organisation
+     * @param integer $provider
+     * @return DeliveryNote
+     */
+    public function findDeliveryNoteByProvider($organisationId, $providerId)
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d')
+            ->where('d.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
+            ->andWhere('d.provider = :provider')
+            ->setParameter('provider', $providerId)
+            ->getQuery()
+            ->getResult();
+    }
 }

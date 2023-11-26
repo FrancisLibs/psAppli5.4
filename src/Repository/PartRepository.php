@@ -160,7 +160,7 @@ class PartRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-     /**
+    /**
      * Récupère les pièces liées à une recherche d'un mot
      *
      * @param Sorganisation
@@ -198,7 +198,7 @@ class PartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-     /**
+    /**
      * @return top value Parts[]
      */
     public function findTopValueParts($organisation)
@@ -211,6 +211,25 @@ class PartRepository extends ServiceEntityRepository
             ->setParameter('organisation', $organisation)
             ->orderBy('p.steadyPrice', 'DESC')
             ->setMaxResults(50)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Fonction de recherche de pièces selon le fournisseur
+     *
+     * @param integer $organisation
+     * @param integer $provider
+     * @return Parts
+     */
+    public function findPartsByProvider($organisationId, $providerId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
+            ->andWhere('p.provider = :provider')
+            ->setParameter('provider', $providerId)
             ->getQuery()
             ->getResult();
     }

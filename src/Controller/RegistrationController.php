@@ -22,7 +22,7 @@ class RegistrationController extends AbstractController
 
 
     public function __construct(
-        EntityManagerInterface $manager, 
+        EntityManagerInterface $manager,
         EmailVerifier $emailVerifier
     ) {
         $this->emailVerifier = $emailVerifier;
@@ -33,7 +33,7 @@ class RegistrationController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/register', name: 'app_register')]
     public function register(
-        Request $request, 
+        Request $request,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         $user = new User();
@@ -57,8 +57,9 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render(
-            'registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
             ]
         );
     }
@@ -66,7 +67,7 @@ class RegistrationController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(
-        Request $request, 
+        Request $request,
         UserRepository $userRepository
     ): Response {
         $id = $request->get('id');

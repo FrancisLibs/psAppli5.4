@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fournisseur
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/provider.css">
+{% endblock %}
+
+
+{% block body %}
+	<main class="row justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
+			<header>
+				<div class="d-flex justify-content-start align-items-center flex-wrap mb-3">
+					<h1 class="text-primary me-5">Remplacement fournisseurs</h1>
+					<div class="d-flex justify-content-start align-items-center flex-wrap ">
+						<a class="btn btn-primary btn-sm mb-2 me-2" href="{{ path('provider_index') }}" role="button">Liste fournisseur</a>
+					</div>
+				</div>
+				<div>
+					<strong><p>Le bouton REMPLACER transfèrera les pièces et BL du fournisseur à remplacer vers le fournisseur à garder</p>
+					<p>Le bouton INVERSER inversera les deux fournisseurs</p>
+					<p>Le bouton ACTUALISER raffraîchira les deux fournisseurs</p></strong>
+				</div>
+			</header>
+			<section class="row mt-5">
+				{% include 'provider/_clean_provider.html.twig' %}
+			</section>
+		</article>
+	</main>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/cleanProviders.js" defer></script>
+{% endblock %}

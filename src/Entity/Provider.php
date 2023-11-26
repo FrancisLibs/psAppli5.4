@@ -253,4 +253,9 @@ class Provider
 
         return $this;
     }
+
+    public function getNameId()
+    {
+        return $this->name . ' ' . $this->id;
+    }
 }

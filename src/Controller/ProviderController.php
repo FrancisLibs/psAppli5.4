@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Provider;
 use App\Form\ProviderType;
 use App\Data\SearchProvider;
+use App\Data\SelectProvider;
+use App\Form\ProviderCleanType;
 use App\Form\SearchProviderForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,8 +28,8 @@ class ProviderController extends AbstractController
 
 
     public function __construct(
-        ProviderRepository 
-        $providerRepository, 
+        ProviderRepository
+        $providerRepository,
         EntityManagerInterface $manager
     ) {
         $this->_providerRepository = $providerRepository;
@@ -35,19 +37,20 @@ class ProviderController extends AbstractController
     }
 
 
-    #[Route('/show/{id}', name: 'provider_show', methods:["GET"])]
+    #[Route('/show/{id}', name: 'provider_show', methods: ["GET"])]
     #[IsGranted('ROLE_ADMIN')]
     public function show(Provider $provider): Response
     {
         return $this->render(
-            'provider/show.html.twig', [
-            'provider' => $provider,
+            'provider/show.html.twig',
+            [
+                'provider' => $provider,
             ]
         );
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/edit/{id}', name: 'provider_edit', methods:["GET", "POST"])]
+    #[Route('/edit/{id}', name: 'provider_edit', methods: ["GET", "POST"])]
     public function edit(Request $request, Provider $provider): Response
     {
         $form = $this->createForm(ProviderType::class, $provider);
@@ -57,19 +60,21 @@ class ProviderController extends AbstractController
             $provider->setCode(strtoupper($provider->getCode()));
             $provider->setName(strtoupper($provider->getName()));
             $provider->setCity(strtoupper($provider->getCity()));
-            
+
             $this->_manager->flush();
 
             return $this->redirectToRoute(
-                'provider_index', [], 
+                'provider_index',
+                [],
                 Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'provider/edit.html.twig', [
-            'provider' => $provider,
-            'form' => $form,
+            'provider/edit.html.twig',
+            [
+                'provider' => $provider,
+                'form' => $form,
             ]
         );
     }
@@ -81,7 +86,7 @@ class ProviderController extends AbstractController
      * @return Response
      */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/new', name: 'provider_new', methods:["GET", "POST"])]
+    #[Route('/new', name: 'provider_new', methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $provider = new Provider();
@@ -103,9 +108,10 @@ class ProviderController extends AbstractController
         }
 
         return $this->renderForm(
-            'provider/new.html.twig', [
-            'provider' => $provider,
-            'form' => $form,
+            'provider/new.html.twig',
+            [
+                'provider' => $provider,
+                'form' => $form,
             ]
         );
     }
@@ -116,13 +122,10 @@ class ProviderController extends AbstractController
      * @param  Request $request
      * @return Response 
      */
-    #[Route('/{mode?}/{documentId?}', name: 'provider_index', methods:["GET"])]
+    #[Route('/{mode?}/{documentId?}', name: 'provider_index', methods: ["GET"])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(
-        Request $request,
-        ?string $mode, 
-        ?int $documentId = null
-    ): Response {
+    public function index(Request $request, ?string $mode, ?int $documentId = null): Response
+    {
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
 
@@ -135,17 +138,18 @@ class ProviderController extends AbstractController
             return new JsonResponse(
                 [
                     'content'       =>  $this->renderView(
-                        'provider/_providers.html.twig', 
-                        ['providers' => $providers, 
-                        'mode' => $mode
+                        'provider/_providers.html.twig',
+                        [
+                            'providers' => $providers,
+                            'mode' => $mode
                         ]
                     ),
                     'sorting'       =>  $this->renderView(
-                        'provider/_sorting.html.twig', 
+                        'provider/_sorting.html.twig',
                         ['providers' => $providers]
                     ),
                     'pagination'    =>  $this->renderView(
-                        'provider/_pagination.html.twig', 
+                        'provider/_pagination.html.twig',
                         ['providers' => $providers]
                     ),
                 ]
@@ -156,15 +160,15 @@ class ProviderController extends AbstractController
             return new JsonResponse(
                 [
                     'content'       =>  $this->renderView(
-                        'provider/_providers.html.twig', 
+                        'provider/_providers.html.twig',
                         ['providers' => $providers]
                     ),
                     'sorting'       =>  $this->renderView(
-                        'provider/_sorting.html.twig', 
+                        'provider/_sorting.html.twig',
                         ['providers' => $providers]
                     ),
                     'pagination'    =>  $this->renderView(
-                        'provider/_pagination.html.twig', 
+                        'provider/_pagination.html.twig',
                         ['providers' => $providers]
                     ),
                 ]
@@ -172,53 +176,32 @@ class ProviderController extends AbstractController
         }
 
         return $this->render(
-            'provider/index.html.twig', [
-            'providers' =>  $providers,
-            'form'  =>  $form->createView(),
-            'mode' => $mode,
-            'documentId' => $documentId,
+            'provider/index.html.twig',
+            [
+                'providers' =>  $providers,
+                'form'  =>  $form->createView(),
+                'mode' => $mode,
+                'documentId' => $documentId,
             ]
         );
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}', name: 'provider_delete', methods:["POST"])]
+    #[Route('/{id}', name: 'provider_delete', methods: ["POST"])]
     public function delete(Request $request, Provider $provider): Response
     {
         if ($this->isCsrfTokenValid(
-            'delete' . $provider->getId(), 
+            'delete' . $provider->getId(),
             $request->request->get('_token')
-        )
-        ) {
+        )) {
             $this->_manager->remove($provider);
             $this->_manager->flush();
         }
 
         return $this->redirectToRoute(
-            'provider_index', 
-            [], 
+            'provider_index',
+            [],
             Response::HTTP_SEE_OTHER
         );
     }
-
-    // /**
-    //  * @Route("/action", name="app_provider_org", methods={"GET","POST"})
-    //  * @Security("is_granted('ROLE_ADMIN')")
-    //  */
-    // public function action(): Response
-    // {
-    //     // dd('ok');
-    //     $organisation = $this->getUser()->getOrganisation();
-    //     //dd($organisation);
-
-    //     $providers = $this->providerRepository->findAll();
-    //     foreach ($providers as $provider) {
-    //         $provider->setOrganisation($organisation);
-    //         $this->manager->persist($provider);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     return $this->redirectToRoute('provider_index');
-    // }
 }
