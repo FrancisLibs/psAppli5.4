@@ -115,7 +115,7 @@ class DeliveryNoteRepository extends ServiceEntityRepository
      *
      * @param integer $organisation
      * @param integer $provider
-     * @return DeliveryNote
+     * @return DeliveryNote[]
      */
     public function findDeliveryNoteByProvider($organisationId, $providerId)
     {

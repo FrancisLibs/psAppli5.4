@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Part;
 use App\Entity\Provider;
 use App\Data\SelectProvider;
 use App\Form\ProviderCleanType;
@@ -56,7 +57,7 @@ class ProviderUtilsController extends AbstractController
             'action' => $this->generateUrl('provider_clean'),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'provider_clean',
+                'id' => 'provider_clean_form',
             )
         ]);
 
@@ -73,8 +74,6 @@ class ProviderUtilsController extends AbstractController
                     $part->setProvider($providerToKeep);
                     $this->manager->persist($part);
                 }
-
-                $this->manager->flush();
             }
 
             $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerToReplaceId);
@@ -84,14 +83,53 @@ class ProviderUtilsController extends AbstractController
 
                     $this->manager->persist($deliveryNote);
                 }
-
-                $this->manager->flush();
             }
-        }
 
-        return $this->render('provider/cleanProvider.html.twig', [
-            'form'  =>  $form->createView(),
-        ]);
+            $this->manager->flush();
+        }
+        if ($request->isXmlHttpRequest()) {
+            $providerToKeepId = $providerToKeep->getId();
+            $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerToKeepId);
+            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerToKeepId);
+
+            $data = array();
+
+            $data['provider'] = [
+                'name' => $providerToKeep->getname(),
+                'code' => $providerToKeep->getCode(),
+                'id' => $providerToKeep->getId(),
+                'adress' => $providerToKeep->getAddress(),
+                'postalCode' => $providerToKeep->getPostalCode(),
+                'city' => $providerToKeep->getCity(),
+                'activity' => $providerToKeep->getActivity(),
+            ];
+
+            if ($providerParts !== null) {
+                $data['parts'] = array_map(function ($part) {
+                    return [
+                        'id' => $part->getId(),
+                        'code' => $part->getCode(),
+                        'designation' => $part->getDesignation()
+                    ];
+                }, $providerParts);
+            }
+
+            if ($deliveryNotes !== null) {
+                $data['deliveryNotes'] = array_map(function ($deliveryNote) {
+                    return [
+                        'id' => $deliveryNote->getId(),
+                        'number' => $deliveryNote->getNumber()
+                    ];
+                }, $deliveryNotes);
+            }
+
+            return new JsonResponse($data);
+
+        } else {
+            return $this->render('provider/cleanProvider.html.twig', [
+                'form'  =>  $form->createView(),
+            ]);
+        }
     }
 
     #[Route('/get-entity-info/{id}', name: 'get_entity_info', methods: ["GET"])]
@@ -101,11 +139,10 @@ class ProviderUtilsController extends AbstractController
         $organisationId = $this->organisation->getOrganisation()->getId();
         $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerId);
         $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerId);
-        // dd($deliveryNotes);
-        $parts = array();
+        
         $data = array();
 
-        $prov = [
+        $data['provider'] = [
             'name' => $provider->getname(),
             'code' => $provider->getCode(),
             'id' => $provider->getId(),
@@ -116,40 +153,22 @@ class ProviderUtilsController extends AbstractController
         ];
 
         if ($providerParts !== null) {
-            $par = array();
-            foreach ($providerParts as $part) {
-                $par = array(
+            $data['parts'] = array_map(function ($part) {
+                return [
                     'id' => $part->getId(),
                     'code' => $part->getCode(),
                     'designation' => $part->getDesignation(),
-                );
-                $parts[] = $par;
-            }
+                ];
+            }, $providerParts);
         }
 
         if ($deliveryNotes !== null) {
-            $notes = array();
-            foreach ($deliveryNotes as $deliveryNote) {
-                $note = array(
+            $data['deliveryNotes'] = array_map(function ($deliveryNote) {
+                return [
                     'id' => $deliveryNote->getId(),
                     'number' => $deliveryNote->getNumber(),
-                );
-                $notes[] = $note;
-            }
-        }
-
-        $data = array();
-
-        if ($prov !== null) {
-            $data['provider'] = $prov;
-        }
-
-        if ($parts !== null) {
-            $data['parts'] = $parts;
-        }
-
-        if ($notes !== null) {
-            $data['deliveryNotes'] = $notes;
+                ];
+            }, $deliveryNotes);
         }
 
         return new JsonResponse($data);

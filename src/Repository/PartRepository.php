@@ -220,7 +220,7 @@ class PartRepository extends ServiceEntityRepository
      *
      * @param integer $organisation
      * @param integer $provider
-     * @return Parts
+     * @return Parts[]
      */
     public function findPartsByProvider($organisationId, $providerId)
     {
