@@ -1,4 +1,4 @@
-<section class="mb-5">
+<section class="mb-4">
 	<div class="row mt-3">
 		<div class="col-12 col-sm-3 col-md-2">
 			<p class="fw-bold">Code</p>
@@ -77,9 +77,9 @@
 		<div class="col-12 col-sm-3 col-md-2">
 			<p class="fw-bold">Remarque</p>
 		</div>
-		<div class="col-12">
+		<div class="<col-12 col-sm-7 col-md-10">
 			<p>{{ part.remark }}</p>
-		</div>
+		</col-12>
 	</div>
 	<div class="row">
 		<div class="col-5 col-sm-3 col-md-2">
@@ -90,6 +90,18 @@
 				<p>{{ part.lastCommandeDate|date('d/m/Y', timezone="Europe/Paris") }}</p>
 			{% else %}
 				<p>Pas de date de commande</p>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-5 col-sm-3 col-md-2">
+			<p class="fw-bold">Date livraison max</p>
+		</div>
+		<div class="col-5">
+			{% if part.maxDeliveryDate %}
+				<p>{{ part.maxDeliveryDate|date('d/m/Y', timezone="Europe/Paris") }}</p>
+			{% else %}
+				<p>Pas de date de livraison max</p>
 			{% endif %}
 		</div>
 	</div>

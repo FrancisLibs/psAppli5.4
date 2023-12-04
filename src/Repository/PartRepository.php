@@ -120,7 +120,7 @@ class PartRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     /**
      * Undocumented function
      *
@@ -170,8 +170,8 @@ class PartRepository extends ServiceEntityRepository
      */
     public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
     {
-        $word =  "%".strtoupper($globalSearch->search)."%";
-    
+        $word =  "%" . strtoupper($globalSearch->search) . "%";
+
         return $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.organisation = :organisation')
@@ -191,7 +191,7 @@ class PartRepository extends ServiceEntityRepository
             ->setParameters(new ArrayCollection([
                 new Parameter('organisation', $organisation),
                 new Parameter('word', $word),
-            ])) 
+            ]))
 
             ->orderBy('p.code', 'ASC')
             ->getQuery()
@@ -232,5 +232,25 @@ class PartRepository extends ServiceEntityRepository
             ->setParameter('provider', $providerId)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Compte le nombre de pièces en réappro dont la date 
+     * de livraison prévue est plus petite que la date du jour
+     * Donc la date est dépassée
+     * 
+     * @param integer $organisation
+     * 
+     * @return Part[]
+     */
+    public function countLateParts($organisationId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->andWhere('p.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
+            ->andWhere('p.maxDeliveryDate < CURRENT_DATE()')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

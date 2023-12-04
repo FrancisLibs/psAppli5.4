@@ -3,6 +3,12 @@
 {% block title %}Pièce détachée - Edition
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/partEdit.css">
+{% endblock %}
+
+
 {% block body %}
 	<main class="row justify-content-start mt-5 mb-5">
 		{% include 'user/_photo.html.twig' %}
@@ -23,4 +29,9 @@
 			</div>
 		</article>
 	</main>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/partsOrderDate.js" defer></script>
 {% endblock %}

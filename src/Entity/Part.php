@@ -104,6 +104,11 @@ class Part
      */
     private $lastCommandeDate;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $maxDeliveryDate;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -367,6 +372,18 @@ class Part
     public function setLastCommandeDate(?\DateTimeInterface $lastCommandeDate): self
     {
         $this->lastCommandeDate = $lastCommandeDate;
+
+        return $this;
+    }
+
+    public function getMaxDeliveryDate(): ?\DateTimeInterface
+    {
+        return $this->maxDeliveryDate;
+    }
+
+    public function setMaxDeliveryDate(?\DateTimeInterface $maxDeliveryDate): self
+    {
+        $this->maxDeliveryDate = $maxDeliveryDate;
 
         return $this;
     }

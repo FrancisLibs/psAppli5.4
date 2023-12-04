@@ -52,6 +52,16 @@ class PartType extends AbstractType
                     'widget' => 'single_text',
                     'required'  => false,
                 ]
+            )
+            ->add(
+                'maxDeliveryDate',
+                DateType::class,
+                [
+                    'input' => 'datetime',
+                    'label' => 'Date de livraison max',
+                    'widget' => 'single_text',
+                    'required'  => false,
+                ]
             );
     }
 

@@ -6,20 +6,22 @@ use Symfony\Component\Security\Core\Security;
 
 class OrganisationService
 {
-    private $security;
+    protected $security;
+    protected $user;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
+        $this->user = $this->security->getUser();
     }
 
     public function getOrganisation()
     {
-        // gets the current user
-        $user = $this->security->getUser();
+        return $this->user->getOrganisation();
+    }
 
-        $organisation = $user->getOrganisation();
-
-        return $organisation;
+    public function getService()
+    {
+        return $this->user->getService();
     }
 }

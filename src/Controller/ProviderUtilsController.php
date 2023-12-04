@@ -87,7 +87,8 @@ class ProviderUtilsController extends AbstractController
 
             $this->manager->flush();
         }
-        if ($request->isXmlHttpRequest()) {
+        
+        if ($request->isXmlHttpRequest() === TRUE) {
             $providerToKeepId = $providerToKeep->getId();
             $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerToKeepId);
             $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerToKeepId);
@@ -105,31 +106,38 @@ class ProviderUtilsController extends AbstractController
             ];
 
             if ($providerParts !== null) {
-                $data['parts'] = array_map(function ($part) {
-                    return [
-                        'id' => $part->getId(),
-                        'code' => $part->getCode(),
-                        'designation' => $part->getDesignation()
-                    ];
-                }, $providerParts);
+                $data['parts'] = array_map(
+                    function (
+                        $part
+                    ) {
+                        return [
+                            'id' => $part->getId(),
+                            'code' => $part->getCode(),
+                            'designation' => $part->getDesignation()
+                        ];
+                    },
+                    $providerParts
+                );
             }
 
             if ($deliveryNotes !== null) {
-                $data['deliveryNotes'] = array_map(function ($deliveryNote) {
-                    return [
-                        'id' => $deliveryNote->getId(),
-                        'number' => $deliveryNote->getNumber()
-                    ];
-                }, $deliveryNotes);
+                $data['deliveryNotes'] = array_map(
+                    function (
+                        $deliveryNote
+                    ) {
+                        return [
+                            'id' => $deliveryNote->getId(),
+                            'number' => $deliveryNote->getNumber()
+                        ];
+                    },
+                    $deliveryNotes
+                );
             }
-
             return new JsonResponse($data);
-
-        } else {
-            return $this->render('provider/cleanProvider.html.twig', [
-                'form'  =>  $form->createView(),
-            ]);
         }
+        return $this->render('provider/cleanProvider.html.twig', [
+            'form'  =>  $form->createView(),
+        ]);
     }
 
     #[Route('/get-entity-info/{id}', name: 'get_entity_info', methods: ["GET"])]
@@ -139,7 +147,7 @@ class ProviderUtilsController extends AbstractController
         $organisationId = $this->organisation->getOrganisation()->getId();
         $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerId);
         $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerId);
-        
+
         $data = array();
 
         $data['provider'] = [

@@ -21,15 +21,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController
 {
-    private $_paramsRepository;
-    private $_userRepository;
-    private $_manager;
-    private $_preventiveService;
-    private $_userConnexionService;
-    private $_preventiveStatusService;
-    private $_stockValueService;
-    private $_organisation;
-    private $_workorderRepository;
+    protected $paramsRepository;
+    protected $userRepository;
+    protected $manager;
+    protected $preventiveService;
+    protected $userConnexionService;
+    protected $preventiveStatusService;
+    protected $stockValueService;
+    protected $organisation;
+    protected $workorderRepository;
+    protected $partRepository;
 
 
     public function __construct(
@@ -42,16 +43,18 @@ class DefaultController extends AbstractController
         StockValueService $stockValueService,
         OrganisationService $organisation,
         WorkorderRepository $workorderRepository,
+        PartRepository $partRepository,
     ) {
-        $this->_paramsRepository = $paramsRepository;
-        $this->_manager = $manager;
-        $this->_userRepository = $userRepository;
-        $this->_preventiveService = $preventiveService;
-        $this->_preventiveStatusService = $preventiveStatusService;
-        $this->_userConnexionService = $userConnexionService;
-        $this->_stockValueService = $stockValueService;
-        $this->_organisation = $organisation;
-        $this->_workorderRepository = $workorderRepository;
+        $this->paramsRepository = $paramsRepository;
+        $this->manager = $manager;
+        $this->userRepository = $userRepository;
+        $this->preventiveService = $preventiveService;
+        $this->preventiveStatusService = $preventiveStatusService;
+        $this->userConnexionService = $userConnexionService;
+        $this->stockValueService = $stockValueService;
+        $this->organisation = $organisation;
+        $this->workorderRepository = $workorderRepository;
+        $this->partRepository =$partRepository;
     }
 
 
@@ -65,17 +68,17 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $organisation = $this->_organisation->getOrganisation();
+        $organisation = $this->organisation->getOrganisation();
         $organisationId = $organisation->getId();
-        $serviceId = $user->getService()->getId();
+        $serviceId = $this->organisation->getService()->getId();
         $oneDay = (new \DateInterval('P1D')); // 'P1D' = 1jour.
         $oneWeek = (new \DateInterval('P7D')); // 'P7D' = 7jour.
 
-        $this->_userConnexionService->registration($user);
+        $this->userConnexionService->registration($user);
 
         // Lecture des dates de vérification cherchées dans le fichier des paramètres.
 
-        $params = $this->_paramsRepository->find(1);
+        $params = $this->paramsRepository->find(1);
         $lastDate = new \DateTime();
         $lastDate->setTimestamp(
             $params->getLastPreventiveDate()->getTimestamp()
@@ -84,22 +87,21 @@ class DefaultController extends AbstractController
 
         // Gestion des bons de travail préventifs : Vérification à chaque connexion.
         // Rajout d'1 jour à la date enregistrée pour ne vérifier qu'une fois/jour.
-
         // Test si traitement possible (1 fois /jour à la première connexion).
         // Si today est supérieur à lancienne date + 1 jour.
 
         //if ($today >= $lastDate) {
         if ($today >= $lastDate) {
             // Traitement des préventifs à ajouter si nécessaire.
-            $this->_preventiveService->preventiveProcessing($organisationId);
+            $this->preventiveService->preventiveProcessing($organisationId);
 
             // Surveillance des status des préventifs en cours selon leurs paramètres.
-            $this->_preventiveStatusService->setPreventiveStatus($organisationId);
+            $this->preventiveStatusService->setPreventiveStatus($organisationId);
 
             // Changement de la date du dernier traitement.
             $params->setLastPreventiveDate(new \DateTime());
-            $this->_manager->persist($params);
-            $this->_manager->flush();
+            $this->manager->persist($params);
+            $this->manager->flush();
         }
 
         // Gestion de l'enregistrement de la valeur du stock .
@@ -112,7 +114,7 @@ class DefaultController extends AbstractController
 
         // Si la date du jour est >= d'une semaine à l'ancienne date.
         if ($today >= $lastStockValueDate) {
-            $this->_stockValueService->computeStockValue(
+            $this->stockValueService->computeStockValue(
                 $organisation,
                 $organisationId,
                 $params
@@ -122,19 +124,26 @@ class DefaultController extends AbstractController
         // ----------------------------------------------------------.
         // Récupération des utilisateurs pour l'affichage des photos.
         // Par organisation ET service.
-        $users = $this->_userRepository->findBy(
+        $users = $this->userRepository->findBy(
             [
                 'organisation' => $organisationId,
                 'service' => $serviceId,
                 'active' => true,
             ],
         );
-        $lateBT = $this->_workorderRepository->countLateBT($organisationId);
+
+        // Compte des BT préventifs en retard
+        $lateBT = $this->workorderRepository->countLateBT($organisationId);
+
+        // Compte de pièces en retard de livraison
+        $lateParts = $this->partRepository->countLateParts($organisationId);
+
         return $this->render(
             'default/index.html.twig',
             [
                 'users' => $users,
                 'lateBT' => $lateBT,
+                'lateParts' => $lateParts,
             ]
         );
     }

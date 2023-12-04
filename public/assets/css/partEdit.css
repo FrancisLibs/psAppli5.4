@@ -1,0 +1,38 @@
+.txt-box {
+    border: 1px #3131ce solid;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    margin-top:5px;
+    padding: 5px;
+    color: #3131ce;
+}
+
+.pro-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid #3498db;
+    color: #ffffff;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.pro-btn2{
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #4caf50;
+    color: #fff;
+}
