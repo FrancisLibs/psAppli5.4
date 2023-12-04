@@ -9,12 +9,14 @@ class OrganisationService
     protected $security;
     protected $user;
 
+
     public function __construct(Security $security)
     {
         $this->security = $security;
         $this->user = $this->security->getUser();
     }
 
+    
     public function getOrganisation()
     {
         return $this->user->getOrganisation();

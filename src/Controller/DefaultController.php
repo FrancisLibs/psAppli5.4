@@ -54,7 +54,7 @@ class DefaultController extends AbstractController
         $this->stockValueService = $stockValueService;
         $this->organisation = $organisation;
         $this->workorderRepository = $workorderRepository;
-        $this->partRepository =$partRepository;
+        $this->partRepository = $partRepository;
     }
 
 
@@ -90,7 +90,6 @@ class DefaultController extends AbstractController
         // Test si traitement possible (1 fois /jour à la première connexion).
         // Si today est supérieur à lancienne date + 1 jour.
 
-        //if ($today >= $lastDate) {
         if ($today >= $lastDate) {
             // Traitement des préventifs à ajouter si nécessaire.
             $this->preventiveService->preventiveProcessing($organisationId);
@@ -104,7 +103,7 @@ class DefaultController extends AbstractController
             $this->manager->flush();
         }
 
-        // Gestion de l'enregistrement de la valeur du stock .
+        // Gestion de l'enregistrement de la valeur du stock.
         // une fois par semaine-------.
         $lastStockValueDate = new \DateTime();
         $lastStockValueDate->setTimestamp(
@@ -132,10 +131,10 @@ class DefaultController extends AbstractController
             ],
         );
 
-        // Compte des BT préventifs en retard
+        // Compte des BT préventifs en retard.
         $lateBT = $this->workorderRepository->countLateBT($organisationId);
 
-        // Compte de pièces en retard de livraison
+        // Compte de pièces en retard de livraison.
         $lateParts = $this->partRepository->countLateParts($organisationId);
 
         return $this->render(

@@ -170,7 +170,7 @@ class PartRepository extends ServiceEntityRepository
      */
     public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
     {
-        $word =  "%" . strtoupper($globalSearch->search) . "%";
+        $word =  "%".strtoupper($globalSearch->search)."%";
 
         return $this->createQueryBuilder('p')
             ->select('p')
@@ -235,7 +235,7 @@ class PartRepository extends ServiceEntityRepository
     }
 
     /**
-     * Compte le nombre de pièces en réappro dont la date 
+     * Compte le nombre de pièces en réappro dont la date
      * de livraison prévue est plus petite que la date du jour
      * Donc la date est dépassée
      * 

@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let champA = document.getElementById("part_stock_approQte");
   let champB = document.getElementById("part_lastCommandeDate");
   let champC = document.getElementById("part_maxDeliveryDate");
-  let text = document.getElementById("deliveryDateTxt");
   let blocText;
   let pText;
 
