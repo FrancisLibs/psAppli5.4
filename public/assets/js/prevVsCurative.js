@@ -4,14 +4,14 @@ let data = {
   datasets: [
     {
       label: "Préventif",
-      data:[],
+      data: [],
       backgroundColor: ["#E62A00"],
       borderColor: ["#E62A00"],
       borderWidth: 1,
     },
     {
       label: "Curatif",
-      data:[],
+      data: [],
       backgroundColor: ["#420BE6"],
       borderColor: ["#420BE6"],
       borderWidth: 1,
@@ -89,37 +89,36 @@ const config = {
 
 // Render / Init block
 document.addEventListener("DOMContentLoaded", function () {
-
   try {
     const datesDiv = document.getElementById("chartLabels");
     let dates = JSON.parse(datesDiv.dataset.chartdates);
     data.labels = dates;
-  }catch (error) {
+  } catch (error) {
     console.log(error);
   }
 
-  try{
+  try {
     const valuesDiv = document.getElementById("chartData1");
-    valuesPreventive = JSON.parse(valuesDiv.dataset.dataset1);
+    let valuesPreventive = JSON.parse(valuesDiv.dataset.dataset1);
     data.datasets[0].data = valuesPreventive;
-  }catch(error) {
+  } catch (error) {
     console.log(error);
   }
 
-  try{
+  try {
     const valuesDiv = document.getElementById("chartData2");
-    valuesCurative = JSON.parse(valuesDiv.dataset.dataset2);
+    let valuesCurative = JSON.parse(valuesDiv.dataset.dataset2);
     data.datasets[1].data = valuesCurative;
-  }catch(error) {
+  } catch (error) {
     console.log(error);
   }
 
-  try{
+  try {
     const myChart = new Chart(document.getElementById("myChart"), config);
-    const dateNotOk = document.createElement("p");
+    let dateNotOk = document.createElement("p");
     document.getElementById("graphique").prepend(dateNotOk);
-  }catch (error) {
-    dateNotOk.innerText = "Il n\'y a pas de données pour ces dates";
+  } catch (error) {
+    dateNotOk.innerText = "Il n'y a pas de données pour ces dates";
     dateNotOk.className = "no-data";
   }
 });

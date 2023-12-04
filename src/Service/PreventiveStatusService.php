@@ -10,10 +10,13 @@ use App\Repository\WorkorderStatusRepository;
 
 class PreventiveStatusService
 {
-    private $workorderStatusRepository;
-    private $workorderRepository;
-    private $templateRepository;
-    private $manager;
+    protected $workorderStatusRepository;
+
+    protected $workorderRepository;
+
+    protected $templateRepository;
+
+    protected $manager;
 
 
     public function __construct(
@@ -26,7 +29,6 @@ class PreventiveStatusService
         $this->workorderStatusRepository = $workorderStatusRepository;
         $this->templateRepository = $templateRepository;
         $this->manager = $manager;
-
     }
 
 
@@ -36,7 +38,7 @@ class PreventiveStatusService
     public function setPreventiveStatus($organisationId)
     {
         $preventiveWorkorders = $this->workorderRepository->findAllActivePreventiveWorkorders($organisationId);
-        if ($preventiveWorkorders) {
+        if ($preventiveWorkorders === true) {
             $today = (new \Datetime())->getTimeStamp();
 
             foreach ($preventiveWorkorders as $workorder) {
@@ -59,7 +61,6 @@ class PreventiveStatusService
 
             $this->manager->flush();
         }
-        
         return;
     }
 }

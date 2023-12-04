@@ -116,7 +116,7 @@ class DeliveryNoteController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/new', name: 'delivery_note_new', methods: ["GET", "POST"])]    
+    #[Route('/new', name: 'delivery_note_new', methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $user = $this->getUser();
@@ -168,21 +168,20 @@ class DeliveryNoteController extends AbstractController
             $deliveryNote->setOrganisation($organisation);
             $deliveryNote->setUser($user);
 
-            $this->manager->persist($deliveryNote);
-
             // Modification du stock de pièces détachées.
             // et du nombre de pièces en commande.
             $deliveryNoteParts = $deliveryNote->getDeliveryNoteParts();
+
             foreach ($deliveryNoteParts as $deliveryNotePart) {
                 $deliveryNotePartQte = $deliveryNotePart->getQuantity();
-                $partStockQte = $deliveryNotePart
-                    ->getPart()
-                    ->getStock()
-                    ->getQteStock();
+                $part = $deliveryNotePart->getPart();
+                $partStock = $part->getStock();
+                $partStockQte = $partStock->getQteStock();
                 $deliveryNotePart
                     ->getPart()
                     ->getStock()
                     ->setQteStock($deliveryNotePartQte + $partStockQte);
+                // Nombre de pièces en commande.
                 $partsInOrder = $deliveryNotePart
                     ->getPart()
                     ->getStock()
@@ -192,6 +191,11 @@ class DeliveryNoteController extends AbstractController
                         ->getPart()
                         ->getStock()
                         ->setApproQte($partsInOrder - $deliveryNotePartQte);
+                }
+                // Traitement date de commande et date de réception
+                if ($deliveryNotePartQte >= $partsInOrder) {
+                    $part->setLastCommandeDate(NULL);
+                    $part->setMaxDeliveryDate(NULL);
                 }
             }
 
@@ -368,8 +372,7 @@ class DeliveryNoteController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $deliveryNote->getId(),
             $request->request->get('_token')
-        )
-        ) {
+        )) {
             $this->manager->remove($deliveryNote);
             $this->manager->flush();
         }

@@ -24,9 +24,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProviderUtilsController extends AbstractController
 {
     protected $providerRepository;
+
     protected $manager;
+
     protected $partRepository;
+
     protected $organisation;
+
     protected $deliveryNoteRepository;
 
 
@@ -53,13 +57,17 @@ class ProviderUtilsController extends AbstractController
 
         $selectProvider = new SelectProvider();
 
-        $form = $this->createForm(ProviderCleanType::class, $selectProvider, [
-            'action' => $this->generateUrl('provider_clean'),
-            'method' => 'POST',
-            'attr' => array(
-                'id' => 'provider_clean_form',
-            )
-        ]);
+        $form = $this->createForm(
+            ProviderCleanType::class,
+            $selectProvider,
+            [
+                'action' => $this->generateUrl('provider_clean'),
+                'method' => 'POST',
+                'attr' => [
+                    'id' => 'provider_clean_form',
+                ]
+            ]
+        );
 
         $form->handleRequest($request);
 
@@ -67,17 +75,24 @@ class ProviderUtilsController extends AbstractController
             $providerToKeep = $selectProvider->getProviderToKeep();
             $providerToReplaceId = $selectProvider->getProviderToReplace()->getId();
 
-            $parts = $this->partRepository->findPartsByProvider($organisationId, $providerToReplaceId);
+            $parts = $this->partRepository->findPartsByProvider(
+                $organisationId,
+                $providerToReplaceId
+            );
 
-            if ($parts) {
+            if ($parts === true) {
                 foreach ($parts as $part) {
                     $part->setProvider($providerToKeep);
                     $this->manager->persist($part);
                 }
             }
 
-            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerToReplaceId);
-            if ($deliveryNotes) {
+            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
+                $organisationId,
+                $providerToReplaceId
+            );
+
+            if ($deliveryNotes === true) {
                 foreach ($deliveryNotes as $deliveryNote) {
                     $deliveryNote->setProvider($providerToKeep);
 
@@ -87,13 +102,20 @@ class ProviderUtilsController extends AbstractController
 
             $this->manager->flush();
         }
-        
-        if ($request->isXmlHttpRequest() === TRUE) {
-            $providerToKeepId = $providerToKeep->getId();
-            $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerToKeepId);
-            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerToKeepId);
 
-            $data = array();
+        if ($request->isXmlHttpRequest() === true) {
+            $providerToKeepId = $providerToKeep->getId();
+            $providerParts = $this->partRepository->findPartsByProvider(
+                $organisationId,
+                $providerToKeepId
+            );
+
+            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
+                $organisationId,
+                $providerToKeepId
+            );
+
+            $data = [];
 
             $data['provider'] = [
                 'name' => $providerToKeep->getname(),
@@ -105,7 +127,7 @@ class ProviderUtilsController extends AbstractController
                 'activity' => $providerToKeep->getActivity(),
             ];
 
-            if ($providerParts !== null) {
+            if ($providerParts === true) {
                 $data['parts'] = array_map(
                     function (
                         $part
@@ -120,7 +142,7 @@ class ProviderUtilsController extends AbstractController
                 );
             }
 
-            if ($deliveryNotes !== null) {
+            if ($deliveryNotes === true) {
                 $data['deliveryNotes'] = array_map(
                     function (
                         $deliveryNote
@@ -135,9 +157,12 @@ class ProviderUtilsController extends AbstractController
             }
             return new JsonResponse($data);
         }
-        return $this->render('provider/cleanProvider.html.twig', [
-            'form'  =>  $form->createView(),
-        ]);
+        return $this->render(
+            'provider/cleanProvider.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     #[Route('/get-entity-info/{id}', name: 'get_entity_info', methods: ["GET"])]
@@ -145,10 +170,16 @@ class ProviderUtilsController extends AbstractController
     {
         $providerId = $provider->getId();
         $organisationId = $this->organisation->getOrganisation()->getId();
-        $providerParts = $this->partRepository->findPartsByProvider($organisationId, $providerId);
-        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider($organisationId, $providerId);
+        $providerParts = $this->partRepository->findPartsByProvider(
+            $organisationId,
+            $providerId
+        );
+        $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
+            $organisationId,
+            $providerId
+        );
 
-        $data = array();
+        $data = [];
 
         $data['provider'] = [
             'name' => $provider->getname(),
@@ -160,23 +191,29 @@ class ProviderUtilsController extends AbstractController
             'activity' => $provider->getActivity(),
         ];
 
-        if ($providerParts !== null) {
-            $data['parts'] = array_map(function ($part) {
-                return [
-                    'id' => $part->getId(),
-                    'code' => $part->getCode(),
-                    'designation' => $part->getDesignation(),
-                ];
-            }, $providerParts);
+        if ($providerParts === true) {
+            $data['parts'] = array_map(
+                function ($part) {
+                    return [
+                        'id' => $part->getId(),
+                        'code' => $part->getCode(),
+                        'designation' => $part->getDesignation(),
+                    ];
+                },
+                $providerParts
+            );
         }
 
-        if ($deliveryNotes !== null) {
-            $data['deliveryNotes'] = array_map(function ($deliveryNote) {
-                return [
-                    'id' => $deliveryNote->getId(),
-                    'number' => $deliveryNote->getNumber(),
-                ];
-            }, $deliveryNotes);
+        if ($deliveryNotes === true) {
+            $data['deliveryNotes'] = array_map(
+                function ($deliveryNote) {
+                    return [
+                        'id' => $deliveryNote->getId(),
+                        'number' => $deliveryNote->getNumber(),
+                    ];
+                },
+                $deliveryNotes
+            );
         }
 
         return new JsonResponse($data);

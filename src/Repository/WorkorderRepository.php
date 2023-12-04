@@ -163,6 +163,8 @@ class WorkorderRepository extends ServiceEntityRepository
      * Récupère les bons de travail préventifs en cours
      *
      * @param int $organisationId
+     * @param int $organisationId
+     * @return Workorder[] Returns an array of workorder
      */
     public function findAllActivePreventiveWorkorders($organisationId)
     {

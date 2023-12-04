@@ -11,10 +11,13 @@ use App\Repository\WorkorderStatusRepository;
 class PreventiveService
 {
 
-    private $_workorderStatusRepository;
-    private $_templateRepository;
-    private $_workorderRepository;
-    private $_manager;
+    protected $workorderStatusRepository;
+
+    protected $templateRepository;
+
+    protected $workorderRepository;
+
+    protected $manager;
 
 
     public function __construct(
@@ -23,10 +26,10 @@ class PreventiveService
         EntityManagerInterface $manager,
         WorkorderStatusRepository $workorderStatusRepository,
     ) {
-        $this->_templateRepository = $templateRepository;
-        $this->_workorderRepository = $workorderRepository;
-        $this->_manager = $manager;
-        $this->_workorderStatusRepository = $workorderStatusRepository;
+        $this->templateRepository = $templateRepository;
+        $this->workorderRepository = $workorderRepository;
+        $this->manager = $manager;
+        $this->workorderStatusRepository = $workorderStatusRepository;
     }
 
 
@@ -36,31 +39,31 @@ class PreventiveService
     public function preventiveProcessing($organisationId)
     {
         // Recherche des templates préventifs
-        $templates = $this->_templateRepository->findAllActiveTemplates($organisationId);
+        $templates = $this->templateRepository->findAllActiveTemplates($organisationId);
 
         $today = (new \DateTime())->getTimestamp();
 
         foreach ($templates as $template) {
-            // Prochaine date en secondes
+            // Prochaine date en secondes.
             $nextDate = $template->getNextDate()->getTimestamp();
 
-            // Jours avant la date
+            // Jours avant la date.
             $secondsBefore = ($template->getDaysBefore() * 24 * 3600);
 
-            // Date finale à prende en compte
-            // Date finale d'activation en secondes
-            $nextComputeDate = $nextDate - $secondsBefore; 
+            // Date finale à prende en compte.
+            // Date finale d'activation en secondes.
+            $nextComputeDate = ($nextDate - $secondsBefore); 
 
             // Test si template éligible : 
-            // si la date du préventif est supérieure à la date du jour
+            // si la date du préventif est supérieure à la date du jour.
             if ($today >= $nextComputeDate) {
-                // Contrôle si BT préventif n'est pas déjà actif
-                if (!$this->_workorderRepository->countPreventiveActiveWorkorder(
+                // Contrôle si BT préventif n'est pas déjà actif.
+                if (!$this->workorderRepository->countPreventiveActiveWorkorder(
                     $template->getTemplateNumber()
                 )
                 ) {
                     // Création du BT préventif, 
-                    // en récupérant les infos sur le template préventif
+                    // en récupérant les infos sur le template préventif.
                     $workorder = new Workorder();
                     $workorder->setCreatedAt(new \DateTime())
                         ->setPreventiveDate($template->getNextDate())
@@ -74,7 +77,7 @@ class PreventiveService
                         ->setDaysBeforeLate($template->getDuration())
                         ->setCalendarTitle($template->getCalendarTitle());
 
-                    $status = $this->_workorderStatusRepository->findOneBy(
+                    $status = $this->workorderStatusRepository->findOneBy(
                         ['name' => 'EN_PREP.']
                     );
                     $workorder->setWorkorderStatus($status);
@@ -83,10 +86,10 @@ class PreventiveService
                     foreach ($machines as $machine) {
                         $workorder->addMachine($machine);
                     }
-                    // Ecriture en Bdd pour prendre en compte
-                    // tous les BT à la prochaine occurence
-                    $this->_manager->persist($workorder);
-                    $this->_manager->flush();
+                    // Ecriture en Bdd pour prendre en compte.
+                    // tous les BT à la prochaine occurence.
+                    $this->manager->persist($workorder);
+                    $this->manager->flush();
                 }
             }
         }

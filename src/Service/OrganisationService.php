@@ -16,7 +16,7 @@ class OrganisationService
         $this->user = $this->security->getUser();
     }
 
-    
+
     public function getOrganisation()
     {
         return $this->user->getOrganisation();

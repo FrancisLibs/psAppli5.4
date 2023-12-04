@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
   totalOfCurativeBt.appendChild(totalCurBt);
 
   function transformTime(minutes) {
-    var Myexp = new RegExp("^[0-9]+$");
+    var Myexp = new RegExp("^\d+$");
     if (Myexp.test(minutes)) {
       var nbHour = parseInt(minutes / 60, 10);
       var nbminuteRestante = minutes % 60;
