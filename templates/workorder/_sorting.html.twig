@@ -2,7 +2,7 @@
     <th>{{ knp_pagination_sortable(workorders, 'Numéro', 'w.id') }}</th>
     <th class="text-center">{{ knp_pagination_sortable(workorders, 'Machine', 'w.machines') }}</th>
     <th class="text-center">{{ knp_pagination_sortable(workorders, 'Technicien', 'user') }}</th>
-    <th class="text-center">{{ knp_pagination_sortable(workorders, 'Date', 'w.createdAt') }}</th>
+    <th class="text-center">{{ knp_pagination_sortable(workorders, 'Date début', 'w.startDate') }}</th>
     <th class="text-center">{{ knp_pagination_sortable(workorders, 'Travaux', 'w.request') }}</th>
     <th class="text-center">{{ knp_pagination_sortable(workorders, 'Status', 'w.workorderStatus') }}</th>
 </tr>

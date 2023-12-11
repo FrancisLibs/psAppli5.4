@@ -134,6 +134,9 @@ class DefaultController extends AbstractController
         // Compte des BT préventifs en retard.
         $lateBT = $this->workorderRepository->countLateBT($organisationId);
 
+        // Compte des pièces à acheter
+        $partsToBuy = $this->partRepository->countPartsToBuy($organisationId);
+
         // Compte de pièces en retard de livraison.
         $lateParts = $this->partRepository->countLateParts($organisationId);
 
@@ -143,6 +146,7 @@ class DefaultController extends AbstractController
                 'users' => $users,
                 'lateBT' => $lateBT,
                 'lateParts' => $lateParts,
+                'partsToBuy' => $partsToBuy
             ]
         );
     }

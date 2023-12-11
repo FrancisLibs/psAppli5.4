@@ -37,12 +37,12 @@ class PartController extends AbstractController
 
 
     public function __construct(
-        OrganisationService $organisation, 
-        Secu $security, 
-        DeliveryNoteRepository $deliveryNoteRepository, 
-        PartRepository $partRepository, 
-        StockValueRepository $stockValueRepository, 
-        EntityManagerInterface $manager, 
+        OrganisationService $organisation,
+        Secu $security,
+        DeliveryNoteRepository $deliveryNoteRepository,
+        PartRepository $partRepository,
+        StockValueRepository $stockValueRepository,
+        EntityManagerInterface $manager,
         RequestStack $requestStack
     ) {
         $this->partRepository = $partRepository;
@@ -59,24 +59,25 @@ class PartController extends AbstractController
      * @ Liste des pièces détachées
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/list/{mode?}/{documentId?}', name: 'part_index', methods:('GET'))]
+    #[Route('/list/{mode?}/{documentId?}', name: 'part_index', methods: ('GET'))]
     public function index(
-        Request $request, 
-        ?string $mode = null, 
+        Request $request,
+        ?string $mode = null,
         ?int $documentId = null
     ): Response {
         $organisation =  $this->organisation->getOrganisation();
-        
+
         $session = $this->requestStack->getSession();
 
         $data = new SearchPart();
 
-        if ($mode == "workorderAddPart" 
-            || $mode == "newDeliveryNote" 
+        if (
+            $mode == "workorderAddPart"
+            || $mode == "newDeliveryNote"
             || $mode == "editDeliveryNote"
         ) {
             $data = $session->get('data', null);
-            if (!$data) {
+            if ($data === null) {
                 $data = new SearchPart();
             }
         }
@@ -94,33 +95,34 @@ class PartController extends AbstractController
         if ($request->get('ajax')) {
             return new JsonResponse(
                 [
-                'content'       =>  $this->renderView(
-                    'part/_parts.html.twig', 
-                    [
-                        'parts' => $parts, 
-                        'mode' => $mode, 
-                        'documentId' => $documentId
-                    ]
-                ),
-                'sorting'       =>  $this->renderView(
-                    'part/_sorting.html.twig', 
-                    ['parts' => $parts]
-                ),
-                'pagination'    =>  $this->renderView(
-                    'part/_pagination.html.twig', 
-                    ['parts' => $parts]
-                ),
+                    'content'       =>  $this->renderView(
+                        'part/_parts.html.twig',
+                        [
+                            'parts' => $parts,
+                            'mode' => $mode,
+                            'documentId' => $documentId
+                        ]
+                    ),
+                    'sorting'       =>  $this->renderView(
+                        'part/_sorting.html.twig',
+                        ['parts' => $parts]
+                    ),
+                    'pagination'    =>  $this->renderView(
+                        'part/_pagination.html.twig',
+                        ['parts' => $parts]
+                    ),
                 ]
             );
         }
 
-        if ($mode == 'workorderAddPart' 
-            || $mode == 'editReceivedPart' 
-            || $mode == 'editDeliveryNote' 
+        if (
+            $mode == 'workorderAddPart'
+            || $mode == 'editReceivedPart'
+            || $mode == 'editDeliveryNote'
             || $mode == 'newDeliveryNote'
         ) {
             $panier = $session->get('panier', null);
-            if ($panier) {
+            if ($panier == true) {
                 $panierWithData = [];
                 foreach ($panier as $id => $quantity) {
                     $panierWithData[] = [
@@ -129,36 +131,42 @@ class PartController extends AbstractController
                     ];
                 }
                 return $this->render(
-                    'part/index.html.twig', [
-                    'parts' =>  $parts,
-                    'form'  =>  $form->createView(),
-                    'mode'  =>  $mode,
-                    'items' => $panierWithData,
-                    'documentId' => $documentId,
+                    'part/index.html.twig',
+                    [
+                        'parts' =>  $parts,
+                        'form'  =>  $form->createView(),
+                        'mode'  =>  $mode,
+                        'items' => $panierWithData,
+                        'documentId' => $documentId,
                     ]
                 );
             }
             return $this->render(
-                'part/index.html.twig', [
-                'parts' =>  $parts,
-                'form'  =>  $form->createView(),
-                'documentId' => $documentId,
-                'mode'  =>  $mode,
+                'part/index.html.twig',
+                [
+                    'parts' =>  $parts,
+                    'form'  =>  $form->createView(),
+                    'documentId' => $documentId,
+                    'mode'  =>  $mode,
                 ]
             );
         }
         return $this->render(
-            'part/index.html.twig', [
-            'parts' =>  $parts,
-            'form'  =>  $form->createView(),
-            'documentId' => $documentId,
-            'mode'  =>  "index",
+            'part/index.html.twig',
+            [
+                'parts' =>  $parts,
+                'form'  =>  $form->createView(),
+                'documentId' => $documentId,
+                'mode'  =>  "index",
             ]
         );
     }
 
+    /**
+     * @ Nouvelle pièce détachée
+     */
     #[IsGranted('ROLE_USER')]
-    #[Route('/new', name: 'part_new', methods: ["GET","POST"])]
+    #[Route('/new', name: 'part_new', methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -184,32 +192,37 @@ class PartController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToRoute(
-                'part_show', [
-                'id' => $part->getId(),
-
-                ], Response::HTTP_SEE_OTHER
+                'part_show',
+                ['id' => $part->getId()],
+                Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'part/new.html.twig', [
-            'part' => $part,
-            'form' => $form,
+            'part/new.html.twig',
+            [
+                'part' => $part,
+                'form' => $form,
             ]
         );
     }
 
+    /**
+     * @ Visualisation pièce
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/show/{id}', name: 'part_show', methods: ["GET"])]
     public function show(Part $part): Response
     {
         return $this->render(
-            'part/show.html.twig', [
-            'part' => $part,
-            ]
+            'part/show.html.twig',
+            ['part' => $part]
         );
     }
 
+    /**
+     * @ Edition pièce
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/edit/{id}', name: 'part_edit', methods: ["GET", "POST"])]
     public function edit(Request $request, Part $part): Response
@@ -226,29 +239,34 @@ class PartController extends AbstractController
             $this->manager->flush();
 
             return $this->redirectToRoute(
-                'part_show', [
-                'id' => $part->getId(),
-                ], Response::HTTP_SEE_OTHER
+                'part_show',
+                [
+                    'id' => $part->getId(),
+                ],
+                Response::HTTP_SEE_OTHER
             );
         }
 
         return $this->renderForm(
-            'part/edit.html.twig', [
-            'part' => $part,
-            'form' => $form,
+            'part/edit.html.twig',
+            [
+                'part' => $part,
+                'form' => $form,
             ]
         );
     }
 
+    /**
+     * @ Désactiver pièce détachée
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/delete/{id}', name: 'part_delete', methods: ["POST"])]
     public function delete(Request $request, Part $part): Response
     {
         if ($this->isCsrfTokenValid(
-            'delete' . $part->getId(), 
+            'delete' . $part->getId(),
             $request->request->get('_token')
-        )
-        ) {
+        )) {
             $part->setActive(false);
             $this->manager->flush();
         }
@@ -256,6 +274,9 @@ class PartController extends AbstractController
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @ Mise à zéro de la quantité d'approvisionnement
+     */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/approzero', name: 'appro_to_zero')]
     public function setApproToZero(): Response
@@ -264,11 +285,11 @@ class PartController extends AbstractController
 
         foreach ($parts as $part) {
             $approQte = $part->getStock()->getApproQte();
-            if ($approQte == null) {
+            if ($approQte === null) {
                 $part->getStock()->setApproQte(0);
                 $this->manager->persist($part);
             }
-            if ($part->getActive() == false) {
+            if ($part->getActive() === false) {
                 $part->setActive(true);
             }
         }
@@ -277,6 +298,9 @@ class PartController extends AbstractController
         return $this->redirectToRoute('part_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @ Liste des pièces détachaes
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/reception', name: 'reception_part')]
     public function reception(): Response
@@ -288,7 +312,7 @@ class PartController extends AbstractController
      * @ Valeur du stock de pièces détachées
      */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/infos', name: 'parts_value', methods:['GET', 'POST'])]
+    #[Route('/infos', name: 'parts_value', methods: ['GET', 'POST'])]
     public function infos(): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -307,14 +331,18 @@ class PartController extends AbstractController
         }
 
         return $this->render(
-            'part/infos_pieces.html.twig', [
-            'totalStock' => $totalStock,
-            'dates' =>  json_encode($dates),
-            'amounts' => json_encode($amounts),
+            'part/infos_pieces.html.twig',
+            [
+                'totalStock' => $totalStock,
+                'dates' =>  json_encode($dates),
+                'amounts' => json_encode($amounts),
             ]
         );
     }
 
+    /**
+     * @ Affichage des bons de livraison liés à une pièce
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/appro/{id}', name: 'show_appro')]
     public function appro(Part $part)
@@ -324,34 +352,34 @@ class PartController extends AbstractController
         );
 
         return $this->render(
-            'part/showAppro.html.twig', [
-            'deliveryNotes' => $deliveryNotes,
-            'part' => $part,
+            'part/showAppro.html.twig',
+            [
+                'deliveryNotes' => $deliveryNotes,
+                'part' => $part,
             ]
         );
     }
 
     /**
+     * Impession étiquette d'une pièce 
      * 
      * @param PdfService $pdfService
-     * Impession étiquette d'une pièce 
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/partlabel/{id}', name: 'part_label')]
     public function printLabel(Part $part, PdfService $pdfService): Response
     {
         $html = $this->renderView(
-            'prints/one_label_print.html.twig', [
-            'part' => $part,
-            ]
+            'prints/one_label_print.html.twig',
+            ['part' => $part]
         );
 
         $pdfService->printLabel($html);
 
         return new Response(
-            '', 200, [
-            'Content-Type' => 'application/pdf',
-            ]
+            '',
+            200,
+            ['Content-Type' => 'application/pdf']
         );
     }
 
@@ -359,7 +387,7 @@ class PartController extends AbstractController
      * @ Valeur du stock de pièces détachées + affichage des 50 pièces les + chères
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/stockTopValue', name: 'stock_top_value', methods:["GET","POST"])]
+    #[Route('/stockTopValue', name: 'stock_top_value', methods: ["GET", "POST"])]
     public function topStockValue(): Response
     {
         $organisation =  $this->organisation->getOrganisation();
@@ -380,11 +408,12 @@ class PartController extends AbstractController
         }
 
         return $this->render(
-            'part/top_value_parts.html.twig', [
-            'totalStock' => $totalStock,
-            'dates' =>  json_encode($dates),
-            'amounts' => json_encode($amounts),
-            'parts' => $topParts,
+            'part/top_value_parts.html.twig',
+            [
+                'totalStock' => $totalStock,
+                'dates' =>  json_encode($dates),
+                'amounts' => json_encode($amounts),
+                'parts' => $topParts,
             ]
         );
     }

@@ -1,9 +1,32 @@
+{# templates/bundles/TwigBundle/Exception/error.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Page non trouvée</h1>
-
-    <p>
-        La page demandée n'a pu être trouvée <a href="{{ path('home') }}">retour à l'accueil</a>.
-    </p>
+{% block title %}
+	{% if status_code is defined %}
+		{{ status_code }}
+		Erreur
+	{% else %}
+		Erreur
+	{% endif %}
 {% endblock %}
+
+{% block body %}
+	<h1>
+		{% if status_code is defined %}
+			{{ status_code }}
+			Erreur
+		{% else %}
+			Erreur
+		{% endif %}
+	</h1>
+	<p>
+		{% if status_text is defined %}
+			{{ status_text }}
+		{% else %}
+			Une erreur s'est produite.
+		{% endif %}
+	</p>
+	{# Ajoutez votre propre contenu personnalisé ici #}
+{% endblock %}
+

@@ -22,11 +22,11 @@ class SearchWorkorderForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('createdAt', DateType::class, [
+            ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'label'     => false,
                 'required'  => false,
-                'attr'      => ['placeholder' => 'Date']
+                'attr'      => ['placeholder' => 'Date début']
             ])
             ->add('id', NumberType::class, [
                 'label'     => false,

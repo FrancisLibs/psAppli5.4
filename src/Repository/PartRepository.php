@@ -239,7 +239,7 @@ class PartRepository extends ServiceEntityRepository
      * de livraison prévue est plus petite que la date du jour
      * Donc la date est dépassée
      * 
-     * @param integer $organisation
+     * @param integer $organisationid
      * 
      * @return Part[]
      */
@@ -250,6 +250,28 @@ class PartRepository extends ServiceEntityRepository
             ->andWhere('p.organisation = :organisation')
             ->setParameter('organisation', $organisationId)
             ->andWhere('p.maxDeliveryDate < CURRENT_DATE()')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Compte le nombre de pièces en réappro et non achetées
+     * 
+     * @param integer $organisationid
+     * 
+     * @return Part[]
+     */
+    public function countPartsToBuy($organisationId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->join('p.stock', 's')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
+            ->andWhere('s.qteStock < s.qteMin')
+            ->andWhere('s.approQte <= 0')
             ->getQuery()
             ->getSingleScalarResult();
     }

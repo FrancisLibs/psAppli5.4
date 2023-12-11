@@ -28,9 +28,9 @@
 							</td>
 							<td data-label="Technicien" class="text-center font_size_table">{{ workorder.user.firstName }}</td>
 							{% if workorder.preventive %}
-								<td data-label="Date" class="text-center font_size_table">{{ workorder.preventiveDate ? workorder.preventiveDate|date('d-m-Y') : '' }}</td>
+								<td data-label="Date" class="text-center font_size_table"><strong>P </strong>{{ workorder.preventiveDate ?  workorder.preventiveDate|date('d-m-Y') : '' }}</td>
 							{% else %}
-								<td data-label="Date" class="text-center font_size_table">{{ workorder.createdAt ? workorder.createdAt|date('d-m-Y') : '' }}</td>
+								<td data-label="Date" class="text-center font_size_table">{{ workorder.startDate ? workorder.startDate|date('d-m-Y') : '' }}</td>
 							{% endif %}
 							<td data-label="Demande" class="text-center font_size_table">{{ workorder.request }}</td>
 							<td data-label="Statut" class="text-center font_size_table">{{ workorder.workorderStatus.name }}</td>

@@ -107,11 +107,12 @@ tr {
 }
 
 .submit_search_word {
-  height: 25px;
+  height: 23px;
   padding: 0;
-  width: 70px;
+  width: 76px;
   background-color: blue;
   color: white;
+  border: 1px solid transparent;
 }
 
 .displayMd {

@@ -19,11 +19,11 @@ class SearchWorkorder
     public $id;
     
     /**
-     * Date de création
+     * Date de début d'intervention
      *
-     * @var dateTime
+     * @var date
      */
-    public $createdAt;
+    public $startDate;
 
     /**
      * Machine

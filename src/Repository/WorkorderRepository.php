@@ -56,15 +56,14 @@ class WorkorderRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchWorkorder $search): PaginationInterface
     {
-        //dd($search->status->getId());
         $query = $this->createQueryBuilder('w')
             ->select('w', 'm', 'u', 'o', 's')
             ->join('w.machines', 'm')
             ->join('w.user', 'u')
             ->join('w.organisation', 'o')
             ->join('w.workorderStatus', 's')
-            ->andWhere('w.organisation = :val')
-            ->setParameter('val', $search->organisation)
+            // ->andWhere('w.organisation = :val')
+            // ->setParameter('val', $search->organisation)
             ->orderBy('w.id', 'DESC');
 
         if (!empty($search->id)) {
@@ -78,6 +77,12 @@ class WorkorderRepository extends ServiceEntityRepository
             $query = $query
                 ->andWhere('m.designation LIKE :machine')
                 ->setParameter('machine', "%{$machine}%");
+        }
+
+        if (!empty($search->request)) {
+            $query = $query
+                ->andWhere('w.request LIKE :request')
+                ->setParameter('request', "%{$search->request}%");
         }
 
         if (!empty($search->user)) {
@@ -111,12 +116,25 @@ class WorkorderRepository extends ServiceEntityRepository
                 ->setParameter('disabled', $search->preventive);
         }
 
+        if (!empty($search->startDate)) {
+            $startDate = $search->startDate;
+            $endDate = clone $startDate;
+
+            $startDate->setTime(0, 0, 0); // Réglage de l'heure à 00:00:00 pour inclure toute la journée.
+            $endDate->setTime(23, 59, 59); // Réglage de l'heure à 23:59:59 pour inclure toute la journée.
+
+            $query = $query
+                ->andWhere('w.startDate BETWEEN :startDate AND :endDate')
+                ->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate);
+        }
+
         $query = $query->getQuery();
 
         return $this->paginator->paginate(
             $query,
             $search->page,
-            15
+            20
         );
     }
 
