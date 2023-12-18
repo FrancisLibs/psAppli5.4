@@ -1,25 +1,75 @@
 // Gestion des dates d'affichage
-const form = document.getElementById("formDate");
-const startDate = form.elements["search_indicator[startDate]"];
-const endDate = form.elements["search_indicator[endDate]"];
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("formDate");
+  const startDateForm = form.elements["search_indicator[startDate]"];
+  const endDateForm = form.elements["search_indicator[endDate]"];
 
-const today = new Date();
-let day = today.getDate();
-let month = today.getMonth() + 1;
-const year = today.getFullYear();
+  // Gestion des boutons d'incrémentation/décrémentation de la date début
+  currentDate = new Date();
+  const dateButtonsStart = document.querySelectorAll(".date-start");
+  dateButtonsStart.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const attribute = button.getAttribute("data-increment");
+      let newDate = new Date(startDateForm.value);
+      switch (attribute) {
+        case "J+":
+          newDate.setDate(newDate.getDate() + 1);
+          break;
+        case "M+":
+          newDate.setMonth(newDate.getMonth() + 1);
+          break;
+        case "Y+":
+          newDate.setFullYear(newDate.getFullYear() + 1);
+          break;
+        case "J-":
+          newDate.setDate(newDate.getDate() - 1);
+          break;
+        case "M-":
+          newDate.setMonth(newDate.getMonth() - 1);
+          break;
+        case "Y-":
+          newDate.setFullYear(newDate.getFullYear() - 1);
+          break;
+        default:
+          console.log("il n'y a pas de possibilité");
+      }
+      updateDateInput(startDateForm, newDate);
+    });
+  });
 
-// date inputs need 2 digits
-day = day < 10 ? "0" + day : day;
-month = month < 10 ? "0" + month : month;
+  const dateButtonsEnd = document.querySelectorAll(".date-end");
+  dateButtonsEnd.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const attribute = button.getAttribute("data-increment");
+      let newDate = new Date(endDateForm.value);
+      switch (attribute) {
+        case "J+":
+          newDate.setDate(newDate.getDate() + 1);
+          break;
+        case "M+":
+          newDate.setMonth(newDate.getMonth() + 1);
+          break;
+        case "Y+":
+          newDate.setFullYear(newDate.getFullYear() + 1);
+          break;
+        case "J-":
+          newDate.setDate(newDate.getDate() - 1);
+          break;
+        case "M-":
+          newDate.setMonth(newDate.getMonth() - 1);
+          break;
+        case "Y-":
+          newDate.setFullYear(newDate.getFullYear() - 1);
+          break;
+        default:
+          console.log("il n'y a pas de possibilité");
+      }
+      updateDateInput(endDateForm, newDate);
+    });
+  });
 
-const dateDuJour = year + "-" + month + "-" + day;
-
-if (endDate.value == "") {
-  endDate.value = dateDuJour;
-}
-
-if (startDate.value == "") {
-  startDate.value = "2022-01-01";
-}
-
-
+  function updateDateInput(input, date) {
+    var formattedDate = date.toISOString().split("T")[0]; // Format ISO 8601 pour les champs de type "text"
+    input.value = formattedDate;
+  }
+});

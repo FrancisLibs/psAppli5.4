@@ -25,3 +25,19 @@ h1 {
   color: blue;
   margin: 0;
 }
+
+.date-start, .date-end{
+  width: 31px;
+  color: green;
+  font-weight: bold;
+  height: 18px;
+  font-size: 11px;
+  border: 1px solid blue;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  padding: 0;
+}
+
+.buttons {
+  margin-top: -2px;
+}

@@ -38,19 +38,7 @@
 						minutes
 					</p>
 				</div>
-				{{ form_start(form, {'attr': {'id': 'formDate', 'class': 'd-flex justify-content-start align-items-center flex-wrap'}}) }}
-				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
-					<label class="form-label">Du :
-					</label>
-					{{ form_widget(form.startDate) }}
-				</div>
-				<div class="me-3 mb-2 d-flex justify-content-start align-items-center">
-					<label class="form-label">Au :
-					</label>
-					{{ form_widget(form.endDate) }}
-				</div>
-				<button id="indicatorSubmit" type="submit" class="btn btn-primary btn-sm mb-2">Valider</button>
-				{{ form_end(form) }}
+				{% include 'indicator/_dateForm.html.twig' %}
 			</section>
 			<section>
 				<div class="d-flex justify-content-between flex-wrap mt-5">

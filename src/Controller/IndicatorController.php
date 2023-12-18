@@ -33,8 +33,16 @@ class IndicatorController extends AbstractController
         $organisation =  $this->_organisation->getOrganisation();
 
         if (empty($searchIndicator->startDate)) {
-            $searchIndicator->startDate = new \DateTime('2022/01/01');
-            $searchIndicator->endDate = new \DateTime('2023/12/31');
+            $currentYear = new \DateTime();
+            $currentYear= $currentYear->format('Y');
+            $firstDay = new \DateTime();
+            $firstDay->setDate($currentYear, 01, 01);
+            $firstDay->setTime(0,0,0);
+            $endDay = new \DateTime();
+            $endDay->setDate($currentYear, 12, 31);
+            $endDay->setTime(23,59,59);
+            $searchIndicator->startDate = $firstDay;
+            $searchIndicator->endDate = $endDay;
         };
 
         $workorders = $this->_workorderRepository->findIndicatorsWorkorders(
@@ -45,14 +53,11 @@ class IndicatorController extends AbstractController
         return $workorders;
     }
 
-
     #[Route('/indicator/workTime', name: 'app_work_time')]
     #[IsGranted('ROLE_USER')]
     public function workTime(Request $request): Response
     {
         $searchIndicator = new SearchIndicator();
-
-        // $searchIndicator = null;
 
         $workorders = $this->_readWorkorders($searchIndicator);
 
@@ -168,7 +173,6 @@ class IndicatorController extends AbstractController
             ];
             return $datas;
         }
-
         return;
     }
 
@@ -245,7 +249,6 @@ class IndicatorController extends AbstractController
                 }
                 $index++;
             }
-
             return $machineDatas;
         }
         return;
