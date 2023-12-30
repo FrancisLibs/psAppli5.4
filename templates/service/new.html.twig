@@ -4,11 +4,16 @@
 {% endblock %}
 
 {% block body %}
-	<div class="d-flex justify-content-start align-items-center">
-		<h1 class="me-5">Nouveau service de l'organisation :
-			{{ organisation.designation }}</h1>
-		<a class="btn btn-primary btn-sm me-3" href="{{ path('service_index') }}">Retour à la liste</a>
-	</div>
-
-	{{ include('service/_form.html.twig') }}
+	<main class="row justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-md-11 col-lg-10 col-xl-9">
+			<header class="d-flex justify-content-start align-items-center mb-3">
+				<h3 class="text-primary me-5">Création service</h3>
+				<a class="btn btn-primary btn-sm" href="{{ path('service_index') }}">Retour à la liste</a>
+			</header>
+			<section>
+				{{ include('service/_form.html.twig') }}
+			</section>
+		</article>
+	</main>
 {% endblock %}

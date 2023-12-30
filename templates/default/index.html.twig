@@ -23,21 +23,27 @@
 			</div>
 			<div class="row mt-5 justify-content-around">
 				<div id="infoFrame" class="cadre-info-vert">
-					<span class="text-center default-title">
+					<div class="text-center default-title">
 						<h2>Infos :</h2>
-					</span>
-					<span class="text-center">
-						Bt préventifs en retard :
-						{{ lateBT }}
-					</span><br>
-					<span class="text-center">
-						Pièces à commander :
-						{{ partsToBuy }}
-					</span><br>
-					<span class="text-center">
-						Pièces en retard :
-						{{ lateParts }}
-					</span>
+					</div>
+					<div class="text-left items-info">
+						<span>Bt préventifs en retard :
+							{{ lateBT }}
+						</span>
+						<span class="items-info-max">(max : 10)</span>
+					</div>
+					<div class="text-left items-info">
+						<span>Pièces à commander :
+							{{ partsToBuy }}
+						</span>
+						<span class="items-info-max">(max : 20)</span>
+					</div>
+					<div class="text-left items-info">
+						<span>Pièces en retard :
+							{{ lateParts }}
+						</span>
+						<span class="items-info-max">(max : 10)</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -67,8 +73,8 @@
 	<script src="/assets/js/infosHomePage.js" defer></script>
 	<script>
 		// Définir les variables lateBT pour le script
-		var nbOfLateBT = {{ lateBT }};
-		var partsToBuy = {{ partsToBuy }};
-		var lateParts = {{ lateParts }};
+var nbOfLateBT = {{ lateBT }};
+var partsToBuy = {{ partsToBuy }};
+var lateParts = {{ lateParts }};
 	</script>
 {% endblock %}

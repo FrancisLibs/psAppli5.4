@@ -69,6 +69,16 @@ h1 {
   animation: blink 1.5s infinite;
 }
 
+.items-info{
+  margin: 0;
+  padding: 0;
+}
+
+.items-info-max{
+  font-size: 0.7rem;
+  color: green;
+}
+
 @keyframes blink {
     0% { border-color: rgb(92, 231, 17); }
     50% { border-color: transparent; }
