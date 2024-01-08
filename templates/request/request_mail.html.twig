@@ -1,0 +1,13 @@
+{# {% if userMessage %}
+	<p>{{ userMessage }}</p>
+{% endif %} #}
+
+<ul>
+	{% for part in parts %}
+		<li>
+			({{ part.quantities}}X)
+			{{ part.part.designation }}
+			{{ part.part.reference }}
+		</li>
+	{% endfor %}
+</ul>

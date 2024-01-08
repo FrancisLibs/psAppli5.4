@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande d'offre
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/quotation_request.css">
+{% endblock %}
+
+
+{% block body %}
+	<main class="d-flex part-js-filter justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="ms-2">
+			<section class="d-flex justify-content-start align-items-center flex-wrap">
+				<h1 class="page-title me-5 mb-5">Pièces en réappro / demande d'offre</h1>
+				<div>
+					{# <a class="btn btn-primary btn-sm mb-2" href="{{ path('parts_to_buy') }}" role="button">Liste pièces réappro</a> #}
+				</div>
+			</section>
+			<section>
+				<div class="mb-5">
+					<h3>Fournisseur :
+						{{ provider.name }}</h3>
+					{% if provider.email %}
+						<p>Email :
+							{{ provider.email }}</p>
+					{% else %}
+						<p>Il n'a pas été attribué d'email à ce fournisseur</p>
+					{% endif %}
+				</div>
+				<form class="mb-5" method="post" action="{{ path('quotation-parts-select') }}">
+					<div class="mb-5">
+						<input type="hidden" name="provider_id" value="{{ provider.id }}"/>
+
+						<table class="table table-striped table-bordered">
+							{% for part in parts %}
+								<tr>
+									<td class="text-left">{{ part.code }}</td>
+									<td class="text-center">{{ part.designation }}</td>
+									<td class="text-center">{{ part.reference }}</td>
+									<td class="text-center"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="1" /></td>
+									<td class="text-center"><input type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked /></td>
+								</tr>
+							{% endfor %}
+						</table>
+
+						<p class="default_message">
+							<strong>Message par défaut :
+							</strong>Bonjour, Merci de me faire une offre pour :</p>
+
+						<label for="user_message">
+							<strong>Message&nbsp;:</strong>
+						</label>
+						<textarea name="user_message" placeholder="Message remplaçant le texte par défaut" rows="4" cols="50"></textarea>
+					</div>
+
+					<button class="btn btn-primary" type="submit">Demande de prix</button>
+				</form>
+			</section>
+		</article>
+	</main>
+{% endblock %}

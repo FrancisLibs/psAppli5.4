@@ -122,11 +122,12 @@ class PartRepository extends ServiceEntityRepository
     }
 
     /**
-     * Undocumented function
+     * Retourne les pièces à réapprovisionner / fournisseur / organisation
      *
      * @param [type] $organisation
      * @param [type] $provider
-     * @return void
+     * 
+     * @return Parts[]
      */
     public function findProviderParts($organisation, $provider)
     {
@@ -147,6 +148,13 @@ class PartRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Récupère la valeur du stock pour une certaine organisation
+     *
+     * @param Sorganisation
+     * 
+     * @return void
+     */
     public function findTotalStock($organisationId)
     {
         return $this->createQueryBuilder('p')

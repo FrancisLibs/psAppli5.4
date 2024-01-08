@@ -1,0 +1,7 @@
+.default_message {
+    border: 1px solid black; border-radius: 3px; padding: 2px;
+}
+
+.part_qte {
+    width : 70px;
+}

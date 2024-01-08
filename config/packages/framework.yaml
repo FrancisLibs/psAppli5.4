@@ -16,12 +16,12 @@ framework:
 
     #esi: true
     #fragments: true
-    php_errors:
-        log: true
+    # php_errors:
+    #     log: true
         
-    error_controller: 'App\Controller\ExceptionController::showException'
+    # error_controller: 'App\Controller\ExceptionController::showException'
 
-    profiler: { only_exceptions: false }
+    # profiler: { only_exceptions: false }
 
 when@test:
     framework:

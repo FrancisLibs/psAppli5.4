@@ -7,8 +7,11 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailerServicefl
 {
+    protected $mailer;
+
     public function __construct(MailerInterface $mailer)
     {
+        $this->mailer = $mailer;
     }
 
     public function sendEmail(

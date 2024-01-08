@@ -4,21 +4,20 @@
 {% endblock %}
 
 {% block body %}
-	<main class="row part-js-filter justify-content-start mt-5">
+	<main class="d-flex part-js-filter justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col">
-			<section class="row justify-content-start align-items-center">
-				<div class="col-12 col-sm-6 col-md-5 col-lg-4">
-					<h1 class="page-title">Pièces en réappro</h1>
-				</div>
-				<div class="col-12 col-sm-6">
-					<a class="btn btn-primary btn-sm" href="{{ path('parts_to_buy') }}" role="button">Liste pièces réappro</a>
+		<article class="ms-2">
+			<section class="d-flex justify-content-start align-items-center flex-wrap">
+				<h1 class="page-title me-5 mb-2">Pièces en réappro</h1>
+				<div>
+					<a class="btn btn-primary btn-sm mb-2" href="{{ path('parts_to_buy') }}" role="button">Liste pièces réappro</a>
+					<a class="btn btn-primary btn-sm mb-2" href="{{ path('app_request', {'id': provider.id}) }}" role="button">Demande d'offre</a>
 				</div>
 			</section>
 			<section class="row mt-5">
 				<div class="col-12 d-flex justify-content-start">
 					<h4 class="me-4">Fournisseur :
-						{{ provider.name }}</h3>
+						{{ provider.name }}</h4>
 				</div>
 			</section>
 			<section class="row mt-5">
