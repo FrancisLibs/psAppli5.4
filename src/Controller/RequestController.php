@@ -72,34 +72,36 @@ class RequestController extends AbstractController
         $providerId = $request->request->get('provider_id');
         $selectedPartIds = $request->request->get('selected_parts');
         $quantities = $request->request->get('quantities');
-        $userMessage = $request->request->get('selected_parts');
+        $userMessage = $request->request->get('user_message');
 
         $provider = $this->providerRepository->findOneById($providerId);
         $email = $provider->getEmail();
-
+        dump($selectedPartIds);
         $this->requestStack->getSession()->clear(); // Effacement d'un éventuel message
         
-        if (empty($selectedPartIds)) {
-            $this->addFlash('error', 'Attention tu n\'as selectionné aucun article');
-            return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
-        }
+        // if (empty($selectedPartIds)) {
+        //     $this->addFlash('error', 'Attention tu n\'as selectionné aucun article');
+        //     return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
+        // }
 
-        if (empty($email)) {
-            $this->addFlash('error', 'Attention ce fournisseur n\'a pas d\'adresse email');
-            return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
-        }
+        // if (empty($email)) {
+        //     $this->addFlash('error', 'Attention ce fournisseur n\'a pas d\'adresse email');
+        //     return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
+        // }
 
-        $part = [];
+        $parts = [];
         foreach ($quantities as $partId => $quantity) {
-            $part = $this->partRepository->findOneById($partId);
-            if ($part) {
-                $parts[] = [
-                    'part' => $part,
-                    'quantities' => $quantity,
-                ];
+            if(in_array($partId, $selectedPartIds )) {
+                $part = $this->partRepository->findOneById($partId);
+                if ($part) {
+                    $parts[] = [
+                        'part' => $part,
+                        'quantities' => $quantity,
+                    ];
+                }
             }
         }
-        //dd($parts);
+        
         // Construction du contenu de l'e-mail en utilisant le rendu de template
         $emailContent = $this->renderView(
             'request/request_mail.html.twig',
