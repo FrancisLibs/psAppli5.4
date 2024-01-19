@@ -54,10 +54,12 @@ class RequestController extends AbstractController
         }
 
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
-
+        //dd($parts);
         return $this->render(
             'request/index.html.twig',
             [
+                'startMessage' => 'Bonjour, \n merci de me faire une offre pour les matériels ci-dessous :',
+                'endMessage'  => 'Cordialement.',
                 'provider' => $provider,
                 'parts' => $parts,
             ]
@@ -72,11 +74,12 @@ class RequestController extends AbstractController
         $providerId = $request->request->get('provider_id');
         $selectedPartIds = $request->request->get('selected_parts');
         $quantities = $request->request->get('quantities');
-        $userMessage = $request->request->get('user_message');
+        $startMessage = $request->request->get('startMessage');
+        $endMessage = $request->request->get('endMessage');
 
         $provider = $this->providerRepository->findOneById($providerId);
         $email = $provider->getEmail();
-        dump($selectedPartIds);
+        // dump($selectedPartIds);
         $this->requestStack->getSession()->clear(); // Effacement d'un éventuel message
         
         // if (empty($selectedPartIds)) {
@@ -106,8 +109,9 @@ class RequestController extends AbstractController
         $emailContent = $this->renderView(
             'request/request_mail.html.twig',
             [
+                'startMessage' => $startMessage,
+                'endMessage' => $endMessage,
                 'parts' => $parts,
-                'userMessage' => $userMessage,
             ]
         );
 

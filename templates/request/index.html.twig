@@ -14,7 +14,7 @@
 		{% include 'user/_photo.html.twig' %}
 		<article class="ms-2">
 			<section class="d-flex justify-content-start align-items-center flex-wrap">
-				<h1 class="page-title me-5 mb-5">Pièces en réappro / demande d'offre</h1>
+				<h1 class="page-title me-5 mb-4">Pièces en réappro / demande d'offre</h1>
 				<div>
 					{# <a class="btn btn-primary btn-sm mb-2" href="{{ path('parts_to_buy') }}" role="button">Liste pièces réappro</a> #}
 				</div>
@@ -36,29 +36,60 @@
 
 						<table class="table table-striped table-bordered">
 							{% for part in parts %}
-								<tr>
+								<tr class="ligne">
 									<td class="text-left">{{ part.code }}</td>
 									<td class="text-center">{{ part.designation }}</td>
 									<td class="text-center">{{ part.reference }}</td>
-									<td class="text-center"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="1" /></td>
-									<td class="text-center"><input type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked /></td>
+									<td class="qte text-center"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="{{ part.stock.qteMax - part.stock.qteStock }}"/></td>
+									<td class="set text-center"><input type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
+									<td class="price text-left">
+										<span>Px un. :</span>
+										<span>{{ part.steadyPrice }}</span>
+										<span>€</span>
+									</td>
+									<td class="totalPrice text-left">
+										<span>Px tot. :
+										</span>
+										<span></span>
+										<span>€</span>
+									</td>
 								</tr>
 							{% endfor %}
+							<tr>
+								<td colspan="6"></td>
+								<td>
+									<span>Px tot :
+									</span>
+									<span id="totalPrice"></span>
+									<span>€</span>
+								</td>
+							</tr>
 						</table>
-
-						<p class="default_message">
-							<strong>Message par défaut :
-							</strong>Bonjour, Merci de me faire une offre pour :</p>
-
-						<label for="user_message">
-							<strong>Message&nbsp;:</strong>
-						</label>
-						<textarea name="user_message" placeholder="Message remplaçant le texte par défaut" rows="4" cols="50"></textarea>
+						<div class="d-flex justify-content-start align-items-top">
+							<div class="d-flex justify-content-start align-items-top">
+								<label class="me-2" for="startMessage">
+									<strong>Message début :
+									</strong>
+								</label>
+								<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
+							</div>
+							<div class="d-flex justify-content-start align-items-top ms-2">
+								<label class="me-2" for="endMessage">
+									<strong>Message fin :
+									</strong>
+								</label>
+								<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
+							</div>
+						</div>
 					</div>
-
 					<button class="btn btn-primary" type="submit">Demande de prix</button>
 				</form>
 			</section>
 		</article>
 	</main>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/priceRequest.js" defer></script>
 {% endblock %}

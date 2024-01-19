@@ -1,6 +1,5 @@
-{# {% if userMessage %}
-	<p>{{ userMessage }}</p>
-{% endif %} #}
+<p>{{ startMessage|nl2br }}</p>
+
 
 <ul>
 	{% for part in parts %}
@@ -11,3 +10,8 @@
 		</li>
 	{% endfor %}
 </ul>
+
+<p>{{ endMessage|nl2br }}</p>
+
+<p>{{ app.user.firstName }}{{ app.user.lastName }}</p>
+
