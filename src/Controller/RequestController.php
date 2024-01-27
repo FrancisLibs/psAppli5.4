@@ -49,12 +49,10 @@ class RequestController extends AbstractController
         $organisation = $this->organisation->getOrganisation();
 
         if (empty($provider->getEmail())) {
-            $this->requestStack->getSession()->clear(); // Effacement d'un éventuel message
             $this->addFlash('error', 'Attention ce fournisseur n\'a pas d\'adresse email');
         }
 
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
-        //dd($parts);
         return $this->render(
             'request/index.html.twig',
             [

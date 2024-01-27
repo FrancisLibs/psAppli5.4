@@ -67,7 +67,7 @@ class ProviderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les machines liées à une recherche d'un mot
+     * Récupère les fournisseurs liées à une recherche d'un mot
      *
      * @param Sorganisation
      * @param $globalSearch
@@ -77,11 +77,9 @@ class ProviderRepository extends ServiceEntityRepository
     public function findGlobalSearch($organisation, GlobalSearch $globalSearch)
     {
         $word =  "%".strtoupper($globalSearch->search)."%";
-    
         return $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.organisation = :organisation')
-
             ->andWhere(
                 '
                 p.name LIKE :word 
@@ -91,7 +89,6 @@ class ProviderRepository extends ServiceEntityRepository
                 p.phone LIKE :word
             '
             )
-
             ->setParameters(
                 new ArrayCollection(
                     [
@@ -100,7 +97,25 @@ class ProviderRepository extends ServiceEntityRepository
                     ]
                 )
             ) 
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
+    /**
+     * Récupère les fournisseurs pour la requête ajax price request
+     *
+     * @param Sorganisation
+     * @param $globalSearch
+     * 
+     * @return DeliveryNote[]
+     */
+    public function findAllProviders($organisationId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->andWhere('p.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
             ->orderBy('p.name', 'ASC')
             ->getQuery()
             ->getResult();

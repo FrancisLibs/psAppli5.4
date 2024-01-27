@@ -7,6 +7,7 @@ use App\Form\ProviderType;
 use App\Data\SearchProvider;
 use App\Data\SelectProvider;
 use App\Form\ProviderCleanType;
+use App\Service\OrganisationService;
 use App\Form\SearchProviderForm;
 use App\Repository\ProviderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,22 +26,35 @@ class ProviderController extends AbstractController
 {
     private $_providerRepository;
     private $_manager;
+    protected $organisation;
 
 
     public function __construct(
-        ProviderRepository
-        $providerRepository,
-        EntityManagerInterface $manager
+        ProviderRepository $providerRepository,
+        EntityManagerInterface $manager,
+        OrganisationService $organisation,
     ) {
         $this->_providerRepository = $providerRepository;
         $this->_manager = $manager;
+        $this->organisation = $organisation;
     }
 
 
     #[Route('/show/{id}', name: 'provider_show', methods: ["GET"])]
     #[IsGranted('ROLE_ADMIN')]
-    public function show(Provider $provider): Response
+    public function show(Provider $provider, Request $request): Response
     {
+        $isAjaxRequest = $request->query->get('ajax');
+        // Vérifier si la requête est une requête AJAX
+        if ($isAjaxRequest) {
+            $data[] = [
+                'id' => $provider->getId(),
+                'nom' => $provider->getName(),
+                'email' => $provider->getEmail(),
+            ];
+            return new JsonResponse($data);
+        }
+
         return $this->render(
             'provider/show.html.twig',
             [
@@ -115,6 +129,30 @@ class ProviderController extends AbstractController
             ]
         );
     }
+/**
+ * Cette fonction est utilisée pour l'appel ajax dans le module priceRequest
+ *
+ * @param Request $request
+ * @return void
+ */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/list', name: 'provider_list', methods: ["GET"])]
+    public function ajaxListe(Request $request)
+    {
+        $organisationId = $this->organisation->getOrganisation()->getId();
+        // Obtenir la liste des fournisseurs
+        $providers = $this->_providerRepository->findAllProviders($organisationId);
+
+        // Convertir la liste en un tableau JSON
+        $data = [];
+        foreach ($providers as $provider) {
+            $data[] = [
+                'id' => $provider->getId(),
+                'nom' => $provider->getName(),
+            ];
+        }
+        return new JsonResponse($data);
+    }
 
     /**
      * Liste des fournisseurs
@@ -137,18 +175,18 @@ class ProviderController extends AbstractController
         if ($request->get('ajax') && ($mode == 'selectProvider')) {
             return new JsonResponse(
                 [
-                    'content'       =>  $this->renderView(
+                    'content' => $this->renderView(
                         'provider/_providers.html.twig',
                         [
                             'providers' => $providers,
                             'mode' => $mode
                         ]
                     ),
-                    'sorting'       =>  $this->renderView(
+                    'sorting' => $this->renderView(
                         'provider/_sorting.html.twig',
                         ['providers' => $providers]
                     ),
-                    'pagination'    =>  $this->renderView(
+                    'pagination' => $this->renderView(
                         'provider/_pagination.html.twig',
                         ['providers' => $providers]
                     ),
@@ -159,15 +197,15 @@ class ProviderController extends AbstractController
         if ($request->get('ajax')) {
             return new JsonResponse(
                 [
-                    'content'       =>  $this->renderView(
+                    'content' => $this->renderView(
                         'provider/_providers.html.twig',
                         ['providers' => $providers]
                     ),
-                    'sorting'       =>  $this->renderView(
+                    'sorting' => $this->renderView(
                         'provider/_sorting.html.twig',
                         ['providers' => $providers]
                     ),
-                    'pagination'    =>  $this->renderView(
+                    'pagination' => $this->renderView(
                         'provider/_pagination.html.twig',
                         ['providers' => $providers]
                     ),
@@ -178,8 +216,8 @@ class ProviderController extends AbstractController
         return $this->render(
             'provider/index.html.twig',
             [
-                'providers' =>  $providers,
-                'form'  =>  $form->createView(),
+                'providers' => $providers,
+                'form' => $form->createView(),
                 'mode' => $mode,
                 'documentId' => $documentId,
             ]

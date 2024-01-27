@@ -5,3 +5,8 @@
 .part_qte {
     width : 70px;
 }
+
+.titre_fournisseur {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

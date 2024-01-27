@@ -20,76 +20,109 @@
 				</div>
 			</section>
 			<section>
-				<div class="mb-5">
-					<h3>Fournisseur :
-						{{ provider.name }}</h3>
-					{% if provider.email %}
-						<p>Email :
-							{{ provider.email }}</p>
-					{% else %}
-						<p>Il n'a pas été attribué d'email à ce fournisseur</p>
-					{% endif %}
-				</div>
-				<form class="mb-5" method="post" action="{{ path('quotation-parts-select') }}">
-					<div class="mb-5">
-						<input type="hidden" name="provider_id" value="{{ provider.id }}"/>
 
-						<table class="table table-striped table-bordered">
-							{% for part in parts %}
-								<tr class="ligne">
-									<td class="text-left">{{ part.code }}</td>
-									<td class="text-center">{{ part.designation }}</td>
-									<td class="text-center">{{ part.reference }}</td>
-									<td class="qte text-center"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="{{ part.stock.qteMax - part.stock.qteStock }}"/></td>
-									<td class="set text-center"><input type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
-									<td class="price text-left">
-										<span>Px un. :</span>
-										<span>{{ part.steadyPrice }}</span>
-										<span>€</span>
-									</td>
-									<td class="totalPrice text-left">
-										<span>Px tot. :
-										</span>
-										<span></span>
-										<span>€</span>
-									</td>
-								</tr>
-							{% endfor %}
-							<tr>
-								<td colspan="6"></td>
-								<td>
-									<span>Px tot :
-									</span>
-									<span id="totalPrice"></span>
-									<span>€</span>
-								</td>
-							</tr>
-						</table>
-						<div class="d-flex justify-content-start align-items-top">
-							<div class="d-flex justify-content-start align-items-top">
-								<label class="me-2" for="startMessage">
-									<strong>Message début :
-									</strong>
-								</label>
-								<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
+				<!-- La modale -->
+				<div class="modal" id="myModal">
+					<div class="modal-dialog">
+						<div
+							class="modal-content">
+
+							<!-- En-tête de la modale -->
+							<div class="modal-header">
+								<h4 class="modal-title">Sélectionnez un fournisseur</h4>
 							</div>
-							<div class="d-flex justify-content-start align-items-top ms-2">
-								<label class="me-2" for="endMessage">
-									<strong>Message fin :
-									</strong>
-								</label>
-								<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
+
+							<!-- Contenu de la modale -->
+							<div class="modal-body">
+								<div id="selectContainer">
+									<select id="fournisseurs" class="form-control"></select>
+								</div>
+							</div>
+
+							<!-- Pied de la modale -->
+							<div class="modal-footer">
+								<button type="button" id="closeModal" class="btn btn-secondary">Fermer</button>
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-primary" type="submit">Demande de prix</button>
-				</form>
-			</section>
-		</article>
-	</main>
-{% endblock %}
+				</div>
 
-{% block javascripts %}
-	{{ parent() }}
-	<script src="/assets/js/priceRequest.js" defer></script>
-{% endblock %}
+				<div class="mb-5">
+					<div class="d-flex justify-content-start align-items-start">
+						<p class="titre_fournisseur me-5">Fournisseur :</p>
+						<a id="moreProvider" class="btn btn-primary btn-sm" role="button">Ajouter fournisseur</a>
+					</div>
+					<form class="mb-5" method="post" action="{{ path('quotation-parts-select') }}">
+						<div id="providerContainer" class="d-flex flex-column justify-content-start align-items-baseline mb-4">
+							<div id="singleProviderContainer" class="d-flex justify-content-start align-items-baseline mb-4">
+								<input class="me-3" type="text" name="provider_id" value="{{ provider.name }}"/>
+								<div>
+									{% if provider.email %}
+										<p>Email :
+											{{ provider.email }}</p>
+									{% else %}
+										<p>Il n'a pas été attribué d'email à ce fournisseur</p>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="mb-5">
+							<table class="table table-striped table-bordered">
+								{% for part in parts %}
+									<tr class="ligne">
+										<td class="text-left">{{ part.code }}</td>
+										<td class="text-center">{{ part.designation }}</td>
+										<td class="text-center">{{ part.reference }}</td>
+										<td class="qte text-center"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="{{ part.stock.qteMax - part.stock.qteStock }}"/></td>
+										<td class="set text-center"><input type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
+										<td class="price text-left">
+											<span>Px un. :</span>
+											<span>{{ part.steadyPrice }}</span>
+											<span>€</span>
+										</td>
+										<td class="totalPrice text-left">
+											<span>Px tot. :
+											</span>
+											<span></span>
+											<span>€</span>
+										</td>
+									</tr>
+								{% endfor %}
+								<tr>
+									<td colspan="6"></td>
+									<td>
+										<span>Px tot :
+										</span>
+										<span id="totalPrice"></span>
+										<span>€</span>
+									</td>
+								</tr>
+							</table>
+							<div class="d-flex justify-content-start align-items-top">
+								<div class="d-flex justify-content-start align-items-top">
+									<label class="me-2" for="startMessage">
+										<strong>Message début :
+										</strong>
+									</label>
+									<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
+								</div>
+								<div class="d-flex justify-content-start align-items-top ms-2">
+									<label class="me-2" for="endMessage">
+										<strong>Message fin :
+										</strong>
+									</label>
+									<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
+								</div>
+							</div>
+						</div>
+						<button class="btn btn-primary" type="submit">Demande de prix</button>
+					</form>
+				</section>
+			</article>
+		</main>
+	{% endblock %}
+
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="/assets/js/priceRequest.js" defer></script>
+	{% endblock %}
