@@ -14,56 +14,30 @@
 		{% include 'user/_photo.html.twig' %}
 		<article class="ms-2">
 			<section class="d-flex justify-content-start align-items-center flex-wrap">
-				<h1 class="page-title me-5 mb-4">Pièces en réappro / demande d'offre</h1>
+				<h1 class="page-title me-5 mb-4">Demande d'offre</h1>
 				<div>
 					{# <a class="btn btn-primary btn-sm mb-2" href="{{ path('parts_to_buy') }}" role="button">Liste pièces réappro</a> #}
 				</div>
 			</section>
 			<section>
-
-				<!-- La modale -->
-				<div class="modal" id="myModal">
-					<div class="modal-dialog">
-						<div
-							class="modal-content">
-
-							<!-- En-tête de la modale -->
-							<div class="modal-header">
-								<h4 class="modal-title">Sélectionnez un fournisseur</h4>
-							</div>
-
-							<!-- Contenu de la modale -->
-							<div class="modal-body">
-								<div id="selectContainer">
-									<select id="fournisseurs" class="form-control"></select>
-								</div>
-							</div>
-
-							<!-- Pied de la modale -->
-							<div class="modal-footer">
-								<button type="button" id="closeModal" class="btn btn-secondary">Fermer</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				{% include 'request/_modaleNewProvider.html.twig' %}
 				<div class="mb-5">
 					<div class="d-flex justify-content-start align-items-start">
 						<p class="titre_fournisseur me-5">Fournisseur :</p>
-						<a id="moreProvider" class="btn btn-primary btn-sm" role="button">Ajouter fournisseur</a>
+						<a id="moreProviderBtn" class="btn btn-primary btn-sm" role="button">Ajouter fournisseur</a>
 					</div>
 					<form class="mb-5" method="post" action="{{ path('quotation-parts-select') }}">
 						<div id="providerContainer" class="d-flex flex-column justify-content-start align-items-baseline mb-4">
-							<div id="singleProviderContainer" class="d-flex justify-content-start align-items-baseline mb-4">
-								<input class="me-3" type="text" name="provider_id" value="{{ provider.name }}"/>
-								<div>
-									{% if provider.email %}
-										<p>Email :
-											{{ provider.email }}</p>
-									{% else %}
-										<p>Il n'a pas été attribué d'email à ce fournisseur</p>
-									{% endif %}
-								</div>
+							<div id="singleProviderContainer" class="d-flex justify-content-start align-items-center">
+								<input class="me-4" type="text" name="provider_name[]" value="{{ provider.name }}"/>
+								<input type="hidden" name="provider_id[]" value="{{provider.id}}"/>
+								<input type="hidden" name="provider_email[]" value="{{provider.email}}"/>
+								{% if provider.email %}
+									<p class="emailAddress">Email :
+										{{ provider.email }}</p>
+								{% else %}
+									<p>Il n'a pas été attribué d'email à ce fournisseur</p>
+								{% endif %}
 							</div>
 						</div>
 						<div class="mb-5">
@@ -124,5 +98,6 @@
 
 	{% block javascripts %}
 		{{ parent() }}
-		<script src="/assets/js/priceRequest.js" defer></script>
+		<script src="/assets/js/priceRequestQte.js" defer></script>
+		<script src="/assets/js/priceRequestProvider.js" defer></script>
 	{% endblock %}

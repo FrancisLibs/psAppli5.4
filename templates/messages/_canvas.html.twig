@@ -1,0 +1,29 @@
+<section class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+	<div class="offcanvas-header">
+		<h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		<div class="list-group">
+			{% if state == 'index' %}
+				<a href="{{ path("messages") }}" class="list-group-item	list-group-item-action active">Accueil</a>
+			{% else %}
+				<a href="{{ path("messages") }}" class="list-group-item	list-group-item-action">Accueil</a>
+			{% endif %}
+		</div>
+		<div class="list-group">
+			{% if state == 'received' %}
+				<a href="{{ path("received") }}" class="list-group-item	list-group-item-action active">Boite de réception</a>
+			{% else %}
+				<a href="{{ path("received") }}" class="list-group-item	list-group-item-action">Boite de réception</a>
+			{% endif %}
+		</div>
+		<div class="list-group">
+			{% if state == 'sent' %}
+				<a href="{{ path("sent") }}" class="list-group-item	list-group-item-action active">Eléments envoyés</a>
+			{% else %}
+				<a href="{{ path("sent") }}" class="list-group-item	list-group-item-action">Eléments envoyés</a>
+			{% endif %}
+		</div>
+	</div>
+</section>

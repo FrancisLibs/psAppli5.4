@@ -10,3 +10,11 @@
     font-size: 1.5rem;
     font-weight: bold;
 }
+
+.emailAddress {
+    margin: 0px;
+}
+
+.red_class {
+    color: red;
+}

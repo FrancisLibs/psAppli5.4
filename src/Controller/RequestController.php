@@ -48,10 +48,6 @@ class RequestController extends AbstractController
     {
         $organisation = $this->organisation->getOrganisation();
 
-        if (empty($provider->getEmail())) {
-            $this->addFlash('error', 'Attention ce fournisseur n\'a pas d\'adresse email');
-        }
-
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
         return $this->render(
             'request/index.html.twig',
@@ -65,30 +61,34 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("/parts-selection", name="quotation-parts-select", methods={"POST"})
+     * Envoi des emails de demande de prix
+     * 
      */
+    #[Route('/parts-selection', name: 'quotation-parts-select', methods: ['POST'])]
     public function traiterSelection(Request $request): Response
     {
+        $providerName = $request->request->get('provider_name');
         $providerId = $request->request->get('provider_id');
+        $providerEmail = $request->request->get('provider_email');
         $selectedPartIds = $request->request->get('selected_parts');
         $quantities = $request->request->get('quantities');
         $startMessage = $request->request->get('startMessage');
         $endMessage = $request->request->get('endMessage');
 
-        $provider = $this->providerRepository->findOneById($providerId);
-        $email = $provider->getEmail();
-        // dump($selectedPartIds);
-        $this->requestStack->getSession()->clear(); // Effacement d'un éventuel message
-        
-        // if (empty($selectedPartIds)) {
-        //     $this->addFlash('error', 'Attention tu n\'as selectionné aucun article');
-        //     return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
-        // }
+        $providers = [];
 
-        // if (empty($email)) {
-        //     $this->addFlash('error', 'Attention ce fournisseur n\'a pas d\'adresse email');
-        //     return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
-        // }
+        for($index = 0; $index < count($providerName); $index++){
+            $providers[$index] = [
+                'providerName' => $providerName[$index],
+                'providerId' => $providerId[$index],
+                'provideEmail' => $providerEmail[$index]
+            ];
+        }
+
+        if (empty($selectedPartIds)) {
+            $this->addFlash('error', 'Attention tu n\'as selectionné aucun article');
+            return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
+        }
 
         $parts = [];
         foreach ($quantities as $partId => $quantity) {
@@ -103,24 +103,30 @@ class RequestController extends AbstractController
             }
         }
         
-        // Construction du contenu de l'e-mail en utilisant le rendu de template
-        $emailContent = $this->renderView(
-            'request/request_mail.html.twig',
-            [
-                'startMessage' => $startMessage,
-                'endMessage' => $endMessage,
-                'parts' => $parts,
-            ]
-        );
+        // Construction du contenu de l'e-mail en utilisant le rendu de template 
+        // pour chaque fournisseur
+        foreach($providers as $provider) {
+            $emailContent = $this->renderView(
+                'request/request_mail.html.twig',
+                    [
+                        'startMessage' => $startMessage,
+                        'endMessage' => $endMessage,
+                        'parts' => $parts,
+                        'provider' => $provider,
+                    ]
+            );
 
-        // Envoi de l'e-mail
-        $email = (new Email())
-            ->from('votre@email.com')
-            ->to('fr.libs@gmail.com')
-            ->subject('Pièces sélectionnées')
-            ->html($emailContent);
+            // Envoi de l'e-mail
+            $email = (new Email())
+                ->from('votre@email.com')
+                ->to('fr.libs@gmail.com')
+                ->subject('Pièces sélectionnées')
+                ->html($emailContent);
 
-        $this->mailer->send($email);
+            $this->mailer->send($email);
+
+        }
+        
 
         return $this->render(
             'request/result.html.twig'

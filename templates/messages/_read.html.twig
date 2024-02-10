@@ -1,0 +1,17 @@
+<section class="col-12">
+	<h2 class="mb-5 page-title">Messagerie</h2>
+	<h4 class="mb-5">Titre :
+		{{message.title}}</h4>
+	<p class="mb-5">Message de
+		{{ message.sender.username}}</p>
+	<p>{{message.createdAt|date}}</p>
+	<div>Message :
+		{{ message.message }}</div>
+
+	<a href="{{ path("respond", {'id': message.id}) }}" class="btn btn-primary mt-5">Répondre</a>
+	<a class="btn btn-primary mt-5" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+		Voir mes dossiers
+	</a>
+	<a href="{{ path("received") }}" class="btn btn-primary mt-5">Retour à la boite de réception</a>
+</section>
+{% include 'messages/_canvas.html.twig' with {'state': 'index'} %}

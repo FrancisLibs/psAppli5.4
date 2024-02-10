@@ -1,0 +1,26 @@
+<section class="d-flex justify-content-start align-items-center flex-wrap mb-5">
+	<h1 class="page-title me-5">Envoyer un message</h1>
+	<a class="btn btn-primary btn-sm" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button">
+		Voir mes dossiers
+	</a>
+
+</section>
+<section>
+	{{ form_start(form) }}
+	<div class="">
+		<div class="">
+			{{ form_row(form.title) }}
+		</div>
+		<div class="">
+			{{ form_row(form.message) }}
+		</div>
+		<div class="">
+			{{ form_row(form.recipient) }}
+		</div>
+		<div class="">
+			{{ form_row(form.all) }}
+		</div>
+	</div>
+	{{ form_end(form) }}
+</section>
+{% include 'messages/_canvas.html.twig' with {'state': 'index'} %}

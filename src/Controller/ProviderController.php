@@ -24,8 +24,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ProviderController extends AbstractController
 {
-    private $_providerRepository;
-    private $_manager;
+    protected $providerRepository;
+    protected $manager;
     protected $organisation;
 
 
@@ -34,8 +34,8 @@ class ProviderController extends AbstractController
         EntityManagerInterface $manager,
         OrganisationService $organisation,
     ) {
-        $this->_providerRepository = $providerRepository;
-        $this->_manager = $manager;
+        $this->providerRepository = $providerRepository;
+        $this->manager = $manager;
         $this->organisation = $organisation;
     }
 
@@ -47,11 +47,12 @@ class ProviderController extends AbstractController
         $isAjaxRequest = $request->query->get('ajax');
         // Vérifier si la requête est une requête AJAX
         if ($isAjaxRequest) {
-            $data[] = [
+            $data = [
                 'id' => $provider->getId(),
-                'nom' => $provider->getName(),
+                'name' => $provider->getName(),
                 'email' => $provider->getEmail(),
             ];
+            // dd(new JsonResponse($data));
             return new JsonResponse($data);
         }
 
@@ -75,7 +76,7 @@ class ProviderController extends AbstractController
             $provider->setName(strtoupper($provider->getName()));
             $provider->setCity(strtoupper($provider->getCity()));
 
-            $this->_manager->flush();
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'provider_index',
@@ -111,8 +112,8 @@ class ProviderController extends AbstractController
             $provider->setCode(strtoupper($provider->getCode()));
             $provider->setName(strtoupper($provider->getName()));
             $provider->setCity(strtoupper($provider->getCity()));
-            $this->_manager->persist($provider);
-            $this->_manager->flush();
+            $this->manager->persist($provider);
+            $this->manager->flush();
 
             return $this->redirectToRoute(
                 'provider_index',
@@ -129,19 +130,21 @@ class ProviderController extends AbstractController
             ]
         );
     }
+
 /**
  * Cette fonction est utilisée pour l'appel ajax dans le module priceRequest
+ * Elle retourne la liste des fournisseurs
  *
  * @param Request $request
  * @return void
  */
     #[IsGranted('ROLE_USER')]
     #[Route('/list', name: 'provider_list', methods: ["GET"])]
-    public function ajaxListe(Request $request)
+    public function providerList(Request $request)
     {
         $organisationId = $this->organisation->getOrganisation()->getId();
         // Obtenir la liste des fournisseurs
-        $providers = $this->_providerRepository->findAllProviders($organisationId);
+        $providers = $this->providerRepository->findAllProviders($organisationId);
 
         // Convertir la liste en un tableau JSON
         $data = [];
@@ -152,6 +155,22 @@ class ProviderController extends AbstractController
             ];
         }
         return new JsonResponse($data);
+    }
+
+/**
+     * Modification d'un fournisseur -> ajout d'une adresse email en ajax
+     *
+     * @param  Request $request
+     * @return Response
+     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/email/{id}/{email}', name: 'provider_email', methods: ["GET"])]
+    public function email(Request $request, Provider $provider, $email): Response
+    {
+        $provider->setEmail($email);
+        $this->manager->persist($provider);
+        $this->manager->flush();
+        return new JsonResponse($email);
     }
 
     /**
@@ -170,7 +189,7 @@ class ProviderController extends AbstractController
         $form = $this->createForm(SearchProviderForm::class, $data);
         $form->handleRequest($request);
 
-        $providers = $this->_providerRepository->findSearch($data);
+        $providers = $this->providerRepository->findSearch($data);
 
         if ($request->get('ajax') && ($mode == 'selectProvider')) {
             return new JsonResponse(
@@ -232,8 +251,8 @@ class ProviderController extends AbstractController
             'delete' . $provider->getId(),
             $request->request->get('_token')
         )) {
-            $this->_manager->remove($provider);
-            $this->_manager->flush();
+            $this->manager->remove($provider);
+            $this->manager->flush();
         }
 
         return $this->redirectToRoute(
