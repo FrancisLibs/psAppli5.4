@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Fonctions -----------------------------
-
   // Mise à jour de chaque ligne de pièces
   function update(ligne) {
     const set = ligne.children[4].childNodes[0].checked;
@@ -24,10 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
       totalGenPrice =
         totalGenPrice + Number(totalPricePerPart[index].children[1].innerHTML);
     }
-    totalPrice.innerHTML = totalGenPrice;
+    totalPrice.innerHTML = Math.round(totalGenPrice * 100) / 100;
   }
-
-  // SCRIPT GENERAL-------------------------------------------
 
   const qtes = document.getElementsByClassName("part_qte");
   const lignes = document.getElementsByClassName("ligne");

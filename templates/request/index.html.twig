@@ -26,14 +26,15 @@
 						<p class="titre_fournisseur me-5">Fournisseur :</p>
 						<a id="moreProviderBtn" class="btn btn-primary btn-sm" role="button">Ajouter fournisseur</a>
 					</div>
-					<form class="mb-5" method="post" action="{{ path('quotation-parts-select') }}">
-						<div id="providerContainer" class="d-flex flex-column justify-content-start align-items-baseline mb-4">
-							<div id="singleProviderContainer" class="d-flex justify-content-start align-items-center">
-								<input class="me-4" type="text" name="provider_name[]" value="{{ provider.name }}"/>
-								<input type="hidden" name="provider_id[]" value="{{provider.id}}"/>
-								<input type="hidden" name="provider_email[]" value="{{provider.email}}"/>
+					<form class="mb-5 mt-3" method="post" action="{{ path('quotation-parts-select') }}">
+						<div id="globalProviderContainer" class="d-flex flex-column justify-content-start align-items-baseline mb-4">
+							<div id="firstProviderContainer" class="d-flex justify-content-start align-items-center ">
+								<input class="me-4" type="text" name="provider_name[]" readonly value="{{ provider.name }}"/>
+								<input class="champ_cache" type="text" name="provider_id[]" value="{{ provider.id }}"/>
+								<input class="champ_cache" type="text" name="provider_email[]" value="{{ provider.email }}"/>
+
 								{% if provider.email %}
-									<p class="emailAddress">Email :
+									<p class="mailAddress">Email :
 										{{ provider.email }}</p>
 								{% else %}
 									<p>Il n'a pas été attribué d'email à ce fournisseur</p>

@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Fonction fetch
+  // Constantes-------------------------------------------------------------------
+  // Récupération de la div contenant tous les fournisseurs
+  const globalProviderContainer = document.getElementById(
+    "globalProviderContainer"
+  );
+
+  // Création d'un bouton de validation d'email
+  const emailValidButton = createEmailValidationButton();
+
+  // Fonctions--------------------------------------------------------------------
+  // Fetch function
   function myFetch(url) {
     const params = {
       method: "GET",
@@ -23,7 +33,184 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // Gestion d'ajout un fournisseur ---------------------------------------------
+  // Création champ input
+  function createInputField() {
+    const inputProviderName = document.createElement("input");
+    inputProviderName.type = "text";
+    inputProviderName.name = "provider_name[]";
+    inputProviderName.className = "me-4";
+    // inputProviderName.readOnly = true;
+    return inputProviderName;
+  }
+
+  // Création d'un champ caché pour l'Id
+  function createHiddenInputProviderId() {
+    const inputProviderId = document.createElement("input");
+    inputProviderId.type = "hidden";
+    inputProviderId.name = "provider_id[]";
+    return inputProviderId;
+  }
+
+  // Création d'un champ caché pour l'email
+  function createHiddenInputProviderEmail() {
+    const inputHiddenProviderEmail = document.createElement("input");
+    inputHiddenProviderEmail.type = "hidden";
+    inputHiddenProviderEmail.name = "provider_email[]";
+    return inputHiddenProviderEmail;
+  }
+
+  // Création du champ input pour saisir les adresses mail
+  function createInputProviderEmail() {
+    const inputProviderEmail = document.createElement("input");
+    inputProviderEmail.type = "text";
+    inputProviderEmail.name = "provider_email[]";
+    inputProviderEmail.classList = "me-3";
+    return inputProviderEmail;
+  }
+
+  // Création bouton de validation de saisie d'un email
+  function createEmailValidationButton() {
+    const emailValidationButton = document.createElement("button");
+    emailValidationButton.classList.add(
+      "btn",
+      "btn-primary",
+      "btn-sm",
+      "emailValidationBtn"
+    );
+    emailValidationButton.innerText = "Valider";
+    return emailValidationButton;
+  }
+
+  // Création d'un bouton de saisie d'email
+  function createEmailButton() {
+    const emailButton = document.createElement("button");
+    emailButton.classList.add("bi", "bi-at", "ms-3", "email_button");
+    return emailButton;
+  }
+
+  // Création du paragraphe
+  function createParagraph() {
+    const paragraph = document.createElement("p");
+    paragraph.className = "mailAddress";
+    return paragraph;
+  }
+
+  // Validation de l'email saisi
+  function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+
+  // Commande modale
+  function openModal() {
+    // Afficher la modale
+    document.getElementById("myModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+  }
+
+  // Fermer la modale (croix dans la modale)
+  document.getElementById("closeModal").addEventListener("click", () => {
+    closeModal();
+  });
+
+  // Ajout du bouton de demande de saise d'un email
+  function addEmailButton(place) {
+    const button = createEmailButton();
+    place.appendChild(button);
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      inputEmail(e);
+    });
+  }
+
+  // Effacment du bouton et du paragraphe
+  function inputEmail(e) {
+    const target = e.target.parentNode;
+
+    target.children[4].remove();
+    target.children[3].remove();
+
+    const inputField = createInputField();
+    const validButton = createEmailValidationButton();
+
+    // Vérification s'il y a une adresse mail
+    const oldEmail = target.children[2].value;
+    if (oldEmail === "") {
+      inputField.placeholder = "adresse email";
+    } else {
+      inputField.placeholder = oldEmail;
+    }
+    // Ajout des éléments à la page
+    target.appendChild(inputField);
+    target.appendChild(validButton);
+
+    validButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      validNewEmail(e, oldEmail);
+    });
+  }
+
+  // Traitement de la nouvelle adresse saisie
+  function validNewEmail(e, oldEmail) {
+    const target = e.target.parentNode;
+    const providerId = target.children[1].value;
+    const newEmail = e.target.parentNode.children[3].value;
+    const p = createParagraph();
+
+    // Test de l'email
+    if (
+      !validateEmail(newEmail) ||
+      newEmail === oldEmail ||
+      newEmail.length === 0
+    ) {
+      if (oldEmail === "") {
+        p.innerText = "Pas d'adresse mail pour ce fournisseur";
+        p.classList.add("red_class");
+      } else {
+        p.innerText = "Email : " + oldEmail;
+      }
+    } else {
+      target.children[0].classList.remove("red_class");
+      // Si oui, sauvegarde de l'email
+      const url = `/provider/email/${encodeURIComponent(
+        providerId
+      )}/${encodeURIComponent(newEmail)}`;
+
+      myFetch(url)
+        .then((email) => {
+          p.innerText = "Email : " + email;
+          target.children[2].value = email;
+        })
+        .catch((error) => {
+          // Gérer les erreurs
+          console.log(error);
+        });
+    }
+    // Effacment du bouton et du champ de saise
+    target.children[4].remove();
+    target.children[3].remove();
+    target.appendChild(p);
+    addEmailButton(target);
+  }
+
+  // Traitement fournisseur d'origine
+  addEmailButton(globalProviderContainer.children[0]);
+
+  // Traitement des ajouts de fournisseurs
+  document.getElementById("moreProviderBtn").addEventListener("click", () => {
+    const url = "/provider/list";
+    myFetch(url)
+      .then((providers) => {
+        fillSelect(providers);
+      })
+      .catch((error) => {
+        // Gérer les erreurs
+        console.error(error);
+      });
+  });
 
   // Remplissage de la liste des fournisseurs
   const selectFournisseurs = document.getElementById("fournisseurs");
@@ -48,219 +235,12 @@ document.addEventListener("DOMContentLoaded", function () {
       option.text = provider.nom;
       selectFournisseurs.add(option);
     });
-    // Une fois que la liste est remplie, affichage de la modale
+    // Une fois la liste remplie, affichage de la modale
     openModal();
   }
 
-  function createSuppButton() {
-    const suppButton = document.createElement("button");
-    suppButton.classList.add("bi", "bi-trash", "ms-2", "suppButton");
-
-    suppButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.target.parentNode.remove();
-    });
-
-    return suppButton;
-  }
-
-  // Ajout d'un fournisseur dans le formulaire--------------------------------------
-  function addProvider(provider) {
-    const providerContainer = document.getElementById("providerContainer");
-    const div = document.createElement("div");
-
-    // Récupération des classes du container et assignation à la nouvelle div
-    const singleContainer = document.getElementById("singleProviderContainer");
-    const classSingleContainer = Array.from(singleContainer.classList);
-    div.classList.add(...classSingleContainer);
-    div.classList.add("mt-2");
-
-    // Créer un nouvel élément input
-    const inputProviderName = document.createElement("input");
-    inputProviderName.type = "text";
-    inputProviderName.name = "provider_name[]";
-    inputProviderName.value = provider.name;
-    inputProviderName.className = "me-4";
-
-    // Créer un nouvel élément input caché pour l'id
-    const inputProviderId = document.createElement("input");
-    inputProviderId.type = "hidden";
-    inputProviderId.name = "provider_id[]";
-    inputProviderId.value = provider.id;
-
-    // Créer un nouvel élément input caché pour l'email
-    const inputProviderEmail = document.createElement("input");
-    inputProviderEmail.type = "hidden";
-    inputProviderEmail.name = "provider_email[]";
-    inputProviderEmail.value = provider.email;
-
-    // Création conditionnelle du paragraphe email
-    const paragraphe = document.createElement("p");
-    paragraphe.className = "emailAddress";
-
-    // Inclusion du groupe de l'input dans la div
-    div.appendChild(inputProviderName);
-    div.appendChild(inputProviderId);
-    div.appendChild(inputProviderEmail);
-    div.appendChild(paragraphe);
-
-    // Contrôle présence
-    if (provider.email === "" || provider.email.length === 0) {
-      paragraphe.textContent = `Pas d'adresse mail pour ce fournisseur`;
-      paragraphe.classList.add("red_class");
-      inputProviderName.classList.add("red_class");
-    } else {
-      paragraphe.textContent = `Email : ${provider.email}`;
-    }
-
-    const emailButton = document.createElement("button");
-    emailButton.classList.add("bi", "bi-at", "ms-3", "rounded", "emailButton");
-
-    // Surveillance du click du bouton qui demande la saisie de l'email
-    emailButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      createInputfield(e);
-    });
-
-    div.appendChild(emailButton);
-
-    // Le bouton suppression est ajouté
-    const suppButton = createSuppButton();
-    div.appendChild(suppButton);
-
-    // Et affichage de la div entière
-    providerContainer.appendChild(div);
-  }
-
-  // Création d'un champ input pour l'email
-  function createInputfield(e) {
-    var inputProviderMail = document.createElement("input");
-    inputProviderMail.type = "text";
-    inputProviderMail.name = "provider_email";
-    inputProviderMail.placeholder = "Nouvelle adresse mail";
-    inputProviderMail.className = "me-3";
-
-    // Intégration du champ
-    const div = e.target.parentNode;
-    // Effacement de la poubelle, du bouton arobase et du paragraphe
-    div.children[5].remove();
-    div.children[4].remove();
-    div.children[3].remove();
-
-    // Placement du champ
-    div.appendChild(inputProviderMail);
-
-    // Création bouton de validation
-    const emailValidButton = document.createElement("button");
-    emailValidButton.classList.add(
-      "btn",
-      "btn-primary",
-      "btn-sm",
-      "validProviderEmail"
-    );
-    // placement du bouton
-    emailValidButton.innerText = "Valider";
-    div.appendChild(emailValidButton);
-    // Surveillance du bouton
-    emailValidButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      validProviderEmail(e);
-    });
-
-    // Placement du bouton suppression du fournisseur
-    const suppButton = createSuppButton();
-    div.appendChild(suppButton);
-  }
-
-  // Validation de l'email saisi
-  function validProviderEmail(e) {
-    // Looking for the provider Id and email
-    const providerId = e.target.parentNode.children[1].value;
-    const email = e.target.parentNode.children[3].value;
-
-    // Check if the email address is ok
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (regex.test(email) === true) {
-      // L'adresse mail est sauvegardée en bdd pour le fournisseur
-      // Fonction encodeURIComponent() pour échapper les valeurs des paramètres
-      const url = `/provider/email/
-      ${encodeURIComponent(providerId)}
-      /${encodeURIComponent(email)}`;
-
-      myFetch(url)
-        .then((data) => {
-          // Data contient l'adresse mail en retour
-          // On efface l'input, le bouton validation et la poubelle
-          const parent = e.target.parentNode;
-          const css = parent.parentNode.children[0].children[3].classList;
-          // Effacement de tous les éléments non nécessaires
-          parent.children[5].remove();
-          parent.children[4].remove();
-          parent.children[3].remove();
-          parent.children[2].remove();
-
-          // Modification du champ caché de l'adresse email
-          // Créer un nouvel élément input caché pour l'email
-          let inputProviderEmail = document.createElement("input");
-          inputProviderEmail.type = "hidden";
-          inputProviderEmail.name = "provider_mail[]";
-          inputProviderEmail.value = data;
-
-          // Insertion du champ caché
-          parent.appendChild(inputProviderEmail);
-
-          // Puis affichage de l'adresse email
-          const paragraphe = document.createElement("p");
-          paragraphe.classList.add(css);
-          paragraphe.innerText = "Email : " + data;
-          parent.appendChild(paragraphe);
-          // Et la case du fournisseur retrouve une couleur normale
-          parent.children[0].classList.remove("red_class");
-
-          // Et on réaffiche la poubelle
-          const suppButton = createSuppButton();
-          parent.appendChild(suppButton);
-        })
-        .catch((error) => {
-          // Gérer les erreurs
-          console.error(error);
-        });
-    } else {
-      e.target.previousElementSibling.value = "";
-    }
-  }
-
-  // Commande modale
-  function openModal() {
-    // Afficher la modale
-    document.getElementById("myModal").style.display = "block";
-  }
-
-  function closeModal() {
-    document.getElementById("myModal").style.display = "none";
-  }
-
-  // Fermer la modale (croix dans la modale)
-  document.getElementById("closeModal").addEventListener("click", () => {
-    closeModal();
-  });
-
-  // Création de la liste des fournisseurs
-  document
-    .getElementById("moreProviderBtn")
-    .addEventListener("click", function () {
-      const url = "/provider/list";
-      myFetch(url)
-        .then((providers) => {
-          fillSelect(providers);
-        })
-        .catch((error) => {
-          // Gérer les erreurs
-          console.error(error);
-        });
-    });
-
-  // ajout d'un fournisseur dans le formulaire
+  // Surveillance choix fournisseur a ajouter
+  let provider = "";
   selectFournisseurs.addEventListener("change", function (e) {
     e.preventDefault;
     let providerId = selectFournisseurs.value;
@@ -275,4 +255,68 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     closeModal();
   });
+
+  function addProvider(provider) {
+    // Création de la div du nouveau fournisseur
+    const div = document.createElement("div");
+    const globalProviderContainer = document.getElementById(
+      "globalProviderContainer"
+    );
+
+    // Récupération des classes du container et assignation à la nouvelle div
+    const firstProviderContainer = document.getElementById(
+      "firstProviderContainer"
+    );
+    const classFirstProviderContainer = Array.from(
+      firstProviderContainer.classList
+    );
+    div.classList.add(...classFirstProviderContainer);
+    div.classList.add("mt-2");
+
+    const inputProviderName = createInputField();
+    inputProviderName.value = provider.name;
+    inputProviderName.readOnly = true;
+
+    const hiddenInputProviderId = createHiddenInputProviderId();
+    hiddenInputProviderId.className = "champ_cache";
+    hiddenInputProviderId.value = provider.id;
+
+    const hiddenInputProviderEmail = createHiddenInputProviderEmail();
+    hiddenInputProviderEmail.className = "champ_cache";
+
+    // Création du paragraphe email
+    const paragraphe = document.createElement("p");
+    paragraphe.className = "emailAddress";
+
+    // Contrôle présence email
+    if (provider.email === "" || provider.email.length === 0) {
+      paragraphe.textContent = `Pas d'adresse mail pour ce fournisseur`;
+      paragraphe.classList.add("red_class");
+      inputProviderName.classList.add("red_class");
+    } else {
+      hiddenInputProviderEmail.value = provider.email;
+      paragraphe.textContent = "Email : " + provider.email;
+    }
+
+    // Inclusion du groupe de l'input dans la div
+    div.appendChild(inputProviderName);
+    div.appendChild(hiddenInputProviderId);
+    div.appendChild(hiddenInputProviderEmail);
+    div.appendChild(paragraphe);
+
+    // Affichage div dans providerContainer
+    globalProviderContainer.appendChild(div);
+
+    addEmailButton(div);
+  }
 });
+
+// Ajout du bouton de demande de saise d'un email
+function addEmailButton(place) {
+  const button = createEmailButton();
+  place.appendChild(button);
+  button.addEventListener("click", function (e) {
+    e.preventDefault();
+    inputEmail(e);
+  });
+}

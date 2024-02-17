@@ -18,3 +18,18 @@
 .red_class {
     color: red;
 }
+
+p {
+    margin: 0;
+}
+
+.email_button {
+    border-radius: 14px;
+    color: white;
+    background: blue;
+    border-color: blue;
+}
+
+.champ_cache {
+    display: none;
+}
