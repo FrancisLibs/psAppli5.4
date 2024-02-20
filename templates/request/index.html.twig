@@ -29,7 +29,11 @@
 					<form class="mb-5 mt-3" method="post" action="{{ path('quotation-parts-select') }}">
 						<div id="globalProviderContainer" class="d-flex flex-column justify-content-start align-items-baseline mb-4">
 							<div id="firstProviderContainer" class="d-flex justify-content-start align-items-center ">
-								<input class="me-4" type="text" name="provider_name[]" readonly value="{{ provider.name }}"/>
+								{% if provider.email %}
+									<input class="me-4" type="text" name="provider_name[]" readonly value="{{ provider.name }}"/>
+								{% else %}
+									<input class="me-4 red_class" type="text" name="provider_name[]" readonly value="{{ provider.name }}"/>
+								{% endif %}
 								<input class="champ_cache" type="text" name="provider_id[]" value="{{ provider.id }}"/>
 								<input class="champ_cache" type="text" name="provider_email[]" value="{{ provider.email }}"/>
 
@@ -37,7 +41,7 @@
 									<p class="mailAddress">Email :
 										{{ provider.email }}</p>
 								{% else %}
-									<p>Il n'a pas été attribué d'email à ce fournisseur</p>
+									<p class="red_class">Il n'a pas été attribué d'email à ce fournisseur</p>
 								{% endif %}
 							</div>
 						</div>

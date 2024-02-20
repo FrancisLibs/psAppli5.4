@@ -30,6 +30,13 @@ p {
     border-color: blue;
 }
 
+.supp_button {
+    border-radius: 14px;
+    color: white;
+    background: red;
+    border-color: red;
+}
+
 .champ_cache {
     display: none;
 }
