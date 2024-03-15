@@ -162,6 +162,44 @@ class PartController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/ajaxPartsList', name: 'ajax_parts_list', methods: ["GET"])]
+    public function ajaxListParts(): JsonResponse
+    {
+        $organisation =  $this->organisation->getOrganisation();
+
+        $parts = $this->partRepository->findParts($organisation);
+
+        $partsArray= array_map(function($part){
+            return [
+                'id' => $part->getId(),
+                'code' => $part->getCode(),
+                'designation' => $part->getDesignation(),
+                'reference' => $part->getReference()
+            ];
+        }, $parts);
+
+        return $this->json($partsArray);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/ajaxPart/{code}', name: 'ajax_part', methods: ["GET"])]
+    public function ajaxPart(string $code): JsonResponse
+    {
+        $organisationId =  $this->organisation->getOrganisation()->getId();
+
+        $part = $this->partRepository->findPartByCode($organisationId, $code);
+
+        $part=[        
+            'code' => $part->getCode(),
+            'designation' => $part->getDesignation(),
+            'reference' => $part->getReference(),
+            
+        ];
+
+        return $this->json($part);
+    }
+
     /**
      * @ Nouvelle pièce détachée
      */

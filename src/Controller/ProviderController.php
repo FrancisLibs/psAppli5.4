@@ -44,15 +44,15 @@ class ProviderController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function show(Provider $provider, Request $request): Response
     {
-        $isAjaxRequest = $request->query->get('ajax');
         // Vérifier si la requête est une requête AJAX
+        $isAjaxRequest = $request->query->get('ajax');
         if ($isAjaxRequest) {
             $data = [
                 'id' => $provider->getId(),
                 'name' => $provider->getName(),
                 'email' => $provider->getEmail(),
             ];
-            // dd(new JsonResponse($data));
+
             return new JsonResponse($data);
         }
 

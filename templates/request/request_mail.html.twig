@@ -1,17 +1,67 @@
-<p>{{ startMessage|nl2br }}</p>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Votre e-mail</title>
+		<style>
+			.company_title {
+				font-size: 19px;
+				font-weight: bold;
+				color: red;
+				margin: 0;
+			}
+
+			.company_address {
+				font-size: 18px;
+				font-weight: 800;
+				color: green;
+				margin: 0;
+			}
+
+			.start {
+				font-size: 18px;
+			}
+
+			.end {
+				font-size: 18px;
+			}
+
+			.signature {
+				font-size: 18px;
+				margin: 0;
+			}
+
+			.signature_div {
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<p class="start">{{ startMessage|raw }}</p>
 
 
-<ul>
-	{% for part in parts %}
-		<li>
-			({{ part.quantities}}X)
-			{{ part.part.designation }}
-			{{ part.part.reference }}
-		</li>
-	{% endfor %}
-</ul>
+		<ul>
+			{% for part in parts %}
+				<li>
+					({{ part.quantities}}X)
+					{{ part.part.designation }}
+					{{ part.part.reference }}
+				</li>
+			{% endfor %}
+		</ul>
 
-<p>{{ endMessage|nl2br }}</p>
+		<p class="end">{{ endMessage|raw }}</p>
 
-<p>{{ app.user.firstName }}{{ app.user.lastName }}</p>
+		<div class="signature_div">
+			<p class="signature">{{ app.user.firstName }}
+				{{ app.user.lastName }}</p>
+			<p class="signature">{{ app.user.phoneNumber }}</p>
+		</div>
 
+
+		<p class="company_title">Charcuterie Pierre Schmidt</p>
+		<p class="company_address">7, rue de l'Ambranchement</p>
+		<p class="company_address">67116 Reichstett</p>
+
+	</body>
+</html>

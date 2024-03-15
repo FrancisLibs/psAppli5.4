@@ -3,10 +3,11 @@
 }
 
 .part_qte {
-    width : 70px;
+    width : 60px;
+    text-align: center;
 }
 
-.titre_fournisseur {
+.titre_fournisseur, .titre_pièces {
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -39,4 +40,40 @@ p {
 
 .champ_cache {
     display: none;
+}
+
+.modal-provider {
+    max-width: 550px;
+}
+
+.modal-parts {
+    max-width: 850px;
+}
+
+.tdCodeClass {
+    font-size: 14px;
+    font-weight: bold;
+    width: 90px;
+}
+
+.tdDesignationClass {
+    font-size: 14px;
+    font-weight: bold;
+    width: 421px;
+}
+
+.tdReferenceClass {
+    font-size: 14px;
+    font-weight: bold;
+    width: 280px;
+}
+
+input {
+    margin: 0;
+    padding: 0;
+}
+
+.codeButtonClass {
+    width: 90px;
+    text-align: center;
 }

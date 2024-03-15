@@ -22,12 +22,12 @@
 							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_index') }}">Liste équipements</a>
 							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_edit', {'id': machine.id}) }}">Edition</a>
 							{# {% if machine.childLevel == 0 %}
-								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
-							{% endif %} #}
+																													<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_new', {'parentId': machine.id}) }}">+ Sous-machine</a>
+																												{% endif %} #}
 							<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_statistics', {'id': machine.id}) }}">Stats</a>
 							{# {% if machine.parent %}
-								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
-							{% endif %} #}
+																													<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_show', {'id': machine.parent.id}) }}">Parent</a>
+																												{% endif %} #}
 							{% if is_granted('ROLE_ADMIN') %}
 								<a class="btn btn-primary btn-sm me-2 mb-2" role="button" href="{{ path('machine_copy', {'id': machine.id}) }}">Copier</a>
 								{{ include('machine/_delete_form.html.twig') }}
@@ -42,7 +42,8 @@
 						</div>
 						<div class="col-12 col-md-8 col-lg-4">
 							{% if machine.parent %}
-								{{ machine.parent.designation }} ->
+								{{ machine.parent.designation }}
+								->
 							{% endif %}
 							{{ machine.designation }}
 						</div>
@@ -130,12 +131,13 @@
 						</div>
 					{% endif %}
 				</section>
-				
-				<section class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+
+				<section class="col-5 col-sm-10 col-md-10 col-lg-10 col-xl-5 mt-5">
 					{% if machine.imageName %}
-						<img style="width: 100%" src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}"/>
+						<img src="{{ vich_uploader_asset(machine, 'imageFile') | imagine_filter('my_machines_filter') }}" alt="Photo de {{ machine.designation }}"/>
 					{% endif %}
 				</section>
+
 			</article>
 			{# Right aside #}
 			<aside class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-5">

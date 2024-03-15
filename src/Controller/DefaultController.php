@@ -139,7 +139,7 @@ class DefaultController extends AbstractController
 
         // Compte de pièces en retard de livraison.
         $lateParts = $this->partRepository->countLateParts($organisationId);
-
+        // dd($users);
         return $this->render(
             'default/index.html.twig',
             [

@@ -104,17 +104,17 @@ class PartRepository extends ServiceEntityRepository
     }
 
     /**
+     * Retourne la liste des pièces pour la requête ajax dans la modale de demande de prix
      * @return Part[]
      */
     public function findParts($organisation)
     {
         return $this->createQueryBuilder('p')
-            ->select('p', 's', 'o', 'f')
-            ->join('p.stock', 's')
-            ->join('p.organisation', 'o')
-            ->join('p.provider', 'f')
+            ->select('p')
             ->where('p.organisation = :organisation')
             ->setParameter('organisation', $organisation)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
             ->orderBy('p.provider', 'ASC')
             //->setMaxResults(100)
             ->getQuery()
@@ -283,4 +283,29 @@ class PartRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * Retourne une pièce selon l'organisation et le code de la pièce
+     * 
+     * @param integer $organisationid
+     * @param string $code
+     * 
+     * @return Part[]
+     */
+    public function findPartByCode($organisationId, $code)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->andWhere('p.organisation = :organisationId')
+            ->setParameter('organisationId', $organisationId)
+            ->andWhere('p.active = :disabled')
+            ->setParameter('disabled', true)
+            ->andWhere('p.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+
 }

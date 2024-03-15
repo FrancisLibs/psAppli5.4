@@ -31,5 +31,5 @@ liip_imagine:
     my_machines_filter:
       filters:
         thumbnail:
-          size: [32, 32]
+          size: [500, 300]
           mode: outbound

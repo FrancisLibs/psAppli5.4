@@ -9,12 +9,13 @@ use App\Service\OrganisationService;
 use App\Repository\ProviderRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class RequestController extends AbstractController
 {
@@ -24,6 +25,7 @@ class RequestController extends AbstractController
     protected $session;
     protected $mailer;
     protected $requestStack;
+    protected $security;
 
 
     public function __construct(
@@ -33,6 +35,7 @@ class RequestController extends AbstractController
         ProviderRepository $providerRepository,
         MailerInterface $mailer,
         RequestStack $requestStack,
+        Security $security,
     ) {
         $this->organisation = $organisation;
         $this->partRepository = $partRepository;
@@ -40,6 +43,7 @@ class RequestController extends AbstractController
         $this->session = $sessionInterface;
         $this->mailer = $mailer;
         $this->requestStack = $requestStack;
+        $this->security = $security;
     }
 
 
@@ -49,11 +53,16 @@ class RequestController extends AbstractController
         $organisation = $this->organisation->getOrganisation();
 
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
+        $startMessage = "Bonjour, \n\nMerci de me faire une offre pour les matériels ci-dessous :";
+        $startMessageBR = nl2br($startMessage);
+        $endMessage ="Cordialement";
+        $endMessageBR =  nl2br($endMessage);
+
         return $this->render(
             'request/index.html.twig',
             [
-                'startMessage' => 'Bonjour, \n merci de me faire une offre pour les matériels ci-dessous :',
-                'endMessage'  => 'Cordialement.',
+                'startMessage' => $startMessageBR,
+                'endMessage'  => $endMessageBR,
                 'provider' => $provider,
                 'parts' => $parts,
             ]
@@ -127,7 +136,6 @@ class RequestController extends AbstractController
 
         }
         
-
         return $this->render(
             'request/result.html.twig'
         );
