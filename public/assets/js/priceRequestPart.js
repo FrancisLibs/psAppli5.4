@@ -1,12 +1,23 @@
+// Variables globales
+const partModal = document.getElementById("partModal");
+
+// Constante pour les appels fetch
+const params = {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
+
 // Ouverture modale
 function openPartModal() {
   // Afficher la modale
-  document.getElementById("partModal").style.display = "block";
+  partModal.style.display = "block";
 }
 
 //Fermeture modale
 function closePartModal() {
-  document.getElementById("partModal").style.display = "none";
+  partModal.style.display = "none";
 }
 
 function displayParts(parts) {
@@ -42,7 +53,7 @@ function displayParts(parts) {
 
 function loadParts() {
   const url = "/part/ajaxPartsList";
-  fetch(url)
+  fetch(url, params)
     .then((response) => {
       if (!response.ok) {
         throw new Error(
