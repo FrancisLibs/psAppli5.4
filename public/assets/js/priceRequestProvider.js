@@ -264,6 +264,11 @@ function createSuppButton() {
 
 // Ajout d'un fournisseur------------------------------------------------------
 function addProvider(newProvider) {
+  // Affectation de new Provider à provider
+  provider.id = newProvider.id;
+  provider.name = newProvider.name;
+  provider.email = newProvider.email;
+
   // Création de la div du nouveau fournisseur
   const newProviderDiv = document.createElement("div");
 
@@ -277,12 +282,12 @@ function addProvider(newProvider) {
   newProviderDiv.classList.add(...classFirstProviderContainer);
 
   const inputProviderName = createInputField();
-  inputProviderName.value = newProvider.name;
+  inputProviderName.value = provider.name;
   inputProviderName.readOnly = true;
 
   const hiddenInputProviderId = createHiddenInputProviderId();
   hiddenInputProviderId.className = "champ_cache";
-  hiddenInputProviderId.value = newProvider.id;
+  hiddenInputProviderId.value = provider.id;
 
   const hiddenInputProviderEmail = createHiddenInputProviderEmail();
   hiddenInputProviderEmail.className = "champ_cache";
@@ -311,13 +316,13 @@ function addProvider(newProvider) {
   emailDiv.appendChild(suppButton);
 
   // Contrôle présence email
-  if (newProvider.email == "" || newProvider.email == "-") {
+  if (provider.email == "" || provider.email == "-") {
     paragraphe.textContent = "Pas d'adresse mail pour ce fournisseur";
     paragraphe.classList.add("red_class");
     inputProviderName.classList.add("red_class");
   } else {
-    hiddenInputProviderEmail.value = newProvider.email;
-    paragraphe.textContent = "Email : " + newProvider.email;
+    hiddenInputProviderEmail.value = provider.email;
+    paragraphe.textContent = "Email : " + provider.email;
   }
 
   // Inclusion du groupe de l'input dans la div
