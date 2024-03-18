@@ -60,54 +60,48 @@
 											<td><input class="set" type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
 											<td>
 												<span>Px un. :</span>
-												<span>{{ part.steadyPrice }}</span>
+												<span>{{  part.steadyPrice }}</span>
 												<span>€</span>
 											</td>
 											<td class="totalPrice">
-												<span>prix un. :</span>
+												<span>Prix tot. :</span>
 												<span></span>
 												<span>€</span>
 											</td>
 										</tr>
-									{% endfor %}
+									</td>
 								</body>
-							</table>
-							<div id="totalGenPrice" class="text-end mt-2 mb-5">
-								<strong>
-									<span>Px tot :
-									</span>
-									<span></span>
-									<span>€</span>
-								</strong>
-							</div>
+							</tr>
+						{% endfor %}
+					</body>
+				</table>
+				<div id="totalGenPrice" class="text-end mt-2 mb-5">
+					<strong>
+						<span>Px tot :
+						</span>
+						<span></span>
+						<span>€</span>
+					</strong>
+				</div>
 
-							<div class="d-flex justify-content-start align-items-top">
-								<div class="d-flex justify-content-start align-items-top">
-									<label class="me-2" for="startMessage">
-										<strong>Message début :
-										</strong>
-									</label>
-									<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
-								</div>
-								<div class="d-flex justify-content-start align-items-top ms-2">
-									<label class="me-2" for="endMessage">
-										<strong>Message fin :
-										</strong>
-									</label>
-									<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
-								</div>
-							</div>
-						</div>
-						<button class="btn btn-primary" type="submit">Demande de prix</button>
-					</form>
-				</section>
-			</article>
-		</main>
-	{% endblock %}
-
-	{% block javascripts %}
-		{{ parent() }}
-		<script src="/assets/js/priceRequestQte.js" defer></script>
-		<script src="/assets/js/priceRequestProvider.js" defer></script>
-
-	{% endblock %}
+				<div class="d-flex justify-content-start align-items-top">
+					<div class="d-flex justify-content-start align-items-top">
+						<label class="me-2" for="startMessage">
+							<strong>Message début :
+							</strong>
+						</label>
+						<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
+					</div>
+					<div class="d-flex justify-content-start align-items-top ms-2">
+						<label class="me-2" for="endMessage">
+							<strong>Message fin :
+							</strong>
+						</label>
+						<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
+					</div>
+				</div>
+			</div>
+			<button class="btn btn-primary" type="submit">Demande de prix</button>
+		</form>
+	</section>
+</article></main>{% endblock %}{% block javascripts %}{{ parent() }}<script src="/assets/js/priceRequestQte.js" defer></script><script src="/assets/js/priceRequestProvider.js" defer></script><script src="/assets/js/priceRequestPart.js" defer></script>{% endblock %}

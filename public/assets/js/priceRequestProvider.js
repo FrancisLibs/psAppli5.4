@@ -1,5 +1,6 @@
 // Variables globales
 let provider = null;
+
 const globalProviderContainer = document.getElementById(
   "globalProviderContainer"
 );
@@ -12,13 +13,25 @@ const firstProviderContainer = document.getElementById(
 // Récupération de la div contenant tous les fournisseurs
 const selectFournisseurs = document.getElementById("fournisseurs");
 
-// Constante pour les appels fetch
+// Paramètres pour les appels fetch
 const params = {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
   },
 };
+
+// La modale des fournisseurs
+const providerModal = document.getElementById("providerModal");
+// Commande modales
+function openProviderModale() {
+  // Afficher la modale
+  providerModal.style.display = "block";
+}
+
+function closeProviderModale() {
+  providerModal.style.display = "none";
+}
 
 // Création d'un bouton de saisie d'email
 function createEmailButton() {
@@ -56,16 +69,6 @@ function fillSelect(providers) {
     option.text = provider.nom;
     selectFournisseurs.add(option);
   });
-}
-
-// Commande modales
-function openProviderModale() {
-  // Afficher la modale
-  document.getElementById("providerModal").style.display = "block";
-}
-
-function closeProviderModale() {
-  document.getElementById("providerModal").style.display = "none";
 }
 
 function suppress(target) {
@@ -109,6 +112,7 @@ function inputEmail(target) {
 // Traitement de la nouvelle adresse saisie---------------------------------------
 function validNewEmail(target) {
   const parent = target.parentNode;
+  const providerNameInput = parent.parentNode.children[0];
   const div = parent.parentNode.children[3];
   const newEmail = div.children[0];
   const hiddenMailField = parent.parentNode.children[2];
@@ -143,7 +147,7 @@ function validNewEmail(target) {
         return response.json();
       })
       .then((email) => {
-        console.log(email);
+        // console.log(email);
       })
       .catch((error) => {
         console.error(error.message);
@@ -151,6 +155,7 @@ function validNewEmail(target) {
 
     p.innerText = "Email : " + provider.email;
     hiddenMailField.value = provider.email;
+    providerNameInput.classList.remove("red_class");
   }
   div.appendChild(p);
   div.appendChild(noEmailButton);

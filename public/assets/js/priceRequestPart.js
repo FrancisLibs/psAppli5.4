@@ -1,13 +1,8 @@
-// Variables globales
-const partModal = document.getElementById("partModal");
+// Variable contenant les pièces
+var parts = null;
 
-// Constante pour les appels fetch
-const params = {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
+// Surveillance bouton "selection pièce"
+var codeSelectButtons = null;
 
 // Ouverture modale
 function openPartModal() {
@@ -49,6 +44,17 @@ function displayParts(parts) {
 
     tableBody.appendChild(ligne);
   });
+
+  selectPartButton = document.getElementsByClassName("codeButtonClass");
+
+  // Surveillance boutton ajouter pièce
+  for (let index = 0; index < selectPartButton.length; index++) {
+    selectPartButton[index].addEventListener("click", function (e) {
+      e.preventDefault();
+      addSelectedPart(e.target);
+      closePartModal();
+    });
+  }
 }
 
 function loadParts() {
@@ -65,28 +71,11 @@ function loadParts() {
     .then((data) => {
       parts = data;
       displayParts(parts);
-      codeSelectButtons = document.getElementsByClassName("codeButtonClass");
-
-      // Surveillance boutton ajouter pièce
-      for (let index = 0; index < codeSelectButtons.length; index++) {
-        codeSelectButtons[index].addEventListener("click", function (e) {
-          addSelectPart(e); // Fichier priceRequestAddpart
-        });
-      }
     })
     .catch((error) => {
       console.error(error.message);
     });
 }
-
-// Surveillance bouton "ajouter pièce"
-const btn = document.getElementById("morePartsBtn");
-btn.addEventListener("click", (e) => {
-  e.preventDefault();
-  emptyInputFields();
-  openPartModal();
-  loadParts();
-});
 
 // Clear the input fields
 function emptyInputFields() {
@@ -99,15 +88,65 @@ function emptyInputFields() {
     "");
 }
 
-// Variable contenant les pièces
-var parts = null;
+function addSelectedPart(target) {
+  const partCode = target.innerText;
 
-// Surveillance bouton "selection pièce"
-var codeSelectButtons = null;
+  // Recherche de la pièce
+  const url = `/part/ajaxPart/${encodeURIComponent(partCode)}`;
+
+  fetch(url, params)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération de l'information");
+      }
+      return response.json();
+    })
+    .then((part) => {
+      partToAdd = new Part(
+        part.id,
+        part.code,
+        part.designation,
+        part.reference
+      );
+      console.log(partToAdd);
+      addPartToList(partToAdd);
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
+
+function addPartToList(partToAdd) {
+  const partList = document.getElementById("partList");
+  const ligne = document.createElement("tr");
+  ligne.className = "ligne";
+  const column = document.createElement("td");
+  column.value = partToAdd.code;
+  ligne.appendChild(column);
+  
+  console.log(ligne);
+}
+
+class Part {
+  constructor(id, code, designation, reference) {
+    this.id = id;
+    this.code = code;
+    this.designation = designation;
+    this.reference = reference;
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   // La fenêtre modale
   var modal = document.getElementById("partModal");
+
+  // Surveillance bouton "ajouter pièce"
+  document.getElementById("morePartsBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    emptyInputFields();
+    loadParts();
+    openPartModal();
+  });
 
   // Filter functionality
   var codeFilter = document.getElementById("codeFilter");
