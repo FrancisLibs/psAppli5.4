@@ -15,6 +15,7 @@ function closePartModal() {
   partModal.style.display = "none";
 }
 
+// Affichage de la modale et remplissage avec les pièces
 function displayParts(parts) {
   // Selection de l'emplacement dans la modale
   const tableBody = document.getElementById("partListModale");
@@ -45,6 +46,10 @@ function displayParts(parts) {
     tableBody.appendChild(ligne);
   });
 
+  // Ouverture de la modale
+  openPartModal();
+
+  // Sélection des boutons de choix de pièce de la modale
   selectPartButton = document.getElementsByClassName("codeButtonClass");
 
   // Surveillance boutton ajouter pièce
@@ -70,7 +75,7 @@ function loadParts() {
     })
     .then((data) => {
       parts = data;
-      displayParts(parts);
+      displayParts(parts); // Mise en tableau des pièces dans la modale
     })
     .catch((error) => {
       console.error(error.message);
@@ -106,36 +111,85 @@ function addSelectedPart(target) {
         part.id,
         part.code,
         part.designation,
-        part.reference
+        part.reference,
+        part.qteMax,
+        part.qteStock,
+        part.price
       );
-      console.log(partToAdd);
       addPartToList(partToAdd);
+
+      // Appel de la fonction de mise à jour du prix total
+      updateLignes();
+
+      // Et du total général
+      totalGenPrice();
     })
     .catch((error) => {
       console.error(error.message);
     });
 }
 
+function createColumn() {
+  column = document.createElement("td");
+  return column;
+}
+
 function addPartToList(partToAdd) {
+  const partToBuy = partToAdd.qteMax - partToAdd.qteStock;
   const partList = document.getElementById("partList");
-  const ligne = document.createElement("tr");
-  ligne.className = "ligne";
-  const column = document.createElement("td");
-  column.value = partToAdd.code;
-  ligne.appendChild(column);
-  
-  console.log(ligne);
+  var row = partList.insertRow();
+  var cell1 = row.insertCell();
+  var cell2 = row.insertCell();
+  var cell3 = row.insertCell();
+  var cell4 = row.insertCell();
+  var cell5 = row.insertCell();
+  var cell6 = row.insertCell();
+  var cell7 = row.insertCell();
+
+  cell1.innerHTML = partToAdd.code;
+  cell2.innerHTML = partToAdd.designation;
+  cell3.innerHTML = partToAdd.reference;
+
+  // Affectation de la chaîne HTML à la cellule
+  cell4.innerHTML =
+    '<input class="part_qte" type="number" name="quantities[' +
+    partToAdd.id +
+    ']" value="' +
+    partToBuy +
+    '" />';
+
+  cell5.innerHTML =
+    '<input class="set" type="checkbox" name="selected_parts[]" value="' +
+    partToAdd.id +
+    '" checked></input>';
+  cell6.innerHTML =
+    "<span class='me-1'>Px un. :</span><span>" +
+    partToAdd.price +
+    "</span><span>€</span>";
+  cell7.innerHTML =
+    "<span class='me-1'>Prix tot. :</span><span></span><span>€</span>";
+
+  // Ajout des classes
+  row.className = "ligne";
+  cell2.className = "text-center";
+  cell3.className = "text-center";
+  cell4.className = "qte";
+  cell5.className = "set";
+  cell7.className = "totalPrice";
 }
 
 class Part {
-  constructor(id, code, designation, reference) {
+  constructor(id, code, designation, reference, qteMax, qteStock, price) {
     this.id = id;
     this.code = code;
     this.designation = designation;
     this.reference = reference;
+    this.qteMax = qteMax;
+    this.qteStock = qteStock;
+    this.price = price;
   }
 }
-
+//------------------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
   // La fenêtre modale
   var modal = document.getElementById("partModal");
@@ -145,7 +199,6 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     emptyInputFields();
     loadParts();
-    openPartModal();
   });
 
   // Filter functionality

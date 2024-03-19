@@ -189,12 +189,14 @@ class PartController extends AbstractController
         $organisationId =  $this->organisation->getOrganisation()->getId();
 
         $part = $this->partRepository->findPartByCode($organisationId, $code);
-
         $part=[ 
             'id' => $part->getId(),   
             'code' => $part->getCode(),
             'designation' => $part->getDesignation(),
             'reference' => $part->getReference(),
+            'qteMax' => $part->getStock()->getQteMax(),
+            'qteStock' => $part->getStock()->getQteStock(),
+            'price' => $part->getSteadyPrice()
         ];
 
         return $this->json($part);

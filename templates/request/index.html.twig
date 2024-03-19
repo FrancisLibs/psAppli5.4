@@ -49,59 +49,62 @@
 							<a id="morePartsBtn" class="btn btn-primary btn-sm" role="button">Ajouter pièce</a>
 						</div>
 						<div class="mb-5">
-							<table class="table table-striped">
-								<body id="partList">
-									{% for part in parts %}
-										<tr class="ligne">
-											<td>{{ part.code }}</td>
-											<td class="text-center">{{ part.designation }}</td>
-											<td class="text-center">{{ part.reference }}</td>
-											<td class="qte"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="{{ part.stock.qteMax - part.stock.qteStock }}"/></td>
-											<td><input class="set" type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
-											<td>
-												<span>Px un. :</span>
-												<span>{{  part.steadyPrice }}</span>
-												<span>€</span>
-											</td>
-											<td class="totalPrice">
-												<span>Prix tot. :</span>
-												<span></span>
-												<span>€</span>
-											</td>
-										</tr>
-									</td>
-								</body>
-							</tr>
-						{% endfor %}
-					</body>
-				</table>
-				<div id="totalGenPrice" class="text-end mt-2 mb-5">
-					<strong>
-						<span>Px tot :
-						</span>
-						<span></span>
-						<span>€</span>
-					</strong>
-				</div>
+							<table id="partList" class="table table-striped">
+								{% for part in parts %}
+									<tr class="ligne">
+										<td>{{ part.code }}</td>
+										<td class="text-center">{{ part.designation }}</td>
+										<td class="text-center">{{ part.reference }}</td>
+										<td class="qte"><input class="part_qte" type="number" name="quantities[{{ part.id }}]" value="{{ part.stock.qteMax - part.stock.qteStock }}"/></td>
+										<td><input class="set" type="checkbox" name="selected_parts[]" value="{{ part.id }}" checked></td>
+										<td>
+											<span class="me-1">Px un. :</span>
+											<span>{{  part.steadyPrice }}</span>
+											<span>€</span>
+										</td>
+										<td class="totalPrice">
+											<span class="me-1">Prix tot. :</span>
+											<span></span>
+											<span>€</span>
+										</td>
+									</tr>
+								{% endfor %}
+							</table>
+							<div id="totalGenPrice" class="text-end mt-2 mb-5">
+								<strong>
+									<span>Px tot :
+									</span>
+									<span></span>
+									<span>€</span>
+								</strong>
+							</div>
 
-				<div class="d-flex justify-content-start align-items-top">
-					<div class="d-flex justify-content-start align-items-top">
-						<label class="me-2" for="startMessage">
-							<strong>Message début :
-							</strong>
-						</label>
-						<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
-					</div>
-					<div class="d-flex justify-content-start align-items-top ms-2">
-						<label class="me-2" for="endMessage">
-							<strong>Message fin :
-							</strong>
-						</label>
-						<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
-					</div>
+							<div class="d-flex justify-content-start align-items-top">
+								<div class="d-flex justify-content-start align-items-top">
+									<label class="me-2" for="startMessage">
+										<strong>Message début :
+										</strong>
+									</label>
+									<textarea name="startMessage" rows="2" cols="35">{{ startMessage }}</textarea>
+								</div>
+								<div class="d-flex justify-content-start align-items-top ms-2">
+									<label class="me-2" for="endMessage">
+										<strong>Message fin :
+										</strong>
+									</label>
+									<textarea name="endMessage" rows="2" cols="35">{{ endMessage }}</textarea>
+								</div>
+							</div>
+						</div>
+						<button class="btn btn-primary" type="submit">Demande de prix</button>
+					</form>
 				</div>
-			</div>
-			<button class="btn btn-primary" type="submit">Demande de prix</button>
-		</form>
-	</section>
-</article></main>{% endblock %}{% block javascripts %}{{ parent() }}<script src="/assets/js/priceRequestQte.js" defer></script><script src="/assets/js/priceRequestProvider.js" defer></script><script src="/assets/js/priceRequestPart.js" defer></script>{% endblock %}
+			</section>
+		</article>
+	</main>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}<script src="/assets/js/priceRequestQte.js" defer></script>
+	<script src="/assets/js/priceRequestProvider.js" defer></script>
+	<script src="/assets/js/priceRequestPart.js" defer></script>
+{% endblock %}

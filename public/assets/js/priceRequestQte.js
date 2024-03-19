@@ -15,8 +15,6 @@ function updateLignes() {
       total.innerHTML = 0;
     }
   }
-
-  totalGenPrice();
 }
 
 // Calcul du prix général
@@ -35,23 +33,20 @@ function totalGenPrice() {
   totalGenPrice.innerHTML = totalGenValue;
 }
 
+function buttonClickHandler(e) {
+  updateLignes();
+  totalGenPrice();
+}
+
+// let qtes = document.getElementsByClassName("part_qte");
+// let sets = document.getElementsByClassName("set");
+
 document.addEventListener("DOMContentLoaded", function () {
-  const qtes = document.getElementsByClassName("part_qte");
-  const sets = document.getElementsByClassName("set");
+  // conteneur pour la modification des quantités
+  const container = document.getElementById("partList");
+
+  // Surveillance du container
+  container.addEventListener("change", buttonClickHandler);
   // Mise à jour des prix totaux lors du chargement de la page
   updateLignes();
-
-  // Surveillance de la modification de quantités
-  for (let index = 0; index < qtes.length; index++) {
-    qtes[index].addEventListener("change", function (event) {
-      updateLignes();
-    });
-  }
-
-  // Surveillande de l'activation ou désactivation de pièces
-  for (let index = 0; index < sets.length; index++) {
-    sets[index].addEventListener("change", function (event) {
-      updateLignes();
-    });
-  }
 });
