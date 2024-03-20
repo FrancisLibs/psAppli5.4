@@ -1,5 +1,5 @@
 // Mise à jour de chaque ligne de pièces
-function updateLignes() {
+export function updateLignes() {
   const lignes = document.getElementsByClassName("ligne");
 
   for (let index = 0; index < lignes.length; index++) {
@@ -18,7 +18,7 @@ function updateLignes() {
 }
 
 // Calcul du prix général
-function totalGenPrice() {
+export function totalGenPrice() {
   const totalPricePart = document.getElementsByClassName("totalPrice");
   let totalGenPrice =
     document.getElementById("totalGenPrice").childNodes[1].childNodes[3];
@@ -33,7 +33,8 @@ function totalGenPrice() {
   totalGenPrice.innerHTML = totalGenValue;
 }
 
-function buttonClickHandler(e) {
+function buttonClickHandler() {
+  console.log("ok");
   updateLignes();
   totalGenPrice();
 }

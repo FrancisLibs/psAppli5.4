@@ -14,7 +14,7 @@ const firstProviderContainer = document.getElementById(
 const selectFournisseurs = document.getElementById("fournisseurs");
 
 // Paramètres pour les appels fetch
-const params = {
+export const params = {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -243,13 +243,6 @@ class Provider {
     this.name = name;
     this.email = email;
   }
-}
-
-// Création d'un bouton de saisie d'email
-function createEmailButton() {
-  const emailButton = document.createElement("button");
-  emailButton.classList.add("bi", "bi-at", "ms-3", "me-2", "email_button");
-  return emailButton;
 }
 
 function takeProvider(container) {

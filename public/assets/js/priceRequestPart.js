@@ -1,8 +1,30 @@
+// Importation de fonction
+import { updateLignes } from "./priceRequestQte.js";
+import { totalGenPrice } from "./priceRequestQte.js";
+
+// Importation de constantes
+import { params } from "./priceRequestProvider.js";
+
+// Classes
+class Part {
+  constructor(id, code, designation, reference, qteMax, qteStock, price) {
+    this.id = id;
+    this.code = code;
+    this.designation = designation;
+    this.reference = reference;
+    this.qteMax = qteMax;
+    this.qteStock = qteStock;
+    this.price = price;
+  }
+}
+
 // Variable contenant les pièces
 var parts = null;
 
-// Surveillance bouton "selection pièce"
-var codeSelectButtons = null;
+// Filter functionality
+const codeFilter = document.getElementById("codeFilter");
+const designationFilter = document.getElementById("designationFilter");
+const referenceFilter = document.getElementById("referenceFilter");
 
 // Ouverture modale
 function openPartModal() {
@@ -50,7 +72,7 @@ function displayParts(parts) {
   openPartModal();
 
   // Sélection des boutons de choix de pièce de la modale
-  selectPartButton = document.getElementsByClassName("codeButtonClass");
+  const selectPartButton = document.getElementsByClassName("codeButtonClass");
 
   // Surveillance boutton ajouter pièce
   for (let index = 0; index < selectPartButton.length; index++) {
@@ -75,7 +97,11 @@ function loadParts() {
     })
     .then((data) => {
       parts = data;
-      displayParts(parts); // Mise en tableau des pièces dans la modale
+      // Effacement champs de saisie
+      clearInputFields();
+
+      // Mise en tableau des pièces dans la modale
+      displayParts(parts);
     })
     .catch((error) => {
       console.error(error.message);
@@ -83,14 +109,10 @@ function loadParts() {
 }
 
 // Clear the input fields
-function emptyInputFields() {
-  // Filter functionality
-  var codeFilter = (document.getElementById("codeFilter").innerText = "");
-  var designationFilter = (document.getElementById(
-    "designationFilter"
-  ).innerText = "");
-  var referenceFilter = (document.getElementById("referenceFilter").innerText =
-    "");
+function clearInputFields() {
+  codeFilter.value = "";
+  designationFilter.value = "";
+  referenceFilter.value = "";
 }
 
 function addSelectedPart(target) {
@@ -107,7 +129,7 @@ function addSelectedPart(target) {
       return response.json();
     })
     .then((part) => {
-      partToAdd = new Part(
+      const partToAdd = new Part(
         part.id,
         part.code,
         part.designation,
@@ -127,11 +149,6 @@ function addSelectedPart(target) {
     .catch((error) => {
       console.error(error.message);
     });
-}
-
-function createColumn() {
-  column = document.createElement("td");
-  return column;
 }
 
 function addPartToList(partToAdd) {
@@ -178,34 +195,16 @@ function addPartToList(partToAdd) {
   cell7.className = "totalPrice";
 }
 
-class Part {
-  constructor(id, code, designation, reference, qteMax, qteStock, price) {
-    this.id = id;
-    this.code = code;
-    this.designation = designation;
-    this.reference = reference;
-    this.qteMax = qteMax;
-    this.qteStock = qteStock;
-    this.price = price;
-  }
-}
 //------------------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
-  // La fenêtre modale
-  var modal = document.getElementById("partModal");
 
   // Surveillance bouton "ajouter pièce"
   document.getElementById("morePartsBtn").addEventListener("click", (e) => {
     e.preventDefault();
-    emptyInputFields();
     loadParts();
   });
 
-  // Filter functionality
-  var codeFilter = document.getElementById("codeFilter");
-  var designationFilter = document.getElementById("designationFilter");
-  var referenceFilter = document.getElementById("referenceFilter");
-
+  // Filter fonctionnalities
   [designationFilter, codeFilter, referenceFilter].forEach(function (input) {
     input.addEventListener("input", function () {
       var code = codeFilter.value.toLowerCase();

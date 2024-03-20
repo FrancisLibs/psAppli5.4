@@ -104,7 +104,8 @@
 	</main>
 {% endblock %}
 {% block javascripts %}
-	{{ parent() }}<script src="/assets/js/priceRequestQte.js" defer></script>
-	<script src="/assets/js/priceRequestProvider.js" defer></script>
-	<script src="/assets/js/priceRequestPart.js" defer></script>
+	{{ parent() }}
+	<script type="module" src="/assets/js/priceRequestQte.js" defer></script>
+	<script type="module" src="/assets/js/priceRequestProvider.js" defer></script>
+	<script type="module" src="/assets/js/priceRequestPart.js" defer></script>
 {% endblock %}
