@@ -10,9 +10,13 @@ use App\Repository\WorkorderStatusRepository;
 
 class PreventiveService
 {
+
     protected $workorderStatusRepository;
+
     protected $templateRepository;
+
     protected $workorderRepository;
+    
     protected $manager;
 
 
@@ -35,8 +39,7 @@ class PreventiveService
     public function preventiveProcessing($organisationId)
     {
         // Recherche des templates préventifs
-        $templates = 
-        $this->templateRepository->findAllActiveTemplates($organisationId);
+        $templates = $this->templateRepository->findAllActiveTemplates($organisationId);
 
         $today = (new \DateTime())->getTimestamp();
 

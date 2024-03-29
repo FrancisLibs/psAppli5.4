@@ -9,6 +9,8 @@ const firstProviderContainer = document.getElementById(
   "firstProviderContainer"
 );
 
+const providerModal = document.getElementById("providerModal");
+
 // Afficher la modale
 function openProviderModale() {
   providerModal.style.display = "block";
@@ -108,8 +110,8 @@ function addProvider(provider) {
   newProviderDiv.appendChild(hiddenInputProviderEmail);
   newProviderDiv.appendChild(emailDiv);
 
-  // Affichage div dans providerContainer
-  globalProviderContainer.appendChild(newProviderDiv);
+  // // Affichage div dans providerContainer
+  // globalProviderContainer.appendChild(newProviderDiv);
 
   // Surveillance des deux boutons
   emailButton.addEventListener("click", function (e) {
@@ -130,22 +132,22 @@ function createEmailButton() {
   return emailButton;
 }
 
-// Ajout du bouton de demande de saise d'un email
-function addEmailButton(place) {
-  const button = createEmailButton();
-  place.appendChild(button);
-  return button;
-}
+// // Ajout du bouton de demande de saise d'un email
+// function addEmailButton(place) {
+//   const button = createEmailButton();
+//   place.appendChild(button);
+//   return button;
+// }
 
-function suppress(target) {
-  // Vérification de la div dans laquelle on est
-  // Si c'est le premier fournisseur ou un fournisseur ajouté
-  if (target.classList.contains("moreProvider")) {
-    target.children[5].remove();
-  }
-  target.children[4].remove();
-  target.children[3].remove();
-}
+// function suppress(target) {
+//   // Vérification de la div dans laquelle on est
+//   // Si c'est le premier fournisseur ou un fournisseur ajouté
+//   if (target.classList.contains("moreProvider")) {
+//     target.children[5].remove();
+//   }
+//   target.children[4].remove();
+//   target.children[3].remove();
+// }
 
 // Mise en place du champ de saisie d'email
 function inputEmail(target) {
@@ -165,9 +167,9 @@ function inputEmail(target) {
   div.appendChild(inputField);
   div.appendChild(validButton);
 
-  if (div.parentNode.parentNode.classList.contains("moreProvider")) {
-    addSuppButton(target);
-  }
+  // if (div.parentNode.parentNode.classList.contains("moreProvider")) {
+  //   addSuppButton(target);
+  // }
 
   // Surveillance bouton email
   validButton.addEventListener("click", function (e) {
@@ -214,7 +216,7 @@ function validNewEmail(target) {
         return response.json();
       })
       .then((email) => {
-        // console.log(email);
+        console.log(email);
       })
       .catch((error) => {
         console.error(error.message);
@@ -281,14 +283,14 @@ function createHiddenInputProviderEmail() {
   return inputHiddenProviderEmail;
 }
 
-// Création du champ input pour saisir les adresses mail
-function createInputProviderEmail() {
-  const inputProviderEmail = document.createElement("input");
-  inputProviderEmail.type = "text";
-  inputProviderEmail.name = "provider_email[]";
-  inputProviderEmail.classList = "me-3";
-  return inputProviderEmail;
-}
+// // Création du champ input pour saisir les adresses mail
+// function createInputProviderEmail() {
+//   const inputProviderEmail = document.createElement("input");
+//   inputProviderEmail.type = "text";
+//   inputProviderEmail.name = "provider_email[]";
+//   inputProviderEmail.classList = "me-3";
+//   return inputProviderEmail;
+// }
 
 // Création bouton de validation de saisie d'un email
 function createEmailValidationButton() {
@@ -400,7 +402,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
       })
       .then((newProvider) => {
-        provider = new Provider(newProvider.id, newProvider.name, newProvider.email)
+        provider = new Provider(
+          newProvider.id,
+          newProvider.name,
+          newProvider.email
+        );
         addProvider(provider);
       })
       .catch((error) => {

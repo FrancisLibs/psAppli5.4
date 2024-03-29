@@ -63,15 +63,15 @@ class RequestController extends AbstractController
         $startMessage = "Bonjour, \n\nMerci de me faire une offre pour les matériels ci-dessous :";
         $startMessageBR = nl2br($startMessage);
         $endMessage = "Cordialement";
-        $endMessageBR =  nl2br($endMessage);
+        $endMessageBR = nl2br($endMessage);
 
         return $this->render(
             'request/index.html.twig',
             [
-                'startMessage' => $startMessageBR,
-                'endMessage'  => $endMessageBR,
-                'provider' => $provider,
-                'parts' => $parts,
+            'startMessage' => $startMessageBR,
+            'endMessage'  => $endMessageBR,
+            'provider' => $provider,
+            'parts' => $parts,
             ]
         );
     }
@@ -125,11 +125,11 @@ class RequestController extends AbstractController
             $emailContent = $this->renderView(
                 'request/request_mail.html.twig',
                 [
-                        'startMessage' => $startMessage,
-                        'endMessage' => $endMessage,
-                        'parts' => $parts,
-                        'provider' => $provider,
-                    ]
+                    'startMessage' => $startMessage,
+                    'endMessage' => $endMessage,
+                    'parts' => $parts,
+                    'provider' => $provider,
+                ]
             );
 
             // Envoi de l'e-mail
