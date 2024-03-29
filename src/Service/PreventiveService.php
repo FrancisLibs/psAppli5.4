@@ -16,7 +16,7 @@ class PreventiveService
     protected $templateRepository;
 
     protected $workorderRepository;
-    
+
     protected $manager;
 
 
