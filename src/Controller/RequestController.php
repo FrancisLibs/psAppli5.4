@@ -19,12 +19,19 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class RequestController extends AbstractController
 {
+
     protected $partRepository;
+
     protected $organisation;
+
     protected $providerRepository;
+
     protected $session;
+
     protected $mailer;
+
     protected $requestStack;
+
     protected $security;
 
 
@@ -55,7 +62,7 @@ class RequestController extends AbstractController
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
         $startMessage = "Bonjour, \n\nMerci de me faire une offre pour les matériels ci-dessous :";
         $startMessageBR = nl2br($startMessage);
-        $endMessage ="Cordialement";
+        $endMessage = "Cordialement";
         $endMessageBR =  nl2br($endMessage);
 
         return $this->render(
@@ -71,7 +78,6 @@ class RequestController extends AbstractController
 
     /**
      * Envoi des emails de demande de prix
-     * 
      */
     #[Route('/parts-selection', name: 'quotation-parts-select', methods: ['POST'])]
     public function traiterSelection(Request $request): Response
@@ -83,6 +89,7 @@ class RequestController extends AbstractController
         $quantities = $request->request->get('quantities');
         $startMessage = $request->request->get('startMessage');
         $endMessage = $request->request->get('endMessage');
+        $copy = $request->request->get('copyOfMail');
 
         $providers = [];
 
@@ -101,7 +108,7 @@ class RequestController extends AbstractController
 
         $parts = [];
         foreach ($quantities as $partId => $quantity) {
-            if(in_array($partId, $selectedPartIds )) {
+            if(in_array($partId, $selectedPartIds)) {
                 $part = $this->partRepository->findOneById($partId);
                 if ($part) {
                     $parts[] = [
@@ -117,7 +124,7 @@ class RequestController extends AbstractController
         foreach($providers as $provider) {
             $emailContent = $this->renderView(
                 'request/request_mail.html.twig',
-                    [
+                [
                         'startMessage' => $startMessage,
                         'endMessage' => $endMessage,
                         'parts' => $parts,

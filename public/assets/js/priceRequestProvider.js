@@ -1,31 +1,16 @@
-// Variables globales
-let provider = null;
+// Importation de constantes
+import { params } from "./priceRequestQte.js";
 
-const globalProviderContainer = document.getElementById(
-  "globalProviderContainer"
-);
+// Déclaration variables
+let provider;
 
-// Récupération de la div du premier provider
+// Déclaration constantes
 const firstProviderContainer = document.getElementById(
   "firstProviderContainer"
 );
 
-// Récupération de la div contenant tous les fournisseurs
-const selectFournisseurs = document.getElementById("fournisseurs");
-
-// Paramètres pour les appels fetch
-export const params = {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
-
-// La modale des fournisseurs
-const providerModal = document.getElementById("providerModal");
-// Commande modales
+// Afficher la modale
 function openProviderModale() {
-  // Afficher la modale
   providerModal.style.display = "block";
 }
 
@@ -33,21 +18,9 @@ function closeProviderModale() {
   providerModal.style.display = "none";
 }
 
-// Création d'un bouton de saisie d'email
-function createEmailButton() {
-  const emailButton = document.createElement("button");
-  emailButton.classList.add("bi", "bi-at", "ms-3", "me-2", "email_button");
-  return emailButton;
-}
-
-// Ajout du bouton de demande de saise d'un email
-function addEmailButton(place) {
-  const button = createEmailButton();
-  place.appendChild(button);
-  return button;
-}
-
+const selectFournisseurs = document.getElementById("fournisseurs");
 // Remplissage de la liste des fournisseurs
+
 function fillSelect(providers) {
   selectFournisseurs.innerHTML = "";
 
@@ -69,6 +42,99 @@ function fillSelect(providers) {
     option.text = provider.nom;
     selectFournisseurs.add(option);
   });
+}
+
+// Ajout d'un fournisseur------------------------------------------------------
+function addProvider(provider) {
+  // Création de la div du nouveau fournisseur
+  const newProviderDiv = document.createElement("div");
+
+  // Récupération des classes du premier fournisseur
+  const classFirstProviderContainer = Array.from(
+    firstProviderContainer.classList
+  );
+
+  // Rajout de 2 classes avant de les transférer vers la div
+  classFirstProviderContainer.push("mt-2", "moreProvider");
+  newProviderDiv.classList.add(...classFirstProviderContainer);
+
+  const inputProviderName = createInputField();
+  inputProviderName.value = provider.name;
+  inputProviderName.readOnly = true;
+
+  const hiddenInputProviderId = createHiddenInputProviderId();
+  hiddenInputProviderId.className = "champ_cache";
+  hiddenInputProviderId.value = provider.id;
+
+  const hiddenInputProviderEmail = createHiddenInputProviderEmail();
+  hiddenInputProviderEmail.className = "champ_cache";
+
+  // Création de la div de l'email
+  const emailDiv = document.createElement("div");
+  emailDiv.classList.add(
+    "d-flex",
+    "justify-content-start",
+    "align-items-center"
+  );
+
+  // Puis le paragraphe
+  const paragraphe = document.createElement("p");
+  paragraphe.className = "emailAddress";
+
+  // Création boutton modif email
+  const emailButton = createEmailButton();
+
+  // Création du bouton de suppression
+  const suppButton = createSuppButton();
+
+  // Inclusion du paragraphe dans la div email
+  emailDiv.appendChild(paragraphe);
+  emailDiv.appendChild(emailButton);
+  emailDiv.appendChild(suppButton);
+
+  // Contrôle présence email
+  if (provider.email == "" || provider.email == "-") {
+    paragraphe.textContent = "Pas d'adresse mail pour ce fournisseur";
+    paragraphe.classList.add("red_class");
+    inputProviderName.classList.add("red_class");
+  } else {
+    hiddenInputProviderEmail.value = provider.email;
+    paragraphe.textContent = "Email : " + provider.email;
+  }
+
+  // Inclusion du groupe de l'input dans la div
+  newProviderDiv.appendChild(inputProviderName);
+  newProviderDiv.appendChild(hiddenInputProviderId);
+  newProviderDiv.appendChild(hiddenInputProviderEmail);
+  newProviderDiv.appendChild(emailDiv);
+
+  // Affichage div dans providerContainer
+  globalProviderContainer.appendChild(newProviderDiv);
+
+  // Surveillance des deux boutons
+  emailButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    inputEmail(e.target);
+  });
+
+  suppButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.target.parentNode.parentNode.remove();
+  });
+}
+
+// Création d'un bouton de saisie d'email
+function createEmailButton() {
+  const emailButton = document.createElement("button");
+  emailButton.classList.add("bi", "bi-at", "ms-3", "me-2", "email_button");
+  return emailButton;
+}
+
+// Ajout du bouton de demande de saise d'un email
+function addEmailButton(place) {
+  const button = createEmailButton();
+  place.appendChild(button);
+  return button;
 }
 
 function suppress(target) {
@@ -102,6 +168,7 @@ function inputEmail(target) {
   if (div.parentNode.parentNode.classList.contains("moreProvider")) {
     addSuppButton(target);
   }
+
   // Surveillance bouton email
   validButton.addEventListener("click", function (e) {
     e.preventDefault();
@@ -237,20 +304,20 @@ function createEmailValidationButton() {
   return emailValidationButton;
 }
 
+function makeProvider(container) {
+  const id = container.children[1].value;
+  const name = container.children[0].value;
+  const email = container.children[2].value;
+  const provider = new Provider(id, name, email);
+  return provider;
+}
+
 class Provider {
   constructor(id, name, email) {
     this.id = id;
     this.name = name;
     this.email = email;
   }
-}
-
-function takeProvider(container) {
-  const id = container.children[1].value;
-  const name = container.children[0].value;
-  let email = container.children[2].value;
-  const provider = new Provider(id, name, email);
-  return provider;
 }
 
 // Création bouton de suppression
@@ -260,96 +327,10 @@ function createSuppButton() {
   return suppButton;
 }
 
-// Ajout d'un fournisseur------------------------------------------------------
-function addProvider(newProvider) {
-  // Affectation de new Provider à provider
-  provider.id = newProvider.id;
-  provider.name = newProvider.name;
-  provider.email = newProvider.email;
-
-  // Création de la div du nouveau fournisseur
-  const newProviderDiv = document.createElement("div");
-
-  // Récupération des classes du premier fournisseur
-  const classFirstProviderContainer = Array.from(
-    firstProviderContainer.classList
-  );
-
-  // Rajout de 2 classes avant de les transférer ver s la div
-  classFirstProviderContainer.push("mt-2", "moreProvider");
-  newProviderDiv.classList.add(...classFirstProviderContainer);
-
-  const inputProviderName = createInputField();
-  inputProviderName.value = provider.name;
-  inputProviderName.readOnly = true;
-
-  const hiddenInputProviderId = createHiddenInputProviderId();
-  hiddenInputProviderId.className = "champ_cache";
-  hiddenInputProviderId.value = provider.id;
-
-  const hiddenInputProviderEmail = createHiddenInputProviderEmail();
-  hiddenInputProviderEmail.className = "champ_cache";
-
-  // Création de la div de l'email
-  const emailDiv = document.createElement("div");
-  emailDiv.classList.add(
-    "d-flex",
-    "justify-content-start",
-    "align-items-center"
-  );
-
-  // Puis le paragraphe
-  const paragraphe = document.createElement("p");
-  paragraphe.className = "emailAddress";
-
-  // Création boutton modif email
-  const emailButton = createEmailButton();
-
-  // Création du bouton de suppression
-  const suppButton = createSuppButton();
-
-  // Inclusion du paragraphe dans la div email
-  emailDiv.appendChild(paragraphe);
-  emailDiv.appendChild(emailButton);
-  emailDiv.appendChild(suppButton);
-
-  // Contrôle présence email
-  if (provider.email == "" || provider.email == "-") {
-    paragraphe.textContent = "Pas d'adresse mail pour ce fournisseur";
-    paragraphe.classList.add("red_class");
-    inputProviderName.classList.add("red_class");
-  } else {
-    hiddenInputProviderEmail.value = provider.email;
-    paragraphe.textContent = "Email : " + provider.email;
-  }
-
-  // Inclusion du groupe de l'input dans la div
-  newProviderDiv.appendChild(inputProviderName);
-  newProviderDiv.appendChild(hiddenInputProviderId);
-  newProviderDiv.appendChild(hiddenInputProviderEmail);
-  newProviderDiv.appendChild(emailDiv);
-
-  // Affichage div dans providerContainer
-  globalProviderContainer.appendChild(newProviderDiv);
-
-  // Surveillance des deux boutons
-  emailButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    inputEmail(e.target);
-  });
-
-  suppButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.target.parentNode.parentNode.remove();
-  });
-}
-
-//-----------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
+// //-----------------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
   // Récup. du premier fournisseur
-  provider = takeProvider(firstProviderContainer);
+  provider = makeProvider(firstProviderContainer);
 
   // Création d'une div pour les emails
   const div = document.createElement("div");
@@ -359,7 +340,10 @@ document.addEventListener("DOMContentLoaded", function () {
     "justify-content-start",
     "align-items-center"
   );
+
+  // Création d'un paragraphe pour l'email
   const p = createParagraph();
+
   if (provider.email === "" || provider.email === "-") {
     provider.email = "";
     p.classList.add("red_class");
@@ -377,11 +361,11 @@ document.addEventListener("DOMContentLoaded", function () {
     inputEmail(e.target);
   });
 
-  //Surveillance du bouton "ajout fournisseur" pour ajouter un fournisseur-------
+  // Surveillance du bouton "ajouter fournisseur" pour ouvrir la modale
   document.getElementById("moreProviderBtn").addEventListener("click", () => {
-    // Récupération de la liste des fournisseurs
     const url = "/provider/list";
 
+    // Récupération de la liste des fournisseurs
     fetch(url, params)
       .then((response) => {
         if (!response.ok) {
@@ -391,6 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         fillSelect(data);
+
         // Une fois la liste remplie, affichage de la modale
         openProviderModale();
       })
@@ -415,7 +400,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
       })
       .then((newProvider) => {
-        addProvider(newProvider);
+        provider = new Provider(newProvider.id, newProvider.name, newProvider.email)
+        addProvider(provider);
       })
       .catch((error) => {
         console.error(error.message);

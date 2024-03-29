@@ -3,7 +3,7 @@ import { updateLignes } from "./priceRequestQte.js";
 import { totalGenPrice } from "./priceRequestQte.js";
 
 // Importation de constantes
-import { params } from "./priceRequestProvider.js";
+import { params } from "./priceRequestQte.js";
 
 // Classes
 class Part {
@@ -153,6 +153,9 @@ function addSelectedPart(target) {
 
 function addPartToList(partToAdd) {
   const partToBuy = partToAdd.qteMax - partToAdd.qteStock;
+  if(partToBuy <0){
+    partToBuy = 0
+  }
   const partList = document.getElementById("partList");
   var row = partList.insertRow();
   var cell1 = row.insertCell();
@@ -168,17 +171,13 @@ function addPartToList(partToAdd) {
   cell3.innerHTML = partToAdd.reference;
 
   // Affectation de la chaîne HTML à la cellule
-  cell4.innerHTML =
-    '<input class="part_qte" type="number" name="quantities[' +
-    partToAdd.id +
-    ']" value="' +
-    partToBuy +
-    '" />';
+
+  cell4.innerHTML = '<input class="part_qte" type="number" name="quantities[' + partToAdd.id + ']" value="' + partToBuy + '" />';
 
   cell5.innerHTML =
     '<input class="set" type="checkbox" name="selected_parts[]" value="' +
     partToAdd.id +
-    '" checked></input>';
+    '" ></input>';
   cell6.innerHTML =
     "<span class='me-1'>Px un. :</span><span>" +
     partToAdd.price +
@@ -197,7 +196,6 @@ function addPartToList(partToAdd) {
 
 //------------------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
-
   // Surveillance bouton "ajouter pièce"
   document.getElementById("morePartsBtn").addEventListener("click", (e) => {
     e.preventDefault();

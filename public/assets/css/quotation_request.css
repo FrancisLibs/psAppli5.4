@@ -1,79 +1,86 @@
 .default_message {
-    border: 1px solid black; border-radius: 3px; padding: 2px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 2px;
 }
 
 .part_qte {
-    width : 60px;
-    text-align: center;
+  width: 60px;
+  text-align: center;
 }
 
-.titre_fournisseur, .titre_pièces {
-    font-size: 1.5rem;
-    font-weight: bold;
+.titre_fournisseur,
+.titre_pièces {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .emailAddress {
-    margin: 0px;
+  margin: 0px;
 }
 
 .red_class {
-    color: red;
+  color: red;
 }
 
 p {
-    margin: 0;
+  margin: 0;
 }
 
 .email_button {
-    border-radius: 14px;
-    color: white;
-    background: blue;
-    border-color: blue;
+  border-radius: 14px;
+  color: white;
+  background: blue;
+  border-color: blue;
 }
 
 .supp_button {
-    border-radius: 14px;
-    color: white;
-    background: red;
-    border-color: red;
+  border-radius: 14px;
+  color: white;
+  background: red;
+  border-color: red;
 }
 
 .champ_cache {
-    display: none;
+  display: none;
 }
 
 .modal-provider {
-    max-width: 550px;
+  max-width: 550px;
 }
 
 .modal-parts {
-    max-width: 850px;
+  max-width: 850px;
 }
 
 .tdCodeClass {
-    font-size: 14px;
-    font-weight: bold;
-    width: 90px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 90px;
 }
 
 .tdDesignationClass {
-    font-size: 14px;
-    font-weight: bold;
-    width: 421px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 421px;
 }
 
 .tdReferenceClass {
-    font-size: 14px;
-    font-weight: bold;
-    width: 280px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 280px;
 }
 
 input {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .codeButtonClass {
-    width: 90px;
-    text-align: center;
+  width: 90px;
+  text-align: center;
+  background-color: blue;
+  color: white;
+  border-width: 1px;
+  border-radius: 14px;
 }

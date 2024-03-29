@@ -10,13 +10,9 @@ use App\Repository\WorkorderStatusRepository;
 
 class PreventiveService
 {
-
     protected $workorderStatusRepository;
-
     protected $templateRepository;
-
     protected $workorderRepository;
-
     protected $manager;
 
 
@@ -39,7 +35,8 @@ class PreventiveService
     public function preventiveProcessing($organisationId)
     {
         // Recherche des templates préventifs
-        $templates = $this->templateRepository->findAllActiveTemplates($organisationId);
+        $templates = 
+        $this->templateRepository->findAllActiveTemplates($organisationId);
 
         $today = (new \DateTime())->getTimestamp();
 
@@ -52,9 +49,9 @@ class PreventiveService
 
             // Date finale à prende en compte.
             // Date finale d'activation en secondes.
-            $nextComputeDate = ($nextDate - $secondsBefore); 
+            $nextComputeDate = ($nextDate - $secondsBefore);
 
-            // Test si template éligible : 
+            // Test si template éligible :
             // si la date du préventif est supérieure à la date du jour.
             if ($today >= $nextComputeDate) {
                 // Contrôle si BT préventif n'est pas déjà actif.
@@ -62,7 +59,7 @@ class PreventiveService
                     $template->getTemplateNumber()
                 )
                 ) {
-                    // Création du BT préventif, 
+                    // Création du BT préventif,
                     // en récupérant les infos sur le template préventif.
                     $workorder = new Workorder();
                     $workorder->setCreatedAt(new \DateTime())
