@@ -18,7 +18,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 class WorkorderRepository extends ServiceEntityRepository
 {
-    private $paginator;
+    protected $paginator;
+
 
     public function __construct(
         ManagerRegistry $registry,
@@ -28,12 +29,14 @@ class WorkorderRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
+
     /**
      * Récupère tous le bons de travail d'une organisation
+     *
      * @param int $organisation
+     * 
      * @return Workorder[] Returns an array of workorder
      */
-
     public function findByOrganisation($organisation)
     {
         return $this->createQueryBuilder('w')
@@ -52,6 +55,7 @@ class WorkorderRepository extends ServiceEntityRepository
      * Récupère les bons de travail liés à une recherche
      *
      * @param SearchWorkorder $search
+     * 
      * @return PaginationInterface
      */
     public function findSearch(SearchWorkorder $search): PaginationInterface
@@ -143,6 +147,8 @@ class WorkorderRepository extends ServiceEntityRepository
      * et qui ne sont pas cloturés 
      * 
      * @param int $templateNumber
+     * 
+     * @return int
      */
     public function countPreventiveActiveWorkorder($templateNumber)
     {
@@ -161,6 +167,8 @@ class WorkorderRepository extends ServiceEntityRepository
      * Récupère les bons de travail préventifs
      *
      * @param int $organisationId
+     * 
+     * @return workorders Returns an array of workorder
      */
     public function findAllLatePreventiveWorkorders($organisationId)
     {
@@ -182,7 +190,8 @@ class WorkorderRepository extends ServiceEntityRepository
      *
      * @param int $organisationId
      * @param int $organisationId
-     * @return Workorder[] Returns an array of workorder
+     * 
+     * @return workorder[] Returns an array of workorder
      */
     public function findAllActivePreventiveWorkorders($organisationId)
     {
@@ -192,12 +201,16 @@ class WorkorderRepository extends ServiceEntityRepository
             ->andWhere('w.organisation = :organisation')
             ->andWhere('w.preventive = :enabled')
             ->andWhere('s.name <> :val1 AND s.name <> :val2')
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisationId),
-                new Parameter('enabled', true),
-                new Parameter('val1', 'CLOTURE'),
-                new Parameter('val2', 'TERMINE'),
-            ]))
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisationId),
+                    new Parameter('enabled', true),
+                    new Parameter('val1', 'CLOTURE'),
+                    new Parameter('val2', 'TERMINE'),
+                    ]
+                )
+            )
             ->getQuery()
             ->getResult();
     }
@@ -205,7 +218,10 @@ class WorkorderRepository extends ServiceEntityRepository
     /**
      * Récupère les bons de travail préventifs
      *
-     * @param $organisation
+     * @param int             $organisation
+     * @param SearchIndicator $searchIndicator
+     * 
+     * @return workorders Returns an array of workorder
      */
     public function findIndicatorsWorkorders($organisation, $searchIndicator)
     {
@@ -232,8 +248,8 @@ class WorkorderRepository extends ServiceEntityRepository
     /**
      * Récupère les machines liées à une recherche d'un mot
      *
-     * @param Sorganisation
-     * @param $globalSearch
+     * @param int Sorganisation
+     * @param GlobalSearch      $globalSearch
      * 
      * @return Part[]
      */
@@ -248,7 +264,8 @@ class WorkorderRepository extends ServiceEntityRepository
 
             ->andWhere('w.organisation = :organisation')
 
-            ->andWhere('
+            ->andWhere(
+                '
                 w.remark LIKE :uppercaseWord
                 OR 
                 w.request LIKE :uppercaseWord
@@ -256,13 +273,18 @@ class WorkorderRepository extends ServiceEntityRepository
                 w.implementation LIKE :uppercaseWord
                 OR
                 u.username LIKE :word
-            ')
+            '
+            )
 
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisation),
-                new Parameter('uppercaseWord', $uppercaseWord),
-                new Parameter('word', $word),
-            ]))
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisation),
+                    new Parameter('uppercaseWord', $uppercaseWord),
+                    new Parameter('word', $word),
+                    ]
+                )
+            )
 
             ->orderBy('w.id', 'ASC')
             ->getQuery()
@@ -270,15 +292,19 @@ class WorkorderRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les workorder liées à une machine
+     * Fetch workorders linked to a  machine
      *
      * @param int SorganisationId
-     * @param $machine
+     * @param SearchIndicator     $searchIndicator
+     * @param int                 $machineId
      * 
      * @return workorders
      */
-    public function findAllWorkordersByMachine($organisationId, $searchIndicator, $machineId,)
-    {
+    public function findAllWorkordersByMachine(
+        $organisationId, 
+        $searchIndicator, 
+        $machineId,
+    ) {
         $startDate = $searchIndicator->startDate;
         $endDate = $searchIndicator->endDate;
 
@@ -288,23 +314,29 @@ class WorkorderRepository extends ServiceEntityRepository
             ->join('w.machines', 'm')
             ->andWhere('o.id = :organisation')
             ->andWhere('m.id = :machine')
-            ->andWhere('w.startDate > :startDate')
+            ->andWhere('w.startDate >= :startDate')
             ->andWhere('w.startDate < :endDate')
             ->andWhere('w.durationDay > 0 OR w.durationHour > 0 OR w.durationMinute > 0')
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisationId),
-                new Parameter('machine', $machineId),
-                new Parameter('startDate', $startDate),
-                new Parameter('endDate', $endDate),
-            ]))
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisationId),
+                    new Parameter('machine', $machineId),
+                    new Parameter('startDate', $startDate),
+                    new Parameter('endDate', $endDate),
+                    ]
+                )
+            )
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * Compte les bons de travail préventifs en retard
+     * Count of the preentive late workorders
      *
      * @param int $organisationId
+     * 
+     * @return int
      */
     public function countLateBT($organisationId)
     {
@@ -314,11 +346,15 @@ class WorkorderRepository extends ServiceEntityRepository
             ->andWhere('w.organisation = :organisation')
             ->andWhere('w.preventive = :enabled')
             ->andWhere('s.name = :val1')
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisationId),
-                new Parameter('enabled', true),
-                new Parameter('val1', 'EN_RETARD'),
-            ]))
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisationId),
+                    new Parameter('enabled', true),
+                    new Parameter('val1', 'EN_RETARD'),
+                    ]
+                )
+            )
             ->getQuery()
             ->getSingleScalarResult();
     }

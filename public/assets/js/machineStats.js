@@ -1,15 +1,13 @@
 // Render / Init block
 document.addEventListener("DOMContentLoaded", function () {
   const datesDiv = document.getElementById("chartLabels");
-  const dates = JSON.parse(datesDiv.dataset.chartdates);
-
   const valuesDiv1 = document.getElementById("chartData1");
-  const valuesPreventive = JSON.parse(valuesDiv1.dataset.dataset1);
-
   const valuesDiv2 = document.getElementById("chartData2");
-  const valuesCurative = JSON.parse(valuesDiv2.dataset.dataset2);
-
   const valuesDiv = document.getElementById("chartData3");
+
+  const dates = JSON.parse(datesDiv.dataset.chartdates);
+  const valuesPreventive = JSON.parse(valuesDiv1.dataset.dataset1);
+  const valuesCurative = JSON.parse(valuesDiv2.dataset.dataset2);
   const partsValue = JSON.parse(valuesDiv.dataset.dataset3);
 
   //----------------------------------------------------------MORE INFOS----------------------------
@@ -19,34 +17,27 @@ document.addEventListener("DOMContentLoaded", function () {
     numberOfPreventiveBt += valuesPreventive[i];
   }
 
-  let numberOfBtCurative = 0;
+  let numberOfCurativeBt = 0;
   for (let i = 0; i < valuesCurative.length; i++) {
-    numberOfBtCurative += valuesCurative[i];
+    numberOfCurativeBt += valuesCurative[i];
   }
 
-  let numberOfTotalBt = numberOfBtCurative + numberOfPreventiveBt;
+  let numberOfTotalBt = numberOfCurativeBt + numberOfPreventiveBt;
 
   // TOTAL OF BT TIME---------------------------------------------------
   const totalOfBt = document.getElementById("totalBtTime");
-  let totalBt = document.createElement("span");
-  totalBt.innerText = transformTime(numberOfTotalBt);
-  totalOfBt.appendChild(totalBt);
+  totalOfBt.textContent = transformTime(numberOfTotalBt);
 
   // TOTAL OF PREVENTIVE BT  TIME----------------------------------------
   const totalOfpreventiveBt = document.getElementById("totalBtPréventifTime");
-  let totalPrevBt = document.createElement("span");
-  totalPrevBt.innerText = transformTime(numberOfPreventiveBt);
-  totalOfpreventiveBt.appendChild(totalPrevBt);
+  totalOfpreventiveBt.innerText = transformTime(numberOfPreventiveBt);
 
-  // TOTAL OF CURATIVE BT  TIME-----------------------------------------
+  // TOTAL OF CURATIVE BT TIME-----------------------------------------
   const totalOfCurativeBt = document.getElementById("totalBtCuratifTime");
-  let totalCurBt = document.createElement("span");
-  totalCurBt.innerText = transformTime(numberOfBtCurative);
-  totalOfCurativeBt.appendChild(totalCurBt);
+  totalOfCurativeBt.innerText = transformTime(numberOfCurativeBt);
 
   function transformTime(minutes) {
-    var Myexp = new RegExp("^\d+$");
-    if (Myexp.test(minutes)) {
+    if (typeof minutes === "number" && minutes > 0) {
       var nbHour = parseInt(minutes / 60, 10);
       var nbminuteRestante = minutes % 60;
       if (nbHour > 0) {
@@ -64,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     datasets: [
       {
         label: "Préventif",
-        data: partsValue,
+        data: valuesPreventive,
         backgroundColor: ["lightgreen"],
         borderColor: ["black"],
         borderWidth: 1,

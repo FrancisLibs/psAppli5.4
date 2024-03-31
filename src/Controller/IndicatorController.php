@@ -37,10 +37,10 @@ class IndicatorController extends AbstractController
             $currentYear= $currentYear->format('Y');
             $firstDay = new \DateTime();
             $firstDay->setDate($currentYear, 01, 01);
-            $firstDay->setTime(0,0,0);
+            $firstDay->setTime(0, 0, 0);
             $endDay = new \DateTime();
             $endDay->setDate($currentYear, 12, 31);
-            $endDay->setTime(23,59,59);
+            $endDay->setTime(23, 59, 59);
             $searchIndicator->startDate = $firstDay;
             $searchIndicator->endDate = $endDay;
         };

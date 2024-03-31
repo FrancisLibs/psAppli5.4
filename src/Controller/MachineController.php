@@ -276,15 +276,22 @@ class MachineController extends AbstractController
         $organisationId = $this->organisation->getOrganisation()->getId();
 
         if (empty($searchIndicator->startDate)) {
-            $searchIndicator->startDate = new \DateTime('2022/01/01');
-            $searchIndicator->endDate = new \DateTime('2023/12/31');
+            $sDate = new \DateTime();
+            $sDate->setDate($sDate->format('Y'), 1, 1);
+
+            $eDate = new \DateTime();
+            $eDate->setDate($eDate->format('Y'), 12, 31);
+
+            $searchIndicator->startDate = $sDate;
+            $searchIndicator->endDate = $eDate;
         };
 
-        return $workorders = $this->workorderRepository->findAllWorkordersByMachine(
+        $workorders = $this->workorderRepository->findAllWorkordersByMachine(
             $organisationId,
             $searchIndicator,
             $machineId
         );
+        return $workorders;
     }
 
     #[IsGranted('ROLE_USER')]
@@ -298,19 +305,8 @@ class MachineController extends AbstractController
         $machineId = $machine->getId();
         $searchIndicator = new SearchIndicator();
 
-        // Comptage du nombre de BT.
-        $totalWorkorders = 0;
-        $totalPreventive = 0;
-        $totalCurative = 0;
+        // Lecture des BT.
         $workorders = $this->_readWorkorders($searchIndicator, $machineId);
-        foreach ($workorders as $workorder) {
-            $totalWorkorders++;
-            if ($workorder->getPreventive()) {
-                $totalPreventive++;
-            } else {
-                $totalCurative++;
-            }
-        }
 
         // Temps de Travail préventif/mois.
         $preventiveTime = [];
@@ -326,6 +322,7 @@ class MachineController extends AbstractController
             $workorders = $this->_readWorkorders($searchIndicator, $machineId);
         }
 
+        // S'il y a des BT.
         if ($workorders != null) {
             foreach ($workorders as $workorder) {
                 if (!is_null($workorder->getStartDate())) {
@@ -335,37 +332,55 @@ class MachineController extends AbstractController
                     $workorderDateYear = (int)$workorder
                         ->getStartDate()
                         ->format('y');
-                    $monthNumber = $workorderDateYear . "/" . $workorderDateMonth;
+                    $date = $workorderDateYear . "/" . $workorderDateMonth;
 
                     // Prix des pièces.
                     $parts = $workorder->getPartsPrice();
 
-                    if (array_key_exists($monthNumber, $partsValue)) {
-                        $partsValue[$monthNumber] += $parts;
+                    if (array_key_exists($date, $partsValue)) {
+                        $partsValue[$date] += $parts;
                     } else {
-                        $partsValue[$monthNumber] = $parts;
+                        $partsValue[$date] = $parts;
                     }
 
                     // Temps de travail.
                     $time = $this->_manageTime($workorder);
 
                     if ($workorder->getpreventive()) {
-                        if (array_key_exists($monthNumber, $preventiveTime)) {
-                            $preventiveTime[$monthNumber] += $time;
+                        if (array_key_exists($date, $preventiveTime)) {
+                            $preventiveTime[$date] += $time;
                         } else {
-                            $preventiveTime[$monthNumber] = $time;
+                            $preventiveTime[$date] = $time;
                         }
                     } else {
-                        if (array_key_exists($monthNumber, $curativeTime)) {
-                            $curativeTime[$monthNumber] += $time;
+                        if (array_key_exists($date, $curativeTime)) {
+                            $curativeTime[$date] += $time;
                         } else {
-                            $curativeTime[$monthNumber] = $time;
+                            $curativeTime[$date] = $time;
                         }
                     }
                 }
             }
 
-            // Sort of array and inverting months number.
+            // Comptage du nombre de BT.
+            $preventiveBt = [];
+            $curativeBt = [];
+        
+            foreach ($workorders as $workorder) {
+                if ($workorder->getPreventive()) {
+                    array_push($preventiveBt, $workorder);
+                } else {
+                    array_push($curativeBt, $workorder);
+                }
+            }
+
+            // Nombre de BT/type.
+            $totalWorkorders = count($workorders);
+            $totalPreventive = count($preventiveBt);
+            $totalCurative = count($curativeBt);
+
+
+            // Sort of array and format months number.
             $columns = array_keys($partsValue);
             array_multisort($columns, SORT_ASC, SORT_REGULAR, $partsValue);
             $partsValue = $this->_invertingMonthNumber($partsValue);
@@ -399,6 +414,11 @@ class MachineController extends AbstractController
             );
         }
 
+        // Nombre de BT/type.
+        $totalWorkorders = 0;
+        $totalPreventive = 0;
+        $totalCurative = 0;
+
         return $this->render(
             'machine/stats.html.twig',
             [
@@ -408,9 +428,9 @@ class MachineController extends AbstractController
                 'preventiveTime' => null,
                 'curativeTime' => null,
                 'partsValue' => null,
-                'totalWorkorder' => $totalWorkorders,
-                'totalPreventive' => $totalPreventive,
-                'totalCurative' => $totalCurative,
+                'totalWorkorder' => null,
+                'totalPreventive' => null,
+                'totalCurative' => null,
             ]
         );
     }
