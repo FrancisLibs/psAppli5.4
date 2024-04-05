@@ -84,7 +84,8 @@ class MessagesController extends AbstractController
                 $this->_manager->persist($message);
                 $this->addFlash(
                     'success', 
-                    "Ton message a bien été envoyé à " . $message->getRecipient()->getFirstName()
+                    "Ton message a bien été envoyé à " . 
+                    $message->getRecipient()->getFirstName()
                 );
             }
             $this->_manager->flush();

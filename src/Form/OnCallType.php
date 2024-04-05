@@ -17,45 +17,67 @@ class OnCallType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('callDay', DateType::class, [
+            ->add(
+                'callDay', DateType::class, [
                 'label' =>  'Jour',
                 'widget' => 'single_text',
-            ])
-            ->add('callTime', TimeType::class, [
+                ]
+            )
+            ->add(
+                'callTime', TimeType::class, [
                 'label' =>  'Heure',
                 'widget' => 'single_text',
-            ])
-            ->add('whoCalls', TextType::class, [
+                ]
+            )
+            ->add(
+                'whoCalls', TextType::class, [
                 'label' =>  'Qui'
-            ])
-            ->add('arrivalTime', TimeType::class, [
+                ]
+            )
+            ->add(
+                'arrivalTime', TimeType::class, [
                 'label' =>  'Heure d\'arrivée',
                 'widget' => 'single_text'
-            ])
-            ->add('reason', TextareaType::class, [
+                ]
+            )
+            ->add(
+                'reason', TextareaType::class, [
                 'label' =>  'Cause'
-            ])
-            ->add('durationHours', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'durationHours', IntegerType::class, [
                 'label' =>  'Heures',
-            ])
-            ->add('durationMinutes', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'durationMinutes', IntegerType::class, [
                 'label' =>  'Minutes',
-            ])
-            ->add('travelhours', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'travelhours', IntegerType::class, [
                 'label' =>  'Heures',
-            ])
-            ->add('travelMinutes', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'travelMinutes', IntegerType::class, [
                 'label' =>  'Minutes',
-            ])
-            ->add('task', TextareaType::class, [
+                ]
+            )
+            ->add(
+                'task', TextareaType::class, [
                 'label' =>  'Action',
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Oncall::class,
-        ]);
+            ]
+        );
     }
 }

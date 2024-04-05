@@ -76,7 +76,8 @@ class DefaultController extends AbstractController
 
         $this->userConnexionService->registration($user);
 
-        // Lecture des dates de vérification cherchées dans le fichier des paramètres.
+        // Lecture des dates de vérification cherchées dans 
+        // le fichier des paramètres.
 
         $params = $this->paramsRepository->find(1);
         $lastDate = new \DateTime();
@@ -94,7 +95,8 @@ class DefaultController extends AbstractController
             // Traitement des préventifs à ajouter si nécessaire.
             $this->preventiveService->preventiveProcessing($organisationId);
 
-            // Surveillance des status des préventifs en cours selon leurs paramètres.
+            // Surveillance des status des préventifs en 
+            // cours selon leurs paramètres.
             $this->preventiveStatusService->setPreventiveStatus($organisationId);
 
             // Changement de la date du dernier traitement.

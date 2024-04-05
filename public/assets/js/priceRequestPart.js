@@ -138,6 +138,7 @@ function addSelectedPart(target) {
         part.qteStock,
         part.price
       );
+
       addPartToList(partToAdd);
 
       // Appel de la fonction de mise à jour du prix total
@@ -152,9 +153,9 @@ function addSelectedPart(target) {
 }
 
 function addPartToList(partToAdd) {
-  const partToBuy = partToAdd.qteMax - partToAdd.qteStock;
-  if(partToBuy <0){
-    partToBuy = 0
+  let partToBuy = partToAdd.qteMax - partToAdd.qteStock;
+  if (partToBuy < 0) {
+    partToBuy = 0;
   }
   const partList = document.getElementById("partList");
   var row = partList.insertRow();
@@ -172,7 +173,12 @@ function addPartToList(partToAdd) {
 
   // Affectation de la chaîne HTML à la cellule
 
-  cell4.innerHTML = '<input class="part_qte" type="number" name="quantities[' + partToAdd.id + ']" value="' + partToBuy + '" />';
+  cell4.innerHTML =
+    '<input class="part_qte" type="number" name="quantities[' +
+    partToAdd.id +
+    ']" value="' +
+    partToBuy +
+    '" />';
 
   cell5.innerHTML =
     '<input class="set" type="checkbox" name="selected_parts[]" value="' +

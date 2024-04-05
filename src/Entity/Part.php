@@ -12,7 +12,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PartRepository::class)
- * @UniqueEntity(fields={"code"}, message="Il y a déjà une pièce avec ce code")
+ * @UniqueEntity(fields={"code"},                    
+ * message="Il y a déjà une pièce avec ce code")
  * @Vich\Uploadable
  */
 class Part
@@ -25,9 +26,12 @@ class Part
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20, unique = true)
+     * Le code de la pièce est indépendant de l'id
+     * 
+     * @ORM\Column(type="string",                  length=20, unique = true)
      * @Assert\NotBlank
-     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")message="Le code ne respecte pas le format !"
+     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")
+     * message="Le code ne respecte pas le format !"
      */
     private $code;
 
@@ -44,7 +48,8 @@ class Part
     private $reference;
 
     /**
-     * @ORM\OneToOne(targetEntity=Stock::class, mappedBy="part", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Stock::class, 
+     * mappedBy="part", cascade={"persist", "remove"})
      */
     private $stock;
 
@@ -109,12 +114,18 @@ class Part
      */
     private $maxDeliveryDate;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="parts")
+     */
+    private $requests;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
         $this->machines = new ArrayCollection();
         $this->template = new ArrayCollection();
         $this->deliveryNoteParts = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     
@@ -384,6 +395,33 @@ class Part
     public function setMaxDeliveryDate(?\DateTimeInterface $maxDeliveryDate): self
     {
         $this->maxDeliveryDate = $maxDeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->addPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): self
+    {
+        if ($this->requests->removeElement($request)) {
+            $request->removePart($this);
+        }
 
         return $this;
     }

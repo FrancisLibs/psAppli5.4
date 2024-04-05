@@ -1,108 +1,70 @@
-<section class="mb-4">
-	<div class="row mt-3">
-		<div class="col-12 col-sm-3 col-md-2">
-			<p class="fw-bold">Code</p>
+<section class="mb-5">
+	<div class="mt-4 mb-4">
+		<h3>Pièce</h3>
+		<div class="d-flex justify-content-start">
+			<div class="d-flex justify-content-start">
+				<p class="fw-bold me-3">Code :</p>
+				<p>{{ part.code }}</p>
+			</div>
+			<div class="d-flex justify-content-start ms-5">
+				{% if part.provider %}
+					<p class="fw-bold me-3">Fournisseur :</p>
+					<p>{{ part.provider.name }}</p>
+				{% endif %}
+			</div>
 		</div>
-		<div class="col-12 col-sm-7 col-md-10">
-			<p>{{ part.code }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-sm-3 col-md-2">
-			<p class="fw-bold">Designation</p>
-		</div>
-		<div class="col-12 col-sm-7 col-md-10 ">
+		<div class="d-flex justify-content-start">
+			<p class="fw-bold me-3">Designation :</p>
 			<p>{{ part.designation }}</p>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-sm-3 col-md-2">
-			<p class="fw-bold">Reference</p>
-		</div>
-		<div class="col-12 col-sm-7 col-md-10">
+		<div class="d-flex justify-content-start">
+			<p class="fw-bold me-3">Reference :</p>
 			<p>{{ part.reference }}</p>
 		</div>
 	</div>
-	{% if part.provider %}
-		<div class="row">
-			<div class="col-12 col-sm-3 col-md-2">
-				<p class="fw-bold">Fournisseur</p>
+
+	<div class="mb-4">
+		<h3>Stock</h3>
+		<div class="d-flex justify-content-start">
+			<div class="d-flex justify-content-start">
+				<p class="fw-bold me-3">Qte :</p>
+				<p>{{ part.stock.qteStock }}</p>
 			</div>
-			<div class="col-12 col-sm-7 col-md-10">
-				<p>{{ part.provider.name }}</p>
+			<div class="d-flex justify-content-start ms-5">
+				<p class="fw-bold me-3">Qte Min :</p>
+				<p>{{ part.stock.qteMin }}</p>
+			</div>
+			<div class="d-flex justify-content-start ms-5">
+				<p class="fw-bold me-3">Qte Max :</p>
+				<p>{{ part.stock.qteMax }}</p>
+			</div>
+			<div class="d-flex justify-content-start ms-5">
+				<p class="fw-bold me-3">Emplacement :</p>
+				<p>{{ part.stock.place }}</p>
 			</div>
 		</div>
-	{% endif %}
-	<div class="row">
-		<div class="col-7 col-sm-3 col-md-2">
-			<p class="fw-bold">Qte Stock</p>
-		</div>
-		<div class="col-5">
-			<p>{{ part.stock.qteStock }}</p>
-		</div>
 	</div>
-	<div class="row">
-		<div class="col-7 col-sm-3 col-md-2">
-			<p class="fw-bold">Qte Min Stock</p>
-		</div>
-		<div class="col-5">
-			<p>{{ part.stock.qteMin }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-7 col-sm-3 col-md-2">
-			<p class="fw-bold">Qte Max Stock</p>
-		</div>
-		<div class="col-5">
-			<p>{{ part.stock.qteMax }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-7 col-sm-3 col-md-2">
-			<p class="fw-bold">Emplacement Stock</p>
-		</div>
-		<div class="col-5">
-			<p>{{ part.stock.place }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-5 col-sm-3 col-md-2">
-			<p class="fw-bold">Prix moyen</p>
-		</div>
-		<div class="col-5">
+
+	<div class="mb-4">
+		<h3>Divers</h3>
+		<div class="d-flex justify-content-start">
+			<p class="fw-bold me-3">Prix moyen :</p>
 			<p>{{ part.steadyPrice|number_format(2) }}€</p>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-sm-3 col-md-2">
-			<p class="fw-bold">Remarque</p>
-		</div>
-		<div class="<col-12 col-sm-7 col-md-10">
+		<div class="d-flex justify-content-start">
+			<p class="fw-bold me-3">Remarque :</p>
 			<p>{{ part.remark }}</p>
-		</col-12>
-	</div>
-	<div class="row">
-		<div class="col-5 col-sm-3 col-md-2">
-			<p class="fw-bold">Date dernière commande</p>
-		</div>
-		<div class="col-5">
-			{% if part.lastCommandeDate %}
-				<p>{{ part.lastCommandeDate|date('d/m/Y', timezone="Europe/Paris") }}</p>
-			{% else %}
-				<p>Pas de date de commande</p>
-			{% endif %}
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-5 col-sm-3 col-md-2">
-			<p class="fw-bold">Date livraison max</p>
-		</div>
-		<div class="col-5">
-			{% if part.maxDeliveryDate %}
-				<p>{{ part.maxDeliveryDate|date('d/m/Y', timezone="Europe/Paris") }}</p>
-			{% else %}
-				<p>Pas de date de livraison max</p>
-			{% endif %}
-		</div>
+
+	<div class="mb-4">
+		<h3>Machines</h3>
+		{% if part.machines is not empty %}
+			{% for machine in part.machines %}
+				<p>-
+					{{ machine.internalCode ~ " " }}{{ machine.designation }}</p>
+			{% endfor %}
+		{% endif %}
 	</div>
+
 </section>

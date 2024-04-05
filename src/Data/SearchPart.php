@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-class SearchPart 
+class SearchPart
 {
     /**
      * Numéro de page pour knp_paginator

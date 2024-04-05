@@ -29,7 +29,8 @@ class Workshop
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Machine::class, mappedBy="workshop", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Machine::class, 
+     * mappedBy="workshop", orphanRemoval=true)
      */
     private $machines;
 

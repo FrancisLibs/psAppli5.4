@@ -111,7 +111,7 @@ function addProvider(provider) {
   newProviderDiv.appendChild(emailDiv);
 
   // // Affichage div dans providerContainer
-  // globalProviderContainer.appendChild(newProviderDiv);
+  globalProviderContainer.appendChild(newProviderDiv);
 
   // Surveillance des deux boutons
   emailButton.addEventListener("click", function (e) {
@@ -389,9 +389,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Surveillance choix fournisseur à ajouter
   selectFournisseurs.addEventListener("change", function (e) {
     e.preventDefault;
+
     let providerId = selectFournisseurs.value;
 
-    // Récupération de la liste des fournisseurs
+    // Récupération du fournisseur
     const url = `/provider/show/${providerId}?ajax=true`;
 
     fetch(url, params)
@@ -407,6 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
           newProvider.name,
           newProvider.email
         );
+
         addProvider(provider);
       })
       .catch((error) => {

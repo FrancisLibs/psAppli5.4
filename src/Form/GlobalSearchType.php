@@ -14,23 +14,26 @@ class GlobalSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('search', TextType::class, [
+            ->add(
+                'search', TextType::class, [
                 'label' => false,
-            ])
-            ->add('submit', SubmitType::class)
-        ;
+                ]
+            )
+            ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => GlobalSearch::class,
             'method' => 'GET',
             'csrf_protection' => false
-        ]);
+            ]
+        );
     }
 
-     public function getBlockPrefix(): string
+    public function getBlockPrefix(): string
     {
         return '';
     }

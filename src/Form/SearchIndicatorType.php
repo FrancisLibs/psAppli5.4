@@ -13,22 +13,27 @@ class SearchIndicatorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startDate', DateType::class, [
+            ->add(
+                'startDate', DateType::class, [
                 'widget' => 'single_text', 
                 'label'  => false               
-            ])
+                ]
+            )
 
-            ->add('endDate', DateType::class, [
+            ->add(
+                'endDate', DateType::class, [
                 'widget' => 'single_text',  
                 'label'  => false              
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SearchIndicator::class,
-        ]);
+            ]
+        );
     }
 }

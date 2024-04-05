@@ -27,7 +27,9 @@ class StockType extends AbstractType
         $builder
             ->add(
                 'place', TextType::class, 
-                ['label' => 'Emplacement']
+                [
+                    'label' => 'Emplacement'
+                ]
             )
             ->add('qteMin')
             ->add('qteMax')
@@ -49,7 +51,10 @@ class StockType extends AbstractType
                 $roles = $user->getRoles();
                 $form = $event->getForm();
 
-                if (in_array('ROLE_ADMIN', $roles)) {
+                if (in_array('ROLE_ADMIN', $roles) 
+                    || in_array('ROLE_COORD', $roles) 
+                    || in_array('ROLE_SUPER', $roles)
+                ) {
                     $form->add(
                         'qteStock',
                         NumberType::class,

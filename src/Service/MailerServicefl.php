@@ -18,8 +18,7 @@ class MailerServicefl
         $to = 'fr.libs@gmail.com',
         $content = '<p>See Twig integration for better HTML integration!</p>',
         $subject = 'Time for Symfony Mailer!'
-    ): void
-    {
+    ): void {
         $email = (new Email())
             ->from($to)
             ->to($to)

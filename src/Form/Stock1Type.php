@@ -16,14 +16,15 @@ class Stock1Type extends AbstractType
             ->add('qteMin')
             ->add('qteMax')
             ->add('qteStock')
-            ->add('part')
-        ;
+            ->add('part');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Stock::class,
-        ]);
+            ]
+        );
     }
 }

@@ -42,7 +42,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Display & process form to request a password reset.
-     *
      */
     #[Route('', name: 'app_forgot_password_request')]
     public function request(
@@ -54,7 +53,7 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->processSendingPasswordResetEmail(
+            return $this->_processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
                 $mailer
             );
@@ -68,7 +67,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Confirmation page after a user has requested a password reset.
-     *
      */
     #[Route('/check-email', name: 'app_check_email')]
     public function checkEmail(): Response
@@ -89,7 +87,6 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
-     *
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
     public function reset(
@@ -156,7 +153,7 @@ class ResetPasswordController extends AbstractController
         );
     }
 
-    private function processSendingPasswordResetEmail(
+    private function _processSendingPasswordResetEmail(
         string $emailFormData,
         MailerInterface $mailer
     ): RedirectResponse {
@@ -172,7 +169,8 @@ class ResetPasswordController extends AbstractController
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment.
+            // If you want to tell the user 
+            // why a reset email was not sent, uncomment.
             // the lines below and change.
             // the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.

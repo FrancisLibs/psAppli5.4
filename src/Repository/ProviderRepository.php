@@ -70,7 +70,7 @@ class ProviderRepository extends ServiceEntityRepository
      * Récupère les fournisseurs liées à une recherche d'un mot
      *
      * @param Sorganisation
-     * @param $globalSearch
+     * @param $globalSearch GlobalSearch
      * 
      * @return DeliveryNote[]
      */
@@ -106,7 +106,6 @@ class ProviderRepository extends ServiceEntityRepository
      * Récupère les fournisseurs pour la requête ajax price request
      *
      * @param Sorganisation
-     * @param $globalSearch
      * 
      * @return DeliveryNote[]
      */

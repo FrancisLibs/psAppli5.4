@@ -78,9 +78,7 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
         $workorders = $this->workorderRepository->findSearch($data);
 
-        if ($request->isXmlHttpRequest() === true)
-        // if ($request->get('ajax')) 
-        {
+        if ($request->isXmlHttpRequest() === true) {
             return new JsonResponse(
                 [
                     'content'       =>  $this->renderView(
@@ -350,7 +348,8 @@ class WorkorderController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $workorder->getId(),
             $request->request->get('_token')
-        )) {
+        )
+        ) {
             $this->manager->remove($workorder);
             $this->manager->flush();
         }
@@ -369,8 +368,7 @@ class WorkorderController extends AbstractController
     #[Route('/closing/{id}', name: 'work_order_closing')]
     public function closing(Workorder $workorder): RedirectResponse
     {
-        if (
-            $workorder->getDurationDay() > 0
+        if ($workorder->getDurationDay() > 0
             || $workorder->getDurationHour() > 0
             || $workorder->getDurationMinute() > 0
         ) {

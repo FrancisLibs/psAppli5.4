@@ -87,10 +87,11 @@ class ProviderUtilsController extends AbstractController
                 }
             }
 
-            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
-                $organisationId,
-                $providerToReplaceId
-            );
+            $deliveryNotes 
+                = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
+                    $organisationId,
+                    $providerToReplaceId
+                );
 
             if ($deliveryNotes === true) {
                 foreach ($deliveryNotes as $deliveryNote) {
@@ -110,10 +111,11 @@ class ProviderUtilsController extends AbstractController
                 $providerToKeepId
             );
 
-            $deliveryNotes = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
-                $organisationId,
-                $providerToKeepId
-            );
+            $deliveryNotes 
+                = $this->deliveryNoteRepository->findDeliveryNoteByProvider(
+                    $organisationId,
+                    $providerToKeepId
+                );
 
             $data = [];
 

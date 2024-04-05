@@ -19,13 +19,14 @@ class Stock
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Part::class, inversedBy="stock", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Part::class, 
+     * inversedBy="stock", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $part;
 
     /**
-     * @ORM\Column(type="string", length=5, nullable=false)
+     * @ORM\Column(type="string",            length=5, nullable=false)
      * @Assert\NotBlank
      * @Assert\Regex("/^[A-Z]{2}[0-9]{3}$/")
      * message="Le code ne respecte pas le format !"

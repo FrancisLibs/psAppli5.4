@@ -17,50 +17,70 @@ class TemplateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('request', TextType::class, [
+            ->add(
+                'request', TextType::class, [
                 'label' => 'Demande'
-            ])
-            ->add('remark', TextareaType::class, [
+                ]
+            )
+            ->add(
+                'remark', TextareaType::class, [
                 'label' => 'Remarque',
                 'required' => false,
-            ])
-            ->add('period', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'period', IntegerType::class, [
                 'label' =>  'Période en jours',
                 'required' => true,
-            ])
-            ->add('nextDate', DateType::class, [
+                ]
+            )
+            ->add(
+                'nextDate', DateType::class, [
                 'label' => 'Date de début',
                 'required' => true,
                 'widget' => 'single_text'
-            ])
-            ->add('daysBefore', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'daysBefore', IntegerType::class, [
                 'label' => 'Jours av. interv.',
                 'required' => true,
-            ])
-            ->add('duration', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'duration', IntegerType::class, [
                 'label' => 'Durée en heures',
                 'required' => false,
-            ])
-            ->add('daysBeforeLate', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'daysBeforeLate', IntegerType::class, [
                 'label' => 'Jours de réalisation',
                 'required' => false,
-            ])
-            ->add('sliding', CheckboxType::class, [
+                ]
+            )
+            ->add(
+                'sliding', CheckboxType::class, [
                 'label' => 'Glissant',
                 'required' => false,
-            ])
-            ->add('calendarTitle', TextType::class, [
+                ]
+            )
+            ->add(
+                'calendarTitle', TextType::class, [
                 'label' => 'Titre calendrier',
                 'required' => true,
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Template::class,
             'organisation' => null,
             'translation_domain' => 'forms'
-        ]);
+            ]
+        );
     }
 }

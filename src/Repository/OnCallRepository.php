@@ -28,7 +28,7 @@ class OnCallRepository extends ServiceEntityRepository
     /**
      * Récupère les rapports d'astreinte liés à une recherche
      *
-     * @param SearchOnCall $search
+     * @param  SearchOnCall $search
      * @return PaginationInterface
      */
     public function findSearch(SearchOnCall $search, $organisation, $service): PaginationInterface

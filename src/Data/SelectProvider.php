@@ -6,8 +6,8 @@ use App\Entity\Provider;
 
 class SelectProvider
 {
-    private $providerToKeep;
-    private $providerToReplace;
+    protected $providerToKeep;
+    protected $providerToReplace;
 
 
     public function getProviderToKeep(): ?Provider

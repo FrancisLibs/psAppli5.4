@@ -23,12 +23,15 @@ class PartType extends AbstractType
             ->add('designation')
             ->add('reference')
             ->add('code')
-            ->add('remark', TextareaType::class, [
+            ->add(
+                'remark', TextareaType::class, [
                 'label' => 'Remarque',
                 'required' => false,
-            ])
+                ]
+            )
             ->add('stock', StockType::class)
-            ->add('provider', EntityType::class, [
+            ->add(
+                'provider', EntityType::class, [
                 'class'     => Provider::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('p')
@@ -37,12 +40,15 @@ class PartType extends AbstractType
                 'choice_label'   =>  'name',
                 'required'  => false,
                 'label' =>  'Fournisseur'
-            ])
-            ->add('steadyPrice', NumberType::class, [
+                ]
+            )
+            ->add(
+                'steadyPrice', NumberType::class, [
                 'label' => 'Prix',
                 'required' => false,
 
-            ])
+                ]
+            )
             ->add(
                 'lastCommandeDate',
                 DateType::class,
@@ -67,8 +73,10 @@ class PartType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Part::class,
-        ]);
+            ]
+        );
     }
 }

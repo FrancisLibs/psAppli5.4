@@ -1,4 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande d'offre
+{% block title %}Résultat demande d'offre
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/quotation_request.css">
+{% endblock %}
+
+
+{% block body %}
+	<main class="d-flex part-js-filter justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="ms-2">
+			<section class="d-flex justify-content-start align-items-center flex-wrap">
+				<h1 class="page-title me-5">Rapport demande d'offre</h1>
+			</section>
+
+			<section>
+				<div class="d-flex justify-content-start align-items-start mt-5">
+					<h2 class="titre_fournisseur me-5">Demande d'offre</h2>
+					<a class="btn btn-primary btn-sm" href="{{ path('parts_to_buy') }}" role="button">Retour aux réappro</a>
+				</div>
+
+				<div class="mt-5">
+					{% if providers|length > 1 %}
+						<h4 class="titre_fournisseur me-5">Fournisseurs :</h4>
+					{% else %}
+						<h4 class="titre_fournisseur me-5">Fournisseurs :</h4>
+					{% endif %}
+					<table class="table table-striped ">
+						<thead class="sorting">
+							<tr>
+								<th class="col-parts-first" scope="col">#</th>
+								<th class="col-parts-designation" scope="col">Nom</th>
+								<th class="col-parts-reference" scope="col">Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for provider in providers %}
+								<tr>
+									<th class="col-parts-first sorting" scope="row">{{ loop.index }}</th>
+									<td data-label="Designation" class="col-parts-designation">{{  provider.providerName}}</td>
+									<td data-label="Référence" class="col-parts-reference">{{ provider.providerEmail}}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+				<div class="mt-5 mb-5">
+					{% if parts|length > 1 %}
+						<h4 class="titre_fournisseur me-5">Pièces détachées :</h4>
+					{% else %}
+						<h4 class="titre_fournisseur me-5">Pièce détachée :</h4>
+					{% endif %}
+					<table class="table table-striped ">
+						<thead class="sorting">
+							<tr>
+								<th class="col-parts-first" scope="col">#</th>
+								<th class="col-parts-designation" scope="col">Désignation</th>
+								<th class="col-parts-reference" scope="col">Référence</th>
+								<th class="col-parts-quantities" scope="col">Quantité</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for part in parts %}
+								<tr>
+									<th class="col-parts-first sorting" scope="row">{{ loop.index }}</th>
+									<td data-label="Designation" class="col-parts-designation">{{ part.part.designation}}</td>
+									<td data-label="Référence" class="col-parts-reference">{{ part.part.reference}}</td>
+									<td data-label="Quantité" class="col-parts-quantities">{{ part.quantities}}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</section>
+		</article>
+	</main>
 {% endblock %}

@@ -23,48 +23,63 @@ class UserEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class, [
+            ->add(
+                'email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => ['placeholder' => 'Email...'],
                 'required' => true,
-            ])
-            ->add('phoneNumber', TextType::class, [
+                ]
+            )
+            ->add(
+                'phoneNumber', TextType::class, [
                 'label' => 'Téléphone',
                 'attr' => ['placeholder' => 'Numéro de téléphone...'],
-            ])
-            ->add('firstName', TextType::class, [
+                ]
+            )
+            ->add(
+                'firstName', TextType::class, [
                 'label' => 'Prénom',
                 'attr' => ['placeholder' => 'Prénom...'],
                 'required' => true,
-            ])
-            ->add('lastName', TextType::class, [
+                ]
+            )
+            ->add(
+                'lastName', TextType::class, [
                 'label' => 'Nom',
                 'attr' => ['placeholder' => 'Nom...'],
                 'required' => true,
-            ])
-            ->add('organisation', EntityType::class, [
+                ]
+            )
+            ->add(
+                'organisation', EntityType::class, [
                 'class' => Organisation::class,
                 'choice_label' => 'designation',
                 'multiple' => false,
                 'expanded' => true,
-            ])
-            ->add('service', EntityType::class, [
+                ]
+            )
+            ->add(
+                'service', EntityType::class, [
                 'class' => Service::class,
                 'choice_label' => 'name',
                 'multiple' => false,
                 'expanded' => true,
-            ])
-            ->add('imageFile', VichImageType::class, [
+                ]
+            )
+            ->add(
+                'imageFile', VichImageType::class, [
                 'required' => false,
                 'label' => 'Photo',
-            ])  
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => User::class,
-        ]);
+            ]
+        );
     }
 }

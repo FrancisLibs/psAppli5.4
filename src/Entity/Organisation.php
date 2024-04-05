@@ -11,7 +11,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=OrganisationRepository::class)
- * @UniqueEntity(fields={"designation"}, message="Il y a déjà une organisation avec ce nom")
+ * @UniqueEntity(fields={"designation"}, 
+ * message="Il y a déjà une organisation avec ce nom")
  */
 class Organisation
 {
@@ -59,7 +60,8 @@ class Organisation
     private $deliveryNotes;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockValue::class, mappedBy="organisation", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=StockValue::class, 
+     * mappedBy="organisation", orphanRemoval=true)
      */
     private $stockValues;
 

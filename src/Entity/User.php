@@ -16,7 +16,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"username"}, message="Il y a déjà un utilisateur avec cet identifiant")
+ * @UniqueEntity(fields={"username"}, 
+ * message="Il y a déjà un utilisateur avec cet identifiant")
  * @Vich\Uploadable
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -76,7 +77,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
-     * @ORM\OneToOne(targetEntity=Token::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Token::class, 
+     * mappedBy="user", cascade={"persist", "remove"})
      */
     private $token;
 
@@ -135,12 +137,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $service;
 
     /**
-     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Messages::class, 
+     * mappedBy="sender", orphanRemoval=true)
      */
     private $sent;
 
     /**
-     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="recipient", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Messages::class, 
+     * mappedBy="recipient", orphanRemoval=true)
      */
     private $received;
 
@@ -153,6 +157,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $active;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Request::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $request;
 
     public function __construct()
     {
@@ -179,7 +188,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->imageFile = $imageFile;
 
         if (null !== $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
+            // It is required that at least 
+            // one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
             if ($this->imageFile instanceof UploadedFile) {
                 $this->updatedAt = new \DateTimeImmutable();
@@ -646,6 +656,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getRequestDate(): ?Request
+    {
+        return $this->requestDate;
+    }
+
+    public function setRequestDate(Request $requestDate): self
+    {
+        // set the owning side of the relation if necessary
+        if ($requestDate->getUser() !== $this) {
+            $requestDate->setUser($this);
+        }
+
+        $this->requestDate = $requestDate;
+
+        return $this;
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
+    }
+
+    public function setRequest(Request $request): self
+    {
+        // set the owning side of the relation if necessary
+        if ($request->getUser() !== $this) {
+            $request->setUser($this);
+        }
+
+        $this->request = $request;
 
         return $this;
     }

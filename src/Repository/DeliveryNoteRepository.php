@@ -31,7 +31,7 @@ class DeliveryNoteRepository extends ServiceEntityRepository
     /**
      * Récupère les bons de livraison liés à une recherche
      *
-     * @param SearchWorkorder $search
+     * @param  SearchWorkorder $search
      * @return PaginationInterface
      */
     public function findSearch(SearchDeliveryNote $search): PaginationInterface
@@ -94,16 +94,22 @@ class DeliveryNoteRepository extends ServiceEntityRepository
             ->innerjoin('d.provider', 'p')
             ->andWhere('d.organisation = :organisation')
 
-            ->andWhere('
+            ->andWhere(
+                '
                 p.name LIKE :word 
                 OR 
                 d.number LIKE :word
-            ')
+            '
+            )
 
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisation),
-                new Parameter('word', $word),
-            ])) 
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisation),
+                    new Parameter('word', $word),
+                    ]
+                )
+            ) 
 
             ->orderBy('d.number', 'ASC')
             ->getQuery()
@@ -113,8 +119,8 @@ class DeliveryNoteRepository extends ServiceEntityRepository
     /**
      * Fonction de recherche de bon de livraison selon le fournisseur
      *
-     * @param integer $organisation
-     * @param integer $provider
+     * @param  integer $organisation
+     * @param  integer $provider
      * @return DeliveryNote[]
      */
     public function findDeliveryNoteByProvider($organisationId, $providerId)

@@ -29,7 +29,7 @@ class DeliveryNote
     private $provider;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string",   length=100)
      * @Assert\NotBlank(message="Ce champ doit être saisi")
      */
     private $number;

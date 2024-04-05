@@ -12,14 +12,15 @@ class OrganisationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('designation')
-        ;
+            ->add('designation');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Organisation::class,
-        ]);
+            ]
+        );
     }
 }

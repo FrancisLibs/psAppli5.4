@@ -84,3 +84,22 @@ input {
   border-width: 1px;
   border-radius: 14px;
 }
+
+.col-parts-first {
+  width: 40px;
+}
+
+.col-parts-designation {
+  width: 450px;
+  text-align: center;
+}
+
+.col-parts-reference {
+  width: 300px;
+  text-align: center;
+}
+
+.col-parts-quantities {
+  width: 110px;
+  text-align: center;
+}

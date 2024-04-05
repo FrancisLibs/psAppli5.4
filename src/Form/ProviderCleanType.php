@@ -17,7 +17,8 @@ class ProviderCleanType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('providerToKeep', EntityType::class, [
+            ->add(
+                'providerToKeep', EntityType::class, [
                 'class' => Provider::class,
                 'query_builder' => function (ProviderRepository $providerRepo): QueryBuilder {
                     return $providerRepo->createQueryBuilder('p')
@@ -26,8 +27,10 @@ class ProviderCleanType extends AbstractType
                 'choice_label' => 'nameId',
                 'label' => 'Fournisseur à garder',
                 'required' => false,
-            ])
-            ->add('providerToReplace', EntityType::class, [
+                ]
+            )
+            ->add(
+                'providerToReplace', EntityType::class, [
                 'class' => Provider::class,
                 'query_builder' => function (ProviderRepository $providerRepo): QueryBuilder {
                     return $providerRepo->createQueryBuilder('p')
@@ -36,16 +39,21 @@ class ProviderCleanType extends AbstractType
                 'choice_label' => 'nameId',
                 'label' => 'Fournisseur à remplacer',
                 'required' => false,
-            ])
-            ->add('submit', SubmitType::class, [
+                ]
+            )
+            ->add(
+                'submit', SubmitType::class, [
                 'label' => 'Remplacer',
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SelectProvider::class,
-        ]);
+            ]
+        );
     }
 }

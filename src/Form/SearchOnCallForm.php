@@ -15,23 +15,26 @@ class SearchOnCallForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user', EntityType::class, [
+            ->add(
+                'user', EntityType::class, [
                 'class'     => User::class,
                 'choice_label'   =>  'userName',
                 'label'     => false,
                 'required'  => false,
                 'placeholder' => 'Technicien...',
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SearchOnCall::class,
             'method' => 'GET',
             'csrf_protection' => false
-        ]);
+            ]
+        );
     }
 
     public function getBlockPrefix(): string

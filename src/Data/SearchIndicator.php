@@ -2,17 +2,17 @@
 
 namespace App\Data;
 
-class SearchIndicator 
+class SearchIndicator
 {
     /**
-     * startDate
+     * StartDate
      *
      * @var date
      */
     public $startDate;
     
     /**
-     * endDate
+     * EndDate
      *
      * @var string
      */

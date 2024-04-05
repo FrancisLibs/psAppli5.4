@@ -16,7 +16,7 @@ class ExceptionController extends AbstractController
         switch ($statusCode) {
         case 403:
             return $this->render(
-                'bundles\TwigBundle\Exception\error403.html.twig', 
+                'bundles\TwigBundle\Exception\error403.html.twig',
                 [
                 'status_code' => $statusCode,
                 'status_text' => Response::$statusTexts[$statusCode] ?? 'Erreur',
@@ -24,7 +24,7 @@ class ExceptionController extends AbstractController
             );
         case 404:
             return $this->render(
-                'bundles\TwigBundle\Exception\error404.html.twig', 
+                'bundles\TwigBundle\Exception\error404.html.twig',
                 [
                 'status_code' => $statusCode,
                 'status_text' => Response::$statusTexts[$statusCode] ?? 'Erreur',
@@ -32,7 +32,7 @@ class ExceptionController extends AbstractController
             );
         case 500:
             return $this->render(
-                'bundles\TwigBundle\Exception\error500.html.twig', 
+                'bundles\TwigBundle\Exception\error500.html.twig',
                 [
                 'status_code' => $statusCode,
                 'status_text' => Response::$statusTexts[$statusCode] ?? 'Erreur',
@@ -40,7 +40,7 @@ class ExceptionController extends AbstractController
             );
         default:
             return $this->render(
-                'bundles\TwigBundle\Exception\error.html.php', 
+                'bundles\TwigBundle\Exception\error.html.php',
                 [
                 'status_code' => $statusCode,
                 'status_text' => Response::$statusTexts[$statusCode] ?? 'Erreur',

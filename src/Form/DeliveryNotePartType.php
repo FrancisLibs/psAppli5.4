@@ -16,20 +16,26 @@ class DeliveryNotePartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('part', EntityType::class, [
+            ->add(
+                'part', EntityType::class, [
                 'label' => false,
                 'class' => Part::class,
                 'choice_label' => 'designation',
-            ])
-            ->add('quantity', IntegerType::class, [
+                ]
+            )
+            ->add(
+                'quantity', IntegerType::class, [
                 'label' => false,
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => DeliveryNotePart::class,
-        ]);
+            ]
+        );
     }
 }

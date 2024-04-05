@@ -75,6 +75,11 @@ class Provider
      */
     private $organisation;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Request::class, inversedBy="providers")
+     */
+    private $requests;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
@@ -257,5 +262,17 @@ class Provider
     public function getNameId()
     {
         return $this->name . ' ' . $this->id;
+    }
+
+    public function getRequests(): ?Request
+    {
+        return $this->requests;
+    }
+
+    public function setRequests(?Request $requests): self
+    {
+        $this->requests = $requests;
+
+        return $this;
     }
 }

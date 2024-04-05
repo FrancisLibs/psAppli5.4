@@ -16,25 +16,32 @@ class DeliveryNoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('number', TextType::class, [
+            ->add(
+                'number', TextType::class, [
                 'label' => 'Numéro de BL'
-            ])
-            ->add('date', DateType::class, [
+                ]
+            )
+            ->add(
+                'date', DateType::class, [
                 'label' => 'Date de BL',
                 'input' => 'datetime',
                 'widget' => 'single_text',
-            ])
-            ->add('deliveryNoteParts', CollectionType::class, [
+                ]
+            )
+            ->add(
+                'deliveryNoteParts', CollectionType::class, [
                 'entry_type' => DeliveryNotePartType::class,
                 'label' => false,
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => DeliveryNote::class,
-        ]);
+            ]
+        );
     }
 }

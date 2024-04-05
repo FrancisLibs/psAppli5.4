@@ -35,7 +35,7 @@ class MachineRepository extends ServiceEntityRepository
     /**
      * Récupère les machines liées à une recherche
      *
-     * @param SearchMachine $search
+     * @param  SearchMachine $search
      * @return PaginationInterface
      */
     public function findSearch(SearchMachine $search): PaginationInterface
@@ -87,14 +87,14 @@ class MachineRepository extends ServiceEntityRepository
                 ->setParameter('workshop', $search->workshop);
         }
 
-        if(!empty($search->active)){
+        if(!empty($search->active)) {
             $query = $query
-            ->andWhere('m.active = :disabled')
-            ->setParameter('disabled', FALSE);
+                ->andWhere('m.active = :disabled')
+                ->setParameter('disabled', false);
         } else {
             $query = $query
-            ->andWhere('m.active = :disabled')
-            ->setParameter('disabled', TRUE);
+                ->andWhere('m.active = :disabled')
+                ->setParameter('disabled', true);
         }
         
 

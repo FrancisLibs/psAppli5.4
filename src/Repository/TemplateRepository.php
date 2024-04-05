@@ -22,7 +22,7 @@ class TemplateRepository extends ServiceEntityRepository
     /**
      * Récupère les templates liés à une recherche
      *
-     * @param SearchTemplate $search
+     * @param  SearchTemplate $search
      * @return PaginationInterface
      */
     public function findTemplates(SearchTemplate $search): PaginationInterface
@@ -102,7 +102,7 @@ class TemplateRepository extends ServiceEntityRepository
     /**
      * Récupère les bons de travail préventifs pour affichage calendrier
      *
-     * @param int $organisationId
+     * @param int    $organisationId
      * @param string $year
      */
     public function findAllTemplatesForCalendar($organisationId, $year)

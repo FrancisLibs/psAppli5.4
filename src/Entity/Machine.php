@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=MachineRepository::class)
- * @UniqueEntity(fields={"internalCode"}, message="Il y a déjà une machine avec ce code")
+ * @UniqueEntity(fields={"internalCode"},                
+ * message = "Il y a déjà une machine avec ce code")
  * @Vich\Uploadable
  */
 class Machine
@@ -49,7 +50,7 @@ class Machine
     private $workshop;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string",               length=15)
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-zA-Z]{6}[0-9]{4}$/")
      * message="Le code ne respecte pas le format !"
@@ -375,7 +376,8 @@ class Machine
         $this->imageFile = $imageFile;
 
         if (null !== $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
+            // It is required that at least one 
+            // field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTime();
         }

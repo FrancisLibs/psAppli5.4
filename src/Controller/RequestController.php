@@ -60,7 +60,9 @@ class RequestController extends AbstractController
         $organisation = $this->organisation->getOrganisation();
 
         $parts = $this->partRepository->findProviderParts($organisation, $provider);
-        $startMessage = "Bonjour, \n\nMerci de me faire une offre pour les matériels ci-dessous :";
+        $startMessage
+            = "Bonjour, 
+            \n\nMerci de me faire une offre pour les matériels ci-dessous :";
         $startMessageBR = nl2br($startMessage);
         $endMessage = "Cordialement";
         $endMessageBR = nl2br($endMessage);
@@ -78,10 +80,14 @@ class RequestController extends AbstractController
 
     /**
      * Envoi des emails de demande de prix
+     * 
+     * @param $request Request
      */
     #[Route('/parts-selection', name: 'quotation-parts-select', methods: ['POST'])]
     public function traiterSelection(Request $request): Response
     {
+        $user = $this->getUser();
+
         $providerName = $request->request->get('provider_name');
         $providerId = $request->request->get('provider_id');
         $providerEmail = $request->request->get('provider_email');
@@ -93,22 +99,36 @@ class RequestController extends AbstractController
 
         $providers = [];
 
-        for($index = 0; $index < count($providerName); $index++){
+        // Creation of an provider array
+        for ($index = 0; $index < count($providerName); $index++) {
             $providers[$index] = [
-                'providerName' => $providerName[$index],
-                'providerId' => $providerId[$index],
-                'provideEmail' => $providerEmail[$index]
-            ];
+                    'providerName' => $providerName[$index],
+                    'providerId' => $providerId[$index],
+                    'providerEmail' => $providerEmail[$index]
+                ];
+            
+        }
+        
+        // Removing providers without email
+        $index = 0;
+        foreach ($providers as $provider) {
+            if ($provider['providerEmail'] == "") {
+                array_splice($providers, $index, 1);
+            }
+            $index++;
         }
 
+        // If are no parts then setting an error message
         if (empty($selectedPartIds)) {
             $this->addFlash('error', 'Attention tu n\'as selectionné aucun article');
-            return $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
+            return
+                $this->redirectToRoute('app_request', ['id' => $provider->getId()]);
         }
 
+        // Creation of an part array
         $parts = [];
         foreach ($quantities as $partId => $quantity) {
-            if(in_array($partId, $selectedPartIds)) {
+            if (in_array($partId, $selectedPartIds)) {
                 $part = $this->partRepository->findOneById($partId);
                 if ($part) {
                     $parts[] = [
@@ -121,7 +141,7 @@ class RequestController extends AbstractController
         
         // Construction du contenu de l'e-mail en utilisant le rendu de template 
         // pour chaque fournisseur
-        foreach($providers as $provider) {
+        foreach ($providers as $provider) {
             $emailContent = $this->renderView(
                 'request/request_mail.html.twig',
                 [
@@ -134,17 +154,23 @@ class RequestController extends AbstractController
 
             // Envoi de l'e-mail
             $email = (new Email())
-                ->from('votre@email.com')
-                ->to('fr.libs@gmail.com')
-                ->subject('Pièces sélectionnées')
+                ->from('pierre.schmidt@gmaops.fr')
+                ->to($provider['providerEmail'])
+                ->addTo($user->getEmail())
+                ->subject('Pièces à chiffrer')
                 ->html($emailContent);
 
             $this->mailer->send($email);
 
         }
-        
+
         return $this->render(
-            'request/result.html.twig'
+            'request/result.html.twig',
+            [
+                'user' => $user,
+                'providers' => $providers,
+                'parts' => $parts
+            ]
         );
     }
 }

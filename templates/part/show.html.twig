@@ -3,6 +3,12 @@
 {% block title %}Pièce détachée
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/part-show.css">
+{% endblock %}
+
+
 {% block body %}
 	<div class="row part-js-filter justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
@@ -22,7 +28,6 @@
 				</div>
 			</section>
 			{% include 'part/_partShow.html.twig' %}
-			{% include 'part/_partShowMachine.html.twig' %}
 		</article>
 	</div>
 {% endblock %}

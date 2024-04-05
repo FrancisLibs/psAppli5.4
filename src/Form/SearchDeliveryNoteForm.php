@@ -16,26 +16,31 @@ class SearchDeliveryNoteForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('number', TextType::class, [
+            ->add(
+                'number', TextType::class, [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Numéro...']
-            ])
-            ->add('provider', TextType::class, [
+                ]
+            )
+            ->add(
+                'provider', TextType::class, [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Fournisseur...']
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SearchDeliveryNote::class,
             'method' => 'GET',
             'csrf_protection' => false
-        ]);
+            ]
+        );
     }
 
     public function getBlockPrefix(): string

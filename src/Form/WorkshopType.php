@@ -15,19 +15,22 @@ class WorkshopType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('organisation', EntityType::class, [
+            ->add(
+                'organisation', EntityType::class, [
                 'class' =>  Organisation::class,
                 'choice_label' => 'designation',
                 'multiple' => false,
                 'expanded' => true,
-            ])
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Workshop::class,
-        ]);
+            ]
+        );
     }
 }

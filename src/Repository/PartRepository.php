@@ -27,7 +27,7 @@ class PartRepository extends ServiceEntityRepository
     /**
      * Récupère les pièces liées à une recherche
      *
-     * @param SearchPart $search
+     * @param  SearchPart $search
      * @return PaginationInterface
      */
     public function findSearch(SearchPart $search): PaginationInterface
@@ -105,6 +105,7 @@ class PartRepository extends ServiceEntityRepository
 
     /**
      * Retourne la liste des pièces pour la requête ajax dans la modale de demande de prix
+     *
      * @return Part[]
      */
     public function findParts($organisation)
@@ -186,7 +187,8 @@ class PartRepository extends ServiceEntityRepository
 
             ->andWhere('p.active = true')
 
-            ->andWhere('
+            ->andWhere(
+                '
                 p.code LIKE :word 
                 OR 
                 p.designation LIKE :word
@@ -194,12 +196,17 @@ class PartRepository extends ServiceEntityRepository
                 p.reference LIKE :word
                 OR
                 p.remark LIKE :word
-            ')
+            '
+            )
 
-            ->setParameters(new ArrayCollection([
-                new Parameter('organisation', $organisation),
-                new Parameter('word', $word),
-            ]))
+            ->setParameters(
+                new ArrayCollection(
+                    [
+                    new Parameter('organisation', $organisation),
+                    new Parameter('word', $word),
+                    ]
+                )
+            )
 
             ->orderBy('p.code', 'ASC')
             ->getQuery()
@@ -226,8 +233,8 @@ class PartRepository extends ServiceEntityRepository
     /**
      * Fonction de recherche de pièces selon le fournisseur
      *
-     * @param integer $organisation
-     * @param integer $provider
+     * @param  integer $organisation
+     * @param  integer $provider
      * @return Parts[]
      */
     public function findPartsByProvider($organisationId, $providerId)
@@ -288,7 +295,7 @@ class PartRepository extends ServiceEntityRepository
      * Retourne une pièce selon l'organisation et le code de la pièce
      * 
      * @param integer $organisationid
-     * @param string $code
+     * @param string  $code
      * 
      * @return Part[]
      */
@@ -303,8 +310,7 @@ class PartRepository extends ServiceEntityRepository
             ->andWhere('p.code = :code')
             ->setParameter('code', $code)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
     }
 
 

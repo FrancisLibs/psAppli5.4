@@ -71,8 +71,7 @@ class PartController extends AbstractController
 
         $data = new SearchPart();
 
-        if (
-            $mode == "workorderAddPart"
+        if ($mode == "workorderAddPart"
             || $mode == "newDeliveryNote"
             || $mode == "editDeliveryNote"
         ) {
@@ -115,8 +114,7 @@ class PartController extends AbstractController
             );
         }
 
-        if (
-            $mode == 'workorderAddPart'
+        if ($mode == 'workorderAddPart'
             || $mode == 'editReceivedPart'
             || $mode == 'editDeliveryNote'
             || $mode == 'newDeliveryNote'
@@ -170,14 +168,16 @@ class PartController extends AbstractController
 
         $parts = $this->partRepository->findParts($organisation);
 
-        $partsArray= array_map(function($part){
-            return [
+        $partsArray= array_map(
+            function ($part) {
+                return [
                 'id' => $part->getId(),
                 'code' => $part->getCode(),
                 'designation' => $part->getDesignation(),
                 'reference' => $part->getReference()
-            ];
-        }, $parts);
+                ];
+            }, $parts
+        );
 
         return $this->json($partsArray);
     }
@@ -306,7 +306,8 @@ class PartController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $part->getId(),
             $request->request->get('_token')
-        )) {
+        )
+        ) {
             $part->setActive(false);
             $this->manager->flush();
         }

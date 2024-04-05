@@ -131,13 +131,13 @@ class ProviderController extends AbstractController
         );
     }
 
-/**
- * Cette fonction est utilisée pour l'appel ajax dans le module priceRequest
- * Elle retourne la liste des fournisseurs
- *
- * @param Request $request
- * @return void
- */
+    /**
+     * Cette fonction est utilisée pour l'appel ajax dans le module priceRequest
+     * Elle retourne la liste des fournisseurs
+     *
+     * @param  Request $request
+     * @return void
+     */
     #[IsGranted('ROLE_USER')]
     #[Route('/list', name: 'provider_list', methods: ["GET"])]
     public function providerList(Request $request)
@@ -157,12 +157,12 @@ class ProviderController extends AbstractController
         return new JsonResponse($data);
     }
 
-/**
-     * Modification d'un fournisseur -> ajout d'une adresse email en ajax
-     *
-     * @param  Request $request
-     * @return Response
-     */
+    /**
+         * Modification d'un fournisseur -> ajout d'une adresse email en ajax
+         *
+         * @param  Request $request
+         * @return Response
+         */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/email/{id}/{email}', name: 'provider_email', methods: ["GET"])]
     public function email(Request $request, Provider $provider, $email): Response
@@ -181,8 +181,11 @@ class ProviderController extends AbstractController
      */
     #[Route('/{mode?}/{documentId?}', name: 'provider_index', methods: ["GET"])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(Request $request, ?string $mode, ?int $documentId = null): Response
-    {
+    public function index(
+        Request $request, 
+        ?string $mode, 
+        ?int $documentId = null
+    ): Response {
         $data = new SearchProvider();
         $data->page = $request->get('page', 1);
 
@@ -250,7 +253,8 @@ class ProviderController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $provider->getId(),
             $request->request->get('_token')
-        )) {
+        )
+        ) {
             $this->manager->remove($provider);
             $this->manager->flush();
         }

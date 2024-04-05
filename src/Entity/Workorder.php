@@ -144,7 +144,8 @@ class Workorder
     /**
      * Pièces détachées ratachées à l'intervention
      * 
-     * @ORM\OneToMany(targetEntity=WorkorderPart::class, mappedBy="workorder", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=WorkorderPart::class, 
+     * mappedBy="workorder", orphanRemoval=true)
      */
     private $workorderParts;
 
@@ -171,6 +172,7 @@ class Workorder
 
     /**
      * Le statut du BT
+     *
      * @ORM\ManyToOne(targetEntity=WorkorderStatus::class, inversedBy="workorders")
      */
     private $workorderStatus;

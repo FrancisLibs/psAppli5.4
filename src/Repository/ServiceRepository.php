@@ -31,8 +31,7 @@ class ServiceRepository extends ServiceEntityRepository
             ->setParameter('organisation', $organisationId)
             ->orderBy('s.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /*

@@ -22,58 +22,76 @@ class SearchWorkorderForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startDate', DateType::class, [
+            ->add(
+                'startDate', DateType::class, [
                 'widget' => 'single_text',
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Date début']
-            ])
-            ->add('id', NumberType::class, [
+                ]
+            )
+            ->add(
+                'id', NumberType::class, [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Num.']
-            ])
-            ->add('machine', TextType::class, [
+                ]
+            )
+            ->add(
+                'machine', TextType::class, [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Machine...']
-            ])
-            ->add('user', EntityType::class, [
+                ]
+            )
+            ->add(
+                'user', EntityType::class, [
                 'class'     => User::class,
                 'choice_label'   =>  'userName',
                 'label'     => false,
                 'required'  => false,
                 'placeholder' => 'Technicien...',
-            ])
-            ->add('request', TextType::class, [
+                ]
+            )
+            ->add(
+                'request', TextType::class, [
                 'label'     => false,
                 'required'  => false,
                 'attr'      => ['placeholder' => 'Travail...']
-            ])
-            ->add('status', EntityType::class, [
+                ]
+            )
+            ->add(
+                'status', EntityType::class, [
                 'class'     => WorkorderStatus::class,
                 'choice_label'   =>  'name',
                 'label'     => false,
                 'required'  => false,
                 'placeholder' => 'Status...',
-            ])
-            ->add('preventive', CheckboxType::class, [
+                ]
+            )
+            ->add(
+                'preventive', CheckboxType::class, [
                 'label'     => 'Préventif',
                 'required'  => false,
-            ])
-            ->add('closed', CheckboxType::class, [
+                ]
+            )
+            ->add(
+                'closed', CheckboxType::class, [
                 'label'     => 'Cloturé',
                 'required'  => false,
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => SearchWorkorder::class,
             'method' => 'GET',
             'csrf_protection' => false
-        ]);
+            ]
+        );
     }
 
     public function getBlockPrefix(): string

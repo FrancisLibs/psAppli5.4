@@ -19,19 +19,24 @@ class MessagesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, [
+            ->add(
+                'title', TextType::class, [
                 "label" => "Titre",
                 "attr" => [
                     "class" => "form-control"
                 ]
-            ])
-            ->add('message', TextareaType::class, [
+                ]
+            )
+            ->add(
+                'message', TextareaType::class, [
                 "label" => "Message",
                 "attr" => [
                     "class" => "form-control"
                 ]
-            ])
-            ->add('recipient', EntityType::class, [
+                ]
+            )
+            ->add(
+                'recipient', EntityType::class, [
                 "label" => "Destinataire",
                 "class" => User::class,
                 'query_builder' => function (UserRepository $repo) {
@@ -41,23 +46,30 @@ class MessagesType extends AbstractType
                 "attr" => [
                     "class" => "form-control"
                 ]
-            ])
-            ->add('all', CheckboxType::class, [
+                ]
+            )
+            ->add(
+                'all', CheckboxType::class, [
                 'label'    => 'Tout le service',
                 'required' => false,
                 'mapped' => false,
-            ])
-            ->add('envoyer', SubmitType::class, [
+                ]
+            )
+            ->add(
+                'envoyer', SubmitType::class, [
                 "attr" => [
                     "class" => "btn btn-primary"
                 ]
-            ]);
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Messages::class,
-        ]);
+            ]
+        );
     }
 }

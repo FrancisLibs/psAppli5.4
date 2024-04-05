@@ -37,7 +37,10 @@ class ServiceController extends AbstractController
     public function index(): Response
     {
         $organisation = $this->organisation->getOrganisation();
-        $services = $this->serviceRepository->findAllServicesByOrganisation($organisation->getId());
+        $services 
+            = $this->serviceRepository->findAllServicesByOrganisation(
+                $organisation->getId()
+            );
 
         return $this->render(
             'service/index.html.twig', 

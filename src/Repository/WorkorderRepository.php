@@ -18,6 +18,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 class WorkorderRepository extends ServiceEntityRepository
 {
+
     protected $paginator;
 
 
@@ -124,8 +125,10 @@ class WorkorderRepository extends ServiceEntityRepository
             $startDate = $search->startDate;
             $endDate = clone $startDate;
 
-            $startDate->setTime(0, 0, 0); // Réglage de l'heure à 00:00:00 pour inclure toute la journée.
-            $endDate->setTime(23, 59, 59); // Réglage de l'heure à 23:59:59 pour inclure toute la journée.
+            // Réglage de l'heure à 00:00:00 pour inclure toute la journée.
+            $startDate->setTime(0, 0, 0);
+            // Réglage de l'heure à 23:59:59 pour inclure toute la journée.
+            $endDate->setTime(23, 59, 59);
 
             $query = $query
                 ->andWhere('w.startDate BETWEEN :startDate AND :endDate')
@@ -301,8 +304,8 @@ class WorkorderRepository extends ServiceEntityRepository
      * @return workorders
      */
     public function findAllWorkordersByMachine(
-        $organisationId, 
-        $searchIndicator, 
+        $organisationId,
+        $searchIndicator,
         $machineId,
     ) {
         $startDate = $searchIndicator->startDate;

@@ -11,7 +11,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ServiceRepository::class)
- * @UniqueEntity(fields={"name"}, message="Il y a déjà un service avec ce nom")
+ * @UniqueEntity(fields={"name"},                        
+ * message="Il y a déjà un service avec ce nom")
  */
 class Service
 {
@@ -23,7 +24,7 @@ class Service
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string",      length=50)
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank
      */

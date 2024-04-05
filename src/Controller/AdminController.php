@@ -7,15 +7,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @IsGranted("ROLE_ADMIN")
- */
 class AdminController extends AbstractController
 {
     /**
      * Admin page
      *
-     * @return          RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     #[Route("/admin", name: "admin", methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]

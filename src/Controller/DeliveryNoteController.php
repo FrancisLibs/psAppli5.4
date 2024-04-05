@@ -194,8 +194,8 @@ class DeliveryNoteController extends AbstractController
                 }
                 // Traitement date de commande et date de réception
                 if ($deliveryNotePartQte >= $partsInOrder) {
-                    $part->setLastCommandeDate(NULL);
-                    $part->setMaxDeliveryDate(NULL);
+                    $part->setLastCommandeDate(null);
+                    $part->setMaxDeliveryDate(null);
                 }
             }
 
@@ -311,7 +311,8 @@ class DeliveryNoteController extends AbstractController
             // 1) Lire les pièces contenues dans le formulaire.
             $parts = $deliveryNote->getDeliveryNoteParts();
 
-            // 2) Boucler sur les pièces de l'ancien BL et comp avec les pièces du form.
+            // 2) Boucler sur les pièces de l'ancien 
+            // BL et comp avec les pièces du form.
             foreach ($parts as $part) {
                 $flag = true;
                 $id = $part->getPart()->getId();

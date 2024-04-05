@@ -46,7 +46,7 @@ class StockValueRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $organisation
+     * @param  int $organisation
      * @return StockValue by organisation
      */
     public function findStockValues($organisation)
@@ -55,7 +55,6 @@ class StockValueRepository extends ServiceEntityRepository
             ->where('s.organisation = :organisation')
             ->setParameter('organisation', $organisation)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }

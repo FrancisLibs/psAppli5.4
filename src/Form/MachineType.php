@@ -18,45 +18,62 @@ class MachineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('internalCode', TextType::class, [
+            ->add(
+                'internalCode', TextType::class, [
                 'label' => 'Code machine'
-            ])
-            ->add('designation', TextType::class, [
+                ]
+            )
+            ->add(
+                'designation', TextType::class, [
                 'label' => 'Désignation'
-            ])
-            ->add('constructor', TextType::class, [
+                ]
+            )
+            ->add(
+                'constructor', TextType::class, [
                 'label' => 'Constructeur'
-            ])
-            ->add('model', TextType::class, [
+                ]
+            )
+            ->add(
+                'model', TextType::class, [
                 'label' => 'Modèle',
                 'required' => false,
-            ])
-            ->add('workshop', EntityType::class, [
+                ]
+            )
+            ->add(
+                'workshop', EntityType::class, [
                 'class' =>  Workshop::class,
                 'choice_label' => 'name',
                 'label' => 'Atelier'
-            ])
-            ->add('serialNumber', TextType::class, [
+                ]
+            )
+            ->add(
+                'serialNumber', TextType::class, [
                 'label' => 'Numéro de série',
                 'required' => false,
-            ])
-            ->add('buyDate', DateType::class, [
+                ]
+            )
+            ->add(
+                'buyDate', DateType::class, [
                 'input' => 'datetime',
                 'widget' => 'single_text',
                 'label' => 'Date d\'achat',
                 'required' => false,
-            ])
-            ->add('imageFile', VichImageType::class, [
+                ]
+            )
+            ->add(
+                'imageFile', VichImageType::class, [
                 'required' => false,
                 'label' => 'Photo',
-            ]) 
-        ;
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Machine::class,
-        ]);
+            ]
+        );
     }
 }

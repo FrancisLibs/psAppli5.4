@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-class SearchWorkorder 
+class SearchWorkorder
 {
     /**
      * Numéro de page pour knp_paginator
