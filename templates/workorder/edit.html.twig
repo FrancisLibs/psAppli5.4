@@ -12,7 +12,7 @@
 	<main class="row justify-content-start mt-5 mb-5">
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-xl-10">
-			<header class="d-flex justify-content-start align-items-center flex-wrap">
+			<header class="d-flex justify-content-start align-items-center flex-wrap mb-5">
 				{% if workorder.preventive %}
 					<h1 class="page-title me-5 mb-2">Edition bon de travail préventif</h1>
 				{% else %}
@@ -26,36 +26,36 @@
 					{% endif %}
 				</div>
 			</header>
-			<section class="row">
-				<div class="mt-4 col-12 col-xl-9">
+			<section class="row mb-5">
+				<div class="d-flex justify-content-start align-items-center me-5">
 					<span class="item me-5">Machine(s)</span>
 					{% if not workorder.preventive %}
-						<a class="btn btn-primary btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'documentId': workorder.id}) }}" role="button">Changer de machine</a>
+						<a class="btn btn-warning btn-sm" href="{{ path('machine_index', {'mode': 'modif', 'documentId': workorder.id}) }}" role="button">Changer de machine</a>
 					{% endif %}
-					<div class="row mt-2">
-						<div class="col-12 d-flex justify-content-start align-items-center">
-							<table class="table table-sm table-striped">
-								<thead>
-									<tr class="sorting">
-										<th>Code</th>
-										<th class="text-center">Désignation</th>
+				</div>
+				<div class="row mt-2 machines-box">
+					<div class="col-12 d-flex justify-content-start align-items-center">
+						<table class="table table-sm table-striped">
+							<thead>
+								<tr class="sorting">
+									<th>Code</th>
+									<th class="text-center">Désignation</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for machine in workorder.machines %}
+									<tr>
+										<td data-label="Code">{{ machine.internalCode }}</td>
+										<td data-label="Désignation" class="text-center">{{ machine.designation }}</td>
 									</tr>
-								</thead>
-								<tbody>
-									{% for machine in workorder.machines %}
-										<tr>
-											<td data-label="Code">{{ machine.internalCode }}</td>
-											<td data-label="Désignation" class="text-center">{{ machine.designation }}</td>
-										</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</section>
 			<section class="row">
-				<div class="col-12 col-xl-11">
+				<div class="col-12 col-xl-12">
 					{{ include('workorder/_form.html.twig') }}
 				</div>
 			</section>
@@ -64,5 +64,5 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	{{ encore_entry_script_tags('workorder') }}
+	<script type="module" src="/assets/js/workorder.js" defer></script>
 {% endblock %}

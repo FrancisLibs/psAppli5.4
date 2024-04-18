@@ -373,7 +373,8 @@ class DeliveryNoteController extends AbstractController
         if ($this->isCsrfTokenValid(
             'delete' . $deliveryNote->getId(),
             $request->request->get('_token')
-        )) {
+        )
+        ) {
             $this->manager->remove($deliveryNote);
             $this->manager->flush();
         }

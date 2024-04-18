@@ -8,7 +8,6 @@
 	<link rel="stylesheet" href="/assets/css/workorder-new.css">
 {% endblock %}
 
-
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
@@ -17,19 +16,34 @@
 				<h1 class="page-title">Nouveau BT</h1>
 			</header>
 			<section class="row">
-				<div class="col-12 col-sm-3 col-xl-2">
-					<a class="btn btn-primary new-btn me-5" href="{{ path('machine_choice', {'mode': 'newWorkorder'}) }}">Machine(s)</a>
+				<div class="d-flex justify-content-start align-items-center mb-4">
+					<a class="btn btn-warning new-btn me-5" href="{{ path('machine_choice', {'mode': 'newWorkorder'}) }}">Machine(s)</a>
 				</div>
-				<div class="text-primary text-af-btn col-12 col-sm-7 mt-1">
-					{% if workorder.machines is not empty %}
-						{% for machine in workorder.machines %}
-							{{ machine.designation }}
-						{% endfor %}
-					{% endif %}
-				</div>
+				<div class="row mt-2 machines-box">
+					<div class="col-12 d-flex justify-content-start align-items-center">
+						{% if workorder.machines is not empty %}
+							<table class="table table-sm table-striped">
+								<thead>
+									<tr class="sorting">
+										<th>Code</th>
+										<th class="text-center">Désignation</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for machine in workorder.machines %}
+										<tr>
+											<td data-label="Code">{{ machine.internalCode }}</td>
+											<td data-label="Désignation" class="text-center">{{ machine.designation }}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				{% endif %}
 			</section>
 			<section class="row mt-3">
-				<div class="col-12 col-xl-11">
+				<div class="col-12 col-xl-12">
 					{{ include('workorder/_form.html.twig') }}
 				</div>
 			</section>
@@ -38,5 +52,5 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	{{ encore_entry_script_tags('workorder') }}
+	<script type="module" src="/assets/js/workorder.js" defer></script>
 {% endblock %}

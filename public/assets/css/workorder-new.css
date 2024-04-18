@@ -1,12 +1,29 @@
-.global-date-box {
+.machines-box {
+  width: 760px;
+}
+
+#date-box-with-text {
   border: 1px solid blue;
   border-radius: 10px;
-  max-width: 660px;
+}
+
+.global-date-box {
+  max-width: 700px;
   display: flex;
   justify-content: start;
   align-items: center;
   flex-wrap: wrap;
   padding: 10px;
+}
+
+.invisible {
+  display: none;
+}
+
+.warning-text {
+  text-align: center;
+  color: red;
+  font-size: 18px;
 }
 
 .global-duration-box {
@@ -54,4 +71,20 @@
   font-weight: bold;
   color: #0d6efd;
   white-space: nowrap;
+}
+
+.to-close-class {
+  display: flex;
+}
+
+.button-valid {
+  width: 300px;
+}
+
+#completedAfterText {
+  color: red;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0px;
+  margin: 0px;
 }

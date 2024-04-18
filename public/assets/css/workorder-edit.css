@@ -1,3 +1,6 @@
+.machines-box {
+  width: 760px;
+}
 .caseTemps {
   width: 157px;
 }
@@ -44,7 +47,7 @@
 .global-date-box {
   border: 1px solid blue;
   border-radius: 10px;
-  max-width: 660px;
+  max-width: 670px;
   display: flex;
   justify-content: start;
   align-items: center;

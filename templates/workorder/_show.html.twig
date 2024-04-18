@@ -71,9 +71,9 @@
 		<div class="item-answer">{{ workorder.remark | nl2br }}</div>
 	</div>
 {% endif %}
-<div class="row mt-4 justify-content-start">
-	<span class="item">Durée :</span>
-	<span class="item-answer">
+<div class="d-flex justify-content-start align-items-center mt-4 mb-4">
+	<span class="item me-2">Durée :</span>
+	<span class="item-answer me-2">
 		{% if workorder.durationDay > 0 %}
 			{{ workorder.durationDay }}
 			{% if workorder.durationDay > 1 %}
@@ -81,6 +81,22 @@
 			{% else %}
 				jour
 			{% endif %}
+		{% else %}
+			0jours
+		{% endif %}
+	</span>
+	<span class="item-answer me-2">
+		{% if workorder.durationHour > 0 %}
+			{{ workorder.durationHour }}h
+		{% else %}
+			0h
+		{% endif %}
+	</span>
+	<span class="item-answer">
+		{% if workorder.durationMinute > 0 %}
+			{{ workorder.durationMinute }}mn
+		{% else %}
+			0mn
 		{% endif %}
 	</span>
 </div>
@@ -157,5 +173,4 @@
 			</div>
 		</div>
 	</div>
-
 {% endif %}

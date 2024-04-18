@@ -129,18 +129,20 @@ class WorkorderController extends AbstractController
         }
         // Initialisation of the workorder
         $workorder
-            ->setStartDate(new \Datetime())
-            ->setEndDate(new \Datetime())
-            ->setStartTime(new \Datetime())
-            ->setEndTime(new \Datetime())
+            // ->setStartDate(new \Datetime())
+            ->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')))
+            ->setStartTime(new \Datetime('now', new \DateTimeZone('Europe/Paris')))
             ->setDurationDay(0)
             ->setDurationHour(0)
             ->setDurationMinute(0)
             ->setStopTimeHour(0)
             ->setStopTimeMinute(0)
             ->setOperationPrice(0)
-            ->setPartsPrice(0);
-
+            ->setPartsPrice(0)
+            ->setUser($user)
+            ->setOrganisation($this->organisation->getOrganisation())
+            ->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')))
+            ->setPreventive(false);
         //Creation of the form
         $form = $this->createForm(
             WorkorderType::class,
@@ -151,11 +153,6 @@ class WorkorderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $workorder->setUser($user);
-            $workorder->setOrganisation($this->organisation->getOrganisation());
-            $workorder->setCreatedAt(new \DateTime());
-            $workorder->setPreventive(false);
-
             if ($machine) {
                 $workorder->addMachine($machine);
             }
@@ -165,7 +162,8 @@ class WorkorderController extends AbstractController
                 $this->addFlash('error', 'Il n\'y a pas de machine dans le BT');
                 return $this->redirectToRoute('work_order_new');
             }
-
+            
+            dd($workorder);
             // Contrôle BT terminé 
             $minute = $workorder->getDurationMinute();
             $hour = $workorder->getDurationHour();
@@ -173,14 +171,20 @@ class WorkorderController extends AbstractController
             $request = $workorder->getRequest();
             $implementation = $workorder->getImplementation();
             $machine = $workorder->getMachines();
+            $toClose = $workorder->getToClose();
 
             $status = $this->workorderStatusRepository->findOneBy(
                 ['name' => 'EN_COURS']
             );
+
+            if($toClose === true) {
+
+            }
             if (($minute > 0 || $hour > 0 || $day > 0)
                 && !empty($request)
                 && !empty($implementation)
                 && !empty($machine)
+                && $toClose === false
             ) {
                 $status = $this->workorderStatusRepository->findOneBy(
                     ['name' => 'TERMINE']

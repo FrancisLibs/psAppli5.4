@@ -180,7 +180,7 @@ class ProviderController extends AbstractController
      * @return Response 
      */
     #[Route('/{mode?}/{documentId?}', name: 'provider_index', methods: ["GET"])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     public function index(
         Request $request, 
         ?string $mode, 

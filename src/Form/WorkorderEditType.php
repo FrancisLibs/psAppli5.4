@@ -92,24 +92,24 @@ class WorkorderEditType extends AbstractType
             )
             ->add(
                 'durationDay',
-                TextType::class,
+                IntegerType::class,
                 ['label' => 'jours']
             )
             ->add(
                 'durationHour',
-                TextType::class,
+                IntegerType::class,
                 [
                     'label' => 'Heures'
                 ]
             )
             ->add(
                 'durationMinute',
-                TextType::class,
+                IntegerType::class,
                 ['label' => 'Minutes']
             )
             ->add(
                 'stopTimeHour',
-                TextType::class,
+                IntegerType::class,
                 [
                     'label' => 'Heure',
                     'required' => false,
@@ -117,7 +117,7 @@ class WorkorderEditType extends AbstractType
             )
             ->add(
                 'stopTimeMinute',
-                TextType::class,
+                IntegerType::class,
                 [
                     'label' => 'Minute',
                     'required' => false,

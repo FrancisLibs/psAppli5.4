@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class WorkorderType extends AbstractType
@@ -81,7 +83,7 @@ class WorkorderType extends AbstractType
                 'startTime',
                 TimeType::class,
                 [
-                    'label' => 'Heure début',
+                    'label' => 'Heure déb.',
                     'widget' => 'single_text',
                     'input' => 'datetime',
                 ]
@@ -107,22 +109,22 @@ class WorkorderType extends AbstractType
             )
             ->add(
                 'durationDay',
-                TextType::class,
+                IntegerType::class,
                 ['label' => 'Jours']
             )
             ->add(
                 'durationHour',
-                TextType::class,
+                IntegerType::class,
                 ['label' => 'Heures']
             )
             ->add(
                 'durationMinute',
-                TextType::class,
+                IntegerType::class,
                 ['label' => 'Minutes']
             )
             ->add(
                 'stopTimeHour',
-                TextType::class,
+                IntegerType::class,
                 [
                     'label' => 'Heures',
                     'required' => false,
@@ -130,7 +132,7 @@ class WorkorderType extends AbstractType
             )
             ->add(
                 'stopTimeMinute',
-                TextType::class,
+                IntegerType::class,
                 [
                     'label' => 'Minutes',
                     'required' => false,
@@ -140,6 +142,13 @@ class WorkorderType extends AbstractType
                 'operationPrice',
                 NumberType::class,
                 ['label' => 'Cout opération']
+            )
+            ->add(
+                'toClose',
+                CheckboxType::class, [
+                'label'    => 'Standby',
+                'required' => false,
+                ]
             );
     }
 
