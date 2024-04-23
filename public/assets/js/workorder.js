@@ -60,10 +60,13 @@ function controlRealization() {
 function compareDates() {
   const sDate = new Date(form[5].value + "T" + form[6].value);
   const eDate = new Date(form[7].value + "T" + form[8].value);
-  return eDate > sDate;
+  console.log("sdate :" + sDate);
+  console.log("eDate :" + eDate);
+
+  return eDate >= sDate;
 }
 
-// Validation du formulaire
+// Submit the form
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   // Check if dates ok
@@ -106,8 +109,8 @@ function errorState() {
   form[12].value = 0;
 }
 
-function dateFill() {
-  return form[5].value && form[6].value && form[7].value && form[8].value;
+function zeroDuration(){
+  
 }
 
 function duration() {
@@ -125,25 +128,14 @@ function duration() {
 
 // Calcul du temps de l'intervention
 function computeTime() {
-  // Est-ce que toutes les cases ont une valeur ?
-  if (dateFill()) {
-    // Vérification de l'antériorité de la date de fin
-    if (compareDates()) {
-      // Normal state
-      normalState();
-      // fill intervention duration
-      duration();
-    } else {
-      errorState();
-    }
-  }
-}
-
-function checkNegativeDurationValues() {
-  for (let index = 10; index < 13; index++) {
-    if (form[index] < 0) {
-      form[(index = 0)];
-    }
+  // Vérification de l'antériorité de la date de fin
+  if (compareDates()) {
+    // Normal state
+    normalState();
+    // fill intervention duration
+    duration();
+  } else {
+    errorState();
   }
 }
 
@@ -184,25 +176,23 @@ function adjustTime() {
 // Surveillance des modifications des dates et heures (de form[5] à form[8])
 for (let index = 5; index < 9; index++) {
   form[index].addEventListener("blur", () => {
-    checkNegativeDurationValues();
-    adjustTime();
+    computeTime();
+    // adjustTime();
   });
 }
 
 // Surveillance des modifications de la durée de l'intervention (form[10] form[12])
 for (let index = 10; index < 13; index++) {
-  form[index].addEventListener("change", adjustTime, false);
+  form[index].addEventListener("change", () => {
+    if (form[index].value < 0) {
+      form[index].value = 0;
+    } else {
+      adjustTime();
+    }
+  });
 }
 
 // Check the dates after loading the page
-window.onload = (event) => {
-  // Are all date box filled ?
-  if (dateFill) {
-    // Are the date order ok ?
-    if (compareDates()) {
-      errorState();
-    } else {
-      normalState();
-    }
-  }
-};
+// window.onload = () => {
+
+//   };

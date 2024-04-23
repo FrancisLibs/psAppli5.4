@@ -57,20 +57,26 @@
 			</div>
 		</div>
 	</div>
-	<div class="me-3 mt-3">
-		<span class="item">Durée</span>
-		<div class="global-duration-box" id="duration_time">
-			<div class="caseHeure">
-				{{ form_row(form.durationDay)}}
-			</div>
-			<div class="caseHeure">
-				{{ form_row(form.durationHour)}}
-			</div>
-			<div class="caseHeure">
-				{{ form_row(form.durationMinute)}}
+	<div class="global-duration-box">
+		<div class="me-3 mt-3">
+			<span class="item">Durée</span>
+			<div class="global-duration-box" id="duration_time">
+				<div class="caseHeure">
+					{{ form_row(form.durationDay)}}
+				</div>
+				<div class="caseHeure">
+					{{ form_row(form.durationHour)}}
+				</div>
+				<div class="caseHeure">
+					{{ form_row(form.durationMinute)}}
+				</div>
 			</div>
 		</div>
+		<div id="warning-duration-text-box" class="text-center warning-text invisible">
+			<p>La date de fin est antérieure à la date de début</p>
+		</div>
 	</div>
+
 	<div class="mt-3 me-3">
 		<span class="item">Arrêt machine</span>
 		<div class="global-stop-time-box">

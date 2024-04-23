@@ -128,12 +128,20 @@ class WorkorderController extends AbstractController
             $workorder->addMachine($machine);
         }
         // Initialisation of the workorder
+        // The endTIme needs an hour more
+        $oneHour = 60 * 60 * 1000 * 2;
+        $endHour = new \Datetime('now', new \DatetimeZone('Europe/Paris'));
+        $endHour = $endHour->getTimestamp() + $oneHour;
+        $endTime = new \Datetime();
+        $endTime->setTimestamp($endHour);
+
         $workorder
-            // ->setStartDate(new \Datetime())
-            ->setStartDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')))
-            ->setStartTime(new \Datetime('now', new \DateTimeZone('Europe/Paris')))
+            ->setStartDate(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
+            ->setStartTime(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
+            ->setEndDate(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
+            ->setEndTime($endTime)
             ->setDurationDay(0)
-            ->setDurationHour(0)
+            ->setDurationHour(1)
             ->setDurationMinute(0)
             ->setStopTimeHour(0)
             ->setStopTimeMinute(0)
@@ -141,7 +149,7 @@ class WorkorderController extends AbstractController
             ->setPartsPrice(0)
             ->setUser($user)
             ->setOrganisation($this->organisation->getOrganisation())
-            ->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')))
+            ->setCreatedAt(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
             ->setPreventive(false);
         //Creation of the form
         $form = $this->createForm(
@@ -388,8 +396,8 @@ class WorkorderController extends AbstractController
                 // Prochaine date en secondes
                 $nextDate = $workorder->getPreventiveDate()->getTimeStamp();
                 // Aujourd'hui en secondes
-                $today = (new \DateTime())->getTimeStamp();
-                $date = new \DateTime();
+                $today = (new \Datetime())->getTimeStamp();
+                $date = new \Datetime();
 
                 if ($template->getSliding()) {
                     // Si préventif glissant, ajout de la période à la date du jour
