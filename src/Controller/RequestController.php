@@ -34,7 +34,7 @@ class RequestController extends AbstractController
 
     protected $security;
 
-
+    
     public function __construct(
         SessionInterface $sessionInterface,
         OrganisationService $organisation,
@@ -53,7 +53,13 @@ class RequestController extends AbstractController
         $this->security = $security;
     }
 
-
+    /**
+     * Affiche la page de demande pour un fournisseur 
+     * spécifique et prépare les messages de début et de fin.
+     *
+     * @param  Provider $provider Le fournisseur pour lequel la demande est faite.
+     * @return Response La réponse HTTP avec le rendu de la vue.
+     */
     #[Route('/request/{id}', name: 'app_request')]
     public function index(Provider $provider): Response
     {
@@ -79,10 +85,12 @@ class RequestController extends AbstractController
     }
 
     /**
-     * Envoi des emails de demande de prix
-     * 
-     * @param $request Request
-     */
+    * Traite la sélection des pièces et envoie des emails de demande de prix aux 
+    * fournisseurs sélectionnés.
+    *
+    * @param  Request $request La requête HTTP contenant les données du formulaire.
+    * @return Response
+    */
     #[Route('/parts-selection', name: 'quotation-parts-select', methods: ['POST'])]
     public function traiterSelection(Request $request): Response
     {

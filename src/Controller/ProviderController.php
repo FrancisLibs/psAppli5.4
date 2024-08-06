@@ -104,6 +104,7 @@ class ProviderController extends AbstractController
     #[Route('/new', name: 'provider_new', methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
+        $organisation = $this->organisation->getOrganisation();
         $provider = new Provider();
         $form = $this->createForm(ProviderType::class, $provider);
         $form->handleRequest($request);
@@ -112,6 +113,7 @@ class ProviderController extends AbstractController
             $provider->setCode(strtoupper($provider->getCode()));
             $provider->setName(strtoupper($provider->getName()));
             $provider->setCity(strtoupper($provider->getCity()));
+            $provider->setOrganisation($organisation);
             $this->manager->persist($provider);
             $this->manager->flush();
 

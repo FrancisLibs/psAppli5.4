@@ -206,11 +206,6 @@ class Workorder
      */
     private $calendarTitle;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $toClose;
-
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -561,18 +556,6 @@ class Workorder
     public function setCalendarTitle(?string $calendarTitle): self
     {
         $this->calendarTitle = $calendarTitle;
-
-        return $this;
-    }
-
-    public function isToClose(): ?bool
-    {
-        return $this->toClose;
-    }
-
-    public function setToClose(?bool $toClose): self
-    {
-        $this->toClose = $toClose;
 
         return $this;
     }

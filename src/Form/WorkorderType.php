@@ -95,6 +95,7 @@ class WorkorderType extends AbstractType
                     'input' => 'datetime',
                     'label' => 'Date fin',
                     'widget' => 'single_text',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -144,10 +145,11 @@ class WorkorderType extends AbstractType
                 ['label' => 'Cout opération']
             )
             ->add(
-                'toClose',
+                'standby',
                 CheckboxType::class, [
                 'label'    => 'Standby',
                 'required' => false,
+                'mapped' => false,
                 ]
             );
     }

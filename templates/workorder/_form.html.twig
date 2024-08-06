@@ -1,11 +1,11 @@
 {{ form_start(form) }}
-<div class="row mt-4">
-	<div class="d-flex justify-content-start align-items-baseline col-12 col-sm-7 col-md-5 col-xl-4">
-		<h4 class="item me-4">Technicien</h4>
+<div class="d-flex justify-content-start align-items-center mt-4">
+	<div class="d-flex justify-content-start align-items-baseline me-5">
+		<p class="item me-2">Technicien :</p>
 		{{ form_row(form.user) }}
 	</div>
-	<div class="d-flex justify-content-start align-items-baseline col-12 col-sm-7 col-md-5 col-xl-4 ">
-		<h4 class="item me-4">Type BT</h4>
+	<div class="d-flex justify-content-start align-items-baseline me-5">
+		<p class="item me-2">Type :</p>
 		{{ form_row(form.type) }}
 	</div>
 </div>
@@ -30,37 +30,36 @@
 		</div>
 	</div>
 </div>
-<div class="duration me-3 mt-3 mb-5" id="time_management">
-	<div class="me-3 mt-3">
-		<span class="item">Date</span>
-		<div id="date-box-with-text">
-			<div class="global-date-box" id="workorder_time">
-				<div class="date-box m-2">
+
+<div class="d-flex justify-content-start align-items-start flex-wrap mb-3 mt-5" id="time_management">
+
+	<div class="d-flex flex-column justify-content-start flex-wrap me-3">
+		<div class="item">Date</div>
+		<div class="d-flex flex-column justify-content-center align-items-center">
+			<div class="time-box" id="workorder_time">
+				<div class="date-box-item">
 					{{ form_row(form.startDate)}}
 				</div>
-				<div class="time2-box m-2">
+				<div class="time2-box">
 					{{ form_row(form.startTime) }}
 				</div>
-				<div class="date-box m-2">
+				<div class="date-box-item">
 					{{ form_row(form.endDate)}}
 				</div>
-				<div class="time2-box m-2">
+				<div class="time2-box">
 					{{ form_row(form.endTime)}}
 				</div>
-				<div class="time2-box m-2">
-					{{ form_widget(form.toClose) }}
-					{{ form_label(form.toClose) }}
-				</div>
 			</div>
-			<div id="warning-text-box" class="text-center warning-text invisible">
+			<div id="warning-time-text-box" class="warning-time-text invisible">
 				<p>La date de fin est antérieure à la date de début</p>
 			</div>
 		</div>
 	</div>
-	<div class="global-duration-box">
-		<div class="me-3 mt-3">
-			<span class="item">Durée</span>
-			<div class="global-duration-box" id="duration_time">
+
+	<div class="d-flex flex-column justify-content-start flex-wrap me-3">
+		<div class="item">Durée</div>
+		<div class="d-flex flex-column justify-content-center align-items-center">
+			<div class="duration-box" id="duration_time">
 				<div class="caseHeure">
 					{{ form_row(form.durationDay)}}
 				</div>
@@ -71,13 +70,13 @@
 					{{ form_row(form.durationMinute)}}
 				</div>
 			</div>
-		</div>
-		<div id="warning-duration-text-box" class="text-center warning-text invisible">
-			<p>La date de fin est antérieure à la date de début</p>
+			<div id="warning-duration-text-box" class="warning-duration-text invisible">
+				<p>La durée est à 0 !</p>
+			</div>
 		</div>
 	</div>
 
-	<div class="mt-3 me-3">
+	<div class="me-3">
 		<span class="item">Arrêt machine</span>
 		<div class="global-stop-time-box">
 			<div class="caseHeure">
@@ -88,15 +87,26 @@
 			</div>
 		</div>
 	</div>
-	<div class="mt-3 me-3">
+
+	<div class="me-3">
 		<span class="item">Coût</span>
 		<div class="global-cost-box">
 			{{ form_row(form.operationPrice)}}
 		</div>
 	</div>
+
 </div>
-<div class="d-flex justify-content-start align-items-center mb-5">
-	<button type="submit" class="btn btn-primary button-sm pull-right me-5 button-valid">Valider</button>
-	<p id="completedAfterText" class="invisible">Attention ce BT en standby devra être complété ultérieurement.</p>
+
+<div class="d-flex justify-content-start align-items-center flex-wrap mb-5">
+	<div class="standby-box mb-3 me-5" id="standby">
+		<div class="time2-box">
+			{{ form_label(form.standby) }}
+			{{ form_widget(form.standby) }}
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary button-sm pull-right button-valid me-5 mb-3">Valider</button>
+	<p id="completedAfterText" class="invisible mb-3">Attention ce BT en standby devra être complété ultérieurement.</p>
+	<p id="completedStandby" class="invisible mb-3">Pour sortir de l'état standby, donnes une durée au BT !</p>
 </div>
+
 {{ form_end(form) }}

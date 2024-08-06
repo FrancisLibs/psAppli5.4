@@ -5,28 +5,33 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="/assets/css/workorder-edit.css">
+	<link rel="stylesheet" href="/assets/css/workorder.css">
 {% endblock %}
 
 {% block body %}
 	<main class="row justify-content-start mt-5 mb-5">
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-xl-10">
-			<header class="d-flex justify-content-start align-items-center flex-wrap mb-5">
-				{% if workorder.preventive %}
-					<h1 class="page-title me-5 mb-2">Edition bon de travail préventif</h1>
-				{% else %}
-					<h1 class="page-title me-5 mb-2">Edition bon de travail</h1>
-				{% endif %}
+
+			<header class="d-flex flex-column">
 				<div class="d-flex justify-content-start align-items-center flex-wrap">
-					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
-					<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
-					{% if is_granted('ROLE_ADMIN') %}
-						{{ include('workorder/_delete_form.html.twig') }}
+					{% if workorder.preventive %}
+						<h1 class="page-title me-5 mb-2">Edition bon de travail préventif</h1>
+					{% else %}
+						<h1 class="page-title me-5 mb-2">Edition bon de travail</h1>
 					{% endif %}
+					<div class="d-flex justify-content-start align-items-center flex-wrap">
+						<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_show', {'id': workorder.id}) }}" role="button">Retour au BT</a>
+						<a class="btn btn-primary btn-sm me-2 mb-2" href="{{ path('work_order_index') }}" role="button">Liste des BT</a>
+						{% if is_granted('ROLE_ADMIN') %}
+							{{ include('workorder/_delete_form.html.twig') }}
+						{% endif %}
+					</div>
 				</div>
+				<span id="standby-text" class="standby  me-5">Ce BT attend une date de fin !</span>
 			</header>
-			<section class="row mb-5">
+
+			<section class="row mt-5 mb-5">
 				<div class="d-flex justify-content-start align-items-center me-5">
 					<span class="item me-5">Machine(s)</span>
 					{% if not workorder.preventive %}

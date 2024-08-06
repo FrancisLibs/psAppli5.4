@@ -1,43 +1,35 @@
 let form = document.forms.workorder;
 
-//Lecture des dates et heures de début et fin d'intervention
-function readParams() {
-  let params = {};
-  // Valeurs formulaire
-  params.startDate = form[5];
-  params.startTime = form[6];
-  params.endDate = form[7];
-  params.endTime = form[8];
-  params.toClose = form[9];
-  params.durationDay = form[10];
-  params.durationHour = form[11];
-  params.durationMinute = form[12];
+// Constantes
+const request = form[2];
+const realization = form[3];
+const remark = form[4];
+const startDate = form[5];
+const startTime = form[6];
+const endDate = form[7];
+const endTime = form[8];
+const durationDay = form[9];
+const durationHour = form[10];
+const durationMinute = form[11];
+const toClose = form[15];
+const warningTimeTextBox = document.getElementById("warning-time-text-box");
+const warningDurationTextBox = document.getElementById(
+  "warning-duration-text-box"
+);
+const completedAfterText = document.getElementById("completedAfterText");
+const completedStandby = document.getElementById("completedStandby");
 
-  // Valeurs calculées
-  params.startHours = params.startTime.value.substr(0, 2);
-  params.startMinutes = params.startTime.value.substr(3, 2);
-  params.endHours = params.endTime.value.substr(0, 2);
-  params.endMinutes = params.endTime.value.substr(3, 2);
-
-  params.dateS = new Date(params.startDate.value);
-  params.dateE = new Date(params.endDate.value);
-
-  params.sDate = new Date(
-    params.startDate.value + "T" + params.startTime.value
-  );
-  params.eDate = new Date(params.endDate.value + "T" + params.endTime.value);
-
-  params.warningTextBox = document.getElementById("warning-text-box");
-
-  params.completedAfterText = document.getElementById("completedAfterText");
-
-  return params;
+const standby = document.getElementById("workorder_standby");
+let standbyText;
+if (document.getElementById("standby-text")) {
+  standbyText = document.getElementById("standby-text");
+} else {
+  standbyText = document.createElement("p");
 }
 
 // Vérification présence demande
 function controlRequest() {
-  const request = form[2].value;
-  if (request == "") {
+  if (request.value == "") {
     alert("Attention il n'y a rien dans le champ 'Demande'");
     return false;
   } else {
@@ -47,8 +39,7 @@ function controlRequest() {
 
 // Vérification présence réalisation
 function controlRealization() {
-  const realization = form[3].value;
-  if (realization == "") {
+  if (realization.value == "") {
     alert("Attention il n'y a rien dans le champ 'Réalisation'");
     return false;
   } else {
@@ -57,26 +48,9 @@ function controlRealization() {
 }
 
 // Check if the start date is smaller than the end date
-function compareDates() {
-  const sDate = new Date(form[5].value + "T" + form[6].value);
-  const eDate = new Date(form[7].value + "T" + form[8].value);
-  console.log("sdate :" + sDate);
-  console.log("eDate :" + eDate);
-
+function compareDates(sDate, eDate) {
   return eDate >= sDate;
 }
-
-// Submit the form
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  // Check if dates ok
-  if (checkDateOrder()) {
-    // Check if request and action fields are ok
-    if (controlRequest() && controlRealization()) {
-      form.submit();
-    }
-  }
-});
 
 function timeConversion(milliseconds) {
   // Nombre de millisecondes dans une journée (24 heures * 60 minutes * 60 secondes * 1000 millisecondes)
@@ -93,106 +67,176 @@ function timeConversion(milliseconds) {
 }
 
 function normalState() {
-  document.getElementById("warning-text-box").classList.add("invisible");
-  document.getElementById("completedAfterText").classList.add("invisible");
-  document.getElementById("date-box-with-text").style.border = "blue solid 1px";
-  form[9].checked = false;
+  warningTimeTextBox.classList.add("invisible");
+  warningDurationTextBox.classList.add("invisible");
+  completedAfterText.classList.add("invisible");
+  completedStandby.classList.add("invisible");
+  standbyText.classList.add("invisible");
 }
 
-function errorState() {
-  document.getElementById("warning-text-box").classList.remove("invisible");
-  document.getElementById("completedAfterText").classList.remove("invisible");
-  document.getElementById("date-box-with-text").style.border = "red solid 3px";
-  form[9].checked = true;
-  form[10].value = 0;
-  form[11].value = 0;
-  form[12].value = 0;
+function errorTimeState() {
+  warningTimeTextBox.classList.remove("invisible");
+  completedAfterText.classList.remove("invisible");
+  completedStandby.classList.add("invisible");
 }
 
-function zeroDuration(){
-  
+function errorDurationState() {
+  warningDurationTextBox.classList.remove("invisible");
+  completedAfterText.classList.remove("invisible");
+  completedStandby.classList.add("invisible");
+  standby.classList.remove("invisible");
+  standbyText.classList.remove("invisible");
 }
 
-function duration() {
-  const sDate = new Date(form[5].value + "T" + form[6].value);
-  const eDate = new Date(form[7].value + "T" + form[8].value);
+function duration(sDate, eDate) {
   // Calculer la différence entre les deux dates avec heures en millisecondes
   let milisecondsTimeDif = Math.abs(eDate - sDate);
 
   // Conversion en jours, heures, minutes
   var convertedTime = timeConversion(milisecondsTimeDif);
-  form[10].value = convertedTime.days;
-  form[11].value = convertedTime.hours;
-  form[12].value = convertedTime.minutes;
+
+  // Affichage dans les cases durée
+  durationDay.value = convertedTime.days;
+  durationHour.value = convertedTime.hours;
+  durationMinute.value = convertedTime.minutes;
 }
 
-// Calcul du temps de l'intervention
-function computeTime() {
-  // Vérification de l'antériorité de la date de fin
-  if (compareDates()) {
-    // Normal state
-    normalState();
-    // fill intervention duration
-    duration();
+function zeroDurationBox() {
+  durationDay.value = 0;
+  durationHour.value = 0;
+  durationMinute.value = 0;
+}
+
+function removeEndDate() {
+  endDate.value = "";
+  endTime.value = "";
+}
+
+function durationBoxZero(days, hours, minutes) {
+  let duration = days * 1 + hours * 1 + minutes * 1;
+  if (duration == 0) {
+    return true;
   } else {
-    errorState();
+    return false;
   }
 }
 
 function adjustTime() {
-  let params = readParams();
-
   // Construction of startDate
-  let startTimeParts = params.startTime.value.split(":"); // Diviser la chaîne en heures et minutes
-
+  let startTimeParts = startTime.value.split(":"); // Diviser la chaîne en heures : minutes
   // startTimeParts contiendra ["13", "02"]
-  let hours = parseInt(startTimeParts[0], 10); // Convertir l'heure en nombre
-  let minutes = parseInt(startTimeParts[1], 10); // Convertir les minutes en nombre
+  let hours = startTimeParts[0] * 1; // Convertir l'heure en nombre
+  let minutes = startTimeParts[1] * 1; // Convertir les minutes en nombre
 
   // Création de la date avec l'année, le mois, le jour, l'heure et les minutes
-  let startDate = new Date(params.startDate.value);
-  startDate.setHours(hours); // Définir les heures
-  startDate.setMinutes(minutes); // Définir les minutes
+  let newStartDate = new Date(startDate.value);
+  newStartDate.setHours(hours); // Définir les heures
+  newStartDate.setMinutes(minutes); // Définir les minutes
 
   // Add to startDate the day, hours and minutes from the duration boxes
-  startDate.setDate(startDate.getDate() + parseInt(params.durationDay.value));
-  startDate.setHours(
-    startDate.getHours() + parseInt(params.durationHour.value),
-    startDate.getMinutes() + parseInt(params.durationMinute.value)
+  newStartDate.setDate(newStartDate.getDate() + durationDay.value * 1);
+  newStartDate.setHours(
+    newStartDate.getHours() + durationHour.value * 1,
+    newStartDate.getMinutes() + durationMinute.value * 1
   );
 
   // Change the end date in the date boxes
-  params.endDate.value = startDate.toISOString().slice(0, 10);
-  params.endTime.value =
-    (startDate.getHours() < 10 ? "0" : "") +
-    startDate.getHours() +
+  endDate.value = newStartDate.toISOString().slice(0, 10);
+  endTime.value =
+    (newStartDate.getHours() < 10 ? "0" : "") +
+    newStartDate.getHours() +
     ":" +
-    (startDate.getMinutes() < 10 ? "0" : "") +
-    startDate.getMinutes();
+    (newStartDate.getMinutes() < 10 ? "0" : "") +
+    newStartDate.getMinutes();
+}
 
-  compareDates() ? normalState() : errorState();
+function timeManagment() {
+  // lecture des chjamps dates
+  const sDate = new Date(startDate.value + "T" + startTime.value);
+  const eDate = new Date(endDate.value + "T" + endTime.value);
+  // Détection dates erronées
+  if (eDate >= sDate) {
+    // Si dates ok
+    // Calcul de la durée entrre les deux dates pour remplir les case de durée
+    duration(sDate, eDate);
+    // L'état d'erreur est désactivé
+    normalState();
+    // La checkbox standby est décochée
+    form[15].checked = false;
+  } else {
+    // Si les dates ne sont pas bonnes
+    //les cases de durée sont mises à 0
+    zeroDurationBox();
+    // L'état erreur de date est activé
+    errorTimeState();
+    // L'état erreur de durée est activé
+    errorDurationState();
+    // La checkbox standby est cochée
+    toClose.checked = true;
+  }
+}
+
+function durationManagement(e) {
+  // Remise à 0 des champs passés en négatif
+  if (e.target.value < 0) {
+    e.target.value = 0;
+  }
+  adjustTime();
+  // Test si la durée est à 0
+  let duration = durationBoxZero(
+    durationDay.value,
+    durationHour.value,
+    durationMinute.value
+  );
+  // If the duration = 0
+  if (duration) {
+    errorDurationState();
+    toClose.checked = true;
+  } else {
+    normalState();
+    adjustTime();
+    toClose.checked = false;
+  }
 }
 
 // Surveillance des modifications des dates et heures (de form[5] à form[8])
 for (let index = 5; index < 9; index++) {
-  form[index].addEventListener("blur", () => {
-    computeTime();
-    // adjustTime();
-  });
+  form[index].addEventListener("blur", timeManagment);
 }
 
 // Surveillance des modifications de la durée de l'intervention (form[10] form[12])
-for (let index = 10; index < 13; index++) {
-  form[index].addEventListener("change", () => {
-    if (form[index].value < 0) {
-      form[index].value = 0;
-    } else {
-      adjustTime();
-    }
-  });
+for (let index = 9; index < 12; index++) {
+  form[index].addEventListener("change", durationManagement);
 }
 
-// Check the dates after loading the page
-// window.onload = () => {
+// // Surveillance de la case standby
+standby.addEventListener("change", () => {
+  if (standby.checked) {
+    // Set to zero the duration box
+    zeroDurationBox();
+    // Set to zero the end time
+    removeEndDate();
+    // Affichage de : "Attention ce BT devra être complété..."
+    completedAfterText.classList.remove("invisible");
+  } else {
+    // Effacement de : "Attention ce BT devra être complété..."
+    completedAfterText.classList.add("invisible");
+    // Display of the message "Pour sortir d el'état standby, mattre une durée"
+    completedStandby.classList.remove("invisible");
+    // The checkbox stay in the same state
+    standby.checked = true;
+  }
+});
 
-//   };
+window.addEventListener("load", () => {
+  const pageTitle = document.querySelector(".page-title");
+  if (
+    pageTitle.textContent == "Edition bon de travail" &&
+    durationBoxZero(durationDay.value, durationHour.value, durationMinute.value)
+  ) {
+    standby.checked = true;
+  } else {
+    standby.checked = false;
+    normalState();
+  }
+});

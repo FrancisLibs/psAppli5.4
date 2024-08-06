@@ -1,0 +1,117 @@
+.machines-box {
+  width: 760px;
+}
+
+#date-box-with-text {
+  border: 1px solid blue;
+  border-radius: 10px;
+}
+
+.invisible {
+  display: none;
+}
+
+.warning-duration-text {
+  width: 200px;
+  border: red 2px solid;
+  border-radius: 5px;
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  padding: 0;
+}
+
+.warning-duration-text > p,
+.warning-time-text > p {
+  padding: 5px;
+  margin: 0;
+}
+
+.warning-time-text {
+  width: 500px;
+  border: red 2px solid;
+  border-radius: 5px;
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  padding: 0;
+}
+
+.duration-box,
+.time-box,
+.global-stop-time-box,
+.global-cost-box {
+  border: 1px solid blue;
+  border-radius: 5px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.date-box-item {
+  margin-right: 10px;
+}
+
+.time2-box {
+  margin-right: 10px;
+}
+
+.global-cost-box {
+  max-width: 145px;
+}
+
+.standby-box {
+  border: 1px solid blue;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+.duration {
+  display: flex;
+  justify-content: start;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.item {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #0d6efd;
+  white-space: nowrap;
+}
+.item-date {
+  width: 628px;
+  text-align: left;
+}
+
+.to-close-class {
+  display: flex;
+}
+
+.button-valid {
+  width: 185px;
+}
+
+#completedAfterText,
+#completedStandby {
+  color: rgb(55, 155, 27);
+  background-color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px;
+  margin: 0px;
+  border-radius: 5px;
+}
+
+.standby {
+  font-size: 1.4rem;
+  color: red;
+  background-color: white;
+  border-radius: 5px;
+  width: 330px;
+  padding: 5px;
+  text-align: center;
+}

@@ -1,29 +1,31 @@
 {# Si c'est un BT préventif #}
 {% if workorder.preventive %}
-	<div class="row">
-		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center flex-wrap mb-3">
+	<div class="d-flex justify-content-start">
+		<div class="d-flex justify-content-start align-items-center flex-wrap mb-3 me-5">
 			<span class="item me-2">Date prévue :</span>
 			<span class="item-answer">{{ workorder.preventiveDate|date('d/m/Y') }}</span>
 		</div>
-		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center flex-wrap mb-3">
+		<div class="d-flex justify-content-start align-items-center flex-wrap mb-3 me-5">
 			<span class="item me-2">Numéro de préventif :</span>
 			<span class="item-answer">{{ workorder.templateNumber }}</span>
 		</div>
-		<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
-			<span class="item me-2">Statut :</span>
-			<span class="item-answer">{{ workorder.workorderStatus.name }}</span>
-		</div>
 	</div>
 {% endif %}
-<div class="row">
-	<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
+<div class="d-flex justify-content-start">
+	<div class="d-flex justify-content-start align-items-center mb-3 me-5">
 		<span class="item me-2">Créé le :</span>
 		<span class="item-answer">{{ workorder.createdAt ? workorder.createdAt|date('d/m/Y', timezone="Europe/Paris") : '' }}</span>
 	</div>
-	<div class="col-12 col-sm-5 col-xl-3 d-flex justify-content-start align-items-center mb-3">
+	<div class="d-flex justify-content-start align-items-center mb-3 me-5">
 		<span class="item me-2">Par :</span>
 		<span class="item-answer">{{ workorder.user.firstName }}</span>
 	</div>
+	{% if workorder.workorderStatus.name is defined %}
+		<div class="d-flex justify-content-start align-items-center flex-wrap mb-3">
+			<div class="item me-2">Statut :</div>
+			<span id="standby-tag" class="item-answer">{{ workorder.workorderStatus.name|capitalize }}</span>
+		</div>
+	{% endif %}
 </div>
 
 {# Machines #}
@@ -53,20 +55,20 @@
 	</div>
 </div>
 
-<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-center flex-wrap mb-3">
+<div class="d-flex justify-content-start align-items-center flex-wrap mb-3">
 	<div class="item me-2">Demande :</div>
 	<span class="item-answer">{{ workorder.request }}</span>
 </div>
 
 {% if workorder.implementation %}
-	<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-center flex-wrap mb-3">
+	<div class="d-flex justify-content-start align-items-center flex-wrap mb-3">
 		<span class="item me-2">Réalisation :</span>
 		<span class="item-answer">{{ workorder.implementation | nl2br }}</span>
 	</div>
 {% endif %}
 
 {% if workorder.remark %}
-	<div class="col-12 col-sm-12 col-xl-10 d-flex justify-content-start align-items-top flex-wrap">
+	<div class="d-flex justify-content-start align-items-top flex-wrap">
 		<span class="item me-2">Remarque :</span>
 		<div class="item-answer">{{ workorder.remark | nl2br }}</div>
 	</div>
@@ -155,7 +157,7 @@
 									<td data-label="Prix : ">-</td>
 									<td data-label="Prix : ">-</td>
 								{% endif %}
-								{% if workorder.workorderStatus.name != "CLOTURE" %}
+								{% if workorder.workorderStatus.name is defined and workorder.workorderStatus.name != "CLOTURE" %}
 									<td data-label="">
 										<a href="{{ path('remove_part', {'id': workorder.id, 'workorderPartId': part.id}) }}" class="btn btn-warning btn-sm">Supp</a>
 									</td>

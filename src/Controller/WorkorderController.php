@@ -129,11 +129,13 @@ class WorkorderController extends AbstractController
         }
         // Initialisation of the workorder
         // The endTIme needs an hour more
-        $oneHour = 60 * 60 * 1000 * 2;
         $endHour = new \Datetime('now', new \DatetimeZone('Europe/Paris'));
-        $endHour = $endHour->getTimestamp() + $oneHour;
-        $endTime = new \Datetime();
-        $endTime->setTimestamp($endHour);
+        $endTime=$endHour->modify('+1 hour');
+
+        // Lecture du status 
+        $status = $this->workorderStatusRepository->findOneBy(
+            ['name' => 'EN_COURS']
+        );
 
         $workorder
             ->setStartDate(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
@@ -150,8 +152,9 @@ class WorkorderController extends AbstractController
             ->setUser($user)
             ->setOrganisation($this->organisation->getOrganisation())
             ->setCreatedAt(new \Datetime('now', new \DatetimeZone('Europe/Paris')))
-            ->setPreventive(false);
-        //Creation of the form
+            ->setPreventive(false)
+            ->setWorkorderStatus($status);
+            
         $form = $this->createForm(
             WorkorderType::class,
             $workorder,
@@ -171,7 +174,6 @@ class WorkorderController extends AbstractController
                 return $this->redirectToRoute('work_order_new');
             }
             
-            dd($workorder);
             // Contrôle BT terminé 
             $minute = $workorder->getDurationMinute();
             $hour = $workorder->getDurationHour();
@@ -179,23 +181,25 @@ class WorkorderController extends AbstractController
             $request = $workorder->getRequest();
             $implementation = $workorder->getImplementation();
             $machine = $workorder->getMachines();
-            $toClose = $workorder->getToClose();
+            $standby = $form->get('standby')->getData();
 
-            $status = $this->workorderStatusRepository->findOneBy(
-                ['name' => 'EN_COURS']
-            );
-
-            if($toClose === true) {
-
-            }
+            // Définition of status
             if (($minute > 0 || $hour > 0 || $day > 0)
                 && !empty($request)
                 && !empty($implementation)
                 && !empty($machine)
-                && $toClose === false
+                && $standby === false
             ) {
                 $status = $this->workorderStatusRepository->findOneBy(
                     ['name' => 'TERMINE']
+                );
+            } else if ($standby == true) {
+                $status = $this->workorderStatusRepository->findOneBy(
+                    ['name' => 'STANDBY']
+                );
+            } else {
+                $status = $this->workorderStatusRepository->findOneBy(
+                    ['name' => 'EN_COURS']
                 );
             }
 
@@ -207,7 +211,7 @@ class WorkorderController extends AbstractController
             return $this->redirectToRoute(
                 'work_order_show',
                 [
-                    'id' => $workorder->getId()
+                'id' => $workorder->getId()
                 ],
                 Response::HTTP_SEE_OTHER
             );
@@ -287,6 +291,7 @@ class WorkorderController extends AbstractController
             $day = $workorder->getDurationDay();
             $request = $workorder->getRequest();
             $implementation = $workorder->getImplementation();
+            $standby = $form->get('standby')->getData();
 
             if (($minute > 0 || $hour > 0 || $day > 0)
                 && !empty($request)
@@ -299,6 +304,12 @@ class WorkorderController extends AbstractController
             } else {
                 $status = $this->workorderStatusRepository->findOneBy(
                     ['name' => 'EN_COURS']
+                );
+            }
+
+            if ($standby == true) {
+                $status = $this->workorderStatusRepository->findOneBy(
+                    ['name' => 'STANDBY']
                 );
             }
 
@@ -380,9 +391,10 @@ class WorkorderController extends AbstractController
     #[Route('/closing/{id}', name: 'work_order_closing')]
     public function closing(Workorder $workorder): RedirectResponse
     {
-        if ($workorder->getDurationDay() > 0
+        if (($workorder->getDurationDay() > 0
             || $workorder->getDurationHour() > 0
-            || $workorder->getDurationMinute() > 0
+            || $workorder->getDurationMinute() > 0)
+            && $workorder->getWorkorderStatus()->getId() <> 2
         ) {
             // Si cloture d'un BT préventif, calcule de la prochaine date du template
             if ($workorder->getPreventive()) {
