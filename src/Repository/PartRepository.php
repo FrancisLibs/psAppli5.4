@@ -104,7 +104,8 @@ class PartRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne la liste des pièces pour la requête ajax dans la modale de demande de prix
+     * Retourne la liste des pièces pour la requête 
+     * ajax dans la modale de demande de prix
      *
      * @return Part[]
      */
@@ -311,6 +312,23 @@ class PartRepository extends ServiceEntityRepository
             ->setParameter('code', $code)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * Renvoie toutes les  pièces d'une organisation avec les données de stock
+     *
+     * @param  integer $organisation
+     * @return Parts[]
+     */
+    public function findPartsByOrganisation($organisationId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p, s')
+            ->join('p.stock', 's')
+            ->where('p.organisation = :organisation')
+            ->setParameter('organisation', $organisationId)
+            ->getQuery()
+            ->getResult();
     }
 
 

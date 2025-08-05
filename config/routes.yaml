@@ -1,3 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# liip_imagine:
+#   resource: "@LiipImagineBundle/config/routing.yaml"
+#   prefix: /media/cache
+liip_imagine_filter:
+  path: /media/cache/{filter}/{path}
+  controller: Liip\ImagineBundle\Controller\ImagineController::filterAction
+  requirements:
+    filter: ".+"
+    path: ".+"

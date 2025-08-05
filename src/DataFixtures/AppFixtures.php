@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
         $this->manager = $entityManager;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager):void
     {
         $faker = Faker\Factory::create('fr_FR');
 

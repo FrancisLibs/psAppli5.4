@@ -8,11 +8,11 @@
 	<link rel="stylesheet" href="/assets/css/indicator.css">
 {% endblock %}
 
-
 {% block body %}
 	<main class="row justify-content-start mt-5">
 		{% include 'user/_photo.html.twig' %}
 		<article class="col-12 col-xl-10">
+
 			<header>
 				<div class="row">
 					<div class="d-flex justify-content-start align-items-center flex-wrap">
@@ -21,6 +21,7 @@
 					</div>
 				</div>
 			</header>
+
 			<section class="mt-4 d-flex justify-content-start flex-wrap text-align-center">
 				{% include 'indicator/_dateForm.html.twig' %}
 			</section>
@@ -42,11 +43,16 @@
 	</main>
 
 {% endblock %}
+
 {% block javascripts %}
 	{{ parent() }}
 	<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
 	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2" defer></script>
 	<script src="/assets/js/indicators.js" defer></script>
-	<script src="/assets/js/costPerMonthJschart.js" defer></script>
+	// <script src="/assets/js/costPerMonthJschart.js" defer></script>
+	{% if values is not empty and months is not empty %}
+		<script src="/assets/js/costPerMonthJschart.js" defer></script>
+	{% endif %}
+
 {% endblock %}

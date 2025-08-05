@@ -118,7 +118,7 @@ class UserController extends AbstractController
      * User profil
      */
     #[Route('/user/{id}/profil', name: 'user_profil')]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     public function userProfil(User $user)
     {
         // BT de l'utilisateur

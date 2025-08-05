@@ -163,6 +163,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $request;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Extract::class, mappedBy="user")
+     */
+    private $extracts;
+
     public function __construct()
     {
         $this->workorders = new ArrayCollection();
@@ -172,6 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
         $this->onCalls = new ArrayCollection();
+        $this->extracts = new ArrayCollection();
     }
 
     /**
@@ -690,6 +696,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Extract>
+     */
+    public function getExtracts(): Collection
+    {
+        return $this->extracts;
+    }
+
+    public function addExtract(Extract $extract): self
+    {
+        if (!$this->extracts->contains($extract)) {
+            $this->extracts[] = $extract;
+            $extract->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExtract(Extract $extract): self
+    {
+        if ($this->extracts->removeElement($extract)) {
+            // set the owning side to null (unless already changed)
+            if ($extract->getUser() === $this) {
+                $extract->setUser(null);
+            }
+        }
 
         return $this;
     }
