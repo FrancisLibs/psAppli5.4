@@ -79,11 +79,6 @@ tr {
   width: 40px;
 }
 
-.default-logo {
-  margin: auto;
-  max-width: 62%;
-}
-
 .bg-color-orange {
   background-color: orange;
 }
@@ -182,11 +177,6 @@ tr {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-  .default-logo {
-    margin: auto;
-    max-width: 62%;
-  }
-
   .register-form {
     width: 91%;
     margin: auto;

@@ -1,116 +1,189 @@
 h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
 }
 
 /* Page default */
-.default-top-margin {
+.mainBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: first baseline;
+  margin-bottom: 30px;
   padding-top: 100px;
 }
 
-.default-column {
-  margin-top: 2em;
-  width: 69%;
-}
-
-.default {
-  min-height: 100%;
+.firstColumn,
+.secondColumn {
+  flex-direction: column;
   width: 100%;
-  background-color: linear-gradient(#51e6b4, white);
+  align-items: center;
 }
 
-.default-title {
+.firstColumn {
+  display: flex;
+}
+
+.secondColumn {
+  display: flex;
+}
+
+.firstColumnTitle {
+  display: inline;
   font-family: "Concert One", cursive;
   font-weight: bold;
   color: black;
   text-align: center;
 }
 
-.margin-top-resp {
-  margin-top: 100px;
+.secondColumnTitle {
+  display: inline;
+  font-family: "Concert One", cursive;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+}
+
+.firstColumn .upperBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.firstColumn .lowerBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.logoSchmidt {
+  margin-top: 57px;
+  width: 60%;
+}
+
+.letsGoBtnBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 70px;
+}
+
+.default {
+  min-height: 100%;
+  width: 100%;
+  background: linear-gradient(#6985d9, white);
 }
 
 .btn-default {
-  color: white;
-  background-color: #4584e9;
+  display: block;
+  background-color: #8ce945;
   font-family: "Montserrat", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-weight: 700;
   font-size: 1.5rem;
   border-radius: 8px;
   text-align: center;
-  padding: 10px;
-  margin-bottom: 17px;
+  padding: 20px;
   width: 232px;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -o-transition: all 0.5s;
-  transition: all 0.5s;
-  text-decoration: none;
-}
-
-.cadre-info-vert {
-  border: 2px solid #11e828;
-  border-radius: 5px;
-  width: 300px;
-  margin: 10px;
-  padding: 20px;
-}
-
-.cadre-info-rouge {
-  border: 2px solid #e9370f;
-  border-radius: 5px;
-  width: 300px;
-  margin: 10px;
-  padding: 20px;
 }
 
 .flashing-border {
   border: 3px solid red;
   animation: blink 1.5s infinite;
+  border-radius: 5px;
+  width: 285px;
+  margin: 60px 0px 60px 0px;
+  padding: 20px;
 }
 
-.items-info{
+.greenBorder {
+  border: 3px solid rgb(38, 255, 0);
+  border-radius: 5px;
+  width: 285px;
+  margin: 60px 0px 60px 0px;
+  padding: 20px;
+}
+
+.items-info {
   margin: 0;
   padding: 0;
 }
 
-.items-info-max{
+.items-info-max {
   font-size: 0.7rem;
   color: green;
 }
 
-@keyframes blink {
-    0% { border-color: rgb(92, 231, 17); }
-    50% { border-color: transparent; }
-    100% { border-color: red; }
+.pictures {
+  margin: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-@media (min-width: 576px) {
-  h1 {
-    font-size: 3.5rem;
+.eachPicture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.pictureSize {
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.pictureTextSize {
+  font-size: 1rem;
+}
+
+@keyframes blink {
+  0% {
+    border-color: rgb(92, 231, 17);
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: red;
   }
 }
 
+@media (min-width: 576px) {
+}
+
 @media (min-width: 768px) {
-  h1 {
-    font-size: 3.5rem;
+  .mainBlock {
+    flex-direction: row;
   }
 }
 
 @media (min-width: 992px) {
-  h1 {
-    font-size: 4rem;
+  .logoSchmidt {
+    margin-top: 100px;
+    max-width: 54%;
   }
 }
 
 @media (min-width: 1200px) {
-  h1 {
-    font-size: 4rem;
+  .logoSchmidt {
+    margin-top: 100px;
+    max-width: 62%;
   }
 }
 
 @media (min-width: 1400px) {
-  h1 {
-    font-size: 4rem;
+  .logoSchmidt {
+    margin-top: 100px;
+    max-width: 50%;
   }
 }

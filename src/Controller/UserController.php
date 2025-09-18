@@ -36,11 +36,12 @@ class UserController extends AbstractController
     }
 
 
-    /**
+   
+ /**
      * Users list
      */
-    #[Route('/admin/user/index', name: 'user_index')]
     #[IsGranted('ROLE_ADMIN')]
+    #[Route('/admin/user/index', name: 'user_index')]
     public function userList()
     {
         $users = $this->userRepository->findAllActive();
@@ -51,12 +52,11 @@ class UserController extends AbstractController
             ]
         );
     }
-
     /**
      * Edit user
      */
-    #[Route('/user/{id}/edit', name: 'user_edit')]
     #[IsGranted('ROLE_ADMIN')]
+    #[Route('/user/{id}/edit', name: 'user_edit')]
     public function userEdit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserEditType::class, $user);

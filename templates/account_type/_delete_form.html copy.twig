@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('accountType_delete', {'id': part.id}) }}" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ce type de compte ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ accountType.id) }}">
+    <button class="btn btn-danger btn-sm btn-middle me-2">Effacer</button>
+</form>

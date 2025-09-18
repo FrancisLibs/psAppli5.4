@@ -147,7 +147,6 @@ class DefaultController extends AbstractController
             [
                 'users' => $users,
                 'lateBT' => $lateBT,
-                'lateParts' => $lateParts,
                 'partsToBuy' => $partsToBuy
             ]
         );

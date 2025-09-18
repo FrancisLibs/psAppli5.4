@@ -8,11 +8,15 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<div
+			class="collapse navbar-collapse" id="navbarSupportedContent">
 			{# <ul class="navbar-nav mx-auto align-items-center">
-				<li>{{ render(path('isNotRead')) }}</li>
-			</ul> #}
+													<li>{{ render(path('isNotRead')) }}</li>
+												</ul> #}
 			<ul class="navbar-nav mx-auto align-items-center">
+				<li class="nav-item me-3">
+					<a class="nav-link" href="{{ path('order_index') }}">Commandes</a>
+				</li>
 				<li class="nav-item dropdown me-3">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Pièces
@@ -23,7 +27,7 @@
 						<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Réappro</a>
 						<div class="dropdown-divider"></div>
 						{# <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Demandes</a>
-																								<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Commandes</a> #}
+																																										<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Commandes</a> #}
 						<a class="dropdown-item" href="{{ path('delivery_note_index') }}">Bon de livraison</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{ path('stock_top_value') }}">Valeur stock</a>

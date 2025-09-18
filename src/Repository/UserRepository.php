@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Organisation;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -61,6 +63,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('disabled', true)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Récupère tous les utilisateurs actifs d'une organisation
+     *
+     * @param  int $organisation
+     * @return Users[] Returns an array of users
+     */
+
+    public function findAllUsersByOrganisationAndActive(?Organisation $organisation): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.active = :active')
+            ->setParameter('active', true)
+            ;
+
+            if ($organisation) {
+                $qb->andWhere('u.organisation = :organisation')
+                ->setParameter('organisation', $organisation);
+            }
+            return $qb;
     }
 
     public function findAllActiveUsers()

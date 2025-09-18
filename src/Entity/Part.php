@@ -119,6 +119,11 @@ class Part
      */
     private $requests;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="parts")
+     */
+    private $orders;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -126,6 +131,7 @@ class Part
         $this->template = new ArrayCollection();
         $this->deliveryNoteParts = new ArrayCollection();
         $this->requests = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     
@@ -421,6 +427,33 @@ class Part
     {
         if ($this->requests->removeElement($request)) {
             $request->removePart($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->addPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            $order->removePart($this);
         }
 
         return $this;

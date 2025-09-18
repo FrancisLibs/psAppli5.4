@@ -1,0 +1,13 @@
+{% for order in orders %}
+	<tr>
+		<td data-label="Numéro" class="font_size_table">
+			<a class="btn index-button text-center" href="{{ path('order_show', {'id': order.id}) }}">{{ order.number }}</a>
+		</td>
+		<td data-label="Designation" class="text-center font_size_table">{{ order.designation }}</td>
+		<td data-label="Fournisseur" class="text-center font_size_table">{{ order.provider }}</td>
+	</tr>
+{% else %}
+	<tr>
+		<td colspan="6">Il n'y a pas de commande enregistrée</td>
+	</tr>
+{% endfor %}

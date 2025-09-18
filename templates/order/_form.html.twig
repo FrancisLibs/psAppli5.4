@@ -1,0 +1,39 @@
+<section class="row mt-5">
+	<div class="mb-4 col-12 col-lg-12 col-xl-12">
+		{{ form_start(form) }}
+		<div class="account-type-item">
+			{% for choice in form.accountType %}
+				{{ form_widget(choice) }}
+				{{ form_label(choice) }}
+			{% endfor %}
+		</div>
+
+		<div class="first-line mb-3">
+			<input type="text" id="lettersField" name="lettersField" readonly>
+			<div class="col-5 col-sm-3 col-xl-2 mb-2">
+				{{ form_errors(form.number) }}
+				{{ form_label(form.number) }}
+				{{ form_widget(form.number) }}
+			</div>
+		</div>
+		<div>
+			<div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-6 flex-wrap">
+				{{ form_label(form.designation) }}
+				{{ form_widget(form.designation) }}
+			</div>
+		</div>
+
+		<div class="row mb-3 align-items center">
+			<div class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3">
+				{{ form_label(form.provider) }}
+				{{ form_widget(form.provider) }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-5 col-sm-3 col-xl-2 text-center">
+				<button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>
+			</div>
+		</div>
+		{{ form_end(form) }}
+	</div>
+</section>

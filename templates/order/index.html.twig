@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/order.css">
+{% endblock %}
+
+{% block body %}
+	<main class="row justify-content-start mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-xl-10">
+			<header class="d-flex justify-content-start align-items-start flex-wrap mb-4">
+				<div class="d-flex justify-content-start align-items-center flex-wrap me-5 mb-2">
+					<h1 class="page-title me-5">Commandes</h1>
+					<a class="btn btn-primary btn-sm" href="{{ path('order_new') }}" role="button">Nouvelle commande</a>
+				</div>
+			</header>
+			<section class="row js-filter">
+				<div class="col-12">
+					{% include 'order/_orderList.html.twig' with {form: form, orders: orders} only %}
+					{# Navigation #}
+					<div class="col-10 navigation js-filter-pagination mb-5">
+						{% include 'order/_pagination.html.twig' %}
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
+{% endblock %}

@@ -80,10 +80,22 @@ class Provider
      */
     private $requests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="provider")
+     */
+    private $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Intervention::class, mappedBy="provider")
+     */
+    private $interventions;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
         $this->deliveryNotes = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->interventions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -272,6 +284,66 @@ class Provider
     public function setRequests(?Request $requests): self
     {
         $this->requests = $requests;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getProvider() === $this) {
+                $order->setProvider(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): self
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions[] = $intervention;
+            $intervention->setProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): self
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getProvider() === $this) {
+                $intervention->setProvider(null);
+            }
+        }
 
         return $this;
     }
