@@ -9,38 +9,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=ServiceRepository::class)
- * @UniqueEntity(fields={"name"},                        
- * message="Il y a déjà un service avec ce nom")
- */
+#[ORM\Entity(repositoryClass: ServiceRepository::class)]
+#[UniqueEntity(fields: ['name'], message: "Il y a déjà un service avec ce nom")]
 class Service
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string",      length=50)
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotBlank
-     */
-    
-    private $name;
+    #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="service")
-     */
-    private $users;
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: User::class)]
+    private Collection $users;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="services")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
     public function __construct()
     {
@@ -49,60 +34,45 @@ class Service
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id; 
     }
-
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name; 
     }
-
     public function setName(string $name): self
     {
-        $this->name = $name;
-
-        return $this;
+        $this->name = $name; return $this; 
     }
 
-    /**
-     * @return Collection|User[]
-     */
     public function getUsers(): Collection
     {
-        return $this->users;
+        return $this->users; 
     }
-
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
             $user->setService($this);
         }
-
         return $this;
     }
-
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
             if ($user->getService() === $this) {
                 $user->setService(null);
             }
         }
-
         return $this;
     }
 
     public function getOrganisation(): ?Organisation
     {
-        return $this->organisation;
+        return $this->organisation; 
     }
-
     public function setOrganisation(?Organisation $organisation): self
     {
-        $this->organisation = $organisation;
-
-        return $this;
+        $this->organisation = $organisation; return $this; 
     }
 }

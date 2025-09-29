@@ -9,14 +9,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @extends ServiceEntityRepository<Order>
- *
- * @method Order|null find($id, $lockMode = null, $lockVersion = null)
- * @method Order|null findOneBy(array $criteria, array $orderBy = null)
- * @method Order[]    findAll()
- * @method Order[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 
 class OrderRepository extends ServiceEntityRepository
 {
@@ -36,24 +28,47 @@ class OrderRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchOrder $search): PaginationInterface
     {
-        $query = $this->createQueryBuilder('p')
-            ->orderBy('p.number', 'ASC')
-            ->select('p', 'o')
-            ->join('p.organisation', 'o')
-            ->setParameter('disabled', true);
+        $query = $this->createQueryBuilder('o')
+            ->select('o, p, org, a')
+            ->join('o.organisation', 'org')
+            ->join('o.provider', 'p')
+            ->join('o.accountType', 'a')
+            ->join('o.createdBy', 'u');
+            
 
         if (!empty($search->organisation)) {
             $query = $query
-                ->andWhere('o.id = :organisation')
+                ->andWhere('o.organisation = :organisation')
                 ->setParameter('organisation', $search->organisation);
         }
 
         if (!empty($search->designation)) {
             $designation = strtoupper($search->designation);
             $query = $query
-                ->andWhere('p.designation LIKE :designation')
+                ->andWhere('o.designation LIKE :designation')
                 ->setParameter('designation', "%{$designation}%");
         }
+
+        if (!empty($search->accountType)) {
+            dd($search->accountType);
+            $query = $query
+                ->andWhere('o.accountType = :accountType')
+                ->setParameter('accountType', $search->accountType);
+        }
+
+        // if (!empty($search->number)) {
+        //     $query = $query
+        //         ->andWhere('p.designation LIKE :designation')
+        //         ->setParameter('designation', "%{$designation}%");
+        // }
+
+        // if (!empty($search->provider)) {
+        //     $query = $query
+        //         ->andWhere('p.designation LIKE :designation')
+        //         ->setParameter('designation', "%{$designation}%");
+        // }
+
+
 
         $query = $query->getQuery();
 

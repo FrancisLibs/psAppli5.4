@@ -2,127 +2,79 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PartRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @ORM\Entity(repositoryClass=PartRepository::class)
- * @UniqueEntity(fields={"code"},                    
- * message="Il y a déjà une pièce avec ce code")
- * @Vich\Uploadable
- */
+#[ORM\Entity(repositoryClass: PartRepository::class)]
+#[UniqueEntity(fields: ['code'], message: "Il y a déjà une pièce avec ce code")]
+#[Vich\Uploadable]
 class Part
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * Le code de la pièce est indépendant de l'id
-     * 
-     * @ORM\Column(type="string",                  length=20, unique = true)
-     * @Assert\NotBlank
-     * @Assert\Regex("/^C|c[A-Za-z]{4}[0-9]{4}$/")
-     * message="Le code ne respecte pas le format !"
-     */
-    private $code;
+    #[ORM\Column(type: 'string', length: 20, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[Cc][A-Za-z]{4}[0-9]{4}$/', message: "Le code ne respecte pas le format !")]
+    private ?string $code = null;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank
-     */
-    private $designation;
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    private ?string $designation = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     * @Assert\NotBlank
-     */
-    private $reference;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $reference = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Stock::class, 
-     * mappedBy="part", cascade={"persist", "remove"})
-     */
-    private $stock;
+    #[ORM\OneToOne(mappedBy: 'part', targetEntity: Stock::class, cascade: ["persist", "remove"])]
+    private ?Stock $stock = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $active;
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = true;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $remark;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $remark = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="parts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'parts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=WorkorderPart::class, mappedBy="part")
-     */
-    private $workorderParts;
+    #[ORM\OneToMany(mappedBy: 'part', targetEntity: WorkorderPart::class)]
+    private Collection $workorderParts;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Machine::class, mappedBy="parts")
-     */
-    private $machines;
+    #[ORM\ManyToMany(targetEntity: Machine::class, mappedBy: 'parts')]
+    private Collection $machines;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="parts")
-     */
-    private $provider;
+    #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'parts')]
+    private ?Provider $provider = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Template::class, inversedBy="parts")
-     */
-    private $template;
+    #[ORM\ManyToMany(targetEntity: Template::class, inversedBy: 'parts')]
+    private Collection $template;
 
-    /**
-     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="part")
-     */
-    private $deliveryNoteParts;
+    #[ORM\OneToMany(mappedBy: 'part', targetEntity: DeliveryNotePart::class)]
+    private Collection $deliveryNoteParts;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $steadyPrice;
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $steadyPrice = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $qrCode;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $qrCode = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $lastCommandeDate;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $lastCommandeDate = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $maxDeliveryDate;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $maxDeliveryDate = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="parts")
-     */
-    private $requests;
+    #[ORM\ManyToMany(targetEntity: Request::class, mappedBy: 'parts')]
+    private Collection $requests;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="parts")
-     */
-    private $orders;
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'parts')]
+    private Collection $orders;
 
     public function __construct()
     {
@@ -134,328 +86,198 @@ class Part
         $this->orders = new ArrayCollection();
     }
 
-    
+    // --- Getters / Setters simples ---
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id; 
     }
-
     public function getCode(): ?string
     {
-        return $this->code;
+        return $this->code; 
     }
-
     public function setCode(string $code): self
     {
-        $this->code = $code;
-
-        return $this;
+        $this->code = $code; return $this; 
     }
-
     public function getDesignation(): ?string
     {
-        return $this->designation;
+        return $this->designation; 
     }
-
     public function setDesignation(string $designation): self
     {
-        $this->designation = $designation;
-
-        return $this;
+        $this->designation = $designation; return $this; 
     }
-
     public function getReference(): ?string
     {
-        return $this->reference;
+        return $this->reference; 
     }
-
     public function setReference(?string $reference): self
     {
-        $this->reference = $reference;
-
-        return $this;
+        $this->reference = $reference; return $this; 
     }
-
     public function getStock(): ?Stock
     {
-        return $this->stock;
+        return $this->stock; 
     }
-
     public function setStock(Stock $stock): self
     {
-        // set the owning side of the relation if necessary
-        if ($stock->getPart() !== $this) {
-            $stock->setPart($this);
-        }
-
-        $this->stock = $stock;
-
-        return $this;
+        if ($stock->getPart() !== $this) { $stock->setPart($this); 
+        } $this->stock = $stock; return $this; 
     }
-
-    public function getActive(): ?string
+    public function isActive(): bool
     {
-        return $this->active;
+        return $this->active; 
     }
-
-    public function setActive(string $active): self
+    public function setActive(bool $active): self
     {
-        $this->active = $active;
-
-        return $this;
+        $this->active = $active; return $this; 
     }
-
     public function getRemark(): ?string
     {
-        return $this->remark;
+        return $this->remark; 
     }
-
     public function setRemark(?string $remark): self
     {
-        $this->remark = $remark;
-
-        return $this;
+        $this->remark = $remark; return $this; 
     }
-
     public function getOrganisation(): ?Organisation
     {
-        return $this->organisation;
+        return $this->organisation; 
     }
-
     public function setOrganisation(?Organisation $organisation): self
     {
-        $this->organisation = $organisation;
-
-        return $this;
+        $this->organisation = $organisation; return $this; 
     }
-
-    /**
-     * @return Collection|WorkorderPart[]
-     */
-    public function getWorkorderParts(): Collection
-    {
-        return $this->workorderParts;
-    }
-
-    public function addWorkorderPart(WorkorderPart $workorderPart): self
-    {
-        if (!$this->workorderParts->contains($workorderPart)) {
-            $this->workorderParts[] = $workorderPart;
-            $workorderPart->setPart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkorderPart(WorkorderPart $workorderPart): self
-    {
-        if ($this->workorderParts->removeElement($workorderPart)) {
-            // set the owning side to null (unless already changed)
-            if ($workorderPart->getPart() === $this) {
-                $workorderPart->setPart(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Machine[]
-     */
-    public function getMachines(): Collection
-    {
-        return $this->machines;
-    }
-
-    public function addMachine(Machine $machine): self
-    {
-        if (!$this->machines->contains($machine)) {
-            $this->machines[] = $machine;
-            $machine->addPart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMachine(Machine $machine): self
-    {
-        if ($this->machines->removeElement($machine)) {
-            $machine->removePart($this);
-        }
-
-        return $this;
-    }
-
     public function getProvider(): ?Provider
     {
-        return $this->provider;
+        return $this->provider; 
     }
-
     public function setProvider(?Provider $provider): self
     {
-        $this->provider = $provider;
-
-        return $this;
+        $this->provider = $provider; return $this; 
     }
-
-    /**
-     * @return Collection|Template[]
-     */
-    public function getTemplate(): Collection
-    {
-        return $this->template;
-    }
-
-    public function addTemplate(Template $template): self
-    {
-        if (!$this->template->contains($template)) {
-            $this->template[] = $template;
-        }
-
-        return $this;
-    }
-
-    public function removeTemplate(Template $template): self
-    {
-        $this->template->removeElement($template);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|DeliveryNotePart[]
-     */
-    public function getDeliveryNoteParts(): Collection
-    {
-        return $this->deliveryNoteParts;
-    }
-
-    public function addDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
-    {
-        if (!$this->deliveryNoteParts->contains($deliveryNotePart)) {
-            $this->deliveryNoteParts[] = $deliveryNotePart;
-            $deliveryNotePart->setPart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
-    {
-        if ($this->deliveryNoteParts->removeElement($deliveryNotePart)) {
-            // set the owning side to null (unless already changed)
-            if ($deliveryNotePart->getPart() === $this) {
-                $deliveryNotePart->setPart(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getSteadyPrice(): ?float
-    {
-        return $this->steadyPrice;
-    }
-
-    public function setSteadyPrice(?float $steadyPrice): self
-    {
-        $this->steadyPrice = $steadyPrice;
-
-        return $this;
-    }
-
-    public function getQrCode(): ?string
-    {
-        return $this->qrCode;
-    }
-
-    public function setQrCode(?string $qrCode): self
-    {
-        $this->qrCode = $qrCode;
-
-        return $this;
-    }
-
-    public function isActive(): ?bool
-    {
-        return $this->active;
-    }
-
     public function getLastCommandeDate(): ?\DateTimeInterface
     {
-        return $this->lastCommandeDate;
+        return $this->lastCommandeDate; 
     }
-
-    public function setLastCommandeDate(?\DateTimeInterface $lastCommandeDate): self
+    public function setLastCommandeDate(?\DateTimeInterface $date): self
     {
-        $this->lastCommandeDate = $lastCommandeDate;
-
-        return $this;
+        $this->lastCommandeDate = $date; return $this; 
     }
-
     public function getMaxDeliveryDate(): ?\DateTimeInterface
     {
-        return $this->maxDeliveryDate;
+        return $this->maxDeliveryDate; 
     }
-
-    public function setMaxDeliveryDate(?\DateTimeInterface $maxDeliveryDate): self
+    public function setMaxDeliveryDate(?\DateTimeInterface $date): self
     {
-        $this->maxDeliveryDate = $maxDeliveryDate;
-
-        return $this;
+        $this->maxDeliveryDate = $date; return $this; 
+    }
+    public function getSteadyPrice(): ?float
+    {
+        return $this->steadyPrice; 
+    }
+    public function setSteadyPrice(?float $price): self
+    {
+        $this->steadyPrice = $price; return $this; 
+    }
+    public function getQrCode(): ?string
+    {
+        return $this->qrCode; 
+    }
+    public function setQrCode(?string $qrCode): self
+    {
+        $this->qrCode = $qrCode; return $this; 
     }
 
-    /**
-     * @return Collection<int, Request>
-     */
+    // --- Collections ---
+    public function getWorkorderParts(): Collection
+    {
+        return $this->workorderParts; 
+    }
+    public function addWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if (!$this->workorderParts->contains($workorderPart)) { $this->workorderParts[] = $workorderPart; $workorderPart->setPart($this); 
+        } return $this; 
+    }
+    public function removeWorkorderPart(WorkorderPart $workorderPart): self
+    {
+        if ($this->workorderParts->removeElement($workorderPart)) { if ($workorderPart->getPart() === $this) { $workorderPart->setPart(null); 
+        } 
+        } return $this; 
+    }
+
+    public function getMachines(): Collection
+    {
+        return $this->machines; 
+    }
+    public function addMachine(Machine $machine): self
+    {
+        if (!$this->machines->contains($machine)) { $this->machines[] = $machine; $machine->addPart($this); 
+        } return $this; 
+    }
+    public function removeMachine(Machine $machine): self
+    {
+        if ($this->machines->removeElement($machine)) { $machine->removePart($this); 
+        } return $this; 
+    }
+
+    public function getTemplate(): Collection
+    {
+        return $this->template; 
+    }
+    public function addTemplate(Template $template): self
+    {
+        if (!$this->template->contains($template)) { $this->template[] = $template; 
+        } return $this; 
+    }
+    public function removeTemplate(Template $template): self
+    {
+        $this->template->removeElement($template); return $this; 
+    }
+
+    public function getDeliveryNoteParts(): Collection
+    {
+        return $this->deliveryNoteParts; 
+    }
+    public function addDeliveryNotePart(DeliveryNotePart $dnPart): self
+    {
+        if (!$this->deliveryNoteParts->contains($dnPart)) { $this->deliveryNoteParts[] = $dnPart; $dnPart->setPart($this); 
+        } return $this; 
+    }
+    public function removeDeliveryNotePart(DeliveryNotePart $dnPart): self
+    {
+        if ($this->deliveryNoteParts->removeElement($dnPart)) { if ($dnPart->getPart() === $this) { $dnPart->setPart(null); 
+        } 
+        } return $this; 
+    }
+
     public function getRequests(): Collection
     {
-        return $this->requests;
+        return $this->requests; 
     }
-
     public function addRequest(Request $request): self
     {
-        if (!$this->requests->contains($request)) {
-            $this->requests[] = $request;
-            $request->addPart($this);
-        }
-
-        return $this;
+        if (!$this->requests->contains($request)) { $this->requests[] = $request; $request->addPart($this); 
+        } return $this; 
     }
-
     public function removeRequest(Request $request): self
     {
-        if ($this->requests->removeElement($request)) {
-            $request->removePart($this);
-        }
-
-        return $this;
+        if ($this->requests->removeElement($request)) { $request->removePart($this); 
+        } return $this; 
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
     public function getOrders(): Collection
     {
-        return $this->orders;
+        return $this->orders; 
     }
-
     public function addOrder(Order $order): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->addPart($this);
-        }
-
-        return $this;
+        if (!$this->orders->contains($order)) { $this->orders[] = $order; $order->addPart($this); 
+        } return $this; 
     }
-
     public function removeOrder(Order $order): self
     {
-        if ($this->orders->removeElement($order)) {
-            $order->removePart($this);
-        }
-
-        return $this;
+        if ($this->orders->removeElement($order)) { $order->removePart($this); 
+        } return $this; 
     }
 }

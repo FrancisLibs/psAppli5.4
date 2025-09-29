@@ -7,37 +7,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=AccountTypeRepository::class)
- */
+#[ORM\Entity(repositoryClass: AccountTypeRepository::class)]
 class AccountType
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $designation;
+    #[ORM\Column(type: 'string', length: 20)]
+    private ?string $designation = null;
 
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
-    private $letter;
+    #[ORM\Column(type: 'string', length: 2)]
+    private ?string $letter = null;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $accountNumber;
+    #[ORM\Column(type: 'string', length: 10)]
+    private ?string $accountNumber = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="accountType")
-     */
-    private $orders;
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'accountType')]
+    private Collection $orders;
 
     public function __construct()
     {

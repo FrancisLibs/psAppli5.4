@@ -18,6 +18,10 @@ export class FilterIndex {
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
+    // console.log(this.form);
+    // console.log(this.content);
+    // console.log(this.sorting);
+    // console.log(this.pagination);
   }
 
   /**
@@ -104,17 +108,30 @@ export class FilterIndex {
 
   async loadUrl(url) {
     const ajaxUrl = url + "&ajax=1";
-    const response = await fetch(ajaxUrl, {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    });
-    if (response.status >= 200 && response.status < 300) {
+    try {
+      const response = await fetch(ajaxUrl, {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      });
+
+      if (!response.ok) {
+        console.error("Erreur HTTP :", response.status);
+        return;
+      }
+
+      // Lecture unique du corps JSON
       const data = await response.json();
-      this.content.innerHTML = data.content;
-      this.sorting.innerHTML = data.sorting;
-      this.pagination.innerHTML = data.pagination;
+      console.log(data);
+
+      // Sécurité : vérifier que les éléments existent
+      if (this.content) this.content.innerHTML = data.content || "";
+      if (this.sorting) this.sorting.innerHTML = data.sorting || "";
+      if (this.pagination) this.pagination.innerHTML = data.pagination || "";
+
+      // Mettre à jour l'URL dans l'historique
       history.replaceState({}, "", url);
+    } catch (e) {
+      console.error("Erreur lors du chargement AJAX :", e);
+      // Ici, on ne relit pas la réponse pour éviter le Body already consumed
     }
   }
 }

@@ -9,36 +9,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=WorkshopRepository::class)
- * @UniqueEntity(fields={"name"}, message="Il y a déjà un atelier avec ce nom")
- */
+#[ORM\Entity(repositoryClass: WorkshopRepository::class)]
+#[UniqueEntity(fields: ['name'], message: "Il y a déjà un atelier avec ce nom")]
 class Workshop
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Machine::class, 
-     * mappedBy="workshop", orphanRemoval=true)
-     */
-    private $machines;
+    #[ORM\OneToMany(targetEntity: Machine::class, mappedBy: 'workshop', orphanRemoval: true)]
+    private Collection $machines;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="workshops")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'workshops')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
     public function __construct()
     {
@@ -58,7 +45,6 @@ class Workshop
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -76,19 +62,16 @@ class Workshop
             $this->machines[] = $machine;
             $machine->setWorkshop($this);
         }
-
         return $this;
     }
 
     public function removeMachine(Machine $machine): self
     {
         if ($this->machines->removeElement($machine)) {
-            // set the owning side to null (unless already changed)
             if ($machine->getWorkshop() === $this) {
                 $machine->setWorkshop(null);
             }
         }
-
         return $this;
     }
 
@@ -100,7 +83,6 @@ class Workshop
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
-
         return $this;
     }
 }

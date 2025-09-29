@@ -87,7 +87,7 @@ class DeliveryNoteController extends AbstractController
 
         $deliveryNotes = $this->deliveryNoteRepo->findSearch($data);
 
-        if ($request->get('ajax') === true) {
+        if ($request->get('ajax') == 1) {
             return new JsonResponse(
                 [
                     'content' => $this->renderView(

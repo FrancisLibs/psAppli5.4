@@ -2,65 +2,47 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\DeliveryNoteRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=DeliveryNoteRepository::class)
- * @UniqueEntity(fields={"number"}, message="Il y a déjà un BL avec ce numéro")
- */
+#[ORM\Entity(repositoryClass: DeliveryNoteRepository::class)]
+#[UniqueEntity(fields: ['number'], message: "Il y a déjà un BL avec ce numéro")]
 class DeliveryNote
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="deliveryNotes")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $provider;
+    #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'deliveryNotes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Provider $provider = null;
 
-    /**
-     * @ORM\Column(type="string",   length=100)
-     * @Assert\NotBlank(message="Ce champ doit être saisi")
-     */
-    private $number;
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank(message: "Ce champ doit être saisi")]
+    private ?string $number = null;
 
-    /**
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank(message="Ce champ doit être saisi")
-     */
-    private $date;
+    #[ORM\Column(type: 'date')]
+    #[Assert\NotBlank(message: "Ce champ doit être saisi")]
+    private ?\DateTimeInterface $date = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=DeliveryNotePart::class, mappedBy="deliveryNote", cascade={"persist"})
-     */
-    private $deliveryNoteParts;
+    #[ORM\OneToMany(targetEntity: DeliveryNotePart::class, mappedBy: 'deliveryNote', cascade: ['persist'])]
+    private Collection $deliveryNoteParts;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="deliveryNotes")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'deliveryNotes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="deliveryNotes")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'deliveryNotes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="DeliveryNote")
-     */
-    private $orders;
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'deliveryNotes')]
+    private Collection $orders;
 
     public function __construct()
     {
@@ -81,7 +63,6 @@ class DeliveryNote
     public function setProvider(?Provider $provider): self
     {
         $this->provider = $provider;
-
         return $this;
     }
 
@@ -93,7 +74,6 @@ class DeliveryNote
     public function setNumber(string $number): self
     {
         $this->number = $number;
-
         return $this;
     }
 
@@ -105,13 +85,9 @@ class DeliveryNote
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
         return $this;
     }
 
-    /**
-     * @return Collection|DeliveryNotePart[]
-     */
     public function getDeliveryNoteParts(): Collection
     {
         return $this->deliveryNoteParts;
@@ -123,19 +99,16 @@ class DeliveryNote
             $this->deliveryNoteParts[] = $deliveryNotePart;
             $deliveryNotePart->setDeliveryNote($this);
         }
-
         return $this;
     }
 
     public function removeDeliveryNotePart(DeliveryNotePart $deliveryNotePart): self
     {
         if ($this->deliveryNoteParts->removeElement($deliveryNotePart)) {
-            // set the owning side to null (unless already changed)
             if ($deliveryNotePart->getDeliveryNote() === $this) {
                 $deliveryNotePart->setDeliveryNote(null);
             }
         }
-
         return $this;
     }
 
@@ -147,7 +120,6 @@ class DeliveryNote
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
-
         return $this;
     }
 
@@ -159,13 +131,9 @@ class DeliveryNote
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
     public function getOrders(): Collection
     {
         return $this->orders;
@@ -177,7 +145,6 @@ class DeliveryNote
             $this->orders[] = $order;
             $order->addDeliveryNote($this);
         }
-
         return $this;
     }
 
@@ -186,7 +153,6 @@ class DeliveryNote
         if ($this->orders->removeElement($order)) {
             $order->removeDeliveryNote($this);
         }
-
         return $this;
     }
 }

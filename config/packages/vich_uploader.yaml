@@ -1,8 +1,5 @@
 vich_uploader:
   db_driver: orm
-  
-  metadata:
-    type: annotation
 
   mappings:
     user_image:

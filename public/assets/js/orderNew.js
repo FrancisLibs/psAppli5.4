@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const checkboxes = document.querySelectorAll(
-    ".account-type-item input[type='checkbox']"
+    ".account_type_line input[type='checkbox']"
   );
   const lettersField = document.getElementById("lettersField");
 
@@ -11,9 +11,10 @@ document.addEventListener("DOMContentLoaded", function () {
     lettersField.value = selectedLetters.join(""); // ex: "AC"
   }
 
-  letters();
-
   checkboxes.forEach((cb) => {
     cb.addEventListener("change", letters);
   });
+
+  // Fonction lettters dès le chargement de la page.
+  letters();
 });

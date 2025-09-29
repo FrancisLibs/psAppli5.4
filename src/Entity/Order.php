@@ -3,90 +3,63 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=OrderRepository::class)
- * @ORM\Table(name="`order`")
- */
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: '`order`')]
 class Order
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $number;
+    #[ORM\Column(type: 'string', length: 10)]
+    private ?string $number = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $date = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $provider;
+    #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Provider $provider = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $designation;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $designation = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Part::class, inversedBy="orders")
-     */
-    private $parts;
+    #[ORM\ManyToMany(targetEntity: Part::class, inversedBy: 'orders')]
+    private Collection $parts;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=DeliveryNote::class, inversedBy="orders")
-     */
-    private $DeliveryNote;
+    #[ORM\ManyToMany(targetEntity: DeliveryNote::class, inversedBy: 'orders')]
+    private Collection $deliveryNotes;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\Column(type: 'string', length: 10)]
+    private ?string $status = null;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $status;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $createdBy = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $createdBy;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $partsOrder = null;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $partsOrder;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $interventionOrder = null;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $interventionOrder;
+    #[ORM\ManyToMany(targetEntity: AccountType::class, inversedBy: 'orders')]
+    private Collection $accountType;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=AccountType::class, inversedBy="orders")
-     */
-    private $accountType;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $remark = null;
+
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
     public function __construct()
     {
         $this->parts = new ArrayCollection();
-        $this->DeliveryNote = new ArrayCollection();
+        $this->deliveryNote = new ArrayCollection();
         $this->accountType = new ArrayCollection();
     }
 
@@ -103,7 +76,6 @@ class Order
     public function setNumber(string $number): self
     {
         $this->number = $number;
-
         return $this;
     }
 
@@ -115,7 +87,6 @@ class Order
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -127,7 +98,6 @@ class Order
     public function setProvider(?Provider $provider): self
     {
         $this->provider = $provider;
-
         return $this;
     }
 
@@ -139,13 +109,9 @@ class Order
     public function setDesignation(string $designation): self
     {
         $this->designation = $designation;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Part>
-     */
     public function getParts(): Collection
     {
         return $this->parts;
@@ -156,50 +122,31 @@ class Order
         if (!$this->parts->contains($part)) {
             $this->parts[] = $part;
         }
-
         return $this;
     }
 
     public function removePart(Part $part): self
     {
         $this->parts->removeElement($part);
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, DeliveryNote>
-     */
     public function getDeliveryNote(): Collection
     {
-        return $this->DeliveryNote;
+        return $this->deliveryNote;
     }
 
     public function addDeliveryNote(DeliveryNote $deliveryNote): self
     {
-        if (!$this->DeliveryNote->contains($deliveryNote)) {
-            $this->DeliveryNote[] = $deliveryNote;
+        if (!$this->deliveryNote->contains($deliveryNote)) {
+            $this->deliveryNote[] = $deliveryNote;
         }
-
         return $this;
     }
 
     public function removeDeliveryNote(DeliveryNote $deliveryNote): self
     {
-        $this->DeliveryNote->removeElement($deliveryNote);
-
-        return $this;
-    }
-
-    public function getOrganisation(): ?Organisation
-    {
-        return $this->organisation;
-    }
-
-    public function setOrganisation(?Organisation $organisation): self
-    {
-        $this->organisation = $organisation;
-
+        $this->deliveryNote->removeElement($deliveryNote);
         return $this;
     }
 
@@ -211,7 +158,6 @@ class Order
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -223,7 +169,6 @@ class Order
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
-
         return $this;
     }
 
@@ -235,7 +180,6 @@ class Order
     public function setPartsOrder(?bool $partsOrder): self
     {
         $this->partsOrder = $partsOrder;
-
         return $this;
     }
 
@@ -247,13 +191,9 @@ class Order
     public function setInterventionOrder(?bool $interventionOrder): self
     {
         $this->interventionOrder = $interventionOrder;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, AccountType>
-     */
     public function getAccountType(): Collection
     {
         return $this->accountType;
@@ -264,14 +204,34 @@ class Order
         if (!$this->accountType->contains($accountType)) {
             $this->accountType[] = $accountType;
         }
-
         return $this;
     }
 
     public function removeAccountType(AccountType $accountType): self
     {
         $this->accountType->removeElement($accountType);
+        return $this;
+    }
 
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
+
+    public function setRemark(?string $remark): self
+    {
+        $this->remark = $remark;
+        return $this;
+    }
+
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?Organisation $organisation): self
+    {
+        $this->organisation = $organisation;
         return $this;
     }
 }

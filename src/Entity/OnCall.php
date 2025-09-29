@@ -5,260 +5,185 @@ namespace App\Entity;
 use App\Repository\OnCallRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=OncallRepository::class)
- */
+#[ORM\Entity(repositoryClass: OnCallRepository::class)]
 class OnCall
 {
-    
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+    #[ORM\Column(type: "datetime")]
+    private \DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $callDay;
+    #[ORM\Column(type: "date")]
+    private \DateTimeInterface $callDay;
 
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $callTime;
+    #[ORM\Column(type: "time")]
+    private \DateTimeInterface $callTime;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $whoCalls;
+    #[ORM\Column(type: "string", length: 100)]
+    private string $whoCalls;
 
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $arrivalTime;
+    #[ORM\Column(type: "time")]
+    private \DateTimeInterface $arrivalTime;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $reason;
+    #[ORM\Column(type: "text")]
+    private string $reason;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $durationHours;
+    #[ORM\Column(type: "integer")]
+    private int $durationHours;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $durationMinutes;
+    #[ORM\Column(type: "integer")]
+    private int $durationMinutes;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $travelhours;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $travelHours = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $travelMinutes;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $travelMinutes = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="onCalls")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "onCalls")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $task;
+    #[ORM\Column(type: "text")]
+    private string $task;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $status;
+    #[ORM\Column(type: "integer")]
+    private int $status;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $transmitted;
+    #[ORM\Column(type: "date", nullable: true)]
+    private ?\DateTimeInterface $transmitted = null;
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id; 
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->createdAt; 
     }
-
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->createdAt = $createdAt; return $this; 
     }
 
-    public function getCallDay(): ?\DateTimeInterface
+    public function getCallDay(): \DateTimeInterface
     {
-        return $this->callDay;
+        return $this->callDay; 
     }
-
     public function setCallDay(\DateTimeInterface $callDay): self
     {
-        $this->callDay = $callDay;
-
-        return $this;
+        $this->callDay = $callDay; return $this; 
     }
 
-    public function getCallTime(): ?\DateTimeInterface
+    public function getCallTime(): \DateTimeInterface
     {
-        return $this->callTime;
+        return $this->callTime; 
     }
-
     public function setCallTime(\DateTimeInterface $callTime): self
     {
-        $this->callTime = $callTime;
-
-        return $this;
+        $this->callTime = $callTime; return $this; 
     }
 
-    public function getWhoCalls(): ?string
+    public function getWhoCalls(): string
     {
-        return $this->whoCalls;
+        return $this->whoCalls; 
     }
-
     public function setWhoCalls(string $whoCalls): self
     {
-        $this->whoCalls = $whoCalls;
-
-        return $this;
+        $this->whoCalls = $whoCalls; return $this; 
     }
 
-    public function getArrivalTime(): ?\DateTimeInterface
+    public function getArrivalTime(): \DateTimeInterface
     {
-        return $this->arrivalTime;
+        return $this->arrivalTime; 
     }
-
     public function setArrivalTime(\DateTimeInterface $arrivalTime): self
     {
-        $this->arrivalTime = $arrivalTime;
-
-        return $this;
+        $this->arrivalTime = $arrivalTime; return $this; 
     }
 
-    public function getReason(): ?string
+    public function getReason(): string
     {
-        return $this->reason;
+        return $this->reason; 
     }
-
     public function setReason(string $reason): self
     {
-        $this->reason = $reason;
-
-        return $this;
+        $this->reason = $reason; return $this; 
     }
 
-    public function getDurationHours(): ?int
+    public function getDurationHours(): int
     {
-        return $this->durationHours;
+        return $this->durationHours; 
     }
-
     public function setDurationHours(int $durationHours): self
     {
-        $this->durationHours = $durationHours;
-
-        return $this;
+        $this->durationHours = $durationHours; return $this; 
     }
 
-    public function getDurationMinutes(): ?int
+    public function getDurationMinutes(): int
     {
-        return $this->durationMinutes;
+        return $this->durationMinutes; 
     }
-
     public function setDurationMinutes(int $durationMinutes): self
     {
-        $this->durationMinutes = $durationMinutes;
-
-        return $this;
+        $this->durationMinutes = $durationMinutes; return $this; 
     }
 
-    public function getTravelhours(): ?int
+    public function getTravelHours(): ?int
     {
-        return $this->travelhours;
+        return $this->travelHours; 
     }
-
-    public function setTravelhours(?int $travelhours): self
+    public function setTravelHours(?int $travelHours): self
     {
-        $this->travelhours = $travelhours;
-
-        return $this;
+        $this->travelHours = $travelHours; return $this; 
     }
 
     public function getTravelMinutes(): ?int
     {
-        return $this->travelMinutes;
+        return $this->travelMinutes; 
     }
-
     public function setTravelMinutes(?int $travelMinutes): self
     {
-        $this->travelMinutes = $travelMinutes;
-
-        return $this;
+        $this->travelMinutes = $travelMinutes; return $this; 
     }
 
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->user; 
     }
-
     public function setUser(?User $user): self
     {
-        $this->user = $user;
-
-        return $this;
+        $this->user = $user; return $this; 
     }
 
-    public function getTask(): ?string
+    public function getTask(): string
     {
-        return $this->task;
+        return $this->task; 
     }
-
     public function setTask(string $task): self
     {
-        $this->task = $task;
-
-        return $this;
+        $this->task = $task; return $this; 
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): int
     {
-        return $this->status;
+        return $this->status; 
     }
-
     public function setStatus(int $status): self
     {
-        $this->status = $status;
-
-        return $this;
+        $this->status = $status; return $this; 
     }
 
     public function getTransmitted(): ?\DateTimeInterface
     {
-        return $this->transmitted;
+        return $this->transmitted; 
     }
-
     public function setTransmitted(?\DateTimeInterface $transmitted): self
     {
-        $this->transmitted = $transmitted;
-
-        return $this;
+        $this->transmitted = $transmitted; return $this; 
     }
 }

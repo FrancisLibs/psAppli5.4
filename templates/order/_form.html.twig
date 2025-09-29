@@ -1,34 +1,58 @@
 <section class="row mt-5">
 	<div class="mb-4 col-12 col-lg-12 col-xl-12">
 		{{ form_start(form) }}
-		<div class="account-type-item">
+
+		<div class="account_type_line">
 			{% for choice in form.accountType %}
 				{{ form_widget(choice) }}
-				{{ form_label(choice) }}
+				{{ form_errors(choice) }}
 			{% endfor %}
 		</div>
 
-		<div class="first-line mb-3">
-			<input type="text" id="lettersField" name="lettersField" readonly>
-			<div class="col-5 col-sm-3 col-xl-2 mb-2">
-				{{ form_errors(form.number) }}
-				{{ form_label(form.number) }}
-				{{ form_widget(form.number) }}
+		<div class="number_date_line">
+			<div class="order_number">
+				<p class="order_number_label">Numéro :</p>
+				<div class="order_letter_number">
+					<input type="text" id="lettersField" name="lettersField" readonly>
+					<div class="order_number_input">
+						{{ form_widget(form.number) }}
+						{{ form_errors(form.number) }}
+					</div>
+				</div>
 			</div>
-		</div>
-		<div>
-			<div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-6 flex-wrap">
-				{{ form_label(form.designation) }}
-				{{ form_widget(form.designation) }}
+			<div class="date_line">
+				<p class="order_date_label">Date :</p>
+				<div>
+					{{ form_widget(form.date) }}
+					{{ form_errors(form.date) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3 align-items center">
-			<div class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3">
-				{{ form_label(form.provider) }}
+		<div class="provider_line">
+			<p class="provider_label">Fournisseur :</p>
+			<div class="provider_input">
 				{{ form_widget(form.provider) }}
+				{{ form_errors(form.provider) }}
 			</div>
 		</div>
+
+		<div class="designation_line">
+			<p class="designation_label">Désignation :</p>
+			<div class="désignation_input">
+				{{ form_widget(form.designation) }}
+				{{ form_errors(form.designation) }}
+			</div>
+		</div>
+
+		<div class="remark_line">
+			<p class="remark_label">Remarque :</p>
+			<div class="remark_input">
+				{{ form_widget(form.remark) }}
+				{{ form_errors(form.remark) }}
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-5 col-sm-3 col-xl-2 text-center">
 				<button type="submit" class="btn btn-primary pull-right w-100 mt-3">Valider</button>

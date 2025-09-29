@@ -38,31 +38,36 @@
 		</div>
 		<div class="secondColumn">
 			<h2 class="secondColumnTitle">The Team</h2>
+
 			<div class="pictures">
 				{% for user in users %}
 					{% if 'ROLE_SUPER' not in user.roles %}
 						<div class="eachPicture">
-							{% if user.imageName %}
-								<a href="{{ path('user_profil', {'id': user.id}) }}">
-									<img class="pictureSize" src="{{ vich_uploader_asset(user, 'imageFile') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}"/></a>
-							{% else %}
-								<a href="{{ path('user_profil', {'id': user.id}) }}">
-									<img class="pictureSize" src="{{ asset('/images/technicien.jpg') | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}"/></a>
+							{% set userImage = '/images/technicien.jpg' %}
+							{# image par défaut #}
+
+							{% if user.imageName is not empty %}
+								{# essaie de récupérer l’image uploadée #}
+								{% set userImage = attribute(user, 'imageFile') is defined ? vich_uploader_asset(user, 'imageFile') : userImage %}
 							{% endif %}
+
+							<a href="{{ path('user_profil', {'id': user.id}) }}">
+								<img class="pictureSize" src="{{ userImage | imagine_filter('my_default_filter') }}" alt="Photo d'identité de {{ user.username }}"/>
+							</a>
 							<p class="pictureTextSize">{{ user.firstName ~ " " ~ user.lastName }}</p>
 						</div>
 					{% endif %}
 				{% endfor %}
 			</div>
-		</div>
-	</div>
-{% endblock %}
-{% block javascripts %}
-	{{ parent() }}
-	<script src="/assets/js/infosHomePage.js" defer></script>
-	<script>
-		// Définir les variables lateBT pour le script
+
+
+		{% endblock %}
+		{% block javascripts %}
+			{{ parent() }}
+			<script src="/assets/js/infosHomePage.js" defer></script>
+			<script>
+				// Définir les variables lateBT pour le script
 var nbOfLateBT = {{ lateBT }};
 var partsToBuy = {{ partsToBuy }};
-	</script>
-{% endblock %}
+			</script>
+		{% endblock %}

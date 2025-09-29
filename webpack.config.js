@@ -21,7 +21,6 @@ Encore
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
   .addEntry("app", "./assets/app.js")
-  .addEntry("workorder", "./assets/JS/workorder.js")
   .addEntry("editDeliveryNote", "./assets/JS/editDeliveryNote.js")
   .addEntry("stockValueJschart", "./assets/JS/stockValueJschart.js")
   // .addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
@@ -30,6 +29,7 @@ Encore
   .addEntry("register", "./assets/styles/register.css")
   .addEntry("on_call_new", "./assets/styles/on_call_new.css")
   .addEntry("registration", "./assets/styles/registration.css")
+  .addEntry("filterIndex", "./assets/JS/filterIndexEntry.js")
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")

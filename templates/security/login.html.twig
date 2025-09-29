@@ -11,8 +11,8 @@
 
 
 {% block body %}
-	<div class="row mt-5">
-		<div class="login_frame mt-5 rounded">
+	<div class="row">
+		<div class="login_frame rounded">
 			<form method="post">
 				{% if error %}
 					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

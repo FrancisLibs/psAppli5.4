@@ -1,0 +1,19 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			{% for flash_message in app.flashes('success') %}
+				<div class="alert alert-success" role="alert">
+					<strong>Good job !</strong>
+					{{ flash_message }}
+				</div>
+			{% endfor %}
+
+			{% for flash_message in app.flashes('error') %}
+				<div class="alert alert-danger" role="alert">
+					<strong>Oops !</strong>
+					{{ flash_message }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

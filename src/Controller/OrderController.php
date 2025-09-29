@@ -6,13 +6,14 @@ use App\Entity\Order;
 use App\Form\OrderType;
 use App\Data\SearchOrder;
 use App\Form\SearchOrderFormType;
-use App\Repository\AccountTypeRepository;
 use App\Repository\OrderRepository;
 use App\Service\OrganisationService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AccountTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -45,20 +46,36 @@ class OrderController extends AbstractController
     public function index(Request $request): Response
     {
         $organisation =  $this->organisation->getOrganisation();
-
+        
         $data = new SearchOrder();
 
         $data->organisation = $organisation;
 
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchOrderFormType::class, $data, [
-            'organisation' => $organisation,
-        ]);
-
+        $form = $this->createForm(SearchOrderFormType::class, $data);
+        
         $form->handleRequest($request);
-
         $orders = $this->orderRepository->findSearch($data);
-
+        
+        if ($request->get('ajax') == 1) {
+            return new JsonResponse(
+                [
+                    'content'       =>  $this->renderView(
+                        'order/_orders.html.twig',
+                        ['orders' => $orders]
+                    ),
+                    'sorting'       =>  $this->renderView(
+                        'order/_sorting.html.twig',
+                        ['orders' => $orders]
+                    ),
+                    'pagination'    =>  $this->renderView(
+                        'order/_pagination.html.twig',
+                        ['orders' => $orders]
+                    ),
+                ]
+            );
+        }
+        
         return $this->render(
             'order/index.html.twig',
             [
@@ -90,10 +107,24 @@ class OrderController extends AbstractController
             $this->manager->flush();
 
             $this->addFlash('success', 'Order created successfully.');
+            return $this->redirectToRoute('order_index');
         }
         return $this->renderForm(
             'order/new.html.twig',
             ['form' => $form]
+        );
+    }
+
+    /**
+     * @ Visualisation commande
+     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/show/{id}', name: 'order_show', methods: ["GET"])]
+    public function show(Order $order): Response
+    {
+        return $this->render(
+            'order/show.html.twig',
+            ['order' => $order]
         );
     }
 }

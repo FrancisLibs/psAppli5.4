@@ -7,27 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=WorkorderStatusRepository::class)
- */
+#[ORM\Entity(repositoryClass: WorkorderStatusRepository::class)]
 class WorkorderStatus
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 20)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Workorder::class, mappedBy="workorderStatus")
-     */
-    private $workorders;
+    #[ORM\OneToMany(targetEntity: Workorder::class, mappedBy: 'workorderStatus')]
+    private Collection $workorders;
 
     public function __construct()
     {
@@ -47,7 +37,6 @@ class WorkorderStatus
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -65,19 +54,16 @@ class WorkorderStatus
             $this->workorders[] = $workorder;
             $workorder->setWorkorderStatus($this);
         }
-
         return $this;
     }
 
     public function removeWorkorder(Workorder $workorder): self
     {
         if ($this->workorders->removeElement($workorder)) {
-            // set the owning side to null (unless already changed)
             if ($workorder->getWorkorderStatus() === $this) {
                 $workorder->setWorkorderStatus(null);
             }
         }
-
         return $this;
     }
 }

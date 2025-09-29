@@ -53,28 +53,31 @@ class SearchOrderFormType extends AbstractType
                 'class'     => Provider::class,
                 'query_builder' => function (EntityRepository $er): QueryBuilder {
                     return $er->createQueryBuilder('p')->orderBy('p.name', 'ASC');
-                    },
+                },
                 'choice_label' => 'name',
-                'attr'      => ['placeholder' => 'Fournisseur...']
+                'placeholder' => 'Fournisseur...',
                 ]
-            )->add(
+            )
+            ->add(
                 'accountType', EntityType::class, [
                 'class'     => AccountType::class,
                 'query_builder' => function (EntityRepository $er): QueryBuilder {
                     return $er->createQueryBuilder('a')->orderBy('a.designation', 'ASC');
-                    },
+                },
                 'choice_label' => 'designation',
-                'attr'      => ['placeholder' => 'Type de compte...']
+                'placeholder' => 'Compte...',
                 ]
             )
-            ->add('createdBy', EntityType::class, [
+            ->add(
+                'createdBy', EntityType::class, [
                 'class' => User::class,
                 'query_builder' => fn(UserRepository $ur) => 
                     $ur->findAllUsersByOrganisationAndActive($organisation),
                 'choice_label' => 'username',
-                'placeholder' => 'Auteur...', // <-- au lieu de attr
+                'placeholder' => 'Auteur...',
                 'required' => false,
-            ]);
+                ]
+            );
 
         // Préselection des champs de formulaires de recherche
         $builder->addEventListener(

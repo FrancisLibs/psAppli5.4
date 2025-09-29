@@ -5,27 +5,19 @@ namespace App\Entity;
 use App\Repository\ParamsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ParamsRepository::class)
- */
+#[ORM\Entity(repositoryClass: ParamsRepository::class)]
 class Params
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $lastPreventiveDate;
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $lastPreventiveDate = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $lastStockValueDate;
+    #[ORM\Column(type: "datetime")]
+    private ?\DateTimeInterface $lastStockValueDate = null;
 
     public function getId(): ?int
     {
@@ -40,7 +32,6 @@ class Params
     public function setLastPreventiveDate(?\DateTimeInterface $lastPreventiveDate): self
     {
         $this->lastPreventiveDate = $lastPreventiveDate;
-
         return $this;
     }
 
@@ -52,7 +43,6 @@ class Params
     public function setLastStockValueDate(\DateTimeInterface $lastStockValueDate): self
     {
         $this->lastStockValueDate = $lastStockValueDate;
-
         return $this;
     }
 }

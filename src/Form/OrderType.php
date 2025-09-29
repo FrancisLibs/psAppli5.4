@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -23,12 +23,13 @@ class OrderType extends AbstractType
             ->add(
                 'date', DateType::class, [
                     'input' => 'datetime',
-                    'label' => 'Date de commande',
+                    'label' => false,
                     'widget' => 'single_text',
                     'required'  => false,
                 ]
             )
-            ->add('accountType', EntityType::class, [
+            ->add(
+                'accountType', EntityType::class, [
                 'class' => AccountType::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('a')
@@ -38,14 +39,15 @@ class OrderType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'label' => false,
-                'choice_attr' => function(AccountType $accountType) {
+                'choice_attr' => function (AccountType $accountType) {
                     // ajoute l'attribut data-letter avec la vraie lettre
                     return ['data-letter' => $accountType->getLetter()];
                 },
-            ])
+                ]
+            )
             ->add(
                 'number', IntegerType::class, [
-                'label' => 'Numéro',
+                'label' => false,
                 'required' => true,
                 ]
             )
@@ -56,13 +58,23 @@ class OrderType extends AbstractType
                     return $er->createQueryBuilder('p')
                         ->orderBy('p.name', 'ASC');
                 },
-                'choice_label'   =>  'name',
-                'required'  => true,
-                'label' =>  'Fournisseur'
+                'choice_label' => 'name',
+                'required' => true,
+                'label' => false
                 ]
             )
-            ->add('designation')
-            ;
+            ->add(
+                'designation', TextType::class, [
+                'label' => false
+                ]
+            )
+            ->add(
+                'remark', TextareaType::class, [
+                'label' => false,
+                'required' => false,
+                'attr' => ['rows' => 4, 'cols' => 72],
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

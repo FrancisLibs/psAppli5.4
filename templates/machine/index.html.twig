@@ -69,3 +69,9 @@
 		</article>
 	</main>
 {% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{# garde app.js #}
+	{{ encore_entry_script_tags('filterIndex') }}
+{% endblock %}

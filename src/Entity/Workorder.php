@@ -8,203 +8,100 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=WorkorderRepository::class)
- */
+#[ORM\Entity(repositoryClass: WorkorderRepository::class)]
 class Workorder
 {
     const CURATIF = 1;
     const PREVENTIF = 2;
     const AMELIORATIF = 3;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * Date de la création du BT
-     * 
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $createdAt;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
 
-    /**
-     * Date de début de l'intervention
-     * 
-     * @ORM\Column(type="date", nullable=true)
-     * @Assert\NotBlank
-     */
-    private $startDate;
+    #[ORM\Column(type: 'date', nullable: true)]
+    #[Assert\NotBlank]
+    private ?\DateTimeInterface $startDate = null;
 
-    /**
-     * Heure de début de l'intervention
-     * 
-     * @ORM\Column(type="time", nullable=true)
-     * @Assert\NotBlank
-     */
-    private $startTime;
+    #[ORM\Column(type: 'time', nullable: true)]
+    #[Assert\NotBlank]
+    private ?\DateTimeInterface $startTime = null;
 
-    /**
-     * Date de fin d'intervention
-     * 
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $endDate;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $endDate = null;
 
-    /**
-     * Heure de fin d'intervention
-     * 
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $endTime;
+    #[ORM\Column(type: 'time', nullable: true)]
+    private ?\DateTimeInterface $endTime = null;
 
-    /**
-     * Technicien de l'intervention
-     * 
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="workorders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'workorders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    /**
-     * Remarque sur l'intervention
-     * 
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $remark;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $remark = null;
 
-    /**
-     * Demande du travail
-     * 
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank
-     */
-    private $request;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\NotBlank]
+    private ?string $request = null;
 
-    /**
-     * Travaux réalisés
-     * 
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $implementation;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $implementation = null;
 
-    /**
-     * Organisation liée à l'intervention
-     * 
-     * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="workorders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisation;
+    #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'workorders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organisation $organisation = null;
 
-    /**
-     * Type d'intervention (Curatif, Préventif, Amélioratif)
-     * 
-     * @ORM\Column(type="integer")
-     */
-    private $type;
+    #[ORM\Column(type: 'integer')]
+    private ?int $type = null;
 
-    /**
-     * Durée en jours
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $durationDay;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $durationDay = null;
 
-    /**
-     * Durée en heures
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $durationHour;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $durationHour = null;
 
-    /**
-     * Durée en minutes
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $durationMinute;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $durationMinute = null;
 
-    /**
-     * Arrêt machine en heures
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $stopTimeHour;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $stopTimeHour = null;
 
-    /**
-     * Arrêt machine en minutes
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $stopTimeMinute;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $stopTimeMinute = null;
 
-    /**
-     * Pièces détachées ratachées à l'intervention
-     * 
-     * @ORM\OneToMany(targetEntity=WorkorderPart::class, 
-     * mappedBy="workorder", orphanRemoval=true)
-     */
-    private $workorderParts;
+    #[ORM\OneToMany(targetEntity: WorkorderPart::class, mappedBy: 'workorder', orphanRemoval: true)]
+    private Collection $workorderParts;
 
-    /**
-     * Machines de l'intervention
-     * 
-     * @ORM\ManyToMany(targetEntity=Machine::class, inversedBy="workorders")
-     */
-    private $machines;
+    #[ORM\ManyToMany(targetEntity: Machine::class, inversedBy: 'workorders')]
+    private Collection $machines;
 
-    /**
-     * Est-ce un préventif ?
-     * 
-     * @ORM\Column(type="boolean")
-     */
-    private $preventive;
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $preventive = null;
 
-    /**
-     * Le numéro de template si préventif
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $templateNumber;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $templateNumber = null;
 
-    /**
-     * Le statut du BT
-     *
-     * @ORM\ManyToOne(targetEntity=WorkorderStatus::class, inversedBy="workorders")
-     */
-    private $workorderStatus;
+    #[ORM\ManyToOne(targetEntity: WorkorderStatus::class, inversedBy: 'workorders')]
+    private ?WorkorderStatus $workorderStatus = null;
 
-    /**
-     * Date de réalisation demandée par le préventif
-     * 
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $preventiveDate;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $preventiveDate = null;
 
-    /**
-     * Nb de jours avant d'être en retard (préventif)
-     * 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $daysBeforeLate;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $daysBeforeLate = null;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $operationPrice;
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $operationPrice = null;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $partsPrice;
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $partsPrice = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $calendarTitle;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $calendarTitle = null;
 
     public function __construct()
     {
@@ -212,351 +109,85 @@ class Workorder
         $this->machines = new ArrayCollection();
     }
 
+    public function getId(): ?int { return $this->id; }
+    public function getCreatedAt(): ?\DateTimeInterface { return $this->createdAt; }
+    public function setCreatedAt(\DateTimeInterface $createdAt): self { $this->createdAt = $createdAt; return $this; }
+    public function getStartDate(): ?\DateTimeInterface { return $this->startDate; }
+    public function setStartDate(?\DateTimeInterface $startDate): self { $this->startDate = $startDate; return $this; }
+    public function getStartTime(): ?\DateTimeInterface { return $this->startTime; }
+    public function setStartTime(?\DateTimeInterface $startTime): self { $this->startTime = $startTime; return $this; }
+    public function getEndDate(): ?\DateTimeInterface { return $this->endDate; }
+    public function setEndDate(?\DateTimeInterface $endDate): self { $this->endDate = $endDate; return $this; }
+    public function getEndTime(): ?\DateTimeInterface { return $this->endTime; }
+    public function setEndTime(?\DateTimeInterface $endTime): self { $this->endTime = $endTime; return $this; }
+    public function getUser(): ?User { return $this->user; }
+    public function setUser(?User $user): self { $this->user = $user; return $this; }
+    public function getRemark(): ?string { return $this->remark; }
+    public function setRemark(?string $remark): self { $this->remark = $remark; return $this; }
+    public function getRequest(): ?string { return $this->request; }
+    public function setRequest(?string $request): self { $this->request = $request; return $this; }
+    public function getImplementation(): ?string { return $this->implementation; }
+    public function setImplementation(?string $implementation): self { $this->implementation = $implementation; return $this; }
+    public function getOrganisation(): ?Organisation { return $this->organisation; }
+    public function setOrganisation(?Organisation $organisation): self { $this->organisation = $organisation; return $this; }
+    public function getType(): ?int { return $this->type; }
+    public function setType(int $type): self { $this->type = $type; return $this; }
+    public function getDurationDay(): ?int { return $this->durationDay; }
+    public function setDurationDay(?int $durationDay): self { $this->durationDay = $durationDay; return $this; }
+    public function getDurationHour(): ?int { return $this->durationHour; }
+    public function setDurationHour(?int $durationHour): self { $this->durationHour = $durationHour; return $this; }
+    public function getDurationMinute(): ?int { return $this->durationMinute; }
+    public function setDurationMinute(?int $durationMinute): self { $this->durationMinute = $durationMinute; return $this; }
+    public function getStopTimeHour(): ?int { return $this->stopTimeHour; }
+    public function setStopTimeHour(?int $stopTimeHour): self { $this->stopTimeHour = $stopTimeHour; return $this; }
+    public function getStopTimeMinute(): ?int { return $this->stopTimeMinute; }
+    public function setStopTimeMinute(?int $stopTimeMinute): self { $this->stopTimeMinute = $stopTimeMinute; return $this; }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getStartDate(): ?\DateTimeInterface
-    {
-        return $this->startDate;
-    }
-
-    public function setStartDate(?\DateTimeInterface $startDate): self
-    {
-        $this->startDate = $startDate;
-
-        return $this;
-    }
-
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    public function getEndDate(): ?\DateTimeInterface
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(?\DateTimeInterface $endDate): self
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(?\DateTimeInterface $endTime): self
-    {
-        $this->endTime = $endTime;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getRemark(): ?string
-    {
-        return $this->remark;
-    }
-
-    public function setRemark(?string $remark): self
-    {
-        $this->remark = $remark;
-
-        return $this;
-    }
-
-    public function getRequest(): ?string
-    {
-        return $this->request;
-    }
-
-    public function setRequest(?string $request): self
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    public function getImplementation(): ?string
-    {
-        return $this->implementation;
-    }
-
-    public function setImplementation(?string $implementation): self
-    {
-        $this->implementation = $implementation;
-
-        return $this;
-    }
-
-    public function getOrganisation(): ?Organisation
-    {
-        return $this->organisation;
-    }
-
-    public function setOrganisation(?Organisation $organisation): self
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    public function getType(): ?int
-    {
-        return $this->type;
-    }
-
-    public function setType(int $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getDurationDay(): ?int
-    {
-        return $this->durationDay;
-    }
-
-    public function setDurationDay(?int $durationDay): self
-    {
-        $this->durationDay = $durationDay;
-
-        return $this;
-    }
-
-    public function getDurationHour(): ?int
-    {
-        return $this->durationHour;
-    }
-
-    public function setDurationHour(?int $durationHour): self
-    {
-        $this->durationHour = $durationHour;
-
-        return $this;
-    }
-
-    public function getDurationMinute(): ?int
-    {
-        return $this->durationMinute;
-    }
-
-    public function setDurationMinute(?int $durationMinute): self
-    {
-        $this->durationMinute = $durationMinute;
-
-        return $this;
-    }
-
-    public function getStopTimeHour(): ?int
-    {
-        return $this->stopTimeHour;
-    }
-
-    public function setStopTimeHour(?int $stopTimeHour): self
-    {
-        $this->stopTimeHour = $stopTimeHour;
-
-        return $this;
-    }
-
-    public function getStopTimeMinute(): ?int
-    {
-        return $this->stopTimeMinute;
-    }
-
-    public function setStopTimeMinute(?int $stopTimeMinute): self
-    {
-        $this->stopTimeMinute = $stopTimeMinute;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|WorkorderPart[]
-     */
-    public function getWorkorderParts(): Collection
-    {
-        return $this->workorderParts;
-    }
-
-    public function addWorkorderPart(WorkorderPart $workorderPart): self
-    {
+    public function getWorkorderParts(): Collection { return $this->workorderParts; }
+    public function addWorkorderPart(WorkorderPart $workorderPart): self {
         if (!$this->workorderParts->contains($workorderPart)) {
             $this->workorderParts[] = $workorderPart;
             $workorderPart->setWorkorder($this);
         }
-
         return $this;
     }
-
-    public function removeWorkorderPart(WorkorderPart $workorderPart): self
-    {
+    public function removeWorkorderPart(WorkorderPart $workorderPart): self {
         if ($this->workorderParts->removeElement($workorderPart)) {
-            // set the owning side to null (unless already changed)
             if ($workorderPart->getWorkorder() === $this) {
                 $workorderPart->setWorkorder(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection|Machine[]
-     */
-    public function getMachines(): Collection
-    {
-        return $this->machines;
-    }
-
-    public function addMachine(Machine $machine): self
-    {
-        if (!$this->machines->contains($machine)) {
-            $this->machines[] = $machine;
-        }
-
+    public function getMachines(): Collection { return $this->machines; }
+    public function addMachine(Machine $machine): self {
+        if (!$this->machines->contains($machine)) $this->machines[] = $machine;
         return $this;
     }
+    public function removeMachine(Machine $machine): self { $this->machines->removeElement($machine); return $this; }
 
-    public function removeMachine(Machine $machine): self
-    {
-        $this->machines->removeElement($machine);
+    public function getPreventive(): ?bool { return $this->preventive; }
+    public function setPreventive(bool $preventive): self { $this->preventive = $preventive; return $this; }
 
-        return $this;
-    }
+    public function getTemplateNumber(): ?int { return $this->templateNumber; }
+    public function setTemplateNumber(?int $templateNumber): self { $this->templateNumber = $templateNumber; return $this; }
 
-    public function getPreventive(): ?bool
-    {
-        return $this->preventive;
-    }
+    public function getWorkorderStatus(): ?WorkorderStatus { return $this->workorderStatus; }
+    public function setWorkorderStatus(?WorkorderStatus $workorderStatus): self { $this->workorderStatus = $workorderStatus; return $this; }
 
-    public function setPreventive(bool $preventive): self
-    {
-        $this->preventive = $preventive;
+    public function getPreventiveDate(): ?\DateTimeInterface { return $this->preventiveDate; }
+    public function setPreventiveDate(?\DateTimeInterface $preventiveDate): self { $this->preventiveDate = $preventiveDate; return $this; }
 
-        return $this;
-    }
+    public function getDaysBeforeLate(): ?int { return $this->daysBeforeLate; }
+    public function setDaysBeforeLate(?int $daysBeforeLate): self { $this->daysBeforeLate = $daysBeforeLate; return $this; }
 
-    public function getTemplateNumber(): ?int
-    {
-        return $this->templateNumber;
-    }
+    public function getOperationPrice(): ?float { return $this->operationPrice; }
+    public function setOperationPrice(?float $operationPrice): self { $this->operationPrice = $operationPrice; return $this; }
 
-    public function setTemplateNumber(?int $templateNumber): self
-    {
-        $this->templateNumber = $templateNumber;
+    public function getPartsPrice(): ?float { return $this->partsPrice; }
+    public function setPartsPrice(?float $partsPrice): self { $this->partsPrice = $partsPrice; return $this; }
 
-        return $this;
-    }
-
-    public function getWorkorderStatus(): ?WorkorderStatus
-    {
-        return $this->workorderStatus;
-    }
-
-    public function setWorkorderStatus(?WorkorderStatus $workorderStatus): self
-    {
-        $this->workorderStatus = $workorderStatus;
-
-        return $this;
-    }
-
-    public function getPreventiveDate(): ?\DateTimeInterface
-    {
-        return $this->preventiveDate;
-    }
-
-    public function setPreventiveDate(?\DateTimeInterface $preventiveDate): self
-    {
-        $this->preventiveDate = $preventiveDate;
-
-        return $this;
-    }
-
-    public function getDaysBeforeLate(): ?int
-    {
-        return $this->daysBeforeLate;
-    }
-
-    public function setDaysBeforeLate(?int $daysBeforeLate): self
-    {
-        $this->daysBeforeLate = $daysBeforeLate;
-
-        return $this;
-    }
-
-    public function getOperationPrice(): ?float
-    {
-        return $this->operationPrice;
-    }
-
-    public function setOperationPrice(?float $operationPrice): self
-    {
-        $this->operationPrice = $operationPrice;
-
-        return $this;
-    }
-
-    public function getPartsPrice(): ?float
-    {
-        return $this->partsPrice;
-    }
-
-    public function setPartsPrice(?float $partsPrice): self
-    {
-        $this->partsPrice = $partsPrice;
-
-        return $this;
-    }
-
-    public function getCalendarTitle(): ?string
-    {
-        return $this->calendarTitle;
-    }
-
-    public function setCalendarTitle(?string $calendarTitle): self
-    {
-        $this->calendarTitle = $calendarTitle;
-
-        return $this;
-    }
+    public function getCalendarTitle(): ?string { return $this->calendarTitle; }
+    public function setCalendarTitle(?string $calendarTitle): self { $this->calendarTitle = $calendarTitle; return $this; }
 }

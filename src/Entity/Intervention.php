@@ -5,38 +5,26 @@ namespace App\Entity;
 use App\Repository\InterventionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=InterventionRepository::class)
- */
+#[ORM\Entity(repositoryClass: InterventionRepository::class)]
 class Intervention
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="interventions")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $provider;
+    #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'interventions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Provider $provider = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $date = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $works;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $works = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $remark;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $remark = null;
 
     public function getId(): ?int
     {
@@ -51,7 +39,6 @@ class Intervention
     public function setProvider(?Provider $provider): self
     {
         $this->provider = $provider;
-
         return $this;
     }
 
@@ -63,7 +50,6 @@ class Intervention
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -75,7 +61,6 @@ class Intervention
     public function setWorks(?string $works): self
     {
         $this->works = $works;
-
         return $this;
     }
 
@@ -87,7 +72,6 @@ class Intervention
     public function setRemark(?string $remark): self
     {
         $this->remark = $remark;
-
         return $this;
     }
 }
