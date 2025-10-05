@@ -1,0 +1,5 @@
+# config/packages/dev/framework.yaml
+framework:
+    profiler:
+        only_exceptions: false
+        collect: true

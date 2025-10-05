@@ -1,33 +1,28 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
   secret: "%env(APP_SECRET)%"
-  #csrf_protection: true
-  http_method_override: false
+  csrf_protection: true
 
-  # Definition of time zone
-  default_locale: 'fr' # Remplacez 'fr' par la locale de votre choix
-
-  # Enables session support. Note that the session will ONLY be started if you read or write from it.
-  # Remove or comment this section to explicitly disable session support.
+  # Sessions
   session:
-    enabled: true
     handler_id: null
     cookie_secure: auto
     cookie_samesite: lax
-    storage_factory_id: session.storage.factory.native
-    gc_probability: null
 
-  #esi: true
-  #fragments: true
-  # php_errors:
-  #     log: true
+  # Localisation
+  default_locale: en
+  translator:
+    default_path: "%kernel.project_dir%/translations"
+    fallbacks:
+      - en
 
-  # error_controller: 'App\Controller\ExceptionController::showException'
+  # Router
+  router:
+    utf8: true
 
-  # profiler: { only_exceptions: false }
+  # Profiler (activé par défaut, désactivé en prod via config/packages/prod/framework.yaml)
+  profiler: { only_exceptions: false }
 
-when@test:
-  framework:
-    test: true
-    session:
-      storage_factory_id: session.storage.factory.mock_file
+  # Cache par défaut
+  cache:
+    app: cache.adapter.filesystem
+    system: cache.adapter.system

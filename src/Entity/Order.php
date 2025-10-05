@@ -36,10 +36,6 @@ class Order
     #[ORM\Column(type: 'string', length: 10)]
     private ?string $status = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $createdBy = null;
-
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $partsOrder = null;
 
@@ -55,6 +51,10 @@ class Order
     #[ORM\ManyToOne(targetEntity: Organisation::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Organisation $organisation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $createdBy = null;
 
     public function __construct()
     {
@@ -161,17 +161,6 @@ class Order
         return $this;
     }
 
-    public function getCreatedBy(): ?User
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(?User $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-        return $this;
-    }
-
     public function isPartsOrder(): ?bool
     {
         return $this->partsOrder;
@@ -232,6 +221,18 @@ class Order
     public function setOrganisation(?Organisation $organisation): self
     {
         $this->organisation = $organisation;
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
         return $this;
     }
 }

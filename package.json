@@ -1,19 +1,22 @@
 {
   "devDependencies": {
-    "@symfony/stimulus-bridge": "^2.0.0",
+    "@babel/core": "^7.28.4",
+    "@babel/plugin-transform-class-properties": "^7.24.7",
+    "@babel/preset-env": "^7.28.3",
+    "@symfony/stimulus-bridge": "^4.0.1",
     "@symfony/webpack-encore": "^5.2.0",
+    "babel-loader": "^10.0.0",
     "core-js": "^3.0.0",
     "regenerator-runtime": "^0.13.2",
     "stimulus": "^2.0.0",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
     "webpack-notifier": "^1.6.0"
   },
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "dev-server": "encore dev-server",
-    "dev": "NODE_OPTIONS=--openssl-legacy-provider encore dev",
-    "watch": "encore dev --watch",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider encore production"
+    "dev": "encore dev"
   },
   "dependencies": {
     "chart.js": "^4.3.0"

@@ -8,17 +8,13 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div
-			class="collapse navbar-collapse" id="navbarSupportedContent">
-			{# <ul class="navbar-nav mx-auto align-items-center">
-													<li>{{ render(path('isNotRead')) }}</li>
-												</ul> #}
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mx-auto align-items-center">
 				<li class="nav-item me-3">
 					<a class="nav-link" href="{{ path('order_index') }}">Commandes</a>
 				</li>
 				<li class="nav-item dropdown me-3">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Pièces
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -26,8 +22,6 @@
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Réappro</a>
 						<div class="dropdown-divider"></div>
-						{# <a class="dropdown-item" href="{{ path('parts_to_buy') }}">Demandes</a>
-																																										<a class="dropdown-item" href="{{ path('parts_to_buy') }}">Commandes</a> #}
 						<a class="dropdown-item" href="{{ path('delivery_note_index') }}">Bon de livraison</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{ path('stock_top_value') }}">Valeur stock</a>
@@ -42,10 +36,10 @@
 					<a class="nav-link" href="{{ path('work_order_index') }}">Travaux</a>
 				</li>
 				<li class="nav-item dropdown me-3">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDivers" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Divers
 					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownDivers">
 						<a class="dropdown-item" href="{{ path('onCall_index') }}">Astreintes</a>
 						<a class="dropdown-item" href="{{ path('app_work_time') }}">Indicateurs</a>
 					</div>
@@ -54,7 +48,7 @@
 					<a href="{{ path('template_index') }}" class="nav-link">Préventif</a>
 				</li>
 				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COORD') %}
-					<li class="nav-item nav-item dropdown me-3">
+					<li class="nav-item me-3">
 						<a href="{{ path('admin') }}" class="nav-link">Administration</a>
 					</li>
 				{% endif %}
@@ -62,6 +56,7 @@
 					{{ render(path('app_global_search')) }}
 				</li>
 			</ul>
+
 			<ul class="navbar-nav align-items-center">
 				<li class="nav-item me-5">
 					<a href="{{ path('app_logout') }}" class="nav-link">
@@ -69,16 +64,16 @@
 					</a>
 				</li>
 				<li class="dropdown">
-					<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
 						{% if app.user.imageName is not null %}
 							<img src="{{ vich_uploader_asset(app.user, 'imageFile') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}"/>
 						{% else %}
 							<img src="{{ asset('/images/technicien.jpg') | imagine_filter('my_little_filter') }}" alt="Photo d'identité de {{ app.user.username }}"/>
 						{% endif %}
 					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item text-left" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
-						<a class="dropdown-item text-left" href="{{ path('app_forgot_password_request') }}">Changer mot de passe</a>
+					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="{{ path('user_profil', { 'id': app.user.id }) }}">Profil</a>
+						<a class="dropdown-item" href="{{ path('app_forgot_password_request') }}">Changer mot de passe</a>
 					</div>
 				</li>
 			</ul>

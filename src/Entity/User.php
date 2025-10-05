@@ -2,17 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\OnCall;
+use App\Entity\Workorder;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['username'], message: "Il y a déjà un utilisateur avec cet identifiant")]
@@ -68,10 +70,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)] // ou true si ce n'est pas obligatoire
     private ?Service $service = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Workorder::class)]
+    private Collection $workorders;
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: OnCall::class)]
+    private Collection $onCalls;
+
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Order::class)]
+    private Collection $orders;
+
+
     public function __construct()
     {
         $this->active = true;
-        // Initialise les collections si besoin
+        $this->workorders = new ArrayCollection();
+        $this->onCalls = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     // === Getters / Setters principaux ===
@@ -228,6 +245,92 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setService(?Service $service): self
     {
         $this->service = $service;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workorder[]
+     */
+    public function getWorkorders(): Collection
+    {
+        return $this->workorders;
+    }
+
+    public function addWorkorder(Workorder $workorder): self
+    {
+        if (!$this->workorders->contains($workorder)) {
+            $this->workorders[] = $workorder;
+            $workorder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkorder(Workorder $workorder): self
+    {
+        if ($this->workorders->removeElement($workorder)) {
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OnCall[]
+     */
+    public function getOnCalls(): Collection
+    {
+        return $this->onCalls;
+    }
+
+    public function addOnCall(OnCall $onCall): self
+    {
+        if (!$this->onCalls->contains($onCall)) {
+            $this->onCalls[] = $onCall;
+            $onCall->setUser($this); // Lien inverse obligatoire
+        }
+
+        return $this;
+    }
+
+    public function removeOnCall(OnCall $onCall): self
+    {
+        if ($this->onCalls->removeElement($onCall)) {
+            // set the owning side to null (unless already changé)
+            if ($onCall->getUser() === $this) {
+                $onCall->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getCreatedBy() === $this) {
+                $order->setCreatedBy(null);
+            }
+        }
+
         return $this;
     }
 }

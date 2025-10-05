@@ -9,7 +9,7 @@
 			<a class="btn index-button text-center" href="{{ path('order_show', {'id': order.id}) }}">{{ order.number }}</a>
 		</td>
 		<td data-label="Designation" class="text-center font_size_table">{{ order.designation }}</td>
-		<td data-label="Designation" class="text-center font_size_table">{{ order.date|date("m/d/Y") }}</td>
+		<td data-label="Designation" class="text-center font_size_table">{{ order.date|date("d/m/Y") }}</td>
 		<td data-label="Fournisseur" class="text-center font_size_table">{{ order.provider.name }}</td>
 		<td data-label="Fournisseur" class="text-center font_size_table">{{ order.createdBy.firstName }}</td>
 	</tr>

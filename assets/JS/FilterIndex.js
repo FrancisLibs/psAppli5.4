@@ -18,10 +18,6 @@ export class FilterIndex {
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
-    // console.log(this.form);
-    // console.log(this.content);
-    // console.log(this.sorting);
-    // console.log(this.pagination);
   }
 
   /**
@@ -71,6 +67,7 @@ export class FilterIndex {
       button.addEventListener("click", resetField);
     });
 
+    // fonctions détectant les clics dans le tri et le changement de page
     this.sorting.addEventListener("click", aClickListener);
     this.pagination.addEventListener("click", aClickListener);
 
@@ -94,7 +91,6 @@ export class FilterIndex {
 
   async loadForm() {
     const data = new FormData(this.form);
-
     const url = new URL(
       this.form.getAttribute("action") || window.location.href
     );
@@ -120,7 +116,6 @@ export class FilterIndex {
 
       // Lecture unique du corps JSON
       const data = await response.json();
-      console.log(data);
 
       // Sécurité : vérifier que les éléments existent
       if (this.content) this.content.innerHTML = data.content || "";

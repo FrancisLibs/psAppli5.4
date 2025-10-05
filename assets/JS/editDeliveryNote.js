@@ -1,38 +1,40 @@
-// Lors d'un nouveau bon de livraison, le numéro de BL
-// et de sa date sont mis en session par ajax
+document.addEventListener("DOMContentLoaded", () => {
+  let blForm = document.forms.delivery_note;
+  let blNumber = blForm["delivery_note[number]"];
+  let blDate = blForm["delivery_note[date]"];
 
-function saveNumber() {
-  let routeClass = document.querySelector(".deliveryNoteRoute");
-  let numberRoute = routeClass.dataset.urlDeliverynotenumber;
+  async function saveNumber() {
+    let routeClass = document.querySelector(".deliveryNoteRoute");
+    let numberRoute = routeClass.dataset.urlDeliverynotenumber;
 
-  let number = blNumber.value;
-  if (number === "") {
-    number = null;
+    let number = blNumber.value || null;
+    const url = numberRoute + "/" + number;
+
+    try {
+      let resultat = await fetch(url);
+      let json = await resultat.json();
+      console.log("Message serveur (number) :", json.message);
+    } catch (e) {
+      console.error("Erreur (number) :", e);
+    }
   }
-  const url = numberRoute + "/" + number;
-  const message = fetch(url)
-    .then((resultat) => resultat.json())
-    .then((json) => {
-      json.message;
-    });
-}
 
-function saveDate() {
-  let routeClass = document.querySelector(".deliveryNoteRoute");
-  let dateRoute = routeClass.dataset.urlDeliverynotedate;
+  async function saveDate() {
+    let routeClass = document.querySelector(".deliveryNoteRoute");
+    let dateRoute = routeClass.dataset.urlDeliverynotedate;
 
-  let date = blDate.value;
-  const url = dateRoute + "/" + date;
-  const message = fetch(url)
-    .then((resultat) => resultat.json())
-    .then((json) => {
-      json.message;
-    });
-}
+    let date = blDate.value;
+    const url = dateRoute + "/" + date; 
 
-let blForm = document.forms.delivery_note;
-let blNumber = blForm["delivery_note[number]"];
-let blDate = blForm["delivery_note[date]"];
+    try {
+      let resultat = await fetch(url);
+      let json = await resultat.json();
+      console.log("Message serveur (date) :", json.message);
+    } catch (e) {
+      console.error("Erreur (date) :", e);
+    }
+  }
 
-blNumber.addEventListener("change", saveNumber, false);
-blDate.addEventListener("change", saveDate, false);
+  blNumber.addEventListener("change", saveNumber, false);
+  blDate.addEventListener("change", saveDate, false);
+});

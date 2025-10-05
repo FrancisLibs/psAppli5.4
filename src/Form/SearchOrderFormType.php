@@ -62,7 +62,8 @@ class SearchOrderFormType extends AbstractType
                 'accountType', EntityType::class, [
                 'class'     => AccountType::class,
                 'query_builder' => function (EntityRepository $er): QueryBuilder {
-                    return $er->createQueryBuilder('a')->orderBy('a.designation', 'ASC');
+                    return $er->
+                    createQueryBuilder('a')->orderBy('a.designation', 'ASC');
                 },
                 'choice_label' => 'designation',
                 'placeholder' => 'Compte...',

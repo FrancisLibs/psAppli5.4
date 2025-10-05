@@ -1,0 +1,10 @@
+framework:
+  cache:
+    pools:
+      doctrine.metadata_cache_pool:
+        adapter: cache.system
+      doctrine.query_cache_pool:
+        adapter: cache.system
+      doctrine.result_cache_pool:
+        adapter: cache.app
+  profiler: { enabled: false }

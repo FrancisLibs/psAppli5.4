@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\OnCallRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OnCallRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: OnCallRepository::class)]
 class OnCall
@@ -54,7 +55,7 @@ class OnCall
     private int $status;
 
     #[ORM\Column(type: "date", nullable: true)]
-    private ?\DateTimeInterface $transmitted = null;
+    private ?\DateTimeInterface $transmitted = null;   
 
     public function getId(): ?int
     {
@@ -185,5 +186,35 @@ class OnCall
     public function setTransmitted(?\DateTimeInterface $transmitted): self
     {
         $this->transmitted = $transmitted; return $this; 
+    }
+
+    /**
+     * @return Collection|OnCall[]
+     */
+    public function getOnCalls(): Collection
+    {
+        return $this->onCalls;
+    }
+
+    public function addOnCall(OnCall $onCall): self
+    {
+        if (!$this->onCalls->contains($onCall)) {
+            $this->onCalls[] = $onCall;
+            $onCall->setUser($this); // lien inverse
+        }
+
+        return $this;
+    }
+
+    public function removeOnCall(OnCall $onCall): self
+    {
+        if ($this->onCalls->removeElement($onCall)) {
+            // set the owning side to null (unless already changed)
+            if ($onCall->getUser() === $this) {
+                $onCall->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
