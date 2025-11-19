@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vue commande
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="/assets/css/orderShow.css">
+{% endblock %}
+
+{% block body %}
+	<main class="row mt-5">
+		{% include 'user/_photo.html.twig' %}
+		<article class="col-12 col-xl-10">
+			<header>
+				<h1 class="page-title">Commande
+					{% if order.investment %}
+						<span class="invest">I</span>
+					{% endif %}
+					<span id="accountLetters">{{ order.accountLetters }}</span>
+					<span>{{ order.number }}</span>
+					<div id="order-container" data-order-id="{{ order.id }}"></div>
+				</h1>
+				<div class="links">
+					<a class="btn btn-primary btn-sm" href="{{ path('order_index') }}" role="button">Retour à la liste</a>
+					<a class="btn btn-primary btn-sm" href="{{ path('order_edit', {'id': order.id }) }}" role="button">Modification</a>
+				</div>
+			</header>
+			<section class="buttons">
+				<div id="buttonArea" class="buttonArea"></div>
+			</section>
+			<section class="orderInfos">
+				<div class="first_line">
+					<div class="info-item">
+						<span class="label">Date de création :</span>
+						<span class="value">{{ order.date|date('d/m/Y') }}</span>
+					</div>
+					<div class="info-item">
+						<span class="label">Fournisseur :</span>
+						<span class="value">{{ order.provider.name }}</span>
+					</div>
+					<div class="info-item">
+						<span class="label">Statut :</span>
+						<span class="value">{{ order.status }}</span>
+					</div>
+				</div>
+				<div class="second_line">
+					<div class="info-item">
+						<span class="label">Créé par :</span>
+						<span class="value">{{order.createdBy.firstName}}</span>
+					</div>
+				</div>
+				<div class="third_line">
+					<div class="info-item">
+						<span class="label">Description :</span>
+						<span class="value">{{ order.designation }}</span>
+					</div>
+				</div>
+				<div class="fourth_line">
+					<div class="info-item">
+						<span class="label">Remarque :</span>
+						<span class="value">{{ order.remark ? order.remark : '-'}}</span>
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/assets/js/orderShow.js" defer></script>
+{% endblock %}

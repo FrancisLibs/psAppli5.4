@@ -1,33 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle commande
+{% block title %}Edition commande
 {% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="/assets/css/orderNew.css">
+	<link rel="stylesheet" href="/assets/css/order_new_and_edit.css">
 {% endblock %}
 
-
 {% block body %}
-	<main class="row justify-content-start mt-5">
+	<main class="row mt-5">
 		{% include 'user/_photo.html.twig' %}
-		<article class="col-10 col-md-10">
+		<article class="col-12 col-xl-10">
+			{{ form_start(form, {'attr': {'id': 'order'}}) }}
+
 			<header>
-				<h1 class="page-title">Nouvelle commande</h1>
+				<h1 class="page-title">Edition commande</h1>
 				<div class="links">
 					<a class="btn btn-primary btn-sm" href="{{ path('order_index') }}" role="button">Retour à la liste</a>
 				</div>
 			</header>
 
-
-			{{ include('order/_account_buttons_line.html.twig')}}
 			{{ include('order/_form.html.twig') }}
+			<section>
+				<div id="buttonArea" class="buttonArea"></div>
+			</section>
 		</article>
 	</main>
-{% endblock %}
-
-{% block javascripts %}
-	{{ parent() }}
-	<script src="/assets/js/orderNew.js" defer></script>
 {% endblock %}

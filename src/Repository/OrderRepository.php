@@ -31,15 +31,8 @@ class OrderRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('o')
             ->leftjoin('o.organisation', 'org')->addSelect('org')
             ->leftjoin('o.provider', 'p')->addSelect('p')
-            ->leftjoin('o.accountType', 'a')->addSelect('a')
             ->leftjoin('o.createdBy', 'u')->addSelect('u');
             
-
-        if (!empty($search->accountType)) {
-            $query = $query
-                ->andWhere('a.id = :accountType')
-                ->setParameter('accountType', $search->accountType);
-        }
         if (!empty($search->organisation)) {
             $query = $query
                 ->andWhere('org.id = :organisation')

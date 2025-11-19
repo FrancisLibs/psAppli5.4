@@ -14,6 +14,9 @@ class Order
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+     #[ORM\Column(length: 10)]
+    private ?string $accountLetters = null;
+
     #[ORM\Column(type: 'string', length: 10)]
     private ?string $number = null;
 
@@ -42,9 +45,6 @@ class Order
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $interventionOrder = null;
 
-    #[ORM\ManyToMany(targetEntity: AccountType::class, inversedBy: 'orders')]
-    private Collection $accountType;
-
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $remark = null;
 
@@ -56,16 +56,30 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $createdBy = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $investment = null;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
         $this->deliveryNote = new ArrayCollection();
-        $this->accountType = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAccountLetters(): ?string
+    {
+        return $this->accountLetters;
+    }
+
+    public function setAccountLetters(string $accountLetters): static
+    {
+        $this->accountLetters = $accountLetters;
+
+        return $this;
     }
 
     public function getNumber(): ?string
@@ -183,25 +197,6 @@ class Order
         return $this;
     }
 
-    public function getAccountType(): Collection
-    {
-        return $this->accountType;
-    }
-
-    public function addAccountType(AccountType $accountType): self
-    {
-        if (!$this->accountType->contains($accountType)) {
-            $this->accountType[] = $accountType;
-        }
-        return $this;
-    }
-
-    public function removeAccountType(AccountType $accountType): self
-    {
-        $this->accountType->removeElement($accountType);
-        return $this;
-    }
-
     public function getRemark(): ?string
     {
         return $this->remark;
@@ -232,6 +227,18 @@ class Order
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function isInvestment(): ?bool
+    {
+        return $this->investment;
+    }
+
+    public function setInvestment(?bool $investment): static
+    {
+        $this->investment = $investment;
 
         return $this;
     }

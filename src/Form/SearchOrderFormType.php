@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\User;
 use App\Entity\Provider;
 use App\Data\SearchOrder;
-use App\Entity\AccountType;
 use App\Entity\Organisation;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\UserRepository;
@@ -15,6 +14,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -59,23 +59,18 @@ class SearchOrderFormType extends AbstractType
                 ]
             )
             ->add(
-                'accountType', EntityType::class, [
-                'class'     => AccountType::class,
-                'query_builder' => function (EntityRepository $er): QueryBuilder {
-                    return $er->
-                    createQueryBuilder('a')->orderBy('a.designation', 'ASC');
-                },
-                'choice_label' => 'designation',
-                'placeholder' => 'Compte...',
-                ]
-            )
-            ->add(
                 'createdBy', EntityType::class, [
                 'class' => User::class,
                 'query_builder' => fn(UserRepository $ur) => 
                     $ur->findAllUsersByOrganisationAndActive($organisation),
                 'choice_label' => 'username',
                 'placeholder' => 'Auteur...',
+                'required' => false,
+                ]
+            )
+            ->add(
+                'investment', CheckboxType::class, [
+                    'label' => false,
                 'required' => false,
                 ]
             );

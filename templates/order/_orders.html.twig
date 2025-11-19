@@ -1,17 +1,13 @@
 {% for order in orders %}
 	<tr>
-		<td data-label="Compte" class="text-center font_size_table">
-			{% for accountType in order.accountType %}
-				{{ accountType.letter }}
-			{% endfor %}
-		</td>
 		<td data-label="Numéro" class="font_size_table">
-			<a class="btn index-button text-center" href="{{ path('order_show', {'id': order.id}) }}">{{ order.number }}</a>
+			<a class="btn index-button text-center" href="{{ path('order_show', {'id': order.id}) }}">{{ order.accountLetters }}{{ order.number }}</a>
 		</td>
 		<td data-label="Designation" class="text-center font_size_table">{{ order.designation }}</td>
 		<td data-label="Designation" class="text-center font_size_table">{{ order.date|date("d/m/Y") }}</td>
 		<td data-label="Fournisseur" class="text-center font_size_table">{{ order.provider.name }}</td>
 		<td data-label="Fournisseur" class="text-center font_size_table">{{ order.createdBy.firstName }}</td>
+		<td data-label="INV" class="text-center font_size_table">{{ order.investment }}</td>
 	</tr>
 {% else %}
 	<tr>

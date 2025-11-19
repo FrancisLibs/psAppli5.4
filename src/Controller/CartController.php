@@ -307,6 +307,13 @@ class CartController extends AbstractController
             );
         }
 
+        if ($mode == "orderAddPart") {
+            return $this->redirectToRoute(
+                'order_edit',
+                ['id' => $documentId]
+            );
+        }
+
         $this->_manager->flush();
 
         // Effacement du panier.

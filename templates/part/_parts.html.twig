@@ -9,7 +9,9 @@
                 {% endif %}
             {% elseif mode == 'newDeliveryNote' %}
                 <a class="btn index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode}) }}">{{ part.code }}</a>
-            {% elseif  mode == 'editDeliveryNote' %}
+            {% elseif mode == 'editDeliveryNote' %}
+                <a class="btn index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
+            {% elseif mode == 'orderAddPart' %}
                 <a class="btn index-button text-center" href="{{ path('cart_add_delivery_note', {'id': part.id, 'mode': mode, 'documentId': documentId}) }}">{{ part.code }}</a>
             {% else %}
                 <a class="btn index-button text-center" href="{{ path('part_show', {'id': part.id}) }}">{{ part.code }}</a>

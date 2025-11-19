@@ -66,4 +66,11 @@ class SearchOrder
      * @var string
      */
     public $createdBy;
+
+     /**
+      * Investissement
+      *
+      * @var boolean
+      */
+    public $investment;
 }

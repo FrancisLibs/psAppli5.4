@@ -20,6 +20,8 @@
 					{% elseif mode == 'newDeliveryNote' or mode == 'editDeliveryNote' %}
 						<h1 class="page-title me-5">Pièces détachées -> BL</h1>
 						<a class="btn btn-primary btn-sm" href="{{ path('delivery_note_new') }}" role="button">Retour au BL</a>
+					{% elseif mode == 'orderAddPart' %}
+						<h1 class="page-title me-5">Pièces détachées -> Commande</h1>
 					{% else %}
 						<h1 class="page-title me-5">Pièces détachées</h1>
 						<a class="btn btn-primary btn-sm" href="{{ path('part_new') }}" role="button">Nouvelle pièce</a>
@@ -27,7 +29,7 @@
 				</div>
 
 				{# Panier de pièces #}
-				{% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' %}
+				{% if mode == "workorderAddPart" or  mode == "newDeliveryNote" or mode == 'editDeliveryNote' or mode == 'orderAddPart' %}
 					{% if items is defined %}
 						<div class="border border-primary rounded p-3">
 							<div class="d-flex justify-content-start align-items-baseline">
