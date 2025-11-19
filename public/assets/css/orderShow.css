@@ -7,16 +7,6 @@
   margin-bottom: 1rem;
 }
 
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 30px;
-}
-
 header h1 {
   white-space: nowrap;
 }
