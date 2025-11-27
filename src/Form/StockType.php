@@ -6,16 +6,17 @@ use App\Entity\Stock;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Security\Core\Security;
+
+
 
 class StockType extends AbstractType
 {
-    private $_security;
 
     public function __construct(Security $security)
     {
@@ -39,7 +40,7 @@ class StockType extends AbstractType
             );
 
         // grab the user, do a quick sanity check that one exists
-        $user = $this->_security->getUser();
+        $user = $this->getUser();
         if (!$user) {
             throw new \LogicException(
                 'The FriendMessageFormType cannot be used without an authenticated user!'

@@ -12,14 +12,15 @@ Encore
 
   // Entrées JS/CSS
   .addEntry("app", "./assets/app.js")
-  .addEntry("editDeliveryNote", "./assets/JS/editDeliveryNote.js")
-  .addEntry("stockValueJschart", "./assets/JS/stockValueJschart.js")
-  //.addEntry("costPerMonthJschart", "./assets/JS/costPerMonthJschart.js")
+  .addEntry("editDeliveryNote", "./assets/js/editDeliveryNote.js")
+  .addEntry("stockValueJschart", "./assets/js/stockValueJschart.js")
+  .addEntry("filterIndex", "./assets/js/filterIndexEntry.js")
+  .addEntry("costPerMonthJschart", "./assets/js/costPerMonthJschart.js")
+
   .addEntry("showMachine", "./assets/styles/showMachine.css")
   .addEntry("register", "./assets/styles/register.css")
   .addEntry("on_call_new", "./assets/styles/on_call_new.css")
   .addEntry("registration", "./assets/styles/registration.css")
-  .addEntry("filterIndex", "./assets/JS/filterIndexEntry.js")
 
   // Symfony UX Stimulus
   .enableStimulusBridge("./assets/controllers.json")

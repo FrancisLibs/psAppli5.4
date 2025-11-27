@@ -76,6 +76,12 @@ class Part
     #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'parts')]
     private Collection $orders;
 
+    /**
+     * @var Collection<int, OrderPart>
+     */
+    #[ORM\OneToMany(mappedBy: 'part', targetEntity: OrderPart::class)]
+    private Collection $orderParts;
+
     public function __construct()
     {
         $this->workorderParts = new ArrayCollection();
@@ -84,6 +90,7 @@ class Part
         $this->deliveryNoteParts = new ArrayCollection();
         $this->requests = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->orderParts = new ArrayCollection();
     }
 
     // --- Getters / Setters simples ---
@@ -279,5 +286,35 @@ class Part
     {
         if ($this->orders->removeElement($order)) { $order->removePart($this); 
         } return $this; 
+    }
+
+    /**
+     * @return Collection<int, OrderPart>
+     */
+    public function getOrderParts(): Collection
+    {
+        return $this->orderParts;
+    }
+
+    public function addOrderPart(OrderPart $orderPart): static
+    {
+        if (!$this->orderParts->contains($orderPart)) {
+            $this->orderParts->add($orderPart);
+            $orderPart->setPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderPart(OrderPart $orderPart): static
+    {
+        if ($this->orderParts->removeElement($orderPart)) {
+            // set the owning side to null (unless already changed)
+            if ($orderPart->getPart() === $this) {
+                $orderPart->setPart(null);
+            }
+        }
+
+        return $this;
     }
 }

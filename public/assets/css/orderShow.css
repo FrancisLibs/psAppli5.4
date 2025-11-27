@@ -88,3 +88,11 @@ section.buttons {
   flex-wrap: wrap;
   gap: 10px;
 }
+
+.sparePartsTitle {
+  font-size: 2rem;
+}
+
+.partsTable {
+  width: 30%;
+}

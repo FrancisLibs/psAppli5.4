@@ -1,9 +1,11 @@
+{% if form.organisation is defined %}
+	<tr style="background-color: #60dd28">
+		<td>{{ form_widget(form.organisation) }}</td>
+	</tr>
+{% endif %}
 <tr style="background-color: #60dd28">
-    <td>{{ form_widget(form.organisation) }}</td>
-</tr>
-<tr style="background-color: #60dd28">
-    <td>{{ form_widget(form.code) }}</td>
-    <td>{{ form_widget(form.designation) }}</td>
-    <td>{{ form_widget(form.reference) }}</td>
-    <td>{{ form_widget(form.place) }}</td>
+	<td>{{ form_widget(form.code) }}</td>
+	<td>{{ form_widget(form.designation) }}</td>
+	<td>{{ form_widget(form.reference) }}</td>
+	<td>{{ form_widget(form.place) }}</td>
 </tr>

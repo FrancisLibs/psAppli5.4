@@ -64,6 +64,9 @@
 					</div>
 				</div>
 			</section>
+			{% if order.orderParts|length %}
+				{% include "order/_orderParts.html.twig" with {'order': order} %}
+			{% endif %}
 		</article>
 	</main>
 {% endblock %}

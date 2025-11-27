@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class RequestController extends AbstractController
 {
@@ -21,7 +20,6 @@ class RequestController extends AbstractController
     protected OrganisationService $organisation;
     protected MailerInterface $mailer;
     protected RequestStack $requestStack;
-    protected Security $security;
 
     public function __construct(
         OrganisationService $organisation,
@@ -29,14 +27,12 @@ class RequestController extends AbstractController
         ProviderRepository $providerRepository,
         MailerInterface $mailer,
         RequestStack $requestStack,
-        Security $security
     ) {
         $this->organisation = $organisation;
         $this->partRepository = $partRepository;
         $this->providerRepository = $providerRepository;
         $this->mailer = $mailer;
         $this->requestStack = $requestStack;
-        $this->security = $security;
     }
 
     #[Route('/request/{id}', name: 'app_request')]
@@ -59,7 +55,7 @@ class RequestController extends AbstractController
     #[Route('/parts-selection', name: 'quotation-parts-select', methods: ['POST'])]
     public function traiterSelection(Request $request): Response
     {
-        $user = $this->security->getUser();
+        $user = $this->getUser();
         $providerName = $request->request->get('provider_name');
         $providerId = $request->request->get('provider_id');
         $providerEmail = $request->request->get('provider_email');

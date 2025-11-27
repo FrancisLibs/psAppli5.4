@@ -18,6 +18,9 @@ export class FilterIndex {
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
+    console.log('ok');
+    console.log(this.form);
+
   }
 
   /**

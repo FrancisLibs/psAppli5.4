@@ -257,10 +257,8 @@ class MachineController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{id}",                 name="machine_show", methods={"GET"})
-     * @Security("is_granted('ROLE_USER')")
-     */
+    #[IsGranted('ROLE_USER')]
+    #[Route('/show/{id}', name: 'machine_show', methods: ('GET'))]
     public function show(Machine $machine): Response
     {
         return $this->render(

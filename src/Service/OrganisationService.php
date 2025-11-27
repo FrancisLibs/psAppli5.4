@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Symfony\Bundle\SecurityBundle\Security;
 
+
 class OrganisationService
 {
     protected Security $security;
@@ -21,12 +22,12 @@ class OrganisationService
     public function getOrganisation(): ?object
     {
         $user = $this->getUser();
-        return $user ? $user->getOrganisation() : null;
+        return $user?->getOrganisation();
     }
 
     public function getService(): ?object
     {
         $user = $this->getUser();
-        return $user ? $user->getService() : null;
+        return $user?->getService();
     }
 }

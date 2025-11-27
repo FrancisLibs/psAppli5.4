@@ -1,0 +1,21 @@
+<section class="parts">
+	<header>
+		<span class="sparePartsTitle">Pièces détachées stockées</span>
+	</header>
+	<table class="table table-striped table-sm partsTable">
+		<thead>
+			<tr>
+				<th scope="col">Désignation</th>
+				<th scope="col">Qte</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for part in order.orderParts %}
+				<tr>
+					<td>{{part.part.designation}}</td>
+					<td>{{ part.qte }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</section>

@@ -7,7 +7,7 @@ use App\Entity\Stock;
 use App\Form\PartType;
 use App\Data\SearchPart;
 use App\Service\PdfService;
-use App\Form\SearchPartForm;
+use App\Form\SearchPartFormType;
 use App\Repository\PartRepository;
 use App\Service\OrganisationService;
 use App\Repository\StockValueRepository;
@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Bundle\SecurityBundle\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -32,7 +31,6 @@ class PartController extends AbstractController
     protected $manager;
     protected $requestStack;
     protected $deliveryNoteRepository;
-    protected $security;
     protected $organisation;
 
 
@@ -43,7 +41,6 @@ class PartController extends AbstractController
         StockValueRepository $stockValueRepository,
         EntityManagerInterface $manager,
         RequestStack $requestStack,
-        Security $security
     ) {
         $this->organisation = $organisation;
         $this->deliveryNoteRepository = $deliveryNoteRepository;
@@ -51,7 +48,6 @@ class PartController extends AbstractController
         $this->stockValueRepository = $stockValueRepository;
         $this->manager = $manager;
         $this->requestStack = $requestStack;
-        $this->security = $security;
     }
 
     /**
@@ -65,7 +61,6 @@ class PartController extends AbstractController
         ?int $documentId = null
     ): Response {
         $organisation =  $this->organisation->getOrganisation();
-
         $session = $this->requestStack->getSession();
 
         $data = new SearchPart();
@@ -83,7 +78,9 @@ class PartController extends AbstractController
         $data->organisation = $organisation;
 
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchPartForm::class, $data);
+        $form = $this->createForm(SearchPartFormType::class, $data, [
+            'afficher_organisation' => false,
+        ]);
 
         $form->handleRequest($request);
 
@@ -168,7 +165,7 @@ class PartController extends AbstractController
 
         $parts = $this->partRepository->findParts($organisation);
 
-        $partsArray= array_map(
+        $partsArray = array_map(
             function ($part) {
                 return [
                 'id' => $part->getId(),
@@ -176,7 +173,8 @@ class PartController extends AbstractController
                 'designation' => $part->getDesignation(),
                 'reference' => $part->getReference()
                 ];
-            }, $parts
+            },
+            $parts
         );
 
         return $this->json($partsArray);
@@ -189,8 +187,8 @@ class PartController extends AbstractController
         $organisationId =  $this->organisation->getOrganisation()->getId();
 
         $part = $this->partRepository->findPartByCode($organisationId, $code);
-        $part=[ 
-            'id' => $part->getId(),   
+        $part = [
+            'id' => $part->getId(),
             'code' => $part->getCode(),
             'designation' => $part->getDesignation(),
             'reference' => $part->getReference(),
@@ -402,8 +400,8 @@ class PartController extends AbstractController
     }
 
     /**
-     * Impession étiquette d'une pièce 
-     * 
+     * Impession étiquette d'une pièce
+     *
      * @param PdfService $pdfService
      */
     #[IsGranted('ROLE_USER')]

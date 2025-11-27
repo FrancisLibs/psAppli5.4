@@ -30,20 +30,8 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $designation = null;
 
-    #[ORM\ManyToMany(targetEntity: Part::class, inversedBy: 'orders')]
-    private Collection $parts;
-
-    #[ORM\ManyToMany(targetEntity: DeliveryNote::class, inversedBy: 'orders')]
-    private Collection $deliveryNotes;
-
     #[ORM\Column(type: 'string', length: 10)]
     private ?string $status = null;
-
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $partsOrder = null;
-
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $interventionOrder = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $remark = null;
@@ -59,10 +47,22 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?bool $investment = null;
 
+    /**
+     * @var Collection<int, OrderPart>
+     */
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderPart::class)]
+    private Collection $orderParts;
+
+    /**
+     * @var Collection<int, OrderIntervention>
+     */
+    #[ORM\OneToMany(mappedBy: 'orderId', targetEntity: OrderIntervention::class)]
+    private Collection $orderInterventions;
+
     public function __construct()
     {
-        $this->parts = new ArrayCollection();
-        $this->deliveryNote = new ArrayCollection();
+        $this->orderParts = new ArrayCollection();
+        $this->orderInterventions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,44 +126,6 @@ class Order
         return $this;
     }
 
-    public function getParts(): Collection
-    {
-        return $this->parts;
-    }
-
-    public function addPart(Part $part): self
-    {
-        if (!$this->parts->contains($part)) {
-            $this->parts[] = $part;
-        }
-        return $this;
-    }
-
-    public function removePart(Part $part): self
-    {
-        $this->parts->removeElement($part);
-        return $this;
-    }
-
-    public function getDeliveryNote(): Collection
-    {
-        return $this->deliveryNote;
-    }
-
-    public function addDeliveryNote(DeliveryNote $deliveryNote): self
-    {
-        if (!$this->deliveryNote->contains($deliveryNote)) {
-            $this->deliveryNote[] = $deliveryNote;
-        }
-        return $this;
-    }
-
-    public function removeDeliveryNote(DeliveryNote $deliveryNote): self
-    {
-        $this->deliveryNote->removeElement($deliveryNote);
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -172,28 +134,6 @@ class Order
     public function setStatus(string $status): self
     {
         $this->status = $status;
-        return $this;
-    }
-
-    public function isPartsOrder(): ?bool
-    {
-        return $this->partsOrder;
-    }
-
-    public function setPartsOrder(?bool $partsOrder): self
-    {
-        $this->partsOrder = $partsOrder;
-        return $this;
-    }
-
-    public function isInterventionOrder(): ?bool
-    {
-        return $this->interventionOrder;
-    }
-
-    public function setInterventionOrder(?bool $interventionOrder): self
-    {
-        $this->interventionOrder = $interventionOrder;
         return $this;
     }
 
@@ -239,6 +179,66 @@ class Order
     public function setInvestment(?bool $investment): static
     {
         $this->investment = $investment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderPart>
+     */
+    public function getOrderParts(): Collection
+    {
+        return $this->orderParts;
+    }
+
+    public function addOrderPart(OrderPart $orderPart): static
+    {
+        if (!$this->orderParts->contains($orderPart)) {
+            $this->orderParts->add($orderPart);
+            $orderPart->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderPart(OrderPart $orderPart): static
+    {
+        if ($this->orderParts->removeElement($orderPart)) {
+            // set the owning side to null (unless already changed)
+            if ($orderPart->getOrder() === $this) {
+                $orderPart->setOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderIntervention>
+     */
+    public function getOrderInterventions(): Collection
+    {
+        return $this->orderInterventions;
+    }
+
+    public function addOrderIntervention(OrderIntervention $orderIntervention): static
+    {
+        if (!$this->orderInterventions->contains($orderIntervention)) {
+            $this->orderInterventions->add($orderIntervention);
+            $orderIntervention->setOrderId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderIntervention(OrderIntervention $orderIntervention): static
+    {
+        if ($this->orderInterventions->removeElement($orderIntervention)) {
+            // set the owning side to null (unless already changed)
+            if ($orderIntervention->getOrderId() === $this) {
+                $orderIntervention->setOrderId(null);
+            }
+        }
 
         return $this;
     }

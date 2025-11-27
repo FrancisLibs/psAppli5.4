@@ -123,6 +123,7 @@ class OrderController extends AbstractController
     #[Route('/show/{id}', name: 'order_show', methods: ['GET'])]
     public function show(Order $order): Response
     {
+        //dd($order->getOrderParts());
         return $this->render(
             'order/show.html.twig', [
             'order' => $order,
